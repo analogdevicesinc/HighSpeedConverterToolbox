@@ -14,7 +14,6 @@ build:master:
     script:
      - export MLRELEASE=R2019a
      - export INCLUDE_EXAMPLES=1
-     - ./CI/scripts/dockermake gen_sim_data
      - ./CI/scripts/dockermake gen_tlbx
      - mkdir mltbx
      - ls *.mltbx

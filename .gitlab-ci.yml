@@ -1,0 +1,59 @@
+stages:
+  - build
+  - test_hardware
+  - deploy
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+# Default build
+build:master:
+    tags:
+     - matlab
+    stage: build
+    script:
+     - export MLRELEASE=R2019a
+     - export INCLUDE_EXAMPLES=1
+     - ./CI/scripts/dockermake gen_sim_data
+     - ./CI/scripts/dockermake gen_tlbx
+     - mkdir mltbx
+     - ls *.mltbx
+     - cp *.mltbx mltbx/
+    artifacts:
+        when: always
+        paths:
+            - functionSignatures.json
+            - +adi/+sim/
+            - mltbx/
+            
+# Test streaming interfaces with hardware
+test_hardware:Streaming_Hardware:
+    tags:
+     - matlab
+     - hardware
+    stage: test_hardware
+    dependencies:
+     - build:master
+    script:
+     - export MLRELEASE=R2019a
+     - cd CI/scripts
+     - make test_streaming
+    artifacts:
+        paths:
+            - logs/
+            - Report.pdf
+
+# Deploy
+deploy:
+    tags:
+     - matlab
+    stage: deploy
+    dependencies:
+     - build:master
+    script:
+     - echo "Complete"
+    artifacts:
+        paths:
+            - mltbx/
+
+

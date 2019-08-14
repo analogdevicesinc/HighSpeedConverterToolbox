@@ -4,8 +4,7 @@ import matlab.unittest.plugins.TestReportPlugin;
 import matlab.unittest.plugins.XMLPlugin
 
 try
-    suite = testsuite({'AD9361Tests','AD9363Tests','AD9364Tests'...
-        'AD9371Tests','ADRV9009Tests','DAQ2Tests'});
+    suite = testsuite({'DAQ2Tests'});
     runner = TestRunner.withNoPlugins;
     xmlFile = 'HWTestResults.xml';
     plugin = XMLPlugin.producingJUnitFormat(xmlFile);

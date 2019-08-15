@@ -36,7 +36,7 @@ addpath(genpath(matlabshared.supportpkg.getSupportPackageRoot));
 addpath(genpath('.'));
 rmpath(genpath('.'));
 if examples
-    ps = {'doc','sensor_examples'};
+    ps = {'doc','hsx_examples'};
 else
     ps = {'doc'};
 end
@@ -53,9 +53,9 @@ rehash
 projectFile = 'bsp.prj';
 currentVersion = matlab.addons.toolbox.toolboxVersion(projectFile);
 if examples
-    outputFile = ['AnalogDevicesSensorToolbox_v',currentVersion];
+    outputFile = ['AnalogDevicesHighSpeedConverterToolbox_v',currentVersion];
 else
-    outputFile = ['AnalogDevicesSensorToolbox_noexamples_v',currentVersion];
+    outputFile = ['AnalogDevicesHighSpeedConverterToolbox_noexamples_v',currentVersion];
 end
 matlab.addons.toolbox.packageToolbox(projectFile,outputFile)
 

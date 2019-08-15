@@ -21,8 +21,6 @@ build:master:
     artifacts:
         when: always
         paths:
-            - functionSignatures.json
-            - +adi/+sim/
             - mltbx/
             
 # Test streaming interfaces with hardware
@@ -35,9 +33,9 @@ test_hardware:Streaming_Hardware:
      - build:master
     script:
      - export MLRELEASE=R2019a
-     - cd CI/scripts
-     - make test_streaming
+     - make -C CI/scripts test_streaming
     artifacts:
+        when: always
         paths:
             - logs/
             - Report.pdf

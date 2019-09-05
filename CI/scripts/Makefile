@@ -36,6 +36,10 @@ endif
 GITTAG := $(shell git describe --tags HEAD)
 
 .ONESHELL:
+build:
+	# Uses the HDLBRANCH variable
+	bash build_bsp.sh
+
 test_streaming:
 	cd ../.. ; \
 	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));runHWTests;"

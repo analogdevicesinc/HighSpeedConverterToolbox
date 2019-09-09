@@ -40,6 +40,15 @@ build:
 	# Uses the HDLBRANCH variable
 	bash build_bsp.sh
 
+test_installer:
+	cd ../.. ; \
+	cp *.mltbx test/ ; \
+	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('test');runInstallerTests;"
+
+test:
+	cd ../.. ; \
+	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('test');runTests('$(BOARD)');"
+
 test_streaming:
 	cd ../.. ; \
 	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));runHWTests;"

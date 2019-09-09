@@ -53,16 +53,18 @@ try
 catch e
     disp(getReport(e,'extended'));
     bdclose('all');
-%     exit(1);
+    exit(1);
 end
 
 try
-    poolobj = gcp('nocreate');
-    delete(poolobj);
+    if runParallel
+        poolobj = gcp('nocreate');
+        delete(poolobj);
+    end
 catch ME
     disp(ME)
 end
 
 save(['BSPTest_',datestr(now,'dd_mm_yyyy-HH:MM:SS'),'.mat'],'t');
 bdclose('all');
-% exit(any([results.Failed]));
+exit(any([results.Failed]));

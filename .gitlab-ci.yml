@@ -1,10 +1,28 @@
 stages:
   - build
+  - test_hdl
   - test_hardware
   - deploy
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+
+# Templates
+.hdl_tests:
+    tags:
+     - vivado
+     - matlab
+    stage: test_hdl
+    dependencies:
+     - build:master
+    artifacts:
+        when: always
+        name: "$CI_COMMIT_REF_NAME"
+        paths:
+            - test/logs/
+            - Report.pdf
+        reports:
+            junit: test/BSPTestResults.xml
 
 # Default build
 build:master:
@@ -14,6 +32,7 @@ build:master:
     script:
      - export MLRELEASE=R2019a
      - export INCLUDE_EXAMPLES=1
+     - ./CI/scripts/dockermake build
      - ./CI/scripts/dockermake gen_tlbx
      - mkdir mltbx
      - ls *.mltbx
@@ -21,8 +40,17 @@ build:master:
     artifacts:
         when: always
         paths:
+            - hdl/
             - mltbx/
-            
+
+# Test HWA no install zed
+test:DAQ2:
+    extends: .hdl_tests
+    script:
+     - export MLRELEASE=R2019a
+     - export BOARD=daq2
+     - ./CI/scripts/dockermake test
+
 # Test streaming interfaces with hardware
 test_hardware:Streaming_Hardware:
     tags:

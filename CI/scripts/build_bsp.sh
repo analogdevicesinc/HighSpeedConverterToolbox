@@ -120,6 +120,31 @@ cd CI
 echo "SED 2"
 grep -rl ${DEFAULT_V_VERSION} hdl/projects/scripts | xargs sed -i "s/${DEFAULT_V_VERSION}/$VIVADOFULL/g"
 
+# Remove unused projects
+TO_KEEP="daq2 common scripts"
+DIRS=$(find hdl/projects -maxdepth 1 -type d )
+
+for d in $DIRS
+do
+    REMOVE=1
+    for tk in $TO_KEEP
+    do
+        if [[ "hdl/projects/$tk" == "$d" ]]; then
+            echo "$d"
+            REMOVE=0
+        fi
+        if [[ "hdl/projects" == "$d" ]]; then
+            echo "$d"
+            REMOVE=0
+        fi
+    done
+    if [ $REMOVE = 1 ]; then
+        echo "Removing: $d"
+        rm -rf "$d"
+    fi
+done
+rm hdl/projects/Makefile
+
 # Remove git directory move to bsp folder
 rm -fr hdl/.git*
 TARGET="../hdl/vendor/AnalogDevices/vivado"

@@ -30,12 +30,9 @@ if {$fpga_board eq "ZCU102"} {
 
     if {$ref_design eq "Rx" || $ref_design eq "Rx & Tx"} {
         connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
-#        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins sys_ps8/pl_clk0]
-#        connect_bd_net [get_bd_pins axi_cpu_interconnect/M8_ACLK] [get_bd_pins axi_adrv9009_rx_clkgen/clk_0]
     }
 
     if {$ref_design eq "Tx"} {
-        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins sys_ps8/pl_clk0]
- #       connect_bd_net [get_bd_pins axi_cpu_interconnect/M8_ACLK] [get_bd_pins axi_adrv9009_tx_clkgen/clk_0]
+        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
     }
 }

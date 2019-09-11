@@ -21,6 +21,7 @@ variables:
         name: "$CI_COMMIT_REF_NAME"
         paths:
             - test/logs/
+            - test/BINS/
             - Report.pdf
         reports:
             junit: test/BSPTestResults.xml
@@ -60,6 +61,22 @@ test_synth:Synthesize:
      - export MLRELEASE=R2019a
      - export BOARD=daq2
      - ./CI/scripts/dockermake test_synth
+
+# Test BOOT.BINS
+test_hardware:DAQ2_BOOT_BIN_Load:
+    tags:
+     - hardware
+    stage: test_hardware
+    dependencies:
+     - test_synth:Synthesize
+    script:
+     - git clone https://github.com/tfcollins/fpga-tests.git
+     - cd fpga-tests
+     - bash process_boot_bin.sh daq2
+    artifacts:
+        when: always
+        paths:
+            - fpga-tests/*.log
 
 # Test streaming interfaces with hardware
 test_hardware:Streaming_Hardware:

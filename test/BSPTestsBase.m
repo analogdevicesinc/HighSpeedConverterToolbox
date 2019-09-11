@@ -36,6 +36,12 @@ classdef BSPTestsBase < matlab.unittest.TestCase
             end
             system('cp *.log logs/');
         end
+        function collectBOOTBINs(~)
+            if ~exist([pwd,'/BINS'],'dir')
+                mkdir('BINS');
+            end
+            system('cp *.BIN BINS/');
+        end
     end
     
     methods(TestMethodSetup)
@@ -50,6 +56,18 @@ classdef BSPTestsBase < matlab.unittest.TestCase
 
     
     methods
+        
+        function CollectBOOTBIN(testCase,cfgb)
+            rdn = strrep(cfgb.ReferenceDesignName,'/','_');
+            rdn = strrep(rdn,'(','');
+            rdn = strrep(rdn,')','');
+            rdn = lower(rdn);
+            system(join(["find '",testCase.Folder,"' -name 'BOOT.BIN' | xargs -I '{}' cp {} ."],''));
+            if exist('BOOT.BIN','file')
+                disp('Found BOOT.BIN... copying');
+                movefile('BOOT.BIN',[rdn,'_BOOT_',cfgb.mode,'.BIN']);
+            end
+        end
         
         function CollectLogs(testCase,cfgb)
             disp('Log collector called');
@@ -180,6 +198,11 @@ classdef BSPTestsBase < matlab.unittest.TestCase
                 disp(res.stack);
                 testCase.CollectLogs(cfgb);
                 verifyEmpty(testCase,res,res.message);
+            else
+                if SynthesizeDesign
+                    % Save BOOT.BIN
+                    testCase.CollectBOOTBIN(cfgb);
+                end
             end
         end
     end

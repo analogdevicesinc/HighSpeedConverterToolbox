@@ -31,29 +31,22 @@ file copy -force vivado_prj.runs/impl_1/system_top.sysdef $sdk_loc/system_top.hd
 close_project
 
 # Create the BOOT.bin
-#exec xsdk -batch -source $cdir/projects/scripts/fsbl_build.tcl -tclargs $fpga_board -wait
-
 if {$fpga_board eq "ZCU102"} {
-    exec hsi -source $cdir/projects/scripts/pmufw_zynqmp.tcl
-    file copy -force $cdir/projects/scripts/fixmake.sh $cdir/fixmake.sh
-    exec chmod +x fixmake.sh
 
-    #exec ./fixmake.sh
-    #cd pmufw
-    #exec make
-    #cd ..
-    if [catch "exec -ignorestderr ./fixmake.sh" ret opt] {
-        set makeRet [lindex [dict get $opt -errorcode] end]
-        puts "make returned with $makeRet"
-    }
-    if {[file exist pmufw/executable.elf] eq 0} {
-        puts "ERROR: pmufw not built"
-        return -code error 10
-    } else {
-        puts "pmufw built correctly!"
-    }
-    
-    exec xsdk -batch -source $cdir/projects/scripts/fsbl_build_zynqmp.tcl
+    ### Copy common boot files
+    file copy -force $cdir/projects/common/boot/zynqmp.bif $cdir/boot/zynqmp.bif
+    file copy -force $cdir/projects/common/boot/bl31.elf $cdir/boot/bl31.elf
+    file copy -force $cdir/projects/common/boot/pmufw.elf $cdir/boot/pmufw.elf
+    file copy -force $cdir/projects/common/boot/fsbl.elf $cdir/boot/fsbl.elf
+    file copy -force $cdir/projects/common/boot/u-boot-zcu.elf $cdir/boot/u-boot-zcu.elf
+
+    ### Copy system_top.bit into the output folder
+    file copy -force vivado_prj.runs/impl_1/system_top.bit $cdir/boot/system_top.bit
+
+    # Generate BOOT.bin File
+    cd $cdir/boot
+    exec bootgen -arch zynqmp -image zynqmp.bif -o BOOT.BIN -w
+    cd $cdir
     if {[file exist boot/BOOT.BIN] eq 0} {
         puts "ERROR: BOOT.BIN not built"
         return -code error 11

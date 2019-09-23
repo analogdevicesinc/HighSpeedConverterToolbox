@@ -1,2 +1,2 @@
-% HDL Coder BSP: Analog Devices Inc
-% Version 19.1.1 (R2019a) 5-September-2019
+% High Speed Converter Toolbox: Analog Devices, Inc
+% Version 19.1.1 (R2019a) 23-September-2019

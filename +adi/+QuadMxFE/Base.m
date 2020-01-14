@@ -1,7 +1,8 @@
-classdef (Abstract) Base < matlabshared.libiio.base & ...
+classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.libiio.base & ...
         matlab.system.mixin.CustomIcon
-    %QuadMxFE Base Class
-    
+    %adi.QuadMxFE.Base Class
+    %   This class contains shared parameters and methods between TX and RX
+    %   classes
     properties (Nontunable)
         %SamplesPerFrame Samples Per Frame
         %   Number of samples per frame, specified as an even positive
@@ -9,32 +10,37 @@ classdef (Abstract) Base < matlabshared.libiio.base & ...
         %   yield poor performance.
         SamplesPerFrame = 2^15;
     end
+       
+    properties (Hidden, Constant)
+        %SamplingRate Sampling Rate
+        %   Baseband sampling rate in Hz, specified as a scalar 
+        %   in samples per second.
+        SamplingRate = 250e6;
+    end
     
     properties(Nontunable, Hidden)
         Timeout = Inf;
         kernelBuffersCount = 2;
         dataTypeStr = 'int16';
-    end
-    
-    properties (Abstract, Hidden, Constant)
-       Type 
+        phyDevName = 'axi-ad9081-rx-3';
+        iioDevPHY
     end
     
     properties (Hidden, Constant)
-        ComplexData = false;
+        ComplexData = true;
     end
+
     
     methods
         %% Constructor
         function obj = Base(varargin)
-            % Returns the matlabshared.libiio.base object
             coder.allowpcode('plain');
             obj = obj@matlabshared.libiio.base(varargin{:});
         end
         % Check SamplesPerFrame
         function set.SamplesPerFrame(obj, value)
             validateattributes( value, { 'double','single' }, ...
-                { 'real', 'positive','scalar', 'finite', 'nonnan', 'nonempty','integer','>',0,'<',2^20+1}, ...
+                { 'real', 'positive','scalar', 'finite', 'nonnan', 'nonempty','integer','>',0,'<=',2^20}, ...
                 '', 'SamplesPerFrame');
             obj.SamplesPerFrame = value;
         end
@@ -42,13 +48,47 @@ classdef (Abstract) Base < matlabshared.libiio.base & ...
     
     %% API Functions
     methods (Hidden, Access = protected)
-                
-        function icon = getIconImpl(obj)
-            icon = sprintf(['Quad MxFE ',obj.Type]);
+               
+        function CheckAndUpdateHW(obj, value, name, attr, phy, output)
+            if nargin < 6
+                output = false;
+            end
+            N = 4;
+            tol = 100;
+            s = size(value);
+            c1 = s(1) == 1;
+            c2 = s(2) == N;
+            assert(c1 && c2,...
+                sprintf('%s expected to be size [1x4]',name));
+            if obj.ConnectedToDevice
+                for k=1:N
+                    id = sprintf('voltage%d_i',k-1);
+                    obj.setAttributeLongLong(id,attr,value(k),output, tol, phy);
+                end
+            end
         end
         
-        function setupInit(~)
-            % Unused
+        function CheckAndUpdateHWBool(obj, value, name, attr, phy, output)
+            if nargin < 6
+                output = false;
+            end
+            N = 4;
+            tol = 100;
+            s = size(value);
+            c1 = s(1) == 1;
+            c2 = s(2) == N;
+            assert(c1 && c2,...
+                sprintf('%s expected to be size [1x4]',name));
+            if obj.ConnectedToDevice
+                for k=1:N
+                    id = sprintf('voltage%d_i',k-1);
+                    obj.setAttributeBool(id,attr,value(k),output, tol, phy);
+                end
+            end
+        end
+        
+        function icon = getIconImpl(obj)
+            icon = sprintf(['QuadMxFE ',obj.Type]);
         end
         
     end
@@ -66,7 +106,7 @@ classdef (Abstract) Base < matlabshared.libiio.base & ...
         end
         
         function bName = getDescriptiveName(~)
-            bName = 'Quad MxFE';
+            bName = 'QuadMxFE';
         end
         
     end

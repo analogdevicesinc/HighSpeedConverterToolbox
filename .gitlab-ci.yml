@@ -32,7 +32,7 @@ build:master:
      - matlab
     stage: build
     script:
-     - export MLRELEASE=R2019a
+     - export MLRELEASE=R2019b
      - export INCLUDE_EXAMPLES=1
      - ./CI/scripts/dockermake build
      - ./CI/scripts/dockermake gen_tlbx
@@ -49,7 +49,7 @@ build:master:
 test_hdl:DAQ2:
     extends: .hdl_tests
     script:
-     - export MLRELEASE=R2019a
+     - export MLRELEASE=R2019b
      - export BOARD=daq2
      - ./CI/scripts/dockermake test
 
@@ -58,7 +58,7 @@ test_synth:Synthesize:
     extends: .hdl_tests
     stage: test_synth
     script:
-     - export MLRELEASE=R2019a
+     - export MLRELEASE=R2019b
      - export BOARD=daq2
      - ./CI/scripts/dockermake test_synth
 
@@ -87,7 +87,7 @@ test_hardware:Streaming_Hardware:
     dependencies:
      - build:master
     script:
-     - export MLRELEASE=R2019a
+     - export MLRELEASE=R2019b
      - make -C CI/scripts test_streaming
     artifacts:
         when: always

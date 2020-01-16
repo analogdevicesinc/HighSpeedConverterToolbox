@@ -82,7 +82,7 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
             if obj.ConnectedToDevice
                 for k=1:N
                     id = sprintf('voltage%d_i',k-1);
-                    obj.setAttributeBool(id,attr,value(k),output, tol, phy);
+                    obj.setAttributeBool(id,attr,value(k),output, phy);
                 end
             end
         end

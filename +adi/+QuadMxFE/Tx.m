@@ -124,33 +124,27 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     end
     
     properties
-        %NCOEnablesChipA Test Mode Chip A
-        %   Test mode of transmit path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
+        %NCOEnablesChipA NCO Enables Chip A
+        %   Vector of logicals which enabled individual NCOs in channel
+        %   interpolators
         NCOEnablesChipA = [false,false,false,false];
-        %NCOEnablesChipB Test Mode Chip B
-        %   Test mode of transmit path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
+        %NCOEnablesChipB NCO Enables Chip B
+        %   Vector of logicals which enabled individual NCOs in channel
+        %   interpolators
         NCOEnablesChipB = [false,false,false,false];
-        %NCOEnablesChipC Test Mode Chip C
-        %   Test mode of transmit path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
+        %NCOEnablesChipC NCO Enables Chip C
+        %   Vector of logicals which enabled individual NCOs in channel
+        %   interpolators
         NCOEnablesChipC = [false,false,false,false];
-        %NCOEnablesChipD Test Mode Chip D
-        %   Test mode of transmit path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
+        %NCOEnablesChipD NCO Enables Chip D
+        %   Vector of logicals which enabled individual NCOs in channel
+        %   interpolators
         NCOEnablesChipD = [false,false,false,false];
     end
     
     properties
+        %ExternalAttenuation External Attenuation
+        %   Attenuation value of external HMC425a
        ExternalAttenuation = 0; 
     end
     
@@ -181,10 +175,17 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     
     properties (Nontunable, Hidden)
         devName = 'axi-ad9081-tx-3';
+        devName0 = 'axi-ad9081-rx-0';
+        devName1 = 'axi-ad9081-rx-1';
+        devName2 = 'axi-ad9081-rx-2';
+        devName3 = 'axi-ad9081-rx-3';
     end
     
     properties (Hidden)
        iioDev0;
+       iioDev1;
+       iioDev2;
+       iioDev3;
        iioHMC425a;
     end
     
@@ -213,19 +214,19 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         % Check ChannelNCOFrequenciesChipB
         function set.ChannelNCOFrequenciesChipB(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOFrequenciesChipA',...
-                'channel_nco_frequency', obj.iioDev0, true);
+                'channel_nco_frequency', obj.iioDev1, true);
             obj.ChannelNCOFrequenciesChipB = value;
         end
         % Check ChannelNCOFrequenciesChipC
         function set.ChannelNCOFrequenciesChipC(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOFrequenciesChipC',...
-                'channel_nco_frequency', obj.iioDev0, true);
+                'channel_nco_frequency', obj.iioDev2, true);
             obj.ChannelNCOFrequenciesChipC = value;
         end
         % Check ChannelNCOFrequenciesChipD
         function set.ChannelNCOFrequenciesChipD(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOFrequenciesChipD',...
-                'channel_nco_frequency', obj.iioDev0, true);
+                'channel_nco_frequency', obj.iioDev3, true);
             obj.ChannelNCOFrequenciesChipD = value;
         end
         %%
@@ -238,19 +239,19 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         % Check MainNCOFrequenciesChipB
         function set.MainNCOFrequenciesChipB(obj, value)
             obj.CheckAndUpdateHW(value,'MainNCOFrequenciesChipA',...
-                'main_nco_frequency', obj.iioDev0, true);
+                'main_nco_frequency', obj.iioDev1, true);
             obj.MainNCOFrequenciesChipB = value;
         end
         % Check MainNCOFrequenciesChipC
         function set.MainNCOFrequenciesChipC(obj, value)
             obj.CheckAndUpdateHW(value,'MainNCOFrequenciesChipC',...
-                'main_nco_frequency', obj.iioDev0, true);
+                'main_nco_frequency', obj.iioDev2, true);
             obj.MainNCOFrequenciesChipC = value;
         end
         % Check MainNCOFrequenciesChipD
         function set.MainNCOFrequenciesChipD(obj, value)
             obj.CheckAndUpdateHW(value,'MainNCOFrequenciesChipD',...
-                'main_nco_frequency', obj.iioDev0, true);
+                'main_nco_frequency', obj.iioDev3, true);
             obj.MainNCOFrequenciesChipD = value;
         end
         %%
@@ -263,19 +264,19 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         % Check ChannelNCOPhasesChipB
         function set.ChannelNCOPhasesChipB(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOPhasesChipA',...
-                'channel_nco_phase', obj.iioDev0, true);
+                'channel_nco_phase', obj.iioDev1, true);
             obj.ChannelNCOPhasesChipB = value;
         end
         % Check ChannelNCOPhasesChipC
         function set.ChannelNCOPhasesChipC(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOPhasesChipC',...
-                'channel_nco_phase', obj.iioDev0, true);
+                'channel_nco_phase', obj.iioDev2, true);
             obj.ChannelNCOPhasesChipC = value;
         end
         % Check ChannelNCOPhasesChipD
         function set.ChannelNCOPhasesChipD(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOPhasesChipD',...
-                'channel_nco_phase', obj.iioDev0, true);
+                'channel_nco_phase', obj.iioDev3, true);
             obj.ChannelNCOPhasesChipD = value;
         end
         %%
@@ -288,19 +289,19 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         % Check MainNCOPhasesChipB
         function set.MainNCOPhasesChipB(obj, value)
             obj.CheckAndUpdateHW(value,'MainNCOPhasesChipA',...
-                'main_nco_phase', obj.iioDev0, true);
+                'main_nco_phase', obj.iioDev1, true);
             obj.MainNCOPhasesChipB = value;
         end
         % Check MainNCOPhasesChipC
         function set.MainNCOPhasesChipC(obj, value)
             obj.CheckAndUpdateHW(value,'MainNCOPhasesChipC',...
-                'main_nco_phase', obj.iioDev0, true);
+                'main_nco_phase', obj.iioDev2, true);
             obj.MainNCOPhasesChipC = value;
         end
         % Check MainNCOPhasesChipD
         function set.MainNCOPhasesChipD(obj, value)
             obj.CheckAndUpdateHW(value,'MainNCOPhasesChipD',...
-                'main_nco_phase', obj.iioDev0, true);
+                'main_nco_phase', obj.iioDev3, true);
             obj.MainNCOPhasesChipD = value;
         end
         %%
@@ -313,19 +314,19 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         % Check ChannelNCOGainScalesChipB
         function set.ChannelNCOGainScalesChipB(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOGainScalesChipA',...
-                'channel_nco_gain_scale', obj.iioDev0, true);
+                'channel_nco_gain_scale', obj.iioDev1, true);
             obj.ChannelNCOGainScalesChipB = value;
         end
         % Check ChannelNCOGainScalesChipC
         function set.ChannelNCOGainScalesChipC(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOGainScalesChipC',...
-                'channel_nco_gain_scale', obj.iioDev0, true);
+                'channel_nco_gain_scale', obj.iioDev2, true);
             obj.ChannelNCOGainScalesChipC = value;
         end
         % Check ChannelNCOGainScalesChipD
         function set.ChannelNCOGainScalesChipD(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOGainScalesChipD',...
-                'channel_nco_gain_scale', obj.iioDev0, true);
+                'channel_nco_gain_scale', obj.iioDev3, true);
             obj.ChannelNCOGainScalesChipD = value;
         end
         % Check ExternalAttenuation
@@ -362,7 +363,7 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         % Check NCOEnablesChipD
         function set.NCOEnablesChipD(obj, value)
             obj.CheckAndUpdateHWBool(value,'NCOEnablesChipD',...
-                'en', obj.iioDev, true);
+                'en', obj.iioDev3, true);
             obj.NCOEnablesChipD = value;
         end
     end
@@ -378,7 +379,10 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             % modification to nontunable variables at SetupImpl
             
             % Get SPI connected dev
-            obj.iioDev0 = getDev(obj, obj.phyDevName);
+            obj.iioDev0 = getDev(obj, obj.devName0);
+            obj.iioDev1 = getDev(obj, obj.devName1);
+            obj.iioDev2 = getDev(obj, obj.devName2);
+            obj.iioDev3 = getDev(obj, obj.devName3);
             obj.iioHMC425a = getDev(obj, 'hmc425a');
             
             %%
@@ -387,65 +391,65 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
                 obj.iioDev0, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOFrequenciesChipB,...
                 'ChannelNCOFrequenciesChipB','channel_nco_frequency', ...
-                obj.iioDev0, true);
+                obj.iioDev1, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOFrequenciesChipC,...
                 'ChannelNCOFrequenciesChipC','channel_nco_frequency', ...
-                obj.iioDev0, true);
+                obj.iioDev2, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOFrequenciesChipD,...
                 'ChannelNCOFrequenciesChipD','channel_nco_frequency', ...
-                obj.iioDev0, true);
+                obj.iioDev3, true);
             %%
             obj.CheckAndUpdateHW(obj.MainNCOFrequenciesChipA,...
                 'MainNCOFrequenciesChipA','main_nco_frequency', ...
                 obj.iioDev0, true);
             obj.CheckAndUpdateHW(obj.MainNCOFrequenciesChipB,...
                 'MainNCOFrequenciesChipB','main_nco_frequency', ...
-                obj.iioDev0, true);
+                obj.iioDev1, true);
             obj.CheckAndUpdateHW(obj.MainNCOFrequenciesChipC,...
                 'MainNCOFrequenciesChipC','main_nco_frequency', ...
-                obj.iioDev0, true);
+                obj.iioDev2, true);
             obj.CheckAndUpdateHW(obj.MainNCOFrequenciesChipD,...
                 'MainNCOFrequenciesChipD','main_nco_frequency', ...
-                obj.iioDev0, true);
+                obj.iioDev3, true);
             %%
             obj.CheckAndUpdateHW(obj.ChannelNCOPhasesChipA,...
                 'ChannelNCOPhasesChipA','channel_nco_phase', ...
                 obj.iioDev0, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOPhasesChipB,...
                 'ChannelNCOPhasesChipB','channel_nco_phase', ...
-                obj.iioDev0, true);
+                obj.iioDev1, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOPhasesChipC,...
                 'ChannelNCOPhasesChipC','channel_nco_phase', ...
-                obj.iioDev0, true);
+                obj.iioDev2, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOPhasesChipD,...
                 'ChannelNCOPhasesChipD','channel_nco_phase', ...
-                obj.iioDev0, true);
+                obj.iioDev3, true);
             %%
             obj.CheckAndUpdateHW(obj.MainNCOPhasesChipA,...
                 'MainNCOPhasesChipA','main_nco_phase', ...
                 obj.iioDev0, true);
             obj.CheckAndUpdateHW(obj.MainNCOPhasesChipB,...
                 'MainNCOPhasesChipB','main_nco_phase', ...
-                obj.iioDev0, true);
+                obj.iioDev1, true);
             obj.CheckAndUpdateHW(obj.MainNCOPhasesChipC,...
                 'MainNCOPhasesChipC','main_nco_phase', ...
-                obj.iioDev0, true);
+                obj.iioDev2, true);
             obj.CheckAndUpdateHW(obj.MainNCOPhasesChipD,...
                 'MainNCOPhasesChipD','main_nco_phase', ...
-                obj.iioDev0, true);
+                obj.iioDev3, true);
             %%
             obj.CheckAndUpdateHW(obj.ChannelNCOGainScalesChipA,...
                 'ChannelNCOGainScalesChipA','channel_nco_gain_scale', ...
                 obj.iioDev0, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOGainScalesChipB,...
                 'ChannelNCOGainScalesChipB','channel_nco_gain_scale', ...
-                obj.iioDev0, true);
+                obj.iioDev1, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOGainScalesChipC,...
                 'ChannelNCOGainScalesChipC','channel_nco_gain_scale', ...
-                obj.iioDev0, true);
+                obj.iioDev2, true);
             obj.CheckAndUpdateHW(obj.ChannelNCOGainScalesChipD,...
                 'ChannelNCOGainScalesChipD','channel_nco_gain_scale', ...
-                obj.iioDev0, true);
+                obj.iioDev3, true);
             %%
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipA,...
                 'NCOEnablesChipA','en', ...
@@ -458,10 +462,10 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
                 obj.iioDev2);
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipD,...
                 'NCOEnablesChipD','en', ...
-                obj.iioDev);
+                obj.iioDev3);
             %%
             obj.setAttributeLongLong('voltage0','hardwaregain',...
-                obj.ExternalAttenuation,true,obj.iioHMC425a);
+                obj.ExternalAttenuation,true,0,obj.iioHMC425a);
             
             %% DDS
             

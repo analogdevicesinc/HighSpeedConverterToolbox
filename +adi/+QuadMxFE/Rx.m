@@ -153,6 +153,12 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
         NCOEnablesChipD = [false,false,false,false];
     end
     
+    properties
+        %ExternalAttenuation External Attenuation
+        %   Attenuation value of external HMC425a
+       ExternalAttenuation = 0; 
+    end
+    
     properties (Hidden, Nontunable, Access = protected)
         isOutput = false;
     end
@@ -208,6 +214,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
        iioDev0;
        iioDev1;
        iioDev2;
+       iioHMC425a;
     end
     
     methods
@@ -219,7 +226,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
         % Check ChannelNCOFrequenciesChipA
         function set.ChannelNCOFrequenciesChipA(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOFrequenciesChipA',...
-                'channel_nco_frequency', obj.iioDev0);
+                'channel_nco_frequency', obj.iioDev0); %#ok<*MCSUP>
             obj.ChannelNCOFrequenciesChipA = value;
         end
         % Check ChannelNCOFrequenciesChipB
@@ -365,6 +372,18 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
                 'en', obj.iioDev);
             obj.NCOEnablesChipD = value;
         end
+        % Check ExternalAttenuation
+        function set.ExternalAttenuation(obj, value)
+%             validateattributes( value, { 'double','single' }, ...
+%                 { 'real', 'scalar', 'finite', 'nonnan', 'nonempty', '>=', -4,'<=', 71}, ...
+%                 '', 'Gain');
+%             assert(mod(value,1/4)==0, 'Gain must be a multiple of 0.25');
+            obj.ExternalAttenuation = value;
+            if obj.ConnectedToDevice
+                id = 'voltage0';
+                obj.setAttributeLongLong(id,'hardwaregain',value,true,obj.iioHMC425a);
+            end
+        end
     end
        
     %% API Functions
@@ -381,6 +400,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.iioDev0 = getDev(obj, obj.devName0);
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
+            obj.iioHMC425a = getDev(obj, 'hmc425a');
             
             % Update attributes
             obj.setAttributeRAW('voltage0_i','test_mode',...
@@ -456,6 +476,9 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipD,...
                 'NCOEnablesChipD','en', ...
                 obj.iioDev);
+            %%
+            obj.setAttributeLongLong('voltage0','hardwaregain',...
+                obj.ExternalAttenuation,true,0,obj.iioHMC425a);
             
         end
         

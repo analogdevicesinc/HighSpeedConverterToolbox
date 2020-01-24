@@ -141,13 +141,7 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         %   interpolators
         NCOEnablesChipD = [false,false,false,false];
     end
-    
-    properties
-        %ExternalAttenuation External Attenuation
-        %   Attenuation value of external HMC425a
-       ExternalAttenuation = 0; 
-    end
-    
+       
     properties (Hidden, Nontunable, Access = protected)
         isOutput = true;
     end
@@ -186,7 +180,6 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
        iioDev1;
        iioDev2;
        iioDev3;
-       iioHMC425a;
     end
     
     methods
@@ -329,18 +322,6 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
                 'channel_nco_gain_scale', obj.iioDev3, true);
             obj.ChannelNCOGainScalesChipD = value;
         end
-        % Check ExternalAttenuation
-        function set.ExternalAttenuation(obj, value)
-%             validateattributes( value, { 'double','single' }, ...
-%                 { 'real', 'scalar', 'finite', 'nonnan', 'nonempty', '>=', -4,'<=', 71}, ...
-%                 '', 'Gain');
-%             assert(mod(value,1/4)==0, 'Gain must be a multiple of 0.25');
-            obj.ExternalAttenuation = value;
-            if obj.ConnectedToDevice
-                id = 'voltage0';
-                obj.setAttributeLongLong(id,'hardwaregain',value,true,obj.iioHMC425a);
-            end
-        end
         %%
         % Check NCOEnablesChipA
         function set.NCOEnablesChipA(obj, value)
@@ -383,7 +364,6 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
             obj.iioDev3 = getDev(obj, obj.devName3);
-            obj.iioHMC425a = getDev(obj, 'hmc425a');
             
             %%
             obj.CheckAndUpdateHW(obj.ChannelNCOFrequenciesChipA,...
@@ -462,11 +442,7 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
                 obj.iioDev2);
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipD,...
                 'NCOEnablesChipD','en', ...
-                obj.iioDev3);
-            %%
-            obj.setAttributeLongLong('voltage0','hardwaregain',...
-                obj.ExternalAttenuation,true,0,obj.iioHMC425a);
-            
+                obj.iioDev3);            
             %% DDS
             
             obj.ToggleDDS(strcmp(obj.DataSource,'DDS'));

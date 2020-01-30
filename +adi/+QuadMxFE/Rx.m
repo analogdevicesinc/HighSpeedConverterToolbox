@@ -125,34 +125,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
         %   'pn15' 'pn31' 'ramp'
         TestModeChipD = 'off';
     end
-    
-    properties
-        %NCOEnablesChipA Test Mode Chip A
-        %   Test mode of receive path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
-        NCOEnablesChipA = [false,false,false,false];
-        %NCOEnablesChipB Test Mode Chip B
-        %   Test mode of receive path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
-        NCOEnablesChipB = [false,false,false,false];
-        %NCOEnablesChipC Test Mode Chip C
-        %   Test mode of receive path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
-        NCOEnablesChipC = [false,false,false,false];
-        %NCOEnablesChipD Test Mode Chip D
-        %   Test mode of receive path. Options are:
-        %   'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 
-        %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
-        %   'pn15' 'pn31' 'ramp'
-        NCOEnablesChipD = [false,false,false,false];
-    end
-    
+
     properties
         %ExternalAttenuation External Attenuation
         %   Attenuation value of external HMC425a
@@ -348,30 +321,6 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.TestModeChipD = value;
         end
         %%
-        % Check NCOEnablesChipA
-        function set.NCOEnablesChipA(obj, value)
-            obj.CheckAndUpdateHWBool(value,'NCOEnablesChipA',...
-                'en', obj.iioDev0);
-            obj.NCOEnablesChipA = value;
-        end
-        % Check NCOEnablesChipB
-        function set.NCOEnablesChipB(obj, value)
-            obj.CheckAndUpdateHWBool(value,'NCOEnablesChipB',...
-                'en', obj.iioDev1);
-            obj.NCOEnablesChipB = value;
-        end
-        % Check NCOEnablesChipC
-        function set.NCOEnablesChipC(obj, value)
-            obj.CheckAndUpdateHWBool(value,'NCOEnablesChipC',...
-                'en', obj.iioDev2);
-            obj.NCOEnablesChipC = value;
-        end
-        % Check NCOEnablesChipD
-        function set.NCOEnablesChipD(obj, value)
-            obj.CheckAndUpdateHWBool(value,'NCOEnablesChipD',...
-                'en', obj.iioDev);
-            obj.NCOEnablesChipD = value;
-        end
         % Check ExternalAttenuation
         function set.ExternalAttenuation(obj, value)
 %             validateattributes( value, { 'double','single' }, ...
@@ -464,25 +413,11 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
                 'MainNCOPhasesChipD','main_nco_phase', ...
                 obj.iioDev);
             %%
-            obj.CheckAndUpdateHWBool(obj.NCOEnablesChipA,...
-                'NCOEnablesChipA','en', ...
-                obj.iioDev0);
-            obj.CheckAndUpdateHWBool(obj.NCOEnablesChipB,...
-                'NCOEnablesChipB','en', ...
-                obj.iioDev1);
-            obj.CheckAndUpdateHWBool(obj.NCOEnablesChipC,...
-                'NCOEnablesChipC','en', ...
-                obj.iioDev2);
-            obj.CheckAndUpdateHWBool(obj.NCOEnablesChipD,...
-                'NCOEnablesChipD','en', ...
-                obj.iioDev);
-            %%
             obj.setAttributeLongLong('voltage0','hardwaregain',...
                 obj.ExternalAttenuation,true,0,obj.iioHMC425a);
-            
-        end
-        
-    end
-    
-end
 
+        end
+
+    end
+
+end

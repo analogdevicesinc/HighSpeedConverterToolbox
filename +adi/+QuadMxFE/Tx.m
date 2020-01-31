@@ -433,25 +433,23 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             %%
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipA,...
                 'NCOEnablesChipA','en', ...
-                obj.iioDev0);
+                obj.iioDev0, true);
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipB,...
                 'NCOEnablesChipB','en', ...
-                obj.iioDev1);
+                obj.iioDev1, true);
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipC,...
                 'NCOEnablesChipC','en', ...
-                obj.iioDev2);
+                obj.iioDev2, true);
             obj.CheckAndUpdateHWBool(obj.NCOEnablesChipD,...
                 'NCOEnablesChipD','en', ...
-                obj.iioDev3);            
+                obj.iioDev3, true);
             %% DDS
-            
             obj.ToggleDDS(strcmp(obj.DataSource,'DDS'));
             if strcmp(obj.DataSource,'DDS')
                 obj.DDSUpdate();
             end
         end
-        
-    end
-    
-end
 
+    end
+
+end

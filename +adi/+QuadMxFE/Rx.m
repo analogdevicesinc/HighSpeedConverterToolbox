@@ -10,92 +10,92 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
     properties
         %ChannelNCOFrequenciesChipA Channel NCO Frequencies Chip A
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOFrequenciesChipA = [0,0,0,0];
         %ChannelNCOFrequenciesChipB Channel NCO Frequencies Chip B
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOFrequenciesChipB = [0,0,0,0];
         %ChannelNCOFrequenciesChipC Channel NCO Frequencies Chip C
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOFrequenciesChipC = [0,0,0,0];
         %ChannelNCOFrequenciesChipD Channel NCO Frequencies Chip D
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOFrequenciesChipD = [0,0,0,0];
     end
     
     properties
         %MainNCOFrequenciesChipA Main NCO Frequencies Chip A
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOFrequenciesChipA = [0,0,0,0];
         %MainNCOFrequenciesChipB Main NCO Frequencies Chip B
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOFrequenciesChipB = [0,0,0,0];
         %MainNCOFrequenciesChipC Main NCO Frequencies Chip C
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOFrequenciesChipC = [0,0,0,0];
         %MainNCOFrequenciesChipD Main NCO Frequencies Chip D
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOFrequenciesChipD = [0,0,0,0];
     end
     
     properties
         %ChannelNCOPhasesChipA Channel NCO Phases Chip A
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOPhasesChipA = [0,0,0,0];
         %ChannelNCOPhasesChipB Channel NCO Phases Chip B
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOPhasesChipB = [0,0,0,0];
         %ChannelNCOPhasesChipC Channel NCO Phases Chip C
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOPhasesChipC = [0,0,0,0];
         %ChannelNCOPhasesChipD Channel NCO Phases Chip D
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         ChannelNCOPhasesChipD = [0,0,0,0];
     end
     
     properties
         %MainNCOPhasesChipA Main NCO Phases Chip A
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOPhasesChipA = [0,0,0,0];
         %MainNCOPhasesChipB Main NCO Phases Chip B
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOPhasesChipB = [0,0,0,0];
         %MainNCOPhasesChipC Main NCO Phases Chip C
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOPhasesChipC = [0,0,0,0];
         %MainNCOPhasesChipD Main NCO Phases Chip D
         %   Frequency of NCO in fine decimators in receive path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
-        %   NCO in hertz.
+        %   must be a [1,N] vector where each value is the frequency of an
+        %   NCO in hertz, and N is the number of channels available.
         MainNCOPhasesChipD = [0,0,0,0];
     end
     
@@ -157,6 +157,8 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
     
     properties(Nontunable, Hidden, Constant)
         Type = 'Rx';
+    end
+    properties(Nontunable, Hidden)
         channel_names = {...
             'voltage0_i','voltage0_q',...
             'voltage1_i','voltage1_q',...
@@ -174,9 +176,8 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             'voltage13_i','voltage13_q',...
             'voltage14_i','voltage14_q',...
             'voltage15_i','voltage15_q'};
-    end
-    
-    properties (Nontunable, Hidden)
+        num_data_channels = 16;
+        num_attr_channels = 4;
         devName = 'axi-ad9081-rx-3';
         devName0 = 'axi-ad9081-rx-0';
         devName1 = 'axi-ad9081-rx-1';
@@ -195,6 +196,22 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
         function obj = Rx(varargin)
             coder.allowpcode('plain');
             obj = obj@adi.QuadMxFE.Base(varargin{:});
+            obj.ChannelNCOFrequenciesChipA = zeros(1,obj.num_attr_channels);
+            obj.ChannelNCOFrequenciesChipB = zeros(1,obj.num_attr_channels);
+            obj.ChannelNCOFrequenciesChipC = zeros(1,obj.num_attr_channels);
+            obj.ChannelNCOFrequenciesChipD = zeros(1,obj.num_attr_channels);
+            obj.MainNCOFrequenciesChipA = zeros(1,obj.num_attr_channels);
+            obj.MainNCOFrequenciesChipB = zeros(1,obj.num_attr_channels);
+            obj.MainNCOFrequenciesChipC = zeros(1,obj.num_attr_channels);
+            obj.MainNCOFrequenciesChipD = zeros(1,obj.num_attr_channels);
+            obj.ChannelNCOPhasesChipA = zeros(1,obj.num_attr_channels);
+            obj.ChannelNCOPhasesChipB = zeros(1,obj.num_attr_channels);
+            obj.ChannelNCOPhasesChipC = zeros(1,obj.num_attr_channels);
+            obj.ChannelNCOPhasesChipD = zeros(1,obj.num_attr_channels);
+            obj.MainNCOPhasesChipA = zeros(1,obj.num_attr_channels);
+            obj.MainNCOPhasesChipB = zeros(1,obj.num_attr_channels);
+            obj.MainNCOPhasesChipC = zeros(1,obj.num_attr_channels);
+            obj.MainNCOPhasesChipD = zeros(1,obj.num_attr_channels);
         end
         % Check ChannelNCOFrequenciesChipA
         function set.ChannelNCOFrequenciesChipA(obj, value)
@@ -344,6 +361,12 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             % Do writes directly to hardware without using set methods.
             % This is required sine Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
+            
+            obj.channel_names = {};
+            for k = 0:(obj.num_data_channels-1)
+                obj.channel_names = [obj.channel_names(:)', ...
+                    {sprintf('voltage%d_i',k)},{sprintf('voltage%d_q',k)}];
+            end
             
             % Get additional devices
             obj.iioDev0 = getDev(obj, obj.devName0);

@@ -30,6 +30,9 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
         ComplexData = true;
     end
 
+    properties (Abstract, Hidden)
+        num_attr_channels
+    end
     
     methods
         %% Constructor
@@ -53,13 +56,13 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
             if nargin < 6
                 output = false;
             end
-            N = 4;
+            N = obj.num_attr_channels;
             tol = 100;
             s = size(value);
             c1 = s(1) == 1;
             c2 = s(2) == N;
             assert(c1 && c2,...
-                sprintf('%s expected to be size [1x4]',name));
+                sprintf('%s expected to be size [1x%d]',name,N));
             if obj.ConnectedToDevice
                 for k=1:N
                     id = sprintf('voltage%d_i',k-1);
@@ -72,13 +75,13 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
             if nargin < 6
                 output = false;
             end
-            N = 4;
+            N = obj.num_attr_channels;
             tol = 100;
             s = size(value);
             c1 = s(1) == 1;
             c2 = s(2) == N;
             assert(c1 && c2,...
-                sprintf('%s expected to be size [1x4]',name));
+                sprintf('%s expected to be size [1x%d]',name,N));
             if obj.ConnectedToDevice
                 for k=1:N
                     id = sprintf('voltage%d_i',k-1);

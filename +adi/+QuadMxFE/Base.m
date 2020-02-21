@@ -24,14 +24,13 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
         dataTypeStr = 'int16';
         phyDevName = 'axi-ad9081-rx-3';
         iioDevPHY
+        max_num_data_channels = 32;
+        max_num_coarse_attr_channels = 16;
+        max_num_fine_attr_channels = 32;
     end
     
     properties (Hidden, Constant)
         ComplexData = true;
-    end
-
-    properties (Abstract, Hidden)
-        num_attr_channels
     end
     
     methods
@@ -56,16 +55,24 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
             if nargin < 6
                 output = false;
             end
-            N = obj.num_attr_channels;
+            if contains(attr,'channel_')
+                N = obj.num_fine_attr_channels;
+                stride = 1;
+            elseif contains(attr,'main_')
+                N = obj.num_coarse_attr_channels;
+                stride = obj.num_fine_attr_channels/N;
+            else
+                error('Unknown attribute name');
+            end
             tol = 100;
             s = size(value);
             c1 = s(1) == 1;
-            c2 = s(2) == N;
+            c2 = s(2) <= N;
             assert(c1 && c2,...
-                sprintf('%s expected to be size [1x%d]',name,N));
+                sprintf('%s expected to be at most size [1x%d]',name,N));
             if obj.ConnectedToDevice
                 for k=1:N
-                    id = sprintf('voltage%d_i',k-1);
+                    id = sprintf('voltage%d_i',(k-1)*stride);
                     obj.setAttributeLongLong(id,attr,value(k),output, tol, phy);
                 end
             end
@@ -75,16 +82,23 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
             if nargin < 6
                 output = false;
             end
-            N = obj.num_attr_channels;
-            tol = 100;
+            if contains(attr,'channel_') || strcmpi(attr,'en')
+                N = obj.num_fine_attr_channels;
+                stride = 1;
+            elseif contains(attr,'main_')
+                N = obj.num_coarse_attr_channels;
+                stride = obj.num_fine_attr_channels/N;
+            else
+                error('Unknown attribute name');
+            end
             s = size(value);
             c1 = s(1) == 1;
-            c2 = s(2) == N;
+            c2 = s(2) <= N;
             assert(c1 && c2,...
-                sprintf('%s expected to be size [1x%d]',name,N));
+                sprintf('%s expected to be at most size [1x%d]',name,N));
             if obj.ConnectedToDevice
                 for k=1:N
-                    id = sprintf('voltage%d_i',k-1);
+                    id = sprintf('voltage%d_i',(k-1)*stride);
                     obj.setAttributeBool(id,attr,value(k),output, phy);
                 end
             end

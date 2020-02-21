@@ -153,7 +153,9 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     properties (Nontunable, Hidden)
         channel_names;
         num_data_channels = 32;
-        num_attr_channels = 8;
+        num_coarse_attr_channels = 4;
+        num_fine_attr_channels = 8;
+        num_dds_channels = 128;
         devName = 'axi-ad9081-tx-3';
         devName0 = 'axi-ad9081-rx-0';
         devName1 = 'axi-ad9081-rx-1';
@@ -173,40 +175,48 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         function obj = Tx(varargin)
             coder.allowpcode('plain');
             obj = obj@adi.QuadMxFE.Base(varargin{:});
+            obj.uri = 'ip:analog';
+            obj.channel_names = {};
+            for k = 0:(obj.num_data_channels-1)
+                obj.channel_names = [obj.channel_names(:)', ...
+                    {sprintf('voltage%d_i',k)},{sprintf('voltage%d_q',k)}];
+            end
+            
             obj.dds_channel_names = {};
-            for k=0:63
+            for k=0:obj.num_dds_channels-1
                 obj.dds_channel_names = [...
                     obj.dds_channel_names(:)',...
                     {sprintf('altvoltage%d',k)}];
             end
-            l = length(obj.dds_channel_names)/2;
+            l = obj.num_dds_channels/2;
             obj.DDSFrequencies = zeros(2,l);
             obj.DDSPhases = zeros(2,l);
             obj.DDSScales = zeros(2,l);
-            obj.ChannelNCOFrequenciesChipA = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOFrequenciesChipB = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOFrequenciesChipC = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOFrequenciesChipD = zeros(1,obj.num_attr_channels);
-            obj.MainNCOFrequenciesChipA = zeros(1,obj.num_attr_channels);
-            obj.MainNCOFrequenciesChipB = zeros(1,obj.num_attr_channels);
-            obj.MainNCOFrequenciesChipC = zeros(1,obj.num_attr_channels);
-            obj.MainNCOFrequenciesChipD = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOPhasesChipA = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOPhasesChipB = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOPhasesChipC = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOPhasesChipD = zeros(1,obj.num_attr_channels);
-            obj.MainNCOPhasesChipA = zeros(1,obj.num_attr_channels);
-            obj.MainNCOPhasesChipB = zeros(1,obj.num_attr_channels);
-            obj.MainNCOPhasesChipC = zeros(1,obj.num_attr_channels);
-            obj.MainNCOPhasesChipD = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOGainScalesChipA = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOGainScalesChipB = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOGainScalesChipC = zeros(1,obj.num_attr_channels);
-            obj.ChannelNCOGainScalesChipD = zeros(1,obj.num_attr_channels);
-            obj.NCOEnablesChipA = zeros(1,obj.num_attr_channels) > 0;
-            obj.NCOEnablesChipB = zeros(1,obj.num_attr_channels) > 0;
-            obj.NCOEnablesChipC = zeros(1,obj.num_attr_channels) > 0;
-            obj.NCOEnablesChipD = zeros(1,obj.num_attr_channels) > 0;
+            
+            obj.ChannelNCOFrequenciesChipA = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOFrequenciesChipB = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOFrequenciesChipC = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOFrequenciesChipD = zeros(1,obj.num_fine_attr_channels);
+            obj.MainNCOFrequenciesChipA = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFrequenciesChipB = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFrequenciesChipC = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFrequenciesChipD = zeros(1,obj.num_coarse_attr_channels);
+            obj.ChannelNCOPhasesChipA = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOPhasesChipB = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOPhasesChipC = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOPhasesChipD = zeros(1,obj.num_fine_attr_channels);
+            obj.MainNCOPhasesChipA = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOPhasesChipB = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOPhasesChipC = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOPhasesChipD = zeros(1,obj.num_coarse_attr_channels);
+            obj.ChannelNCOGainScalesChipA = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOGainScalesChipB = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOGainScalesChipC = zeros(1,obj.num_fine_attr_channels);
+            obj.ChannelNCOGainScalesChipD = zeros(1,obj.num_fine_attr_channels);
+            obj.NCOEnablesChipA = zeros(1,obj.num_fine_attr_channels) > 0;
+            obj.NCOEnablesChipB = zeros(1,obj.num_fine_attr_channels) > 0;
+            obj.NCOEnablesChipC = zeros(1,obj.num_fine_attr_channels) > 0;
+            obj.NCOEnablesChipD = zeros(1,obj.num_fine_attr_channels) > 0;
         end
         % Check ChannelNCOFrequenciesChipA
         function set.ChannelNCOFrequenciesChipA(obj, value)
@@ -369,18 +379,12 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             % This is required sine Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
             
-            obj.channel_names = {};
-            for k = 0:(obj.num_data_channels-1)
-                obj.channel_names = [obj.channel_names(:)', ...
-                    {sprintf('voltage%d_i',k)},{sprintf('voltage%d_q',k)}];
-            end
-            
             % Get SPI connected dev
             obj.iioDev0 = getDev(obj, obj.devName0);
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
             obj.iioDev3 = getDev(obj, obj.devName3);
-            
+
             %%
             obj.CheckAndUpdateHW(obj.ChannelNCOFrequenciesChipA,...
                 'ChannelNCOFrequenciesChipA','channel_nco_frequency', ...

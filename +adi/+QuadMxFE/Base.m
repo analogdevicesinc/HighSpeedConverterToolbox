@@ -9,6 +9,11 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
         %   integer from 2 to 16,777,216. Using values less than 3660 can
         %   yield poor performance.
         SamplesPerFrame = 2^15;
+        %EnableResampleFilters Enable Resample Filters
+        %   Enable interpolation (TX) or decimation (RX) by 2 when enabled 
+        %   to correct interface rate to 125 MS/s. This will scale the 
+        %   input and output data length by either 1/2 (RX) or 2 (TX).
+        EnableResampleFilters = false;
     end
        
     properties (Hidden, Constant)

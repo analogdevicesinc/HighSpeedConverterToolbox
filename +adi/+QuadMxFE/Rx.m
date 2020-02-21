@@ -4,7 +4,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
     %   complex data from the QuadMxFE.
     %
     %   rx = adi.QuadMxFE.Rx;
-    %   rx = adi.QuadMxFE.Rx('uri','192.168.2.1');
+    %   rx = adi.QuadMxFE.Rx('uri','ip:192.168.2.1');
     %
     %   <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf">AD9081 Datasheet</a>       
     properties
@@ -347,6 +347,14 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
        
     %% API Functions
     methods (Hidden, Access = protected)
+        
+        function [data,valid] = stepImpl(obj)
+            [data,valid] = stepImpl@adi.common.Rx(obj);
+            if obj.EnableResampleFilters
+                % Decimate
+                data = resample(data,1,2);
+            end
+        end
         
         function setupInit(obj)
             % Write all attributes to device once connected through set

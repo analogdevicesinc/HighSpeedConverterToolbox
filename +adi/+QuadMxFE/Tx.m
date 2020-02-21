@@ -4,29 +4,29 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     %   complex data from the QuadMxFE.
     %
     %   tx = adi.QuadMxFE.Tx;
-    %   tx = adi.QuadMxFE.Tx('uri','192.168.2.1');
+    %   tx = adi.QuadMxFE.Tx('uri','ip:192.168.2.1');
     %
     %   <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf">AD9081 Datasheet</a>
 
     properties
         %ChannelNCOFrequenciesChipA Channel NCO Frequencies Chip A
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOFrequenciesChipA = [0,0,0,0];
         %ChannelNCOFrequenciesChipB Channel NCO Frequencies Chip B
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOFrequenciesChipB = [0,0,0,0];
         %ChannelNCOFrequenciesChipC Channel NCO Frequencies Chip C
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOFrequenciesChipC = [0,0,0,0];
         %ChannelNCOFrequenciesChipD Channel NCO Frequencies Chip D
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOFrequenciesChipD = [0,0,0,0];
     end
@@ -34,22 +34,22 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     properties
         %MainNCOFrequenciesChipA Main NCO Frequencies Chip A
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOFrequenciesChipA = [0,0,0,0];
         %MainNCOFrequenciesChipB Main NCO Frequencies Chip B
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOFrequenciesChipB = [0,0,0,0];
         %MainNCOFrequenciesChipC Main NCO Frequencies Chip C
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOFrequenciesChipC = [0,0,0,0];
         %MainNCOFrequenciesChipD Main NCO Frequencies Chip D
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOFrequenciesChipD = [0,0,0,0];
     end
@@ -57,22 +57,22 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     properties
         %ChannelNCOPhasesChipA Channel NCO Phases Chip A
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOPhasesChipA = [0,0,0,0];
         %ChannelNCOPhasesChipB Channel NCO Phases Chip B
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOPhasesChipB = [0,0,0,0];
         %ChannelNCOPhasesChipC Channel NCO Phases Chip C
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOPhasesChipC = [0,0,0,0];
         %ChannelNCOPhasesChipD Channel NCO Phases Chip D
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOPhasesChipD = [0,0,0,0];
     end
@@ -80,22 +80,22 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     properties
         %MainNCOPhasesChipA Main NCO Phases Chip A
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOPhasesChipA = [0,0,0,0];
         %MainNCOPhasesChipB Main NCO Phases Chip B
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOPhasesChipB = [0,0,0,0];
         %MainNCOPhasesChipC Main NCO Phases Chip C
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOPhasesChipC = [0,0,0,0];
         %MainNCOPhasesChipD Main NCO Phases Chip D
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         MainNCOPhasesChipD = [0,0,0,0];
     end
@@ -103,22 +103,22 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     properties
         %ChannelNCOGainScalesChipA Channel NCO Gain Scales Chip A
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOGainScalesChipA = [0,0,0,0];
         %ChannelNCOGainScalesChipB Channel NCO Gain Scales Chip B
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOGainScalesChipB = [0,0,0,0];
         %ChannelNCOGainScalesChipC Channel NCO Gain Scales Chip C
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOGainScalesChipC = [0,0,0,0];
         %ChannelNCOGainScalesChipD Channel NCO Gain Scales Chip D
         %   Frequency of NCO in fine decimators in transmit path. Property
-        %   must be a [1,4] vector where each value is the frequency of an
+        %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
         ChannelNCOGainScalesChipD = [0,0,0,0];
     end
@@ -371,6 +371,31 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
     
     %% API Functions
     methods (Hidden, Access = protected)
+        
+        function setupImpl(obj,data)
+            if strcmp(obj.DataSource,'DMA')
+                obj.SamplesPerFrame = ...
+                    (1+obj.EnableResampleFilters)*size(data,1);
+            end
+            % Call the superclass method
+             setupImpl@adi.common.RxTx(obj);
+        end
+        
+        function valid = stepImpl(obj,varargin)
+            if strcmp(obj.DataSource,'DMA')
+                if nargin < 2
+                   error('In DMA mode, data must be passed to operator'); 
+                end
+                % Interpolate
+                data = varargin{1};
+                if obj.EnableResampleFilters
+                    data = resample(data,2,1);
+                end
+                valid = stepImpl@adi.common.Tx(obj,data);
+            else
+                valid = stepImpl@adi.common.Tx(obj,varargin);
+            end
+        end
         
         function setupInit(obj)
             % Write all attributes to device once connected through set

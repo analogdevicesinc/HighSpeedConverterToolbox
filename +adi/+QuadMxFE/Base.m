@@ -83,6 +83,33 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
             end
         end
         
+        function CheckAndUpdateHWFloat(obj, value, name, attr, phy, output)
+            if nargin < 6
+                output = false;
+            end
+            if contains(attr,'channel_')
+                N = obj.num_fine_attr_channels;
+                stride = 1;
+            elseif contains(attr,'main_')
+                N = obj.num_coarse_attr_channels;
+                stride = obj.num_fine_attr_channels/N;
+            else
+                error('Unknown attribute name');
+            end
+            tol = 100;
+            s = size(value);
+            c1 = s(1) == 1;
+            c2 = s(2) <= N;
+            assert(c1 && c2,...
+                sprintf('%s expected to be at most size [1x%d]',name,N));
+            if obj.ConnectedToDevice
+                for k=1:N
+                    id = sprintf('voltage%d_i',(k-1)*stride);
+                    obj.setAttributeDouble(id,attr,value(k),output, tol, phy);
+                end
+            end
+        end
+        
         function CheckAndUpdateHWBool(obj, value, name, attr, phy, output)
             if nargin < 6
                 output = false;

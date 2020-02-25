@@ -403,7 +403,10 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             % Do writes directly to hardware without using set methods.
             % This is required sine Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
-            
+
+            % Enable TX DMA offload
+            obj.setDebugAttributeBool('pl_ddr_fifo_enable', 1, getDev(obj, obj.devName));
+
             % Get SPI connected dev
             obj.iioDev0 = getDev(obj, obj.devName0);
             obj.iioDev1 = getDev(obj, obj.devName1);

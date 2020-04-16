@@ -168,6 +168,10 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
        iioDev1;
        iioDev2;
        iioDev3;
+       iioDevADF4371_0;
+       iioDevADF4371_1;
+       iioDevADF4371_2;
+       iioDevADF4371_3;
     end
     
     methods
@@ -412,6 +416,10 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
             obj.iioDev3 = getDev(obj, obj.devName3);
+            obj.iioDevADF4371_0 = getDev(obj, 'adf4371-0');
+            obj.iioDevADF4371_1 = getDev(obj, 'adf4371-1');
+            obj.iioDevADF4371_2 = getDev(obj, 'adf4371-2');
+            obj.iioDevADF4371_3 = getDev(obj, 'adf4371-3');
 
             %%
             obj.CheckAndUpdateHW(obj.ChannelNCOFrequenciesChipA,...

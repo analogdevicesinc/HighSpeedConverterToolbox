@@ -8,7 +8,7 @@ switch mode
         end
         if realModeLength == 192
             N = 192;
-        elseif realModeLength == 192
+        elseif realModeLength == 96
             N = 96;
         else
             error('For independent filters (non-complex) lengths must be 96 or 192');

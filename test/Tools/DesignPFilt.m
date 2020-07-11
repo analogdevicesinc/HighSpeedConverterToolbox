@@ -1,4 +1,4 @@
-function [config,taps,quantizedTaps] = DesignPFilt(taps,mode,realModeLength)
+function [config,taps,quantizedTaps,tapError] = DesignPFilt(taps,mode,realModeLength)
 
 % Checks
 switch mode
@@ -30,7 +30,7 @@ taps = taps./max(abs(taps));
 taps = taps.*(2^(16-1));
 
 %% Find best possible configuration that maintains precision
-[config, quantizedTaps] = findBestBitArrangement(taps,N);
+[config, quantizedTaps,tapError] = findBestBitArrangement(taps,N);
 
 
 end

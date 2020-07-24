@@ -6,6 +6,11 @@ classdef Version
         Vivado = '2018.2';
         MATLAB = 'R2019b';
         Release = '19.2.1';
+        AppName = 'Analog Devices, Inc. High-Speed Converter Toolbox';
+        ToolboxName = 'HighSpeedConverterToolbox';
+        ToolboxNameShort = 'hsx';
+        ExamplesDir = 'hsx_examples';
+        HasHDL = true;
     end
     properties(Dependent)
         VivadoShort

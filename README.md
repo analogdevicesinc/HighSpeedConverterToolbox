@@ -6,13 +6,13 @@ License : [![License](https://img.shields.io/badge/license-LGPL2-blue.svg)](http
 Latest Release : [![GitHub release](https://img.shields.io/github/release/analogdevicesinc/HighSpeedConverterToolbox.svg)](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases/latest)
 Downloads :  [![Github All Releases](https://img.shields.io/github/downloads/analogdevicesinc/HighSpeedConverterToolbox/total.svg)](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases/latest)
 
-As with many open source packages, we use [GitHub](https://github.com/analogdevicesinc/HighSpeedConverterToolbox) to do develop and maintain the source, and [GitLab](https://GitLab.com/) for continuous integration.
+As with many open source packages, we use [GitHub](https://github.com/analogdevicesinc/HighSpeedConverterToolbox) to do develop and maintain the source, and [Jenkins](https://jenkins.io/) for continuous integration.
   - If you want to just use HighSpeedConverterToolbox, we suggest using the [latest release](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases/latest).
   - If you think you have found a bug in the release, or need a feature which isn't in the release, try the latest **untested** builds from the master branch.
 
-| HDL Branch        | GitHub master status  | MATLAB Release |  Installer Package  |
-|:-----------------------:|:---------------------:|:-------:|:-------------------:|
-| 2018_R2                 | [![pipeline status](https://gitlab.com/tfcollins/HighSpeedConverterToolbox/badges/master/pipeline.svg)](https://gitlab.com/tfcollins/HighSpeedConverterToolbox/commits/master) | 2019b | <a href="https://gitlab.com/tfcollins/HighSpeedConverterToolbox/-/jobs/artifacts/master/download?job=deploy"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" height="40" /></a>|
+| HDL Branch         | MATLAB Release |  Installer Package  |
+|:------------------:|:--------------:|:-------------------:|
+| 2018_R2            | R2019b         | <a href="http://swdownloads.analog.com/cse/toolboxes/trx/master/AnalogDevicesHighSpeedConverterToolbox_v19.2.1.mltbx"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" height="40" /></a>|
 
 If you use it, and like it - please let us know. If you use it, and hate it - please let us know that too.
 

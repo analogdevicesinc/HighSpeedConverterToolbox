@@ -2,3 +2,7 @@
 	path = +adi/+common
 	url = https://github.com/analogdevicesinc/ToolboxCommon.git
 	branch = master
+[submodule "CI/scripts"]
+	path = CI/scripts
+	url = https://github.com/analogdevicesinc/ToolboxCI.git
+	branch = master

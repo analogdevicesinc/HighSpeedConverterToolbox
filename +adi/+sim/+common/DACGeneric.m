@@ -3,9 +3,12 @@ classdef DACGeneric < matlab.System
     %
     properties(Abstract, Nontunable, Constant)
         Bits
+    end
+    
+    properties(Abstract, Dependent)
         %ConverterNSD Converter NSD (dBFS/Hz)
         %   Specify the noise spectral density in dBc/Hz as a scalar
-        ConverterNSD
+        ConverterNSD;
     end
     
     properties(Abstract, Nontunable)

@@ -3,7 +3,12 @@ classdef DAC9081 < adi.sim.common.DACGeneric
     %
     properties(Nontunable, Constant)
         Bits = 16;
-        ConverterNSD = -162;
+        SNRFS = 64.2185;
+%         ConverterNSD = -162;
+    end
+    
+    properties(Dependent)
+        ConverterNSD;
     end
     
     properties(Nontunable)
@@ -17,6 +22,12 @@ classdef DAC9081 < adi.sim.common.DACGeneric
                 { 'real', 'scalar', 'finite', 'nonnan', 'nonempty', '>=', 0.5e9,'<=', 12e9}, ...
                 '', 'Gain');
             obj.SampleRate = value;
-        end        
+        end
+        
+        function value = get.ConverterNSD(obj)
+            NoisePowerPerBin = -10*log10(obj.SampleRate/2);
+            value = NoisePowerPerBin-obj.SNRFS;
+        end
+        
     end
 end

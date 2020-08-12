@@ -130,7 +130,7 @@ classdef Rx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
         ModeSelectMux1 = false;
     end
     
-    properties(Constant)
+    properties
         % SampleRate Sample Rate of ADCs
         %   Scalar in Hz. Currently this is fixed since NSD will change
         %   with this number, which would make the model invalid
@@ -239,13 +239,13 @@ classdef Rx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
             obj.setNCOEnable();
         end
         % Check SampleRate
-%         function set.SampleRate(obj, value)
-%             validateattributes( value, { 'double','single' }, ...
-%                 { 'real', 'scalar', 'finite', 'nonnan', 'nonempty', '>=', 1.5e9,'<=', 4e9}, ...
-%                 '', 'SampleRate');
-%             obj.SampleRate = value;
-%             obj.setRates();
-%         end
+        function set.SampleRate(obj, value)
+            validateattributes( value, { 'double','single' }, ...
+                { 'real', 'scalar', 'finite', 'nonnan', 'nonempty', '>=', 1.5e9,'<=', 4e9}, ...
+                '', 'SampleRate');
+            obj.SampleRate = value;
+            obj.setRates();
+        end
         
         % Check Crossbar4x8Mux2
         function set.Crossbar4x8Mux2(obj, value)

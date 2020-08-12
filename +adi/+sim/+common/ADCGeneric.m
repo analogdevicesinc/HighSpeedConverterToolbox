@@ -4,9 +4,13 @@ classdef ADCGeneric < matlab.System
     properties(Abstract, Nontunable, Constant)
         FullScaleVoltage
         Bits
+        SNRFS
+    end
+    
+    properties(Abstract, Dependent)
         %ConverterNSD Converter NSD (dBFS/Hz)
         %   Specify the noise spectral density in dBFS/Hz as a scalar
-        ConverterNSD
+        ConverterNSD;
     end
     
     properties(Abstract, Nontunable)

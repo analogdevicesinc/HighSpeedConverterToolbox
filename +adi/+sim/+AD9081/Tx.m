@@ -95,10 +95,9 @@ classdef Tx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
         ModeSelectMux = 0;
     end
     
-    properties(Constant)
+    properties
         % SampleRate Sample Rate of DACs
-        %   Scalar in Hz. Currently this is fixed since NSD will change
-        %   with this number, which would make the model invalid
+        %   Scalar in Hz
         SampleRate = 12e9;
     end
     
@@ -175,13 +174,13 @@ classdef Tx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
             obj.setNCOEnable();
         end
         % Check SampleRate
-%         function set.SampleRate(obj, value)
-%             validateattributes( value, { 'double','single' }, ...
-%                 { 'real', 'scalar', 'finite', 'nonnan', 'nonempty', '>=', 1.5e9,'<=', 4e9}, ...
-%                 '', 'SampleRate');
-%             obj.SampleRate = value;
-%             obj.setRates();
-%         end
+        function set.SampleRate(obj, value)
+            validateattributes( value, { 'double','single' }, ...
+                { 'real', 'scalar', 'finite', 'nonnan', 'nonempty', '>=', 1.5e9,'<=', 12e9}, ...
+                '', 'SampleRate');
+            obj.SampleRate = value;
+            obj.setRates();
+        end
         
         % Check Crossbar8x8Mux
         function set.Crossbar8x8Mux(obj, value)

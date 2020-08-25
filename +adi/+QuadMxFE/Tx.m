@@ -325,25 +325,25 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         %%
         % Check ChannelNCOGainScalesChipA
         function set.ChannelNCOGainScalesChipA(obj, value)
-            obj.CheckAndUpdateHW(value,'ChannelNCOGainScalesChipA',...
+            obj.CheckAndUpdateHWFloat(value,'ChannelNCOGainScalesChipA',...
                 'channel_nco_gain_scale', obj.iioDev0, true);
             obj.ChannelNCOGainScalesChipA = value;
         end
         % Check ChannelNCOGainScalesChipB
         function set.ChannelNCOGainScalesChipB(obj, value)
-            obj.CheckAndUpdateHW(value,'ChannelNCOGainScalesChipA',...
+            obj.CheckAndUpdateHWFloat(value,'ChannelNCOGainScalesChipA',...
                 'channel_nco_gain_scale', obj.iioDev1, true);
             obj.ChannelNCOGainScalesChipB = value;
         end
         % Check ChannelNCOGainScalesChipC
         function set.ChannelNCOGainScalesChipC(obj, value)
-            obj.CheckAndUpdateHW(value,'ChannelNCOGainScalesChipC',...
+            obj.CheckAndUpdateHWFloat(value,'ChannelNCOGainScalesChipC',...
                 'channel_nco_gain_scale', obj.iioDev2, true);
             obj.ChannelNCOGainScalesChipC = value;
         end
         % Check ChannelNCOGainScalesChipD
         function set.ChannelNCOGainScalesChipD(obj, value)
-            obj.CheckAndUpdateHW(value,'ChannelNCOGainScalesChipD',...
+            obj.CheckAndUpdateHWFloat(value,'ChannelNCOGainScalesChipD',...
                 'channel_nco_gain_scale', obj.iioDev3, true);
             obj.ChannelNCOGainScalesChipD = value;
         end

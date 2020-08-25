@@ -122,7 +122,7 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
         %%
         % Check ChannelNCOGainScales
         function set.ChannelNCOGainScales(obj, value)
-            obj.CheckAndUpdateHW(value,'ChannelNCOGainScales',...
+            obj.CheckAndUpdateHWFloat(value,'ChannelNCOGainScales',...
                 'channel_nco_gain_scale', obj.phyDev, true);
             obj.ChannelNCOGainScales = value;
         end

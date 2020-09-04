@@ -423,8 +423,8 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             obj.iioDevADF4371_3 = getDev(obj, 'adf4371-3');
             obj.iioDevHMC7043 = getDev(obj, 'hmc7043');
             if obj.CalibrationBoardAttached
-                obj.iioAD5592r = getDev(obj, 'AD5592r');
-                obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac’');
+                obj.iioAD5592r = getDev(obj, 'ad5592r');
+                obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac');
             end
 
             %%

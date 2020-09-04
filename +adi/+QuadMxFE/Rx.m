@@ -340,7 +340,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.ExternalAttenuation = value;
             if obj.ConnectedToDevice
                 id = 'voltage0';
-                obj.setAttributeLongLong(id,'hardwaregain',value,true,obj.iioHMC425a);
+                obj.setAttributeLongLong(id,'hardwaregain',value,true,0,obj.iioHMC425a);
             end
         end
     end
@@ -369,8 +369,8 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.iioDev2 = getDev(obj, obj.devName2);
             obj.iioHMC425a = getDev(obj, 'hmc425a');
             if obj.CalibrationBoardAttached
-                obj.iioAD5592r = getDev(obj, 'AD5592r');
-                obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac’');
+                obj.iioAD5592r = getDev(obj, 'ad5592r');
+                obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac');
             end
             
             % Update attributes

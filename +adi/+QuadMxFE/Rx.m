@@ -368,6 +368,10 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
             obj.iioHMC425a = getDev(obj, 'hmc425a');
+            if obj.CalibrationBoardAttached
+                obj.iioAD5592r = getDev(obj, 'AD5592r');
+                obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac’');
+            end
             
             % Update attributes
             obj.setAttributeRAW('voltage0_i','test_mode',...

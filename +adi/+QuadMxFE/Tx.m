@@ -410,7 +410,7 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             % modification to nontunable variables at SetupImpl
 
             % Enable TX DMA offload
-            obj.setDebugAttributeBool('pl_ddr_fifo_enable', 1, getDev(obj, obj.devName));
+            obj.setDebugAttributeBool('pl_ddr_fifo_enable', 1, 0, getDev(obj, obj.devName));
 
             % Get SPI connected dev
             obj.iioDev0 = getDev(obj, obj.devName0);

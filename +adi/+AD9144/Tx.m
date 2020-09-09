@@ -23,11 +23,11 @@ classdef Tx < adi.AD9144.Base & adi.common.Tx & adi.common.DDS
     
     properties(Nontunable, Hidden, Constant)
         Type = 'Tx';
-        channel_names = {'voltage0','voltage1'};
     end
     
     properties (Nontunable, Hidden)
         devName = 'axi-ad9144-hpc';
+        channel_names = {'voltage0','voltage1'};
     end
     
     methods

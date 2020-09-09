@@ -22,11 +22,11 @@ classdef Rx < adi.AD9680.Base & adi.common.Rx
     
     properties(Nontunable, Hidden, Constant)
         Type = 'Rx';
-        channel_names = {'voltage0','voltage1'};
     end
     
     properties (Nontunable, Hidden)
         devName = 'axi-ad9680-hpc';
+        channel_names = {'voltage0','voltage1'};
     end
     
     methods

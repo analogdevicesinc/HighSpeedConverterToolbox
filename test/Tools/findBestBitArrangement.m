@@ -1,4 +1,4 @@
-function [mode,quantizedTaps] = findBestBitArrangement(taps,N)
+function [mode,quantizedTaps,tapError] = findBestBitArrangement(taps,N)
 
 reps = N/(192/4);
 
@@ -40,7 +40,7 @@ for leading12s = 1:size(PossibleCasts,1)
     end
 end
 
-[~,bestCast] = min(error);
+[tapError,bestCast] = min(error);
 % plot(sort(error));
 
 mode = PossibleCasts(bestCast,:);

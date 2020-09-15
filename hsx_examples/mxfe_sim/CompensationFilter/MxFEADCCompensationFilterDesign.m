@@ -60,7 +60,7 @@ Hd = design(d,'firls','B1Weights',W1,'B2Weights',[W2 W3],'SystemObject',true);
 % mode = 'SingleInphase';
 % [config,tapsInt16,qt,tapError] = DesignPFilt(taps,mode,FilterOrder);
 % % Convert to hex for part injest
-% tapsHex = dec2hex(tapsInt16,4);
+% tapsHex = dec2hex(qt,4);
 % Hd.Numerator = qt./sum(qt);
 
 %% Calculate new filter's response

@@ -70,9 +70,9 @@ switch mode
         end
     case 'rxtx'
         % RX
-        hdlset_param([mdl,'/HDL_DUT/in1'], 'IOInterface', [dev,' ADC Data 0 [0:',num2str(portWidthRX-1),']']);
+        hdlset_param([mdl,'/HDL_DUT/in1'], 'IOInterface', [dev,' ADC Data 0 IN [0:',num2str(portWidthRX-1),']']);
         hdlset_param([mdl,'/HDL_DUT/in1'], 'IOInterfaceMapping', ['[0:',num2str(portWidthRX-1),']']);
-        hdlset_param([mdl,'/HDL_DUT/in2'], 'IOInterface', [dev,' ADC Data 1 [0:',num2str(portWidthRX-1),']']);
+        hdlset_param([mdl,'/HDL_DUT/in2'], 'IOInterface', [dev,' ADC Data 1 IN [0:',num2str(portWidthRX-1),']']);
         hdlset_param([mdl,'/HDL_DUT/in2'], 'IOInterfaceMapping', ['[0:',num2str(portWidthRX-1),']']);
         hdlset_param([mdl,'/HDL_DUT/out1'], 'IOInterface', ['IP Data 0 OUT [0:',num2str(portWidthRX-1),']']);
         hdlset_param([mdl,'/HDL_DUT/out1'], 'IOInterfaceMapping', ['[0:',num2str(portWidthRX-1),']']);

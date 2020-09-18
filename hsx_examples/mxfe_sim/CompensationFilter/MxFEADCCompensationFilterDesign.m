@@ -60,7 +60,7 @@ Hd = design(d,'firls','B1Weights',W1,'B2Weights',[W2 W3],'SystemObject',true);
 % mode = 'SingleInphase';
 % [config,tapsInt16,qt,tapError] = DesignPFilt(taps,mode,FilterOrder);
 % % Convert to hex for part injest
-% tapsHex = dec2hex(qt,4);
+% tapsHex = signeddec2hex(qt,16);
 % Hd.Numerator = qt./sum(qt);
 
 %% Calculate new filter's response
@@ -77,3 +77,9 @@ plot(frequencies, response,frequencies, responseComp, frequencies,combined);
 legend('ADC Response','Compensation Response','Combined');
 xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)');
 grid on;
+
+function hex = signeddec2hex(val, bits)
+val = val(:);
+val = (val<0)*2.^bits + val;
+hex = dec2hex(val, fix(bits/4));
+end

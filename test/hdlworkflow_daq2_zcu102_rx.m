@@ -1,3 +1,9 @@
+function out = hdlworkflow_daq2_zcu102_rx(vivado)
+
+if nargin < 1
+	vivado = '2018.2';
+end
+
 %--------------------------------------------------------------------------
 % HDL Workflow Script
 % Generated with MATLAB 9.8 (R2020a) at 12:56:00 on 24/09/2020
@@ -106,15 +112,15 @@ hWC = hdlcoder.WorkflowConfig('SynthesisTool','Xilinx Vivado','TargetWorkflow','
 
 % Specify the top level project directory
 hWC.ProjectFolder = 'hdl_prj';
-hWC.ReferenceDesignToolVersion = '2018.2';
-hWC.IgnoreToolVersionMismatch = false;
+hWC.IgnoreToolVersionMismatch = true;
+hWC.ReferenceDesignToolVersion = vivado;
 
 % Set Workflow tasks to run
 hWC.RunTaskGenerateRTLCodeAndIPCore = true;
 hWC.RunTaskCreateProject = true;
 hWC.RunTaskGenerateSoftwareInterfaceModel = false;
 hWC.RunTaskBuildFPGABitstream = true;
-hWC.RunTaskProgramTargetDevice = true;
+hWC.RunTaskProgramTargetDevice = false;
 
 % Set properties related to 'RunTaskGenerateRTLCodeAndIPCore' Task
 hWC.IPCoreRepository = '';
@@ -131,7 +137,11 @@ hWC.OperatingSystem = '';
 % Set properties related to 'RunTaskBuildFPGABitstream' Task
 hWC.RunExternalBuild = false;
 hWC.TclFileForSynthesisBuild = hdlcoder.BuildOption.Custom;
+if ispc
+hWC.CustomBuildTclFile = 'adi_build_win.tcl';
+else
 hWC.CustomBuildTclFile = 'adi_build.tcl';
+end
 
 % Set properties related to 'RunTaskProgramTargetDevice' Task
 % hWC.ProgrammingMethod = hdlcoder.ProgrammingMethod.Download;

@@ -57,6 +57,27 @@ stage("HDL Tests") {
     }
 }
 
+/////////////////////////////////////////////////////
+
+boardNames = ['daq2']
+dockerConfig.add("-e HDLBRANCH=hdl_2018_r2")
+
+stage("Demo Tests") {
+    dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+        branchName ->
+        withEnv(['BOARD='+branchName]) {
+            stage("Source") {
+                unstash "builtSources"
+                sh 'make -C ./CI/scripts test_targeting_demos'
+		junit testResults: 'test/*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            }
+        }
+    }
+}
+
+
+
 
 /////////////////////////////////////////////////////
 

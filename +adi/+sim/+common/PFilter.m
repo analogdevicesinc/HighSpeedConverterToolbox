@@ -22,7 +22,7 @@ classdef PFilter < matlab.System
         %   - HalfComplexSumQuadrature: y2 = F1(x1)+F2(x1), y1 = x1*z^-p
         %   - FullComplex: y1 = F1(x1)-F3(x2), y2 = F1(x1)+F3(x2)-F2(x1+x2) 
         %   - Matrix: y1 = F1(x1) - F3(x2), y2 = F2(x1) - F4(x2)
-        Mode = 'SingleInphase';
+        Mode = 'Matrix';
         %TapsWidthsPerQuad Taps Widths Per Quad
         %   Number of bits per each set of four coefficients. This matrix
         %   must be [NxM] where N is the number of distinct filters based
@@ -96,7 +96,7 @@ classdef PFilter < matlab.System
             obj.Gains = value;
         end
     end
-    
+        
     methods(Access = protected)
         
         function checkFilterDescription(obj,filters,taps,N)

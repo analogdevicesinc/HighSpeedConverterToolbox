@@ -27,14 +27,14 @@ classdef PFIRDesigner < adi.sim.common.PFilter
         MemoryTargetSet =  matlab.system.StringSet({'page_0','page_1',...
             'page_2','page_3','page_all'});
         FileModes = {...
-            'disabled disabled',...    %'NoFilter'
-            'real_n disabled',...      %'SingleInphase'
-            'disabled real_n',...      %'SingleQuadrature'
-            'real_n2 real_n2',...      %'DualReal'
-            'complex_half real_n4',... %'HalfComplexSumInphase'
-            'real_n4 complex_half',... %'HalfComplexSumQuadrature'
-            'complex_full',...         %'FullComplex'
-            'matrix'};                 %'Matrix'
+            'disabled disabled',...          %'NoFilter'
+            'real_n disabled',...            %'SingleInphase'
+            'disabled real_n',...            %'SingleQuadrature'
+            'real_n2 real_n2',...            %'DualReal'
+            'complex_half real_n2',...       %'HalfComplexSumInphase'
+            'real_n2 complex_half',...       %'HalfComplexSumQuadrature'
+            'complex_full complex_full',...  %'FullComplex'
+            'matrix matrix'};                %'Matrix'
     end
     
     methods(Access = protected, Hidden)
@@ -60,7 +60,7 @@ classdef PFIRDesigner < adi.sim.common.PFilter
                     end
                 case 'FullComplex'
                     for k=1:192/3
-                        fprintf(fid,'%d %d %d\n',taps(1,k),taps(2,k),taps(3,k));
+                        fprintf(fid,'%d %d\n',taps(1,k),taps(2,k));
                     end
                 case 'Matrix'
                     for k=1:192/4

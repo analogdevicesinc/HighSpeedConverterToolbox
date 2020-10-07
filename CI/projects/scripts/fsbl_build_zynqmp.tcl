@@ -2,9 +2,9 @@
 
 ### Calling script must have system_top.hdf u-boot.elf
 
-
 set cdir [pwd]
 set sdk_loc $cdir/vivado_prj.sdk
+set vversion $argv[0]
 
 ### Create fsbl
 hsi open_hw_design $sdk_loc/system_top.hdf
@@ -13,6 +13,11 @@ sdk setws $sdk_loc
 sdk createhw -name hw_0 -hwspec $sdk_loc/system_top.hdf
 sdk createapp -name fsbl -hwproject hw_0 -proc $cpu_name -os standalone -lang C -app {Zynq MP FSBL}
 configapp -app fsbl build-config release
+if { $vversion eq "2018.3" } {
+        file copy -force xfsbl_ddr_init.c $sdk_loc/fsbl/src
+        file copy -force xfsbl_hooks.c    $sdk_loc/fsbl/src
+        file copy -force xfsbl_hooks.h    $sdk_loc/fsbl/src
+}
 sdk projects -build -type all
 
 ### Create create_pmufw_project.tcl

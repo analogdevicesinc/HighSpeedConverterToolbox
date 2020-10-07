@@ -47,7 +47,18 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         TestMode = 'off';
     end
     
+    properties (Nontunable, Logical)
+        %EnablePFIRs Enable PFIRs
+        %   Enable use of PFIR/PFILT filters
+        EnablePFIRs = false;
+    end
     
+    properties (Nontunable)
+        %PFIRFilenames PFIR File names
+        %   Path(s) to FPIR/PFILT filter file(s). Input can be a string or
+        %   cell array of strings. Files are loading in order
+        PFIRFilenames = '';
+    end
     
     properties (Hidden, Nontunable, Access = protected)
         isOutput = false;
@@ -141,11 +152,46 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
                 obj.iioDev);
             obj.TestMode = value;
         end
-        
+        %%
+        % Check EnablePFIRs
+        function set.EnablePFIRs(obj, value)
+            validateattributes( value, { 'logical' }, ...
+                { }, ...
+                '', 'EnablePFIRs');
+            obj.EnablePFIRs = value;
+        end
+        % Check PFIRFilenames
+        function set.PFIRFilenames(obj, value)
+            validateattributes( value, { 'char' }, ...
+                { }, ...
+                '', 'PFIR1Filename');
+            obj.PFIRFilenames = value;
+            if obj.EnablePFIRs && obj.ConnectedToDevice
+                writeFilterFile(obj);
+            end
+        end
     end 
     
     %% API Functions
     methods (Hidden, Access = protected)
+        
+        function writeFilterFile(obj)
+            % Read in filter files and write them sequentially into the
+            % attribute
+            fir_data_files = obj.obj.PFIRFilenames;
+            if ~iscell(fir_data_files)
+                fir_data_files = {fir_data_files};
+            end
+            
+            for fir_data_file = fir_data_files
+                filename = fir_data_file{:};
+                if ~exist(filename,'file')
+                    error('Filter file %s does not exist',filename);
+                end
+                fir_data_str = fileread(filename);
+                obj.setDeviceAttributeRAW('filter_fir_config',fir_data_str);
+            end
+        end
                 
         function setupInit(obj)
             % Write all attributes to device once connected through set
@@ -173,6 +219,10 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             obj.CheckAndUpdateHW(obj.MainNCOPhases,...
                 'MainNCOPhases','main_nco_phase', ...
                 obj.iioDev);
+            %%
+            if obj.EnablePFIRs
+                obj.writeFilterFile();
+            end
 
         end
 

@@ -162,9 +162,6 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         end
         % Check PFIRFilenames
         function set.PFIRFilenames(obj, value)
-            validateattributes( value, { 'char' }, ...
-                { }, ...
-                '', 'PFIR1Filename');
             obj.PFIRFilenames = value;
             if obj.EnablePFIRs && obj.ConnectedToDevice
                 writeFilterFile(obj);
@@ -178,7 +175,7 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         function writeFilterFile(obj)
             % Read in filter files and write them sequentially into the
             % attribute
-            fir_data_files = obj.obj.PFIRFilenames;
+            fir_data_files = obj.PFIRFilenames;
             if ~iscell(fir_data_files)
                 fir_data_files = {fir_data_files};
             end

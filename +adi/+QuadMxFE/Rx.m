@@ -396,29 +396,20 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
         
         % Check PFIRFilenamesChipA
         function set.PFIRFilenamesChipA(obj, value)
-            validateattributes( value, { 'char' }, ...
-                { }, ...
-                '', 'PFIR1FilenameChipA');
-            obj.PFIRFilenamesA = value;
+            obj.PFIRFilenamesChipA = value;
             if obj.EnablePFIRsChipA && obj.ConnectedToDevice
                 writeFilterFile(obj,obj.iioDev0,value);
             end
         end
         % Check PFIRFilenamesChipB
         function set.PFIRFilenamesChipB(obj, value)
-            validateattributes( value, { 'char' }, ...
-                { }, ...
-                '', 'PFIRFilenamesChipB');
             obj.PFIRFilenamesChipB = value;
-            if obj.PFIRFilenamesChipB && obj.ConnectedToDevice
+            if obj.EnablePFIRsChipB && obj.ConnectedToDevice
                 writeFilterFile(obj,obj.iioDev1,value);
             end
         end
         % Check PFIRFilenamesChipC
         function set.PFIRFilenamesChipC(obj, value)
-            validateattributes( value, { 'char' }, ...
-                { }, ...
-                '', 'PFIRFilenamesChipC');
             obj.PFIRFilenamesChipC = value;
             if obj.EnablePFIRsChipC && obj.ConnectedToDevice
                 writeFilterFile(obj,obj.iioDev2,value);
@@ -426,11 +417,8 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
         end
         % Check PFIRFilenamesChipD
         function set.PFIRFilenamesChipD(obj, value)
-            validateattributes( value, { 'char' }, ...
-                { }, ...
-                '', 'PFIRFilenamesChipD');
             obj.PFIRFilenamesChipD = value;
-            if obj.PFIRFilenamesChipD && obj.ConnectedToDevice
+            if obj.EnablePFIRsChipD && obj.ConnectedToDevice
                 writeFilterFile(obj,obj.iioDev,value);
             end
         end

@@ -23,6 +23,10 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
         SamplingRate = 250e6;
     end
     
+    properties (Logical)
+       CalibrationBoardAttached = false; 
+    end
+    
     properties(Nontunable, Hidden)
         Timeout = Inf;
         kernelBuffersCount = 2;
@@ -36,6 +40,11 @@ classdef (Abstract, Hidden = true) Base < adi.common.Attribute & matlabshared.li
     
     properties (Hidden, Constant)
         ComplexData = true;
+    end
+    
+    properties (Hidden)
+       iioAD5592r;
+       iioOneBitADCDAC;
     end
     
     methods

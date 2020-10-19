@@ -126,6 +126,40 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
         TestModeChipD = 'off';
     end
 
+    properties (Logical)
+        %EnablePFIRsChipA Enable PFIRs Chip A
+        %   Enable use of PFIR/PFILT filters for Chip A
+        EnablePFIRsChipA = false;
+        %EnablePFIRsChipB Enable PFIRs Chip B
+        %   Enable use of PFIR/PFILT filters for Chip B
+        EnablePFIRsChipB = false;
+        %EnablePFIRsChipC Enable PFIRs Chip C
+        %   Enable use of PFIR/PFILT filters for Chip C
+        EnablePFIRsChipC = false;
+        %EnablePFIRsChipD Enable PFIRs Chip D
+        %   Enable use of PFIR/PFILT filters for Chip D
+        EnablePFIRsChipD = false;
+    end
+    
+    properties
+        %PFIRFilenamesChipA PFIR File names Chip A
+        %   Path(s) to FPIR/PFILT filter file(s). Input can be a string or
+        %   cell array of strings. Files are loading in order for Chip A
+        PFIRFilenamesChipA = '';
+        %PFIRFilenamesChipB PFIR File names Chip B
+        %   Path(s) to FPIR/PFILT filter file(s). Input can be a string or
+        %   cell array of strings. Files are loading in order for Chip B
+        PFIRFilenamesChipB = '';
+        %PFIRFilenamesChipC PFIR File names Chip C
+        %   Path(s) to FPIR/PFILT filter file(s). Input can be a string or
+        %   cell array of strings. Files are loading in order for Chip C
+        PFIRFilenamesChipC = '';
+        %PFIRFilenamesChipD PFIR File names Chip D
+        %   Path(s) to FPIR/PFILT filter file(s). Input can be a string or
+        %   cell array of strings. Files are loading in order for Chip D
+        PFIRFilenamesChipD = '';
+    end
+    
     properties
         %ExternalAttenuation External Attenuation
         %   Attenuation value of external HMC425a
@@ -331,6 +365,65 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.TestModeChipD = value;
         end
         %%
+        % Check EnablePFIRsChipA
+        function set.EnablePFIRsChipA(obj, value)
+            validateattributes( value, { 'logical' }, ...
+                { }, ...
+                '', 'EnablePFIRsChipA');
+            obj.EnablePFIRsChipA = value;
+        end
+        % Check EnablePFIRsChipB
+        function set.EnablePFIRsChipB(obj, value)
+            validateattributes( value, { 'logical' }, ...
+                { }, ...
+                '', 'EnablePFIRsChipB');
+            obj.EnablePFIRsChipB = value;
+        end
+        % Check EnablePFIRsChipC
+        function set.EnablePFIRsChipC(obj, value)
+            validateattributes( value, { 'logical' }, ...
+                { }, ...
+                '', 'EnablePFIRsChipC');
+            obj.EnablePFIRsChipC = value;
+        end
+        % Check EnablePFIRsChipD
+        function set.EnablePFIRsChipD(obj, value)
+            validateattributes( value, { 'logical' }, ...
+                { }, ...
+                '', 'EnablePFIRsChipD');
+            obj.EnablePFIRsChipD = value;
+        end
+        
+        % Check PFIRFilenamesChipA
+        function set.PFIRFilenamesChipA(obj, value)
+            obj.PFIRFilenamesChipA = value;
+            if obj.EnablePFIRsChipA && obj.ConnectedToDevice
+                writeFilterFile(obj,obj.iioDev0,value);
+            end
+        end
+        % Check PFIRFilenamesChipB
+        function set.PFIRFilenamesChipB(obj, value)
+            obj.PFIRFilenamesChipB = value;
+            if obj.EnablePFIRsChipB && obj.ConnectedToDevice
+                writeFilterFile(obj,obj.iioDev1,value);
+            end
+        end
+        % Check PFIRFilenamesChipC
+        function set.PFIRFilenamesChipC(obj, value)
+            obj.PFIRFilenamesChipC = value;
+            if obj.EnablePFIRsChipC && obj.ConnectedToDevice
+                writeFilterFile(obj,obj.iioDev2,value);
+            end
+        end
+        % Check PFIRFilenamesChipD
+        function set.PFIRFilenamesChipD(obj, value)
+            obj.PFIRFilenamesChipD = value;
+            if obj.EnablePFIRsChipD && obj.ConnectedToDevice
+                writeFilterFile(obj,obj.iioDev,value);
+            end
+        end
+        
+        %%
         % Check ExternalAttenuation
         function set.ExternalAttenuation(obj, value)
 %             validateattributes( value, { 'double','single' }, ...
@@ -340,7 +433,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.ExternalAttenuation = value;
             if obj.ConnectedToDevice
                 id = 'voltage0';
-                obj.setAttributeLongLong(id,'hardwaregain',value,true,obj.iioHMC425a);
+                obj.setAttributeLongLong(id,'hardwaregain',value,true,0,obj.iioHMC425a);
             end
         end
     end
@@ -356,6 +449,23 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             end
         end
         
+        function writeFilterFile(obj, phy, fir_data_files)
+            % Read in filter files and write them sequentially into the
+            % attribute
+            if ~iscell(fir_data_files)
+                fir_data_files = {fir_data_files};
+            end
+            
+            for fir_data_file = fir_data_files
+                filename = fir_data_file{:};
+                if ~exist(filename,'file')
+                    error('Filter file %s does not exist',filename);
+                end
+                fir_data_str = fileread(filename);
+                obj.setDeviceAttributeRAW('filter_fir_config',fir_data_str, phy);
+            end
+        end
+        
         function setupInit(obj)
             % Write all attributes to device once connected through set
             % methods
@@ -368,6 +478,10 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
             obj.iioHMC425a = getDev(obj, 'hmc425a');
+            if obj.CalibrationBoardAttached
+                obj.iioAD5592r = getDev(obj, 'ad5592r');
+                obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac');
+            end
             
             % Update attributes
             obj.setAttributeRAW('voltage0_i','test_mode',...
@@ -430,6 +544,19 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.CheckAndUpdateHW(obj.MainNCOPhasesChipD,...
                 'MainNCOPhasesChipD','main_nco_phase', ...
                 obj.iioDev);
+            %%
+            if obj.EnablePFIRsChipA
+                obj.writeFilterFile(obj.iioDev0,obj.PFIRFilenamesChipA);
+            end
+            if obj.EnablePFIRsChipB
+                obj.writeFilterFile(obj.iioDev1,obj.PFIRFilenamesChipB);
+            end
+            if obj.EnablePFIRsChipC
+                obj.writeFilterFile(obj.iioDev2,obj.PFIRFilenamesChipC);
+            end
+            if obj.EnablePFIRsChipD
+                obj.writeFilterFile(obj.iioDev,obj.PFIRFilenamesChipD);
+            end
             %%
             obj.setAttributeLongLong('voltage0','hardwaregain',...
                 obj.ExternalAttenuation,true,0,obj.iioHMC425a);

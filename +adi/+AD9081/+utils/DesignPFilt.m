@@ -30,7 +30,7 @@ taps = taps./max(abs(taps));
 taps = taps.*(2^(16-1));
 
 %% Find best possible configuration that maintains precision
-[config, quantizedTaps,tapError] = findBestBitArrangement(taps,N);
+[config, quantizedTaps,tapError] = adi.AD9081.utils.findBestBitArrangement(taps,N);
 
 
 end

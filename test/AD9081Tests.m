@@ -1,7 +1,7 @@
 classdef AD9081Tests < matlab.unittest.TestCase
     
     properties
-        EnableVisuals = true;
+        EnableVisuals = false;
     end
     
     methods (Static)
@@ -308,10 +308,10 @@ classdef AD9081Tests < matlab.unittest.TestCase
             %% Create filter
             tapsInt16 = 2^15.*[pFiltS1.A.';pFiltS1.C.';pFiltS1.B.';pFiltS1.D.'];
             N = 48;
-            [config,qt] = findBestBitArrangement(tapsInt16(1,:),N);
-            [config1,qt1] = findBestBitArrangement(tapsInt16(2,:),N);
-            [config2,qt2] = findBestBitArrangement(tapsInt16(3,:),N);
-            [config3,qt3] = findBestBitArrangement(tapsInt16(4,:),N);
+            [config,qt] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(1,:),N);
+            [config1,qt1] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(2,:),N);
+            [config2,qt2] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(3,:),N);
+            [config3,qt3] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(4,:),N);
             
             % Set taps
             rx = adi.sim.common.PFilter;
@@ -442,10 +442,10 @@ classdef AD9081Tests < matlab.unittest.TestCase
             %% Create filter
             tapsInt16 = 2^15.*[pFiltS1.A.';pFiltS1.C.';pFiltS1.B.';pFiltS1.D.'];
             N = 48;
-            [config,qt] = findBestBitArrangement(tapsInt16(1,:),N);
-            [config1,qt1] = findBestBitArrangement(tapsInt16(2,:),N);
-            [config2,qt2] = findBestBitArrangement(tapsInt16(3,:),N);
-            [config3,qt3] = findBestBitArrangement(tapsInt16(4,:),N);
+            [config,qt] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(1,:),N);
+            [config1,qt1] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(2,:),N);
+            [config2,qt2] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(3,:),N);
+            [config3,qt3] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(4,:),N);
             
             % Set taps
             rx = adi.sim.AD9081.Rx;
@@ -583,10 +583,10 @@ classdef AD9081Tests < matlab.unittest.TestCase
             %% Create filter
             tapsInt16 = 2^15.*[pFiltS1.A1.';pFiltS1.C1.';pFiltS1.B1.';pFiltS1.D1.'];
             N = 48;
-            [config,qt] = findBestBitArrangement(tapsInt16(1,:),N);
-            [config1,qt1] = findBestBitArrangement(tapsInt16(2,:),N);
-            [config2,qt2] = findBestBitArrangement(tapsInt16(3,:),N);
-            [config3,qt3] = findBestBitArrangement(tapsInt16(4,:),N);
+            [config,qt] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(1,:),N);
+            [config1,qt1] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(2,:),N);
+            [config2,qt2] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(3,:),N);
+            [config3,qt3] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(4,:),N);
             
             % Set taps
             rx = adi.sim.AD9081.Rx;
@@ -722,10 +722,10 @@ classdef AD9081Tests < matlab.unittest.TestCase
             %% Create filter
             tapsInt16 = 2^15.*[pFiltS1.A2.';pFiltS1.C2.';pFiltS1.B2.';pFiltS1.D2.'];
             N = 48;
-            [config,qt] = findBestBitArrangement(tapsInt16(1,:),N);
-            [config1,qt1] = findBestBitArrangement(tapsInt16(2,:),N);
-            [config2,qt2] = findBestBitArrangement(tapsInt16(3,:),N);
-            [config3,qt3] = findBestBitArrangement(tapsInt16(4,:),N);
+            [config,qt] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(1,:),N);
+            [config1,qt1] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(2,:),N);
+            [config2,qt2] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(3,:),N);
+            [config3,qt3] = adi.AD9081.utils.findBestBitArrangement(tapsInt16(4,:),N);
             
             % Set taps
             rx = adi.sim.AD9081.Rx;

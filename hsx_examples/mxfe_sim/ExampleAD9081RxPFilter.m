@@ -15,7 +15,7 @@ end
 taps = [taps, zeros(1,N-length(taps))];
 
 % Find best tap quantization for given filter
-[config,tapsInt16,qt] = DesignPFilt(taps,mode,N);
+[config,tapsInt16,qt] = adi.AD9081.utils.DesignPFilt(taps,mode,N);
 %% Plots
 close all;
 figure(1);

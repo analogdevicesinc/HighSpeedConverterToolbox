@@ -77,7 +77,7 @@ end
 % else
 %     mode = 'SingleInphase';
 % end
-% [config,tapsInt16,qt,tapError] = DesignPFilt(taps,mode,FilterOrder);
+% [config,tapsInt16,qt,tapError] = adi.AD9081.utils.DesignPFilt(taps,mode,FilterOrder);
 % Convert to hex for part injest
 % tapsHex = dec2hex(qt,4); 
 % Hd.Numerator = qt./2^16;

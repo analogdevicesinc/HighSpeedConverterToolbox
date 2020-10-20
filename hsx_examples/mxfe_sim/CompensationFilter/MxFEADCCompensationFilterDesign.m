@@ -58,7 +58,7 @@ Hd = design(d,'firls','B1Weights',W1,'B2Weights',[W2 W3],'SystemObject',true);
 
 % taps = Hd.Numerator;
 % mode = 'SingleInphase';
-% [config,tapsInt16,qt,tapError] = DesignPFilt(taps,mode,FilterOrder);
+% [config,tapsInt16,qt,tapError] = adi.AD9081.utils.DesignPFilt(taps,mode,FilterOrder);
 % % Convert to hex for part injest
 % tapsHex = dec2hex(tapsInt16,4);
 % Hd.Numerator = qt./sum(qt);

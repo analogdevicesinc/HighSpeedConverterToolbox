@@ -25,7 +25,7 @@ Hd = Hdlp;
 % This will quantized the generated taps based on limitations of the
 % hardware PFIR
 taps = Hd.Numerator;
-[config,tapsInt16,qt,tapError] = DesignPFilt(taps,pfir.Mode,N);
+[config,tapsInt16,qt,tapError] = adi.AD9081.utils.DesignPFilt(taps,pfir.Mode,N);
 Hd.Numerator = qt./2^15;
 freqz(Hd,8192,4e6);
 % Update model

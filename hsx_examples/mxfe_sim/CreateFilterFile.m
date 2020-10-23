@@ -4,7 +4,7 @@ pfir.Mode = 'SingleInphase';
 N = 192;
 taps = randn(1,N).*2^6;
 % Find best tap quantization for given filter
-[config,tapsInt16,qt] = DesignPFilt(taps,pfir.Mode,N);
+[config,tapsInt16,qt] = adi.AD9081.utils.DesignPFilt(taps,pfir.Mode,N);
 % Update model
 pfir.Taps = qt;
 pfir.TapsWidthsPerQuad = config;

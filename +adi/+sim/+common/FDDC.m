@@ -37,7 +37,7 @@ classdef FDDC < matlab.System
         TB1
     end
     
-    properties(Access = private, Hidden)
+    properties(Hidden)
         FilterPath
     end
     

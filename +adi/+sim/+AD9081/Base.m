@@ -2,7 +2,7 @@ classdef Base < matlab.System & matlab.system.mixin.Propagates ...
         & matlab.system.mixin.CustomIcon
     % AD9081 Base class
    
-    properties(Hidden, Access = protected, NonCopyable)
+    properties(Hidden, NonCopyable)
         %% RX
         ADC0
         ADC1
@@ -156,6 +156,41 @@ classdef Base < matlab.System & matlab.system.mixin.Propagates ...
             obj.FDUC7 = [];
             obj.FDUC8 = [];  
         end
+        
+        function filters = RxCascade(obj)
+            %%RxCascade Get cascade filter object of RX path ignoring NCOs
+            if ~isLocked(obj.CDDC1) || ~isLocked(obj.FDDC1)
+               error('Model must be initialized/stepped before filters can be extracted'); 
+            end
+            
+            if obj.FDDC1.Decimation==1 && obj.CDDC1.Decimation==1
+                error('No decimation filters are enabled, no avaible response');
+            elseif obj.FDDC1.Decimation>1 && obj.CDDC1.Decimation==1
+                filters = obj.FDDC1.FilterPath;
+            elseif obj.FDDC1.Decimation==1 && obj.CDDC1.Decimation>1
+                filters = obj.CDDC1.FilterPath;
+            else
+                filters = cascade(obj.CDDC1.FilterPath,obj.FDDC1.FilterPath);
+            end
+        end
+
+        function filters = TxCascade(obj)
+            %%TxCascade Get cascade filter object of TX path ignoring NCOs
+            if ~isLocked(obj.FDUC1) || ~isLocked(obj.CDUC1)
+               error('Model must be initialized/stepped before filters can be extracted'); 
+            end
+            if obj.FDUC1.Interpolation==1 && obj.CDUC1.Interpolation==1
+                error('No interpolator filters are enabled, no avaible response');
+            elseif obj.FDUC1.Interpolation>1 && obj.CDUC1.Interpolation==1
+                filters = obj.FDUC1.FilterPath;
+            elseif obj.FDUC1.Interpolation==1 && obj.CDUC1.Interpolation>1
+                filters = obj.CDUC1.FilterPath;
+            else
+                filters = cascade(obj.FDUC1.FilterPath,obj.CDUC1.FilterPath);
+            end
+        end
+
+        
     end
     
     methods(Access = protected)

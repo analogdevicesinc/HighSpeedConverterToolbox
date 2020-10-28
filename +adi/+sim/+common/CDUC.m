@@ -41,7 +41,7 @@ classdef CDUC < matlab.System
         TB1_TX
     end
     
-    properties(Access = private, Hidden)
+    properties(Hidden)
         FilterPath
     end
     

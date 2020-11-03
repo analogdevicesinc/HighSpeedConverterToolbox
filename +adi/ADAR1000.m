@@ -3,13 +3,32 @@ classdef ADAR1000 < adi.common.Attribute & ...
         matlabshared.libiio.base
     %ADAR1000 Beamformer
     properties (Nontunable)
+        %Beams Beams
+        %   Cell array of strings idenifying desired chip select
+        %   option of ADAR100. This is based on the jumper configuration
+        %   if the EVAL-ADAR100 is used. These strings are the labels
+        %   coinciding with each chip select and are typically in the
+        %   form BEAM0, BEAM1, BEAM2, BEAM3. Use a list when multiple
+        %   are chips are cascaded together.
         Beams = {'BEAM0'};
     end
     
     properties
+        %RxGPhases Rx Phases
+        %   Set all phases applied to RX path where each row represents a
+        %   given chip. Row ordering matches Beams attribute
         RxPhases = [0,0,0,0];
+        %TxGPhases Tx Phases
+        %   Set all phases applied to RX path where each row represents a
+        %   given chip. Row ordering matches Beams attribute
         TxPhases = [0,0,0,0];
+        %RxGains Rx Gains
+        %   Set all gains applied to RX path where each row represents a
+        %   given chip. Row ordering matches Beams attribute
         RxGains = [0,0,0,0];
+        %TxGains Tx Gains
+        %   Set all gains applied to TX path where each row represents a
+        %   given chip. Row ordering matches Beams attribute
         TxGains = [0,0,0,0];
     end
     
@@ -18,6 +37,7 @@ classdef ADAR1000 < adi.common.Attribute & ...
         kernelBuffersCount = 0;
         dataTypeStr = 'int16';
         phyDevName = 'adar1000';
+        % Name of driver instance in device tree
         iioDriverName = 'dev';
         iioDevPHY
         devName = 'adar1000';
@@ -144,11 +164,8 @@ classdef ADAR1000 < adi.common.Attribute & ...
             
             setContextTimeout(obj);
             
-            % Get the device
-            % obj.iioDev = getDev(obj, obj.devName);
-            
             obj.needsTeardown = true;
-                        
+            
             % Pre-calculate values to be used faster in stepImpl()
             obj.pIsInSimulink = coder.const(obj.isInSimulink);
             obj.pNumBufferBytes = coder.const(obj.numBufferBytes);

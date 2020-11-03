@@ -18,6 +18,7 @@ classdef ADAR1000 < adi.common.Attribute & ...
         kernelBuffersCount = 0;
         dataTypeStr = 'int16';
         phyDevName = 'adar1000';
+        iioDriverName = 'dev';
         iioDevPHY
         devName = 'adar1000';
         SamplesPerFrame = 0;
@@ -68,9 +69,6 @@ classdef ADAR1000 < adi.common.Attribute & ...
         function set.Beams(obj, value)
             assert(iscell(value),'Beams must be a cell array of strings');
             obj.Beams = value;
-            if obj.ConnectedToDevice
-                obj.setDeviceAttributeRAW('dwell_samples',num2str(value));
-            end
         end
         % Check RxGains
         function set.RxGains(obj, value)
@@ -116,7 +114,7 @@ classdef ADAR1000 < adi.common.Attribute & ...
                     devPtr = obj.iio_context_get_device(obj.iioCtx, k-1);
                     attrCount = obj.iio_device_get_attrs_count(devPtr);
                     name = obj.iio_device_get_name(devPtr);
-                    if strcmpi(name,'adar1000')
+                    if strcmpi(name,obj.iioDriverName)
                         for i = 1:attrCount
                             attr = obj.iio_device_get_attr(devPtr,i-1);
                             if strcmpi(attr,'label')
@@ -178,6 +176,10 @@ classdef ADAR1000 < adi.common.Attribute & ...
             obj.setBeams(rows);
             
             % Set attributes in hardware
+            obj.setAllDevs(obj.RxPhases,'phase',false)
+            obj.setAllDevs(obj.TxPhases,'phase',true)
+            obj.setAllDevs(obj.RxGains,'hardwaregain',false)
+            obj.setAllDevs(obj.TxGains,'hardwaregain',true)
         end
     end
     

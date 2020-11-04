@@ -944,8 +944,8 @@ for currentChannel=1:2:NumChannels
     pfir.OutputFilename = filename{currentChannel,:};
 
     % Find Best Tap Quantization For Given Filter
-    [config1,tapsInt16_1,qt1,error1] = DesignPFilt(designedEqualizersTapsExtended(currentChannel,:),pfir.Mode,96);
-    [config2,tapsInt16_2,qt2,error2] = DesignPFilt(designedEqualizersTapsExtended(currentChannel+1,:),pfir.Mode,96);
+    [config1,tapsInt16_1,qt1,error1] = adi.AD9081.utils.DesignPFilt(designedEqualizersTapsExtended(currentChannel,:),pfir.Mode,96);
+    [config2,tapsInt16_2,qt2,error2] = adi.AD9081.utils.DesignPFilt(designedEqualizersTapsExtended(currentChannel+1,:),pfir.Mode,96);
 
     % Update Model
     pfir.Gains = [0 0 0 0];

@@ -31,15 +31,10 @@ plotResults = 1; %0: Do not plot intermediate results, 1: Plot intermediate resu
 useCalibrationBoard = 1; %0: Not using calibration board, 1: Using calibration board
 
 %% Setup Tx Configuration
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-0 dac-full-scale-current-ua 40000']);
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-1 dac-full-scale-current-ua 40000']);
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-2 dac-full-scale-current-ua 40000']);
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-3 dac-full-scale-current-ua 40000']);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev0);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev1);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev2);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev3);
 tx = adi.QuadMxFE.Tx;
+tx.UpdateDACFullScaleCurrent = true;
+tx.DACFullScaleCurrentuA = 40000;
+
 tx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
 tx.uri = uri;
 tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE

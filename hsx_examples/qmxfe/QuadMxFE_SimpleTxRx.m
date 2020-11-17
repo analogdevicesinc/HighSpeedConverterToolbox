@@ -121,6 +121,7 @@ y1 = swv1();
 
 release(tx);
 tx(ones(samplesPerFrame,size(tx.EnabledChannels,2)).*y1); %Output Tx Waveforms
+tx.UpdateDACFullScaleCurrent = false;
 
 pause(1);
 
@@ -171,7 +172,7 @@ rx.EnablePFIRsChipA = false; %MxFE0 pFIR Configuration; false: Don't Use pFIRs, 
 rx.EnablePFIRsChipB = false; %MxFE1 pFIR Configuration; false: Don't Use pFIRs, true: Use pFIRs
 rx.EnablePFIRsChipC = false; %MxFE2 pFIR Configuration; false: Don't Use pFIRs, true: Use pFIRs
 rx.EnablePFIRsChipD = false; %MxFE3 pFIR Configuration; false: Don't Use pFIRs, true: Use pFIRs
-RxData = rx(); %Initialize The Rx System; Grab The Rx Data Into 'RxData' Matrix
+rx(); %Initialize The Rx System; Grab The Rx Data Into 'RxData' Matrix
 rx.setRegister(hex2dec('FF'),'19',rx.iioDev0); %Fine DDC Page
 rx.setRegister(hex2dec('FF'),'19',rx.iioDev1); %Fine DDC Page
 rx.setRegister(hex2dec('FF'),'19',rx.iioDev2); %Fine DDC Page
@@ -188,10 +189,10 @@ rx.setRegister(hex2dec('1F'),'210F',rx.iioDev2); %Image Canceler: 0x210F = 0x1F
 rx.setRegister(hex2dec('1'),'2100',rx.iioDev2); %Image Canceler: 0x2100 = 0x1    
 rx.setRegister(hex2dec('1F'),'210F'); %Image Canceler: 0x210F = 0x1F
 rx.setRegister(hex2dec('1'),'2100'); %Image Canceler: 0x2100 = 0x1
-regVal = dec2hex(rx.getRegister('283',rx.iioDev0));
-regVal = dec2hex(rx.getRegister('283',rx.iioDev1));
-regVal = dec2hex(rx.getRegister('283',rx.iioDev2));
-regVal = dec2hex(rx.getRegister('283'));
+dec2hex(rx.getRegister('283',rx.iioDev0));
+dec2hex(rx.getRegister('283',rx.iioDev1));
+dec2hex(rx.getRegister('283',rx.iioDev2));
+dec2hex(rx.getRegister('283'));
 pause(1);
 
 %% Grab Initial Rx Data
@@ -229,7 +230,7 @@ if (plotResults==1)
         fftComplex1 = fft(windowedData1);
         fftComplexShifted1 = fftshift(fftComplex1);
         fftMags1 = abs(fftComplexShifted1);
-        fftMagsdB1(chanNum,:) = 20 * log10(fftMags1);
+        fftMagsdB1(chanNum,:) = 20 * log10(fftMags1); %#ok<SAGROW>
         if (rx.EnableResampleFilters)
             freqAxis1 = linspace((-fs_RxIQ/1e6/2/2), (fs_RxIQ/1e6/2/2), length(fftMagsdB1));
         else

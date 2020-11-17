@@ -41,15 +41,10 @@ minCodeValue = 500; %Lowest Acceptaple ADC Code Value. Anything Lower Is Regarde
 useCalibrationBoard = 1; %0: Not using calibration board, 1: Using calibration board
 
 %% Setup Tx Information
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-0 dac-full-scale-current-ua 40000']);
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-1 dac-full-scale-current-ua 40000']);
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-2 dac-full-scale-current-ua 40000']);
-system(['iio_attr -u ' uri ' -D axi-ad9081-rx-3 dac-full-scale-current-ua 40000']);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev0);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev1);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev2);
-%         tx.setDebugAttributeLongLong('dac-full-scale-current-ua',40000,tx.iioDev3);
 tx = adi.QuadMxFE.Tx;
+tx.UpdateDACFullScaleCurrent = true;
+tx.DACFullScaleCurrentuA = 40000;
+
 tx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
 tx.uri = uri;
 tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
@@ -109,6 +104,7 @@ for i=1:1:tx.num_data_channels
 end
 release(tx);
 tx(channelArray'); %Output Tx Waveforms
+tx.UpdateDACFullScaleCurrent = false;
 pause(1);
 
 %% Configure Calibration Board For Desired Routing
@@ -239,7 +235,7 @@ rx.PFIRFilenamesChipA = 'disabled.cfg';  %MxFE0 pFIR File
 rx.PFIRFilenamesChipB = 'disabled.cfg';  %MxFE1 pFIR File
 rx.PFIRFilenamesChipC = 'disabled.cfg';  %MxFE2 pFIR File
 rx.PFIRFilenamesChipD = 'disabled.cfg';  %MxFE3 pFIR File
-data = rx(); %Initialize The Rx System; Grab The Rx Data Into 'data' Matrix
+rx(); %Initialize The Rx System; Grab The Rx Data Into 'data' Matrix
 rx.setRegister(hex2dec('FF'),'19',rx.iioDev0); %Fine DDC Page
 rx.setRegister(hex2dec('FF'),'19',rx.iioDev1); %Fine DDC Page
 rx.setRegister(hex2dec('FF'),'19',rx.iioDev2); %Fine DDC Page
@@ -256,10 +252,10 @@ rx.setRegister(hex2dec('1F'),'210F',rx.iioDev2); %Image Canceler: 0x210F = 0x1F
 rx.setRegister(hex2dec('1'),'2100',rx.iioDev2); %Image Canceler: 0x2100 = 0x1    
 rx.setRegister(hex2dec('1F'),'210F'); %Image Canceler: 0x210F = 0x1F
 rx.setRegister(hex2dec('1'),'2100'); %Image Canceler: 0x2100 = 0x1
-regVal = dec2hex(rx.getRegister('283',rx.iioDev0));
-regVal = dec2hex(rx.getRegister('283',rx.iioDev1));
-regVal = dec2hex(rx.getRegister('283',rx.iioDev2));
-regVal = dec2hex(rx.getRegister('283'));
+dec2hex(rx.getRegister('283',rx.iioDev0));
+dec2hex(rx.getRegister('283',rx.iioDev1));
+dec2hex(rx.getRegister('283',rx.iioDev2));
+dec2hex(rx.getRegister('283'));
 pause(1);
 
 %% Issue Synchronization Algorithms

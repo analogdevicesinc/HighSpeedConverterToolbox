@@ -141,7 +141,20 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
         %   interpolators
         NCOEnablesChipD = [false,false,false,false];
     end
-       
+    
+    properties (Nontunable, Logical)
+        %UpdateDACFullScaleCurrent Update DAC Full Scale Current
+        %   At initialization update DAC full scale current
+        UpdateDACFullScaleCurrent = false;
+    end
+    
+    properties (Nontunable)
+        %DACFullScaleCurrentuA DAC Full Scale Current uA
+        %   DAC full scale current in microamps.
+        %   Only used when UpdateDACFullScaleCurrent is set.
+        DACFullScaleCurrentuA = 40000;
+    end
+    
     properties (Hidden, Nontunable, Access = protected)
         isOutput = true;
     end
@@ -408,7 +421,7 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             % Do writes directly to hardware without using set methods.
             % This is required sine Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
-
+            
             % Enable TX DMA offload
             obj.setDebugAttributeBool('pl_ddr_fifo_enable', 1, 0, getDev(obj, obj.devName));
 
@@ -427,6 +440,14 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
                 obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac');
             end
 
+            % Update DACs' FSC
+            if obj.UpdateDACFullScaleCurrent
+                obj.setDebugAttributeLongLong('dac-full-scale-current-ua',obj.DACFullScaleCurrentuA,true,obj.iioDev0)
+                obj.setDebugAttributeLongLong('dac-full-scale-current-ua',obj.DACFullScaleCurrentuA,true,obj.iioDev1)
+                obj.setDebugAttributeLongLong('dac-full-scale-current-ua',obj.DACFullScaleCurrentuA,true,obj.iioDev2)
+                obj.setDebugAttributeLongLong('dac-full-scale-current-ua',obj.DACFullScaleCurrentuA,true,obj.iioDev3)
+            end
+            
             %%
             obj.CheckAndUpdateHW(obj.ChannelNCOFrequenciesChipA,...
                 'ChannelNCOFrequenciesChipA','channel_nco_frequency', ...

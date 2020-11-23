@@ -42,10 +42,11 @@ useCalibrationBoard = 1; %0: Not using calibration board, 1: Using calibration b
 
 %% Setup Tx Information
 tx = adi.QuadMxFE.Tx;
-tx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
-tx.uri = uri;
 tx.UpdateDACFullScaleCurrent = true;
 tx.DACFullScaleCurrentuA = 40000;
+
+tx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
+tx.uri = uri;
 
 % Poll System Information
 tx(1);
@@ -58,6 +59,7 @@ numFineDDCsPerMxFE = length(strfind(retVal,'voltage'))/2; %Number of Fine DDCs I
 [errorVal,retVal] = system(['iio_attr -u' uri ' -c -o axi-ad9081-rx-0']);
 numFineDUCsPerMxFE = length(strfind(retVal,'voltage'))/2; %Number of Fine DUCs In The System
 release(tx);
+tx.UpdateDACFullScaleCurrent = false;
 
 tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
 tx.num_fine_attr_channels = numFineDUCsPerMxFE; %Number of Fine DUCs Used Per MxFE
@@ -115,7 +117,6 @@ for i=1:1:tx.num_data_channels
 end
 release(tx);
 tx(channelArray'); %Output Tx Waveform
-tx.UpdateDACFullScaleCurrent = false;
 pause(1);
 
 %% Configure Calibration Board For Desired Routing

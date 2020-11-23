@@ -104,7 +104,6 @@ for i=1:1:tx.num_data_channels
 end
 release(tx);
 tx(channelArray'); %Output Tx Waveforms
-tx.UpdateDACFullScaleCurrent = false;
 pause(1);
 
 %% Configure Calibration Board For Desired Routing

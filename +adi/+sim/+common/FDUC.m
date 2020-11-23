@@ -41,7 +41,7 @@ classdef FDUC < matlab.System
         TB0_TX
     end
     
-    properties(Access = private, Hidden)
+    properties(Hidden)
         FilterPath
     end
     

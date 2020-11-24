@@ -121,7 +121,6 @@ y1 = swv1();
 
 release(tx);
 tx(ones(samplesPerFrame,size(tx.EnabledChannels,2)).*y1); %Output Tx Waveforms
-tx.UpdateDACFullScaleCurrent = false;
 
 pause(1);
 

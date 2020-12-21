@@ -37,10 +37,10 @@ classdef CalBoardVCU118
         %% Configure Calibration Board for Combined Tx Output to J502 SMA Connector
         function ConfigureTxOutToSMA(~,obj)
             obj.setAttributeDouble('voltage2','raw',1,true,0,obj.iioOneBitADCDAC);
-            obj.setAttributeDouble('voltage0','raw',1,true,0,obj.iioOneBitADCDAC);
+            obj.setAttributeDouble('voltage0','raw',0,true,0,obj.iioOneBitADCDAC);
             obj.setAttributeDouble('voltage1','raw',0,true,0,obj.iioOneBitADCDAC);
 %             self.iio_attr_one_bit_adc_dac('voltage2','CTRL_IND_raw','1');
-%             self.iio_attr_one_bit_adc_dac('voltage0','5045_V1_raw','1');
+%             self.iio_attr_one_bit_adc_dac('voltage0','5045_V1_raw','0');
 %             self.iio_attr_one_bit_adc_dac('voltage1','5045_V2_raw','0');
         end
         
@@ -53,6 +53,16 @@ classdef CalBoardVCU118
 %             self.iio_attr_one_bit_adc_dac('voltage0','5045_V1_raw','0');
 %             self.iio_attr_one_bit_adc_dac('voltage1','5045_V2_raw','1');            
         end
+        
+        %% Configure Calibration Board for Combined Tx Output to AD8318 Detector
+        function ConfigureTxOutToAD8318(~,obj)
+            obj.setAttributeDouble('voltage2','raw',1,true,0,obj.iioOneBitADCDAC);
+            obj.setAttributeDouble('voltage0','raw',1,true,0,obj.iioOneBitADCDAC);
+            obj.setAttributeDouble('voltage1','raw',0,true,0,obj.iioOneBitADCDAC);
+%             self.iio_attr_one_bit_adc_dac('voltage2','CTRL_IND_raw','1');
+%             self.iio_attr_one_bit_adc_dac('voltage0','5045_V1_raw','1');
+%             self.iio_attr_one_bit_adc_dac('voltage1','5045_V2_raw','0');            
+        end        
         
         %% Configure Calibration Board for Combined Rx Input from J501 SMA Connector
         function ConfigureRxInFromSMA(~,obj)

@@ -1,6 +1,15 @@
 function [mode,quantizedTaps,tapError] = findBestBitArrangement(taps,N)
 
-reps = N/(192/4);
+% The AD9081 PFIR has 192 taps but has unique tap orderings with
+% - 48 16-bit taps which must be continuous
+% - 48 12-bit taps which must abut the 16-bit taps
+% - 96 6-bit taps that can have any arrangement
+% All taps must be places in groups of four coefficients and the number of
+% available taps in each bitwidth scales with the filter mode aka the
+% number of subfilters. For example, if Matrix mode is used, it will have
+% 12 16-bit and 12-bit taps available per filter.
+
+reps = floor(N/(192/4));
 
 tapGroups = {};
 for k=1:4:N

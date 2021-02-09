@@ -933,7 +933,7 @@ if (plotResults==1)
         end
         title('Individual Channel Rx Spectrum');
         hold off;    
-        txPlusRxPhaseOffsets = (angle(data(1,:)) - angle(data(1,rx.num_data_channels)))*180/pi;
+        txPlusRxPhaseOffsets = unwrap((angle(data(1,:)) - angle(data(1,rx.num_data_channels))))*180/pi;
         % Plot Phase Error Relative To Rx0 on MxFE0
         subplot(2,2,2);
         scatter(linspace(1,rx.num_data_channels,rx.num_data_channels),txPlusRxPhaseOffsets,'filled');

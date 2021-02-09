@@ -477,7 +477,14 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.iioDev0 = getDev(obj, obj.devName0);
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
-            obj.iioHMC425a = getDev(obj, 'hmc425a');
+
+	    % Rev C uses a different DSA
+	    obj.iioHMC425a = iio_context_find_device(obj, obj.iioCtx, 'hmc425a');
+            status = cPtrCheck(obj,obj.iioHMC425a);
+	    if status < 0
+                obj.iioHMC425a = getDev(obj, 'hmc540s');
+            end
+
             if obj.CalibrationBoardAttached
                 obj.iioAD5592r = getDev(obj, 'ad5592r');
                 obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac');

@@ -1,4 +1,4 @@
-classdef Rx < adi.AD9680.Base & adi.common.Rx
+classdef Rx < adi.common.Rx & adi.AD9680.Base
     % adi.AD9680.Rx Receive data from the AD9680 high speed ADC
     %   The adi.AD9680.Rx System object is a signal source that can receive
     %   complex data from the AD9680.

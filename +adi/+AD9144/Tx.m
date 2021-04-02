@@ -1,4 +1,4 @@
-classdef Tx < adi.AD9144.Base & adi.common.Tx & adi.common.DDS
+classdef Tx < adi.common.Tx & adi.AD9144.Base & adi.common.DDS
     % adi.AD9144.Tx Transmit data to the AD9144 high speed DAC
     %   The adi.AD9144.Tx System object is a signal source that can send
     %   complex data from the AD9144.

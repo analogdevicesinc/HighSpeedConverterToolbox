@@ -66,7 +66,7 @@ stage("Demo Tests") {
     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
         branchName ->
         withEnv(['BOARD='+branchName]) {
-            if (boardNames == 'daq2') {
+            if (branchName == 'daq2') {
                 stage("Source") {
                     unstash "builtSources"
                     sh 'make -C ./CI/scripts test_targeting_demos'

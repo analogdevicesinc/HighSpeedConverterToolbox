@@ -1,4 +1,4 @@
-function suite = runNonHWTests()
+function suite = runNonHWTest()
 
 import matlab.unittest.TestRunner;
 import matlab.unittest.TestSuite;

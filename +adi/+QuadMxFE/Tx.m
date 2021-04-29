@@ -425,15 +425,13 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             % Enable TX DMA offload
             obj.setDebugAttributeBool('pl_ddr_fifo_enable', 1, 0, getDev(obj, obj.devName));
 
-            % Get SPI connected dev
-            obj.iioDev0 = getDev(obj, obj.devName0);
-            obj.iioDev1 = getDev(obj, obj.devName1);
-            obj.iioDev2 = getDev(obj, obj.devName2);
-            obj.iioDev3 = getDev(obj, obj.devName3);
-            obj.iioDevADF4371_0 = getDev(obj, 'adf4371-0');
-            obj.iioDevADF4371_1 = getDev(obj, 'adf4371-1');
-            obj.iioDevADF4371_2 = getDev(obj, 'adf4371-2');
-            obj.iioDevADF4371_3 = getDev(obj, 'adf4371-3');
+            % Get SPI connected devs
+            for k=0:3
+                obj.(sprintf('iioDevADF4371_%d',k)) = ...
+                    iio_context_find_device(obj, obj.iioCtx, ...
+                    sprintf('adf4371-%d',k));
+            end
+            
             obj.iioDevHMC7043 = getDev(obj, 'hmc7043');
             if obj.CalibrationBoardAttached
                 obj.iioAD5592r = getDev(obj, 'ad5592r');

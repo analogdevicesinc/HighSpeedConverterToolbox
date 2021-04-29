@@ -472,16 +472,16 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             % Do writes directly to hardware without using set methods.
             % This is required sine Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
-                        
+            
             % Get additional devices
             obj.iioDev0 = getDev(obj, obj.devName0);
             obj.iioDev1 = getDev(obj, obj.devName1);
             obj.iioDev2 = getDev(obj, obj.devName2);
-
-	    % Rev C uses a different DSA
-	    obj.iioHMC425a = iio_context_find_device(obj, obj.iioCtx, 'hmc425a');
+            
+            % Rev C uses a different DSA
+            obj.iioHMC425a = iio_context_find_device(obj, obj.iioCtx, 'hmc425a');
             status = cPtrCheck(obj,obj.iioHMC425a);
-	    if status < 0
+            if status < 0
                 obj.iioHMC425a = getDev(obj, 'hmc540s');
             end
 

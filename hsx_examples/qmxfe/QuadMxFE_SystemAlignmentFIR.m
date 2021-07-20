@@ -21,7 +21,7 @@
 instrreset;
 %% Reload FPGA Code
 % LoadVcu118Code('C:\Xilinx\Vivado_Lab\2019.2\bin\xsdb.bat',...
-%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4.tcl')
+%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc.tcl')
 
 %% Setup Parameters
 close all;
@@ -120,6 +120,8 @@ end
 %         tx.setRegister(hex2dec('00'),'EA',tx.iioDevHMC7043); %SYSREF1 Coarse Digital Delay Set To Zero
 
 %% Setup MxFEs For Fast-Frequency Hopping Mode
+% On Tx side must be in FFH mode to get phase coherency
+% Don't strcitly need to do these, but gives 
 tx.setRegister(hex2dec('0F'),'1B',tx.iioDev0); %DDSM Page Mask
 tx.setRegister(hex2dec('EE'),'806',tx.iioDev0); %3.7GHz FTW1
 tx.setRegister(hex2dec('EE'),'807',tx.iioDev0); %
@@ -414,15 +416,15 @@ deltaTemp = adf4371_temp - adf4371_temp(1);
 %% Perform ADF4371 Phase Alignment
 if (Align_ADF4371s==1)
     % Find the pulse corresponding to Tx0
-    if (abs(real(data(1,1)))>500 || abs(imag(data(1,1)))>500 || ...
-            abs(real(data(50,1)))>500 || abs(imag(data(50,1)))>500) %Check if signal is present at start of capture
+    if (abs(real(data(1,1)))>minCodeValue || abs(imag(data(1,1)))>minCodeValue || ...
+            abs(real(data(50,1)))>minCodeValue || abs(imag(data(50,1)))>minCodeValue) %Check if signal is present at start of capture
         [separation,initialCross,finalCross,nextCross,midLev] = ...
-            pulsesep(double(abs(real(data(:,1)))>500)); 
+            pulsesep(double(abs(real(data(:,1)))>minCodeValue)); 
         [maxVal, maxLoc] = max(separation);
         channel0Start = ceil(nextCross(maxLoc)); %The Tx0 pulse location
     else %Correct if signal is zero at start of capture
         [period,initialCross,finalCross,nextCross,midLev] = ...
-            pulseperiod(double(abs(real(data(:,1)))>500));
+            pulseperiod(double(abs(real(data(:,1)))>minCodeValue));
         channel0Start = ceil(initialCross(1));
     end
     timeZeroAlignedFirstRx = circshift(data(:,1),-channel0Start);
@@ -587,15 +589,15 @@ mxfe_temp(4) = temp/1e3;
 
 %% Align All Tx Channels
 % Now Find The Pulse Corresponding To Tx0
-if (abs(real(data(1,1)))>500 || abs(imag(data(1,1)))>500 || ...
-        abs(real(data(50,1)))>500 || abs(imag(data(50,1)))>500) %Check if signal is present at start of capture
+if (abs(real(data(1,1)))>minCodeValue || abs(imag(data(1,1)))>minCodeValue || ...
+        abs(real(data(50,1)))>minCodeValue || abs(imag(data(50,1)))>minCodeValue) %Check if signal is present at start of capture
     [separation,initialCross,finalCross,nextCross,midLev] = ...
-        pulsesep(double(abs(real(data(:,1)))>500)); 
+        pulsesep(double(abs(real(data(:,1)))>minCodeValue)); 
     [maxVal, maxLoc] = max(separation);
     channel0Start = ceil(nextCross(maxLoc)); %The Tx0 pulse location
 else %Correct if signal is zero at start of capture
     [period,initialCross,finalCross,nextCross,midLev] = ...
-        pulseperiod(double(abs(real(data(:,1)))>500));
+        pulseperiod(double(abs(real(data(:,1)))>minCodeValue));
     channel0Start = ceil(initialCross(1));
 end
 timeZeroAlignedFirstRx = circshift(data(:,1),-channel0Start);
@@ -644,15 +646,15 @@ if (plotResults==1)
     %% Observe Tx-Aligned Results
     data = rx();
     % Now Find The Pulse Corresponding To Tx0
-    if (abs(real(data(1,1)))>500 || abs(imag(data(1,1)))>500 || ...
-            abs(real(data(50,1)))>500 || abs(imag(data(50,1)))>500) %Check if signal is present at start of capture
+    if (abs(real(data(1,1)))>minCodeValue || abs(imag(data(1,1)))>minCodeValue || ...
+            abs(real(data(50,1)))>minCodeValue || abs(imag(data(50,1)))>minCodeValue) %Check if signal is present at start of capture
         [separation,initialCross,finalCross,nextCross,midLev] = ...
-            pulsesep(double(abs(real(data(:,1)))>500)); 
+            pulsesep(double(abs(real(data(:,1)))>minCodeValue)); 
         [maxVal, maxLoc] = max(separation);
         channel0Start = ceil(nextCross(maxLoc)); %The Tx0 Pulse Location
     else %Correct If Signal Is Aero At Start Of Capture
         [period,initialCross,finalCross,nextCross,midLev] = ...
-            pulseperiod(double(abs(real(data(:,1)))>500));
+            pulseperiod(double(abs(real(data(:,1)))>minCodeValue));
         channel0Start = ceil(initialCross(1));
     end
     timeZeroAlignedFirstRx = circshift(data(:,1),-channel0Start);
@@ -896,7 +898,7 @@ for currentChannel=1:4:NumChannels
     ylim([-180 180]);
     xlabel('Frequency [GHz]');
     ylabel('Phase [^o]');
-    title('Error Response MxFE0');
+    title(sprintf('Error Response MxFE%d', mxFENum));
     legend('0','1','2','3');
     subplot(2,4,(mxFENum+1)+4); plot(frequenciesForEqualizerF2.*(fs_Rx/2)/1e9, 20*log10(abs(errorResponseF2Smooth(currentChannel,:))),'b'); grid on;
     hold on; plot(frequenciesForEqualizerF2.*(fs_Rx/2)/1e9, 20*log10(abs(errorResponseF2Smooth(currentChannel+1,:))),'r');

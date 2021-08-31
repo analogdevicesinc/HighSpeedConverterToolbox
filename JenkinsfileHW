@@ -78,7 +78,7 @@ lock(label: 'adgt_test_harness_boards') {
         sh 'git submodule update --init'
       }
       try {
-          sh 'IIO_URI="ip:' + ip + '" /usr/local/MATLAB/R2020b/bin/matlab -nosplash -nodesktop -nodisplay -r "addpath(genpath(\'test\'));runHWTests()"'
+          sh 'IIO_URI="ip:' + ip + '" /usr/local/MATLAB/R2021a/bin/matlab -nosplash -nodesktop -nodisplay -r "addpath(genpath(\'test\'));runHWTests()"'
       } finally {
           junit testResults: '*.xml', allowEmptyResults: true
       }

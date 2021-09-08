@@ -1,7 +1,7 @@
 // Pipeline
 lock(label: 'adgt_test_harness_boards') {
   // @Library('sdgtt-lib@adgt-test-harness') _ // Not necessary when we turn on global libraries :)
-  @Library('sdgtt-lib@fix_iio_not_defined') _
+  @Library('sdgtt-lib@add-matlab-stage') _
   def dependencies = ["nebula", "libiio", "libiio-py"]
   def hdlBranch = "hdl_2019_r2"
   def linuxBranch = "2019_R2"
@@ -21,6 +21,7 @@ lock(label: 'adgt_test_harness_boards') {
   harness.set_env('libiio_branch', 'v0.21')
   harness.set_env('telemetry_repo', 'https://github.com/kimpaller/telemetry.git')
   harness.set_env('telemetry_branch', 'master')
+  harness.set_env('matlab_release','R2021a')
 
   //update first the agent with the required deps
   harness.update_agents()
@@ -34,7 +35,7 @@ lock(label: 'adgt_test_harness_boards') {
       node(agent_name) {
         stage('Update Nebula Config') {
           sh 'if [ -d "nebula-config" ]; then rm -Rf nebula-config; fi'
-          sh 'git clone -b master https://github.com/kimpaller/nebula-config.git'
+          sh 'git clone -b master https://github.com/sdgtt/nebula-config.git'
           cmd = 'sudo mv nebula-config/' + agent_name + ' /etc/default/nebula'
           sh cmd
         }
@@ -67,24 +68,13 @@ lock(label: 'adgt_test_harness_boards') {
                     harness.stage_library("RecoverBoard"))
 
   // Test stage
-  def matlab = {
-    String board ->
-    stage("Test MATLAB") {
-      def ip = nebula('update-config network-config dutip --board-name=' + board)
-      sh 'cp -r /root/.matlabro /root/.matlab'
-      retry(3) {
-        sleep(5)
-        checkout scm
-        sh 'git submodule update --init'
-      }
-      try {
-          sh 'IIO_URI="ip:' + ip + '" /usr/local/MATLAB/R2021a/bin/matlab -nosplash -nodesktop -nodisplay -r "addpath(genpath(\'test\'));runHWTests()"'
-      } finally {
-          junit testResults: '*.xml', allowEmptyResults: true
-      }
-    }
-  }
-  harness.add_stage(matlab)
+  harness.set_matlab_commands(["ad=adi.utils.libad9361",
+                        "ad.download_libad9361()",
+                        "addpath(genpath('test'))",
+                        "pyenv('Version','/usr/bin/python3')",
+                        "runHWTests(getenv('board'))"])
+  harness.add_stage(harness.stage_library("MATLABTests"),'continueWhenFail')
+  
   harness.add_stage(harness.stage_library("RestoreIP"), 'stopWhenFail')
   // harness.add_stage(harness.stage_library('SendResults'),'continueWhenFail')
 

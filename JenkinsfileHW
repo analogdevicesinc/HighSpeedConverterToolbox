@@ -19,7 +19,7 @@ lock(label: 'adgt_test_harness_boards') {
   harness.set_env('nebula_branch', 'do_not_load_system_uart_if_zcu102')
   // harness.set_env('nebula_branch','dev')
   harness.set_env('libiio_branch', 'v0.21')
-  harness.set_env('telemetry_repo', 'https://github.com/kimpaller/telemetry.git')
+  harness.set_env('telemetry_repo', 'https://github.com/sdgtt/telemetry.git')
   harness.set_env('telemetry_branch', 'master')
   harness.set_env('matlab_release','R2021a')
 
@@ -72,7 +72,7 @@ lock(label: 'adgt_test_harness_boards') {
                         "ad.download_libad9361()",
                         "addpath(genpath('test'))",
                         "pyenv('Version','/usr/bin/python3')",
-                        "runHWTests(getenv('board'))"])
+                        "runHWTests"])
   harness.add_stage(harness.stage_library("MATLABTests"),'continueWhenFail')
   
   harness.add_stage(harness.stage_library("RestoreIP"), 'stopWhenFail')

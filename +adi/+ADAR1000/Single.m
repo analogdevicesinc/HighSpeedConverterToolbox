@@ -8,18 +8,95 @@ classdef Single < adi.common.Attribute & ...
     
     properties (Nontunable)
         %ChipID Chip ID
-        %   Cell array of strings identifying desired chip select
-        %   option of ADAR100. This is based on the jumper configuration
-        %   if the EVAL-ADAR100 is used. These strings are the labels
-        %   coinciding with each chip select and are typically in the
+        %   String identifying desired chip select option of 
+        %   ADAR100. This is based on the jumper configuration
+        %   if the EVAL-ADAR100 is used. This string is the label
+        %   coinciding with each chip select and is typically in the
         %   form csb*_chip*, e.g., csb1_chip1. When an ADAR1000 array
         %   is instantiated, the array class will handle the instantiation 
         %   of individual adar1000 handles.
-        chipID = {'csb1_chip1'};
+        chipID = 'csb1_chip1';
+    end
+    
+    properties
+        ArrayElementMap = [1 2 3 4];
+        ChannelElementMap = [2 1 4 3];
+        ElementR
+        ElementC
+    end
+    
+    properties
+        Channels
+    end
+    
+    properties(Nontunable, Hidden)
+%         Timeout = Inf;
+        kernelBuffersCount = 0;
+        dataTypeStr = 'int16';
+%         phyDevName = 'adar1000';
+        % Name of driver instance in device tree
+        iioDriverName = 'adar1000';
+%         iioDevPHY
+        devName = 'adar1000';
+        SamplesPerFrame = 0;
+    end
+    
+    properties (Hidden)
+        BeamDev
+    end
+    
+    properties (Hidden, Constant, Logical)
+        ComplexData = false;
+    end
+    
+    properties(Nontunable, Hidden, Constant)
+        Type = 'Rx';
+%         channel_names = {''};
+    end
+    
+    properties (Hidden, Nontunable, Access = protected)
+        isOutput = false;
     end
     
     %% API Functions
+    methods
+        %% Constructor
+        function obj = Single(varargin)
+            coder.allowpcode('plain');
+            obj = obj@matlabshared.libiio.base(varargin{:});
+        end
+        % Destructor
+        function delete(obj)
+        end
+    end
+    
     methods (Hidden, Access = protected)
+        function setchipID(obj)
+            numDevs = obj.iio_context_get_devices_count(obj.iioCtx);
+            found = false;
+            for k = 1:numDevs
+                devPtr = obj.iio_context_get_device(obj.iioCtx, k-1);                    
+                name = obj.iio_device_get_name(devPtr);
+                if contains(name,obj.iioDriverName)
+                    attrCount = obj.iio_device_get_attrs_count(devPtr);
+                    for i = 1:attrCount
+                        attr = obj.iio_device_get_attr(devPtr,i-1);
+                        if strcmpi(attr,'label')
+                            val = obj.getDeviceAttributeRAW(attr,128,devPtr);
+                            if contains(obj.chipID,val)
+                                obj.BeamDev = devPtr;
+                                found = true;
+                            end
+                        end
+                    end
+                end
+            end
+            if ~found
+                error('Unable to locate %s in context',obj.chipID);
+            end
+            
+        end
+        
         function setupImpl(obj)
             % Setup LibIIO
             setupLib(obj);
@@ -49,17 +126,38 @@ classdef Single < adi.common.Attribute & ...
             % This is required sine Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
             
+            % Check ArrayElementMap and ChannelElementMap have the same
+            % elements
+            assert(isequal(numel(intersect(obj.ArrayElementMap, obj.ChannelElementMap)), ...
+                numel(obj.ChannelElementMap)), ...
+                'ChannelElementMap needs to contain the same elements as ArrayElementMap');
             % Check dimensions of arrays
             %{
-            rows = length(obj.Beams);
-            assert(isequal(size(obj.RxPhases),[rows,4]), 'RxPhases must be of size 4 x length(Beams)');
-            assert(isequal(size(obj.TxPhases),[rows,4]), 'TxPhases must be of size 4 x length(Beams)');
-            assert(isequal(size(obj.RxGains),[rows,4]), 'RxGains must be of size 4 x length(Beams)');
-            assert(isequal(size(obj.TxGains),[rows,4]), 'TxGains must be of size 4 x length(Beams)');
-            
+            rows = length(obj.chipID);
+            assert(isequal(size(obj.RxPhases),[rows,4]), 'RxPhases must be of size 4 x length(chipID)');
+            assert(isequal(size(obj.TxPhases),[rows,4]), 'TxPhases must be of size 4 x length(chipID)');
+            assert(isequal(size(obj.RxGains),[rows,4]), 'RxGains must be of size 4 x length(chipID)');
+            assert(isequal(size(obj.TxGains),[rows,4]), 'TxGains must be of size 4 x length(chipID)');
+            %}
             % Get devices based on beam arrangement
-            obj.setBeams(rows);
+            obj.setchipID();
             
+            % Get element indices in 2D, i.e., row and column numbers
+            obj.ElementR = zeros(numel(obj.ArrayElementMap), 1);
+            obj.ElementC = zeros(numel(obj.ArrayElementMap), 1);
+            for ii = 1:numel(obj.ChannelElementMap)
+                [obj.ElementR(ii), obj.ElementC(ii)] = ...
+                    find(obj.ChannelElementMap(ii) == obj.ArrayElementMap);
+            end
+            
+            % Create channel vector
+            obj.Channels = adi.ADAR1000.Channel.empty(numel(obj.ArrayElementMap), 0);
+            for ii = 1:numel(obj.ChannelElementMap)
+                obj.Channels(ii) = adi.ADAR1000.Channel(obj, ii, ...
+                    obj.ChannelElementMap(ii), obj.ElementR(ii), obj.ElementC(ii));
+            end
+            x = 1;
+            %{
             % Set attributes in hardware
             obj.setAllDevs(obj.RxPhases,'phase',false)
             obj.setAllDevs(obj.TxPhases,'phase',true)

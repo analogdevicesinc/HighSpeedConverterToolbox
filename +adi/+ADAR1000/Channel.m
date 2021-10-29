@@ -34,7 +34,7 @@ classdef Channel < matlab.mixin.SetGet
             obj.Row = Row;
             obj.Col = Col;
 
-            obj.BIAS_CODE_TO_VOLTAGE_SCALE = adar1000.BIAS_CODE_TO_VOLTAGE_SCALE;
+            obj.BIAS_CODE_TO_VOLTAGE_SCALE = obj.ADARParent.BIAS_CODE_TO_VOLTAGE_SCALE;
         end
         
         function res = get.ADARParent(obj)

@@ -1,4 +1,4 @@
-classdef Channel < matlab.mixin.SetGet
+classdef Channel < adi.common.Attribute
     properties
         BIAS_CODE_TO_VOLTAGE_SCALE
     end

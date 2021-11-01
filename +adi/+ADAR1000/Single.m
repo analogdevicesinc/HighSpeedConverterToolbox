@@ -15,18 +15,19 @@ classdef Single < adi.common.Attribute & ...
         %   form csb*_chip*, e.g., csb1_chip1. When an ADAR1000 array
         %   is instantiated, the array class will handle the instantiation 
         %   of individual adar1000 handles.
-        chipID = 'csb1_chip1';
+        ChipID = 'csb1_chip1';
+        ArrayElementMap = [1 2 3 4];
+        ChannelElementMap = [2 1 4 3];
     end
     
     properties
-        ArrayElementMap = [1 2 3 4];
-        ChannelElementMap = [2 1 4 3];
         ElementR
         ElementC
     end
     
     properties
         Channels
+        BeamMemEnable
     end
     
     properties(Nontunable, Hidden)
@@ -63,7 +64,7 @@ classdef Single < adi.common.Attribute & ...
         %% Constructor
         function obj = Single(varargin)
             coder.allowpcode('plain');
-            obj = obj@matlabshared.libiio.base(varargin{:});
+            obj = obj@matlabshared.libiio.base(varargin{:});  
         end
         % Destructor
         function delete(obj)
@@ -165,5 +166,33 @@ classdef Single < adi.common.Attribute & ...
             obj.setAllDevs(obj.TxGains,'hardwaregain',true)
             %}
         end
+    end
+    
+    methods
+        function res = getDeviceAttribute(obj, DevAttrName)
+            attrCount = obj.iio_device_get_attrs_count(devPtr);
+            for i = 1:attrCount
+                attr = obj.iio_device_get_attr(devPtr,i-1);
+                if strcmpi(attr,'label')
+                end
+            end
+            
+        end
+        %{
+        function res = get.BeamMemEnable(obj)
+            res = obj.getAttributeLongLong(sprintf('voltage%d',obj.ADARChannel), 'pa_bias_off', true);
+            attrCount = obj.iio_device_get_attrs_count(devPtr);
+            for i = 1:attrCount
+                attr = obj.iio_device_get_attr(devPtr,i-1);
+                if strcmpi(attr,'label')
+                end
+            end
+        end
+        
+        function set.BeamMemEnable(obj, value)
+            dac_code = int(value / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            obj.ADARParent.setAttributeBool(sprintf('voltage%d',obj.ADARChannel), 'pa_bias_off', true, dac_code);
+        end
+        %}
     end
 end

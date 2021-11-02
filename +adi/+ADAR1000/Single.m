@@ -6,7 +6,7 @@ classdef Single < adi.common.Attribute & ...
         BIAS_CODE_TO_VOLTAGE_SCALE = -0.018824
     end
     
-    properties (Nontunable)
+    properties
         %ChipID Chip ID
         %   String identifying desired chip select option of 
         %   ADAR100. This is based on the jumper configuration
@@ -18,6 +18,10 @@ classdef Single < adi.common.Attribute & ...
         ChipID = 'csb1_chip1';
         ArrayElementMap = [1 2 3 4];
         ChannelElementMap = [2 1 4 3];
+    end
+    
+    properties (Dependent)
+        NumADAR1000s
     end
     
     properties
@@ -43,7 +47,7 @@ classdef Single < adi.common.Attribute & ...
     end
     
     properties (Hidden)
-        BeamDev
+        ChipIDHandle
     end
     
     properties (Hidden, Constant, Logical)
@@ -71,31 +75,39 @@ classdef Single < adi.common.Attribute & ...
         end
     end
     
+    methods
+        function res = get.NumADAR1000s(obj)
+            res = numel(obj.ChipID);
+        end
+    end
+    
     methods (Hidden, Access = protected)
-        function setchipID(obj)
+        function setChipID(obj)
             numDevs = obj.iio_context_get_devices_count(obj.iioCtx);
-            found = false;
-            for k = 1:numDevs
-                devPtr = obj.iio_context_get_device(obj.iioCtx, k-1);                    
-                name = obj.iio_device_get_name(devPtr);
-                if contains(name,obj.iioDriverName)
+            obj.ChipIDHandle = {};
+            for ChipIDIndx = 1:obj.NumADAR1000s
+                found = false;
+                for k = 1:numDevs
+                    devPtr = obj.iio_context_get_device(obj.iioCtx, k-1);                    
                     attrCount = obj.iio_device_get_attrs_count(devPtr);
-                    for i = 1:attrCount
-                        attr = obj.iio_device_get_attr(devPtr,i-1);
-                        if strcmpi(attr,'label')
-                            val = obj.getDeviceAttributeRAW(attr,128,devPtr);
-                            if contains(obj.chipID,val)
-                                obj.BeamDev = devPtr;
-                                found = true;
+                    name = obj.iio_device_get_name(devPtr);
+                    if contains(name,obj.iioDriverName)
+                        for i = 1:attrCount
+                            attr = obj.iio_device_get_attr(devPtr,i-1);
+                            if strcmpi(attr,'label')
+                                val = obj.getDeviceAttributeRAW(attr,128,devPtr);
+                                if contains(obj.ChipID{ChipIDIndx},val)
+                                    obj.ChipIDHandle = [obj.ChipIDHandle(:)', {devPtr}];
+                                    found = true;
+                                end
                             end
                         end
                     end
+                end            
+                if ~found
+                    error('Unable to locate %s in context',obj.ChipID{ChipIDIndx});
                 end
             end
-            if ~found
-                error('Unable to locate %s in context',obj.chipID);
-            end
-            
         end
         
         function setupImpl(obj)
@@ -118,30 +130,33 @@ classdef Single < adi.common.Attribute & ...
             obj.ConnectedToDevice = true;
             setupInit(obj);
         end
+        
         function [data,valid] = stepImpl(~)
             data = 0;
             valid = false;
         end
+        
         function setupInit(obj)
             % Do writes directly to hardware without using set methods.
-            % This is required sine Simulink support doesn't support
+            % This is required since Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
             
             % Check ArrayElementMap and ChannelElementMap have the same
             % elements
-            assert(isequal(numel(intersect(obj.ArrayElementMap, obj.ChannelElementMap)), ...
-                numel(obj.ChannelElementMap)), ...
-                'ChannelElementMap needs to contain the same elements as ArrayElementMap');
+            if (numel(intersect(obj.ArrayElementMap, obj.ChannelElementMap)) ~= ...
+                    numel(obj.ChannelElementMap))
+                error('ChannelElementMap needs to contain the same elements as ArrayElementMap');
+            end
             % Check dimensions of arrays
             %{
-            rows = length(obj.chipID);
-            assert(isequal(size(obj.RxPhases),[rows,4]), 'RxPhases must be of size 4 x length(chipID)');
-            assert(isequal(size(obj.TxPhases),[rows,4]), 'TxPhases must be of size 4 x length(chipID)');
-            assert(isequal(size(obj.RxGains),[rows,4]), 'RxGains must be of size 4 x length(chipID)');
-            assert(isequal(size(obj.TxGains),[rows,4]), 'TxGains must be of size 4 x length(chipID)');
+            rows = length(obj.ChipID);
+            assert(isequal(size(obj.RxPhases),[rows,4]), 'RxPhases must be of size 4 x length(ChipID)');
+            assert(isequal(size(obj.TxPhases),[rows,4]), 'TxPhases must be of size 4 x length(ChipID)');
+            assert(isequal(size(obj.RxGains),[rows,4]), 'RxGains must be of size 4 x length(ChipID)');
+            assert(isequal(size(obj.TxGains),[rows,4]), 'TxGains must be of size 4 x length(ChipID)');
             %}
             % Get devices based on beam arrangement
-            obj.setchipID();
+            obj.setChipID();
             
             % Get element indices in 2D, i.e., row and column numbers
             obj.ElementR = zeros(numel(obj.ArrayElementMap), 1);

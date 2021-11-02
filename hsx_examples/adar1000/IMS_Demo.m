@@ -8,7 +8,7 @@ classdef IMS_Demo
     end
     
     methods
-        function obj = IMS_Demo(uri)
+        function obj = IMS_Demo(uri, CSBs)
             obj.stingray = adi.Stingray(uri, CSBs);
             obj.mxfe = adi.AD9081.Rx;
             obj.mxfe.uri = uri;
@@ -22,7 +22,7 @@ classdef IMS_Demo
         end
         
         function obj = Configure(StingrayFreq, MxFEFreq)
-            obj.ConfigureMxFE(MxFEFreq);
+            % obj.ConfigureMxFE(MxFEFreq);
             obj.ConfigureStingray(StingrayFreq);
         end
         

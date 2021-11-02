@@ -25,6 +25,8 @@ classdef Stingray < matlab.mixin.SetGet
         PowerSequencerEnable
         PowerSequencerPowerGood
         FullyPowered
+        EnableP5V
+        PowerGoodP5V
     end
             
     methods
@@ -32,12 +34,24 @@ classdef Stingray < matlab.mixin.SetGet
             res = logical(obj.PowerSequencerEnable && obj.PowerSequencerPowerGood);
         end
         
+        function res = get.FullyPowered(obj)
+            res = logical(obj.PartiallyPowered && obj.EnableP5V && obj.PowerGoodP5V);
+        end
+        
         function res = get.PowerSequencerEnable(obj)
             res = obj.Monitor.getGPIO1();
         end
         
+        function res = get.EnableP5V(obj)
+            res = obj.Monitor.getGPIO2();
+        end
+        
         function res = get.PowerSequencerPowerGood(obj)
             res = obj.Monitor.getGPIO3();
+        end
+        
+        function res = get.PowerGoodP5V(obj)
+            res = obj.Monitor.getGPIO4();
         end
     end
     
@@ -49,11 +63,13 @@ classdef Stingray < matlab.mixin.SetGet
                     obj.ChipIDs{4*(ii-1)+jj} = sprintf('csb%d_chip%d', ii, jj);
                 end
             end
-            obj.ADAR1000Array = adi.ADAR1000.Array;
+            obj.ADAR1000Array = adi.ADAR1000.Array('uri', uri);
             obj.ADAR1000Array();
             
             % One-Bit-ADC-DAC
             obj.GPIOHandle = adi.OneBitADCDAC;
+            obj.GPIOHandle.uri = uri;
+            obj.GPIOHandle();
             
             % HW-Monitor
             obj.Monitor = adi.LTC2992;
@@ -72,13 +88,13 @@ classdef Stingray < matlab.mixin.SetGet
         end
         
         function obj = PowerUp(Enable5V)
-            if ~self.PartiallyPowered
+            if ~obj.PartiallyPowered
                 % Send a signal to power up the Stingray board's first few rails
                 obj.PulsePowerPin('pwr_up_down');
                 
                 % Wait for the supplies to settle
                 loops = 0;
-                while ~self.PowerSequencerPowerGood
+                while ~obj.PowerSequencerPowerGood
                     pause(0.01);
                     loops = loops+1;
                     if (loops > 50)
@@ -86,7 +102,7 @@ classdef Stingray < matlab.mixin.SetGet
                     end
                 end
                 
-                if ~self.PartiallyPowered
+                if ~obj.PartiallyPowered
                     error('Board didn''t power up!');
                 end
             end

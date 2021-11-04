@@ -1,3 +1,10 @@
+clc;
+clear;
+close all;
+
+sdut = adi.Stingray;
+sdut.uri = 'ip:192.168.1.111';
+%{
 classdef IMS_Demo
     properties
         % IP address
@@ -45,3 +52,4 @@ end
 % configure MxFE
 
 % configure Stingray
+%}

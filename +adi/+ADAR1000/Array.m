@@ -120,10 +120,11 @@ classdef Array < adi.ADAR1000.Single
                 obj.ChipID = {'csb1_chip1','csb1_chip2','csb1_chip3','csb1_chip4'};
             end
             % Check that the number of chips matches for all the inputs
-            if (numel(obj.ChipID) ~= obj.NumADAR1000s) || ...
-                    ((numel(obj.ChipID)*4) ~= numel(obj.ArrayElementMap)) || ...
-                    (numel(obj.ArrayElementMap) ~= numel(obj.ChannelElementMap))
-                error('The number of chips must match for all the inputs');
+            if ((numel(obj.ChipID)*4) ~= numel(obj.ArrayElementMap))
+                error('Expected equal number of elements in ArrayElementMap and 4*numel(ChipIDs)');
+            end
+            if (numel(obj.ArrayElementMap) ~= numel(obj.ChannelElementMap))
+                error('Expected equal number of elements in ArrayElementMap and ChannelElementMap');
             end
         end
         
@@ -133,7 +134,7 @@ classdef Array < adi.ADAR1000.Single
     end
     
     methods
-        function obj = SteerRx(Azimuth, Elevation)
+        function SteerRx(obj, Azimuth, Elevation)
             % SteerRx Steer the Rx array in a particular direction. This method assumes that the entire array is one analog beam.
             % Parameters:
             %     Azimuth: float
@@ -143,7 +144,7 @@ classdef Array < adi.ADAR1000.Single
             obj.Steer("Rx", Azimuth, Elevation);
         end
         
-        function obj = SteerTx(Azimuth, Elevation)
+        function SteerTx(obj, Azimuth, Elevation)
             % SteerTx Steer the Tx array in a particular direction. This method assumes that the entire array is one analog beam.
             % Parameters:
             %     Azimuth: float
@@ -155,11 +156,11 @@ classdef Array < adi.ADAR1000.Single
     end
     
     methods (Access = private)
-        function obj = Steer(RxOrTx, Azimuth, Elevation)
+        function Steer(obj, RxOrTx, Azimuth, Elevation)
             [AzimuthPhi, ElevationPhi] = obj.CalculatePhi(Azimuth, Elevation);
             
             % Update the class variables
-            if strcmpi(rx_or_tx, 'Rx')
+            if strcmpi(RxOrTx, 'Rx')
                 obj.RxAzimuth = Azimuth;
                 obj.RxElevation = Elevation;
                 obj.RxAzimuth_phi = AzimuthPhi;
@@ -192,74 +193,8 @@ classdef Array < adi.ADAR1000.Single
     end
     
     methods (Hidden, Access = protected)
-        %{
-        function setChipID(obj)
-            numDevs = obj.iio_context_get_devices_count(obj.iioCtx);
-            obj.ChipIDHandle = {};
-            for ChipIDIndx = 1:numel(obj.NumADAR1000s)
-                found = false;
-                for k = 1:numDevs
-                    devPtr = obj.iio_context_get_device(obj.iioCtx, k-1);                    
-                    name = obj.iio_device_get_name(devPtr);
-                    if contains(name,obj.iioDriverName)
-                        attrCount = obj.iio_device_get_attrs_count(devPtr);
-                        for i = 1:attrCount
-                            attr = obj.iio_device_get_attr(devPtr,i-1);
-                            if strcmpi(attr,'label')
-                                val = obj.getDeviceAttributeRAW(attr,128,devPtr);
-                                if contains(obj.ChipID{ChipIDIndx},val)
-                                    obj.ChipIDHandle = [obj.ChipIDHandle(:)', {devPtr}];
-                                    found = true;
-                                end
-                            end
-                        end
-                    end
-                end            
-                if ~found
-                    error('Unable to locate %s in context',obj.ChipID{ChipIDIndx});
-                end
-            end
-        end
-        %}
         function setupInit(obj)
             setupInit@adi.ADAR1000.Single(obj);
-            %{
-            % Check ArrayElementMap and ChannelElementMap have the same
-            % elements
-            if (numel(intersect(obj.ArrayElementMap, obj.ChannelElementMap)) ~= ...
-                    numel(obj.ChannelElementMap))
-                error('ChannelElementMap needs to contain the same elements as ArrayElementMap');
-            end
-            
-            % Get devices based on beam arrangement
-            obj.setChipID();
-            
-            % Get element indices in 2D, i.e., row and column numbers
-            obj.ElementR = zeros(numel(obj.ArrayElementMap), 1);
-            obj.ElementC = zeros(numel(obj.ArrayElementMap), 1);
-            for ii = 1:numel(obj.ChannelElementMap)
-                [obj.ElementR(ii), obj.ElementC(ii)] = ...
-                    find(obj.ChannelElementMap(ii) == obj.ArrayElementMap);
-            end
-            
-            % Create channel vector
-            % obj.Channels = adi.ADAR1000.Channel.empty(numel(obj.ArrayElementMap), 1);
-            for ii = 1:numel(obj.ChannelElementMap)
-                obj.Channels(ii) = adi.ADAR1000.Channel(obj, ii, ...
-                    obj.ChannelElementMap(ii), obj.ElementR(ii), obj.ElementC(ii));
-            end
-            %}
-            %{
-            obj.ChipIDHandles = cell(numel(obj.ChipID), 1);
-            for ii = 1:numel(obj.ChipID)
-                obj.ChipIDHandles{ii} = adi.ADAR1000.Single;
-                obj.ChipIDHandles{ii}.ChipID = obj.ChipID{ii};
-                obj.ChipIDHandles{ii}.uri = obj.uri;
-                obj.ChipIDHandles{ii}.ArrayElementMap = obj.ArrayElementMap;
-                obj.ChipIDHandles{ii}.ChannelElementMap = ...
-                    obj.ChannelElementMap(ii, :);
-            end
-            %}
             x = 1;
         end
     end

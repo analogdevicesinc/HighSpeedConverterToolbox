@@ -15,7 +15,7 @@ classdef Single < adi.common.Attribute & ...
         %   form csb*_chip*, e.g., csb1_chip1. When an ADAR1000 array
         %   is instantiated, the array class will handle the instantiation 
         %   of individual adar1000 handles.
-        ChipID = 'csb1_chip1';
+        ChipID = {'csb1_chip1'};
         ArrayElementMap = [1 2 3 4];
         ChannelElementMap = [2 1 4 3];
     end
@@ -63,21 +63,465 @@ classdef Single < adi.common.Attribute & ...
         isOutput = false;
     end
     
+    properties
+        % Device Attributes
+        Mode = {'Rx'}
+        StateTxOrRx = {'Rx'}
+        RxEnable = true
+        TxEnable = false
+        LNABiasOutEnable = true
+        LNABiasOn = -4.80012
+        
+        % Channel Attributes
+        DetectorEnable = true(1, 4)
+        DetectorPower = 255*ones(1, 4)
+        PABiasOff = -4.80012*ones(1, 4)
+        PABiasOn = -4.80012*ones(1, 4)
+        RxAttn = true(1, 4)
+        RxBeamState = zeros(1, 4)
+        RxPowerDown = false(1, 4)
+        RxGain = ones(1, 4)
+        RxPhase = zeros(1, 4)
+        TxAttn = true(1, 4)
+        TxBeamState = zeros(1, 4)
+        TxPowerDown = false(1, 4)
+        TxGain = ones(1, 4)
+        TxPhase = zeros(1, 4)
+    end
+    
     %% API Functions
     methods
         %% Constructor
         function obj = Single(varargin)
             coder.allowpcode('plain');
-            obj = obj@matlabshared.libiio.base(varargin{:});  
+            obj = obj@matlabshared.libiio.base(varargin{:});
+            % Check that the number of chips matches for all the inputs
+            if ((numel(obj.ChipID)*4) ~= numel(obj.ArrayElementMap))
+                error('Expected equal number of elements in ArrayElementMap and 4*numel(ChipIDs)');
+            end
+            if (numel(obj.ArrayElementMap) ~= numel(obj.ChannelElementMap))
+                error('Expected equal number of elements in ArrayElementMap and ChannelElementMap');
+            end
         end
         % Destructor
         function delete(obj)
         end
+        
+        function getAllChipsChannelAttribute(obj, attr, isOutput, AttrClass)
+            for d = 1:length(obj.ChipID)
+                for c = 0:3
+                    channel = sprintf('voltage%d', c);
+                    if strcmpi(AttrClass, 'logical')
+                        obj.getAttributeBool(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                    elseif strcmpi(AttrClass, 'raw')
+                        obj.getAttributeRAW(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                    elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
+                        obj.getAttributeLongLong(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                    elseif strcmpi(AttrClass, 'double')
+                        obj.getAttributeDouble(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                    end
+                end
+            end
+        end
+        
+        function setAllChipsChannelAttribute(obj, values, attr, isOutput, AttrClass)
+            if strcmpi(AttrClass, 'logical')
+                validateattributes(values, {'logical'},...
+                    {'size', size(obj.ChannelElementMap)});
+            elseif strcmpi(AttrClass, 'raw') || ...
+                    strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
+                validateattributes(values, {'numeric', 'uint32'},...
+                    {'size', size(obj.ChannelElementMap)});
+            elseif strcmpi(AttrClass, 'double')
+                validateattributes(values, {'numeric', 'double'},...
+                    {'size', size(obj.ChannelElementMap)});
+            end
+            
+            if obj.ConnectedToDevice
+                for dev = 1:length(obj.ChipID)
+                    for ch = 1:4
+                        channel = sprintf('voltage%d', ch-1);
+                        if strcmpi(AttrClass, 'logical')
+                            obj.setAttributeBool(channel, attr, ...
+                                values(dev, ch), isOutput, obj.ChipIDHandle{dev});
+                        elseif strcmpi(AttrClass, 'raw')
+                            obj.setAttributeRAW(channel, attr, ...
+                                values(dev, ch), isOutput, obj.ChipIDHandle{dev});
+                        elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
+                            tol = 0;
+                            obj.setAttributeLongLong(channel, attr, ...
+                                values(dev, ch), isOutput, tol, obj.ChipIDHandle{dev});
+                        elseif strcmpi(AttrClass, 'double')
+                            tol = sqrt(eps);
+                            obj.setAttributeDouble(channel, attr, ...
+                                values(dev, ch), isOutput, tol, obj.ChipIDHandle{dev});
+                        end
+                    end
+                end
+            end
+        end
+        
+        function result = getAllChipsDeviceAttributeRAW(obj, attr, isBooleanAttr)
+            temp = zeros(size(obj.ChipID));
+            for ii = 1:length(obj.ChipID)
+                temp(ii) = logical(obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii}));                
+            end
+            if isBooleanAttr
+                result = logical(temp);
+            else
+                result = temp;
+            end
+        end
+        
+        function setAllChipsDeviceAttributeRAW(obj, attr, values)
+            validateattributes(values, {'char'}, {'size', size(obj.ChipID)});
+            if obj.ConnectedToDevice
+                for ii = 1:length(obj.ChipID)
+                    obj.setDeviceAttributeRAW(attr,values(ii),obj.ChipIDHandle{ii});
+                end
+            end
+        end        
+    end
+    
+    % Get/Set Methods for Device Attributes
+    methods
+        function result = get.Mode(obj)
+            result = cell(size(obj.ChipID));
+            result(:) = {'Rx'};
+            RxEnableMat = obj.RxEnable;
+            TxEnableMat = obj.TxEnable;
+            StateTxOrRxMat = obj.StateTxOrRx;
+            if ~isempty(obj.ChipIDHandle)
+                for ii = 1:numel(obj.ChipID)
+                    if (RxEnableMat(ii) && ~TxEnableMat(ii))
+                        if strcmp(StateTxOrRxMat(ii), 'Rx')
+                            result(ii) = 'Rx';
+                        else
+                            result(ii) = 'Disabled';
+                        end
+                    elseif (TxEnableMat(ii) && ~RxEnableMat(ii))
+                        if strcmp(StateTxOrRxMat(ii), 'Tx')
+                            result(ii) = 'Tx';
+                        else
+                            result(ii) = 'Disabled';
+                        end
+                    elseif (TxEnableMat(ii) && RxEnableMat(ii))
+                        result(ii) = StateTxOrRxMat(ii);
+                    else
+                        result(ii) = 'Disabled';
+                    end
+                end
+            end
+        end
+        
+        function set.Mode(obj, values)
+            RxEnableMat = zeros(size(values));
+            TxEnableMat = zeros(size(values));
+            StateTxOrRxMat = cell(size(values));
+            StateTxOrRxMat(:) = {'Rx'};
+            for ii = 1:numel(values)
+                if ~(strcmpi(values{ii}, 'Tx') || strcmpi(values{ii}, 'Rx') ...
+                         || strcmpi(values{ii}, 'Disabled'))
+                    error('Expected ''Tx'' or ''Rx'' or ''Disabled'' for property, Mode');
+                end
+                if ~strcmpi(values{ii}, 'Disabled')
+%                     RxEnableMat(ii) = false;
+%                     TxEnableMat(ii) = false;
+%                 else
+                    StateTxOrRxMat{ii} = values{ii};
+                    if strcmpi(values(ii), 'Tx')
+%                         RxEnableMat(ii) = false;
+                        TxEnableMat(ii) = 1;                        
+                    else
+                        RxEnableMat(ii) = 1;
+%                         TxEnableMat(ii) = false;
+                    end
+                end
+            end
+            obj.RxEnable = RxEnableMat;
+            obj.TxEnable = TxEnableMat;
+            obj.StateTxOrRx = StateTxOrRxMat;
+        end
+        
+        function result = get.RxEnable(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'rx_en', true);
+            end
+        end
+        
+        function set.RxEnable(obj, values)
+            setAllChipsDeviceAttributeRAW(obj, 'rx_en', num2str(values));
+        end
+        
+        function result = get.TxEnable(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'tx_en', true);
+            end
+        end
+        
+        function set.TxEnable(obj, values)
+            setAllChipsDeviceAttributeRAW(obj, 'tx_en', num2str(values));
+        end
+        
+        function result = get.LNABiasOutEnable(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'lna_bias_out_enable', true);
+            end
+        end
+        
+        function set.LNABiasOutEnable(obj, values)
+            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_out_enable', num2str(int32(values)));
+        end
+        
+        function result = get.LNABiasOn(obj)
+            result = 255*obj.BIAS_CODE_TO_VOLTAGE_SCALE*ones(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'lna_bias_on', false);
+                result = obj.BIAS_CODE_TO_VOLTAGE_SCALE*result;
+            end            
+        end
+        
+        function set.LNABiasOn(obj, values)
+            dac_codes = int(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_on', dac_codes);
+        end
+        
+        function result = get.StateTxOrRx(obj)
+            result = cell(size(obj.ChipID));
+            result(:) = {'Rx'};
+            if ~isempty(obj.ChipIDHandle)
+                temp = getAllChipsDeviceAttributeRAW(obj,'tr_spi', true);
+                for ii = 1:numel(temp)
+                    if temp(ii)
+                        result(ii) = 'Tx';
+                    else
+                        result(ii) = 'Rx';
+                    end
+                end
+            end
+        end
+        
+        function set.StateTxOrRx(obj, values)
+            ivalues = blanks(numel(values));
+            for ii = 1:numel(values)
+                if ~(strcmpi(values(ii), 'Tx') || strcmpi(values(ii), 'Rx'))
+                    error('Expected ''Tx'' or ''Rx'' for property, StateTxOrRx');
+                end
+                if strcmpi(values(ii), 'Tx')
+                    ivalues(ii) = '1';
+                else
+                    ivalues(ii) = '0';
+                end
+            end
+            setAllChipsDeviceAttributeRAW(obj, 'tr_spi', ivalues);
+        end
     end
     
     methods
-        function res = get.NumADAR1000s(obj)
-            res = numel(obj.ChipID);
+        function LatchRxSettings(obj)
+            setAllChipsDeviceAttributeRAW(obj, 'rx_load_spi', ones(size(obj.ChipID)));
+        end
+        
+        function LatchTxSettings(obj)
+            setAllChipsDeviceAttributeRAW(obj, 'Tx_load_spi', ones(size(obj.ChipID)));
+        end
+    end
+    
+    % Get/Set Methods for Channel Attributes
+    methods
+        function result = get.DetectorEnable(obj)
+            result = true(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsChannelAttribute(obj, 'detector_en', true, 'logical');
+            end
+        end
+        
+        function set.DetectorEnable(obj, values)
+            setAllChipsChannelAttribute(obj, values, 'detector_en', true, 'logical');
+        end
+        
+        function result = get.DetectorPower(obj)
+            result = true(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                obj.DetectorEnable = true(obj.ChannelElementMap);
+                result = getAllChipsChannelAttribute(obj, 'raw', true, 'raw');
+                obj.DetectorEnable = false(obj.ChannelElementMap);
+            end
+        end
+        
+        function result = get.PABiasOff(obj)
+            result = 255*ones(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                dac_code = getAllChipsChannelAttribute(obj, 'pa_bias_off', true, 'int32');
+                result = dac_code*obj.BIAS_CODE_TO_VOLTAGE_SCALE;
+            end
+        end
+        
+        function set.PABiasOff(obj, values)
+            dac_codes = int(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            setAllChipsChannelAttribute(obj, dac_codes, 'pa_bias_off', true, 'int32');
+        end
+        
+        function result = get.PABiasOn(obj)
+            result = 255*ones(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                dac_code = getAllChipsChannelAttribute(obj, 'pa_bias_on', true, 'int32');
+                result = dac_code*obj.BIAS_CODE_TO_VOLTAGE_SCALE;
+            end
+        end
+        
+        function set.PABiasOn(obj, values)
+            dac_codes = int(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            setAllChipsChannelAttribute(obj, dac_codes, 'pa_bias_on', true, 'int32');
+        end
+        
+        function result = get.RxAttn(obj)
+            result = true(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = ~getAllChipsChannelAttribute(obj, 'attenuation', false, 'logical');
+            end
+        end
+        
+        function set.RxAttn(obj, values)
+            setAllChipsChannelAttribute(obj, ~values, 'attenuation', false, 'logical');
+        end
+        
+        function result = get.RxBeamState(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsChannelAttribute(obj, 'beam_pos_load', false, 'int32');
+            end
+        end
+        
+        function set.RxBeamState(obj, values)
+            validateattributes( values, { 'double', 'single', 'uint32'}, ...
+                { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',120}, ...
+                '', 'RxBeamState');
+            setAllChipsChannelAttribute(obj, values, 'beam_pos_load', false, 'int32');
+        end
+        
+        function result = get.RxPowerDown(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = ~getAllChipsChannelAttribute(obj, 'powerdown', false, 'logical');
+            end
+        end
+        
+        function set.RxPowerDown(obj, values)
+            setAllChipsChannelAttribute(obj, ~values, 'powerdown', false, 'logical');
+        end
+        
+        function result = get.RxGain(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsChannelAttribute(obj, 'hardwaregain', false, 'double');
+            end
+        end
+        
+        function set.RxGain(obj, values)
+            setAllChipsChannelAttribute(obj, values, 'hardwaregain', false, 'double');
+        end
+        
+        function result = get.RxPhase(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsChannelAttribute(obj, 'phase', false, 'double');
+            end
+        end
+        
+        function set.RxPhase(obj, values)
+            setAllChipsChannelAttribute(obj, values, 'phase', false, 'double');
+        end
+        
+        function result = get.TxAttn(obj)
+            result = true(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = ~getAllChipsChannelAttribute(obj, 'attenuation', true, 'logical');
+            end
+        end
+        
+        function set.TxAttn(obj, values)
+            setAllChipsChannelAttribute(obj, ~values, 'attenuation', true, 'logical');
+        end
+        
+        function result = get.TxBeamState(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsChannelAttribute(obj, 'beam_pos_load', true, 'int32');
+            end
+        end
+        
+        function set.TxBeamState(obj, values)
+            validateattributes( values, { 'double', 'single', 'uint32'}, ...
+                { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',120}, ...
+                '', 'RxBeamState');
+            setAllChipsChannelAttribute(obj, values, 'beam_pos_load', true, 'int32');
+        end
+        
+        function result = get.TxPowerDown(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = ~getAllChipsChannelAttribute(obj, 'powerdown', true, 'logical');
+            end
+        end
+        
+        function set.TxPowerDown(obj, values)
+            setAllChipsChannelAttribute(obj, ~values, 'powerdown', true, 'logical');
+        end
+        
+        function result = get.TxGain(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsChannelAttribute(obj, 'hardwaregain', true, 'double');
+            end
+        end
+        
+        function set.TxGain(obj, values)
+            setAllChipsChannelAttribute(obj, values, 'hardwaregain', true, 'double');
+        end
+        
+        function result = get.TxPhase(obj)
+            result = zeros(size(obj.ChannelElementMap));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsChannelAttribute(obj, 'phase', true, 'double');
+            end
+        end
+        
+        function set.TxPhase(obj, values)
+            setAllChipsChannelAttribute(obj, values, 'phase', true, 'double');
+        end
+    end
+    
+    methods    
+        function SaveRxBeam(obj, ChipIDIndx, ChIndx, State, Attn, Gain, Phase)
+             validateattributes( value, { 'double','single', 'uint32' }, ...
+                { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',120}, ...
+                '', 'State');
+             validateattributes( value, { 'double','single', 'uint32' }, ...
+                { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',127}, ...
+                '', 'Gain');             
+            obj.setAttributeRAW(sprintf('voltage%d', ChIndx), ...
+                'beam_pos_save', sprintf('%d, %d, %d, %f', State, 1 - int(Attn), Gain, Phase), false, obj.ChipIDHandles{ChipIDIndx});
+        end
+        
+        function SaveTxBeam(obj, ChipIDIndx, ChIndx, State, Attn, Gain, Phase)
+             validateattributes( value, { 'double','single', 'uint32' }, ...
+                { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',120}, ...
+                '', 'State');
+             validateattributes( value, { 'double','single', 'uint32' }, ...
+                { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',127}, ...
+                '', 'Gain');             
+            obj.setAttributeRAW(sprintf('voltage%d', ChIndx), ...
+                'beam_pos_save', sprintf('%d, %d, %d, %f', State, 1 - int(Attn), Gain, Phase), true, obj.ChipIDHandles{ChipIDIndx});
+        end
+    end
+    
+    methods
+        function result = get.NumADAR1000s(obj)
+            result = numel(obj.ChipID);
         end
     end
     
@@ -165,15 +609,14 @@ classdef Single < adi.common.Attribute & ...
                 [obj.ElementR(ii), obj.ElementC(ii)] = ...
                     find(obj.ChannelElementMap(ii) == obj.ArrayElementMap);
             end
-            
+            %{
             % Create channel vector
-            obj.Channels = adi.ADAR1000.Channel.empty(numel(obj.ArrayElementMap), 0);
+            obj.Channels = cell(size(obj.ArrayElementMap));
             for ii = 1:numel(obj.ChannelElementMap)
                 obj.Channels(ii) = adi.ADAR1000.Channel(obj, ii, ...
                     obj.ChannelElementMap(ii), obj.ElementR(ii), obj.ElementC(ii));
             end
-            x = 1;
-            %{
+            
             % Set attributes in hardware
             obj.setAllDevs(obj.RxPhases,'phase',false)
             obj.setAllDevs(obj.TxPhases,'phase',true)
@@ -184,7 +627,7 @@ classdef Single < adi.common.Attribute & ...
     end
     
     methods
-        function res = getDeviceAttribute(obj, DevAttrName)
+        function result = getDeviceAttribute(obj, DevAttrName)
             attrCount = obj.iio_device_get_attrs_count(devPtr);
             for i = 1:attrCount
                 attr = obj.iio_device_get_attr(devPtr,i-1);
@@ -194,8 +637,8 @@ classdef Single < adi.common.Attribute & ...
             
         end
         %{
-        function res = get.BeamMemEnable(obj)
-            res = obj.getAttributeLongLong(sprintf('voltage%d',obj.ADARChannel), 'pa_bias_off', true);
+        function result = get.BeamMemEnable(obj)
+            result = obj.getAttributeLongLong(sprintf('voltage%d',obj.ADARChannel), 'pa_bias_off', true);
             attrCount = obj.iio_device_get_attrs_count(devPtr);
             for i = 1:attrCount
                 attr = obj.iio_device_get_attr(devPtr,i-1);

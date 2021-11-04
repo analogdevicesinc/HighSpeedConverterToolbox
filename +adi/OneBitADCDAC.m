@@ -1,4 +1,4 @@
-classdef OneBitADCDAC < adi.common.Attribute & adi.common.Rx
+classdef OneBitADCDAC < adi.common.Attribute% & adi.common.Rx
     properties(Nontunable, Hidden)
         SamplesPerFrame = 0;
         devName = 'one-bit-adc-dac';
@@ -21,15 +21,16 @@ classdef OneBitADCDAC < adi.common.Attribute & adi.common.Rx
     properties
         PowerUpDown
         Ctrl5V
+        PAOn
     end
     
     methods
         function set.PowerUpDown(obj, value)
-            obj.ADARParent.setAttributeBool('voltage5', 'raw', true, value);
+            obj.setAttributeBool('voltage5', 'raw', true, value);
         end
         
         function set.Ctrl5V(obj, value)
-            obj.ADARParent.setAttributeBool('voltage4', 'raw', true, value);
+            obj.setAttributeBool('voltage4', 'raw', true, value);
         end
     end
     
@@ -55,8 +56,7 @@ classdef OneBitADCDAC < adi.common.Attribute & adi.common.Rx
             setupInit(obj);
         end
         
-        function setupInit(obj)
-            
+        function setupInit(obj)            
         end
     end
 end

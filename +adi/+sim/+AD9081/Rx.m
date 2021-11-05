@@ -250,8 +250,8 @@ classdef Rx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
         % Check Crossbar4x8Mux2
         function set.Crossbar4x8Mux2(obj, value)
             % Cannot support certain configs
-            assert(value(1:4)>2,'Input to first half of Crossbar4x8Mux2 can only map from DDC 1-2');
-            assert(value(5:8)<3,'Input to second half of Crossbar4x8Mux2 can only map from DDC 3-4');
+            assert(all(value(1:4)<3),'Input to first half of Crossbar4x8Mux2 can only map from DDC 1-2');
+            assert(all(value(5:8)>2),'Input to second half of Crossbar4x8Mux2 can only map from DDC 3-4');
             obj.Crossbar4x8Mux2 = value;
             obj.setRates();
         end

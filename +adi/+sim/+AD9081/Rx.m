@@ -62,7 +62,7 @@ classdef Rx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
         %   - HalfComplexSumQuadrature: y2 = F1(x1)+F2(x1), y1 = x1*z^-p
         %   - FullComplex: y1 = F1(x1)-F3(x2), y2 = F1(x1)+F3(x2)-F2(x1+x2) 
         %   - Matrix: y1 = F1(x1) - F3(x2), y2 = F2(x1) - F4(x2)
-        PFilter1Mode = 'SingleInphase';
+        PFilter1Mode = 'Matrix';
         %PFilter1TapsWidthsPerQuad PFilter1 Taps Widths Per Quad
         %   Number of bits per each set of four coefficients. This matrix
         %   must be [NxM] where N is the number of distinct filters based
@@ -102,7 +102,7 @@ classdef Rx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
         %   - HalfComplexSumQuadrature: y2 = F1(x1)+F2(x1), y1 = x1*z^-p
         %   - FullComplex: y1 = F1(x1)-F3(x2), y2 = F1(x1)+F3(x2)-F2(x1+x2) 
         %   - Matrix: y1 = F1(x1) - F3(x2), y2 = F2(x1) - F4(x2)
-        PFilter2Mode = 'SingleInphase';
+        PFilter2Mode = 'Matrix';
         %PFilter2TapsWidthsPerQuad PFilter2 Taps Widths Per Quad
         %   Number of bits per each set of four coefficients. This matrix
         %   must be [NxM] where N is the number of distinct filters based
@@ -250,8 +250,8 @@ classdef Rx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
         % Check Crossbar4x8Mux2
         function set.Crossbar4x8Mux2(obj, value)
             % Cannot support certain configs
-            assert(value(1:4)>2,'Input to first half of Crossbar4x8Mux2 can only map from DDC 1-2');
-            assert(value(5:8)<3,'Input to second half of Crossbar4x8Mux2 can only map from DDC 3-4');
+            assert(all(value(1:4)<3),'Input to first half of Crossbar4x8Mux2 can only map from DDC 1-2');
+            assert(all(value(5:8)>2),'Input to second half of Crossbar4x8Mux2 can only map from DDC 3-4');
             obj.Crossbar4x8Mux2 = value;
             obj.setRates();
         end
@@ -533,7 +533,7 @@ classdef Rx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
             % Return data type for each output port
             varargout = cell(8,1);
             for k=1:8
-                varargout{k} = "double";
+                varargout{k} = "int16";
             end
         end
 

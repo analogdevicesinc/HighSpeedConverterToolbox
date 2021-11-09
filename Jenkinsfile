@@ -27,6 +27,7 @@ stage("Build Toolbox") {
 		}
         }
         if (branchName == 'hdl_2018_r2') {
+	    archiveArtifacts artifacts: '*.mltbx'
             stash includes: '**', name: 'builtSources', useDefaultExcludes: false
         }
     }

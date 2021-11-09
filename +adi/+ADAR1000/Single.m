@@ -174,6 +174,11 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function setAllChipsDeviceAttributeRAW(obj, attr, values)
+            temp = char(ones(size(obj.ChipID)) * '1');
+            for ii = 1:size(values, 1)
+                temp(ii, :) = strrep(values(ii, :), ' ', '');
+            end
+            values = temp;
             validateattributes(values, {'char'}, {'size', size(obj.ChipID)});
             if obj.ConnectedToDevice
                 for ii = 1:length(obj.ChipID)
@@ -215,8 +220,8 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.Mode(obj, values)
-            RxEnableMat = zeros(size(values));
-            TxEnableMat = zeros(size(values));
+            RxEnableMat = char(ones(size(values)) * '0');
+            TxEnableMat = char(ones(size(values)) * '0');
             StateTxOrRxMat = cell(size(values));
             StateTxOrRxMat(:) = {'Rx'};
             for ii = 1:numel(values)
@@ -231,9 +236,9 @@ classdef Single < adi.common.Attribute & ...
                     StateTxOrRxMat{ii} = values{ii};
                     if strcmpi(values(ii), 'Tx')
 %                         RxEnableMat(ii) = false;
-                        TxEnableMat(ii) = 1;                        
+                        TxEnableMat(ii) = '1';                        
                     else
-                        RxEnableMat(ii) = 1;
+                        RxEnableMat(ii) = '1';
 %                         TxEnableMat(ii) = false;
                     end
                 end
@@ -272,8 +277,8 @@ classdef Single < adi.common.Attribute & ...
             end
         end
         
-        function set.LNABiasOutEnable(obj, values)
-            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_out_enable', num2str(int32(values)));
+        function set.LNABiasOutEnable(obj, values)            
+            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_out_enable', num2str(values));
         end
         
         function result = get.LNABiasOn(obj)
@@ -305,7 +310,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.StateTxOrRx(obj, values)
-            ivalues = blanks(numel(values));
+            ivalues = char(ones(size(values)) * '0');
             for ii = 1:numel(values)
                 if ~(strcmpi(values(ii), 'Tx') || strcmpi(values(ii), 'Rx'))
                     error('Expected ''Tx'' or ''Rx'' for property, StateTxOrRx');
@@ -374,7 +379,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.PABiasOn(obj, values)
-            dac_codes = int(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            dac_codes = int64(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
             setAllChipsChannelAttribute(obj, dac_codes, 'pa_bias_on', true, 'int32');
         end
         

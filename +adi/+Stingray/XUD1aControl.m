@@ -5,7 +5,7 @@ classdef XUD1aControl < adi.common.Attribute & adi.common.Rx
         kernelBuffersCount = 0;
         dataTypeStr = 'int16';
         iioDriverName = 'one-bit-adc-dac';
-        DevLabel = 'stingray_control'
+        DevLabel = 'xud_control'
     end
     
     properties (Hidden, Nontunable, Access = protected)

@@ -1,4 +1,4 @@
-classdef OneBitADCDAC < adi.common.Attribute & adi.common.Rx
+classdef StingrayControl < adi.common.Attribute & adi.common.Rx
     properties(Nontunable, Hidden)
         SamplesPerFrame = 0;
         devName = 'one-bit-adc-dac';
@@ -66,7 +66,7 @@ classdef OneBitADCDAC < adi.common.Attribute & adi.common.Rx
     end
     
     methods (Hidden, Access = protected)
-        function setupOneBitADCDAC(obj)
+        function setupStingrayControl(obj)
             numDevs = obj.iio_context_get_devices_count(obj.iioCtx);            
             found = false;
             for k = 1:numDevs
@@ -124,7 +124,7 @@ classdef OneBitADCDAC < adi.common.Attribute & adi.common.Rx
         end
         
         function setupInit(obj)
-            obj.setupOneBitADCDAC();
+            obj.setupStingrayControl();
         end
     end
 end

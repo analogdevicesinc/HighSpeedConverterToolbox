@@ -10,7 +10,8 @@ classdef Stingray < matlab.mixin.SetGet
     
     properties (Access = private)
         ADAR1000Array
-        GPIOHandle
+        SRayCtrl
+        XCtrl
         Monitor
     end
     
@@ -66,11 +67,11 @@ classdef Stingray < matlab.mixin.SetGet
     methods% (Access = private)
         function PulsePowerPin(obj, WhichGPIO)
             if strcmpi(WhichGPIO, 'pwr_up_down')
-                obj.GPIOHandle.PowerUpDown = true;
-                obj.GPIOHandle.PowerUpDown = false;
+                obj.SRayCtrl.PowerUpDown = true;
+                obj.SRayCtrl.PowerUpDown = false;
             elseif strcmpi(WhichGPIO, '5v_ctrl')
-                obj.GPIOHandle.Ctrl5V = true;
-                obj.GPIOHandle.Ctrl5V = false;
+                obj.SRayCtrl.Ctrl5V = true;
+                obj.SRayCtrl.Ctrl5V = false;
             end
         end
     end
@@ -92,17 +93,23 @@ classdef Stingray < matlab.mixin.SetGet
             obj.ADAR1000Array.ChannelElementMap = obj.ChannelElementMap;
             obj.ADAR1000Array();
             
-            % One-Bit-ADC-DAC
-            obj.GPIOHandle = adi.OneBitADCDAC;
-            obj.GPIOHandle.uri = obj.uri;
-            obj.GPIOHandle();
+            % Stingray Control
+            obj.SRayCtrl = adi.Stingray.StingrayControl;
+            obj.SRayCtrl.uri = obj.uri;
+            obj.SRayCtrl();
+            
+            % XUD1a Control
+            obj.XCtrl = adi.Stingray.XUD1aControl;
+            obj.XCtrl.uri = obj.uri;
+            obj.XCtrl();
             
             % HW-Monitor
-            obj.Monitor = adi.LTC2992(obj.uri);
+            obj.Monitor = adi.Stingray.LTC2992(obj.uri);
             obj.Monitor();
             
             % Ensure that the board is powered down
             for i = 1:5
+                fprintf('%d\n\n',i)
                 obj.PowerDown();
                 try
                     result = obj.ADAR1000Array.getAttributeRAW('voltage0', 'raw', true, obj.ADAR1000Array.ChipIDHandle{1});
@@ -117,7 +124,7 @@ classdef Stingray < matlab.mixin.SetGet
             end
             
             % Ensure the PA_ON pin is high
-            % obj.GPIOHandle.PAOn = true;
+            obj.SRayCtrl.PAOn = true;
         end
     
         function PowerDown(obj)
@@ -178,7 +185,8 @@ classdef Stingray < matlab.mixin.SetGet
             disp(obj.PartiallyPowered);
             disp(obj.PowerSequencerEnable);
             disp(obj.PowerSequencerPowerGood);
-            if ~obj.PartiallyPowered
+            disp(obj.PowerGoodP5V);
+            if ~obj.FullyPowered % if ~obj.PartiallyPowered
                 % Send a signal to power up the Stingray board's first few rails
                 obj.PulsePowerPin('pwr_up_down');
                 
@@ -192,9 +200,9 @@ classdef Stingray < matlab.mixin.SetGet
                     end
                 end
                 
-                if ~obj.PartiallyPowered
-                    error('Board didn''t power up!');
-                end
+%                 if ~obj.PartiallyPowered
+%                     error('Board didn''t power up!');
+%                 end
             end
             
             % Send a signal to power up the +5V rail

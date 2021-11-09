@@ -108,17 +108,18 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function getAllChipsChannelAttribute(obj, attr, isOutput, AttrClass)
+            result = zeros(size(obj.ChannelElementMap));
             for d = 1:length(obj.ChipID)
                 for c = 0:3
                     channel = sprintf('voltage%d', c);
                     if strcmpi(AttrClass, 'logical')
-                        obj.getAttributeBool(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = obj.getAttributeBool(channel, attr, isOutput, obj.ChipIDHandle{ii});
                     elseif strcmpi(AttrClass, 'raw')
-                        obj.getAttributeRAW(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = obj.getAttributeRAW(channel, attr, isOutput, obj.ChipIDHandle{ii});
                     elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
-                        obj.getAttributeLongLong(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = obj.getAttributeLongLong(channel, attr, isOutput, obj.ChipIDHandle{ii});
                     elseif strcmpi(AttrClass, 'double')
-                        obj.getAttributeDouble(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = obj.getAttributeDouble(channel, attr, isOutput, obj.ChipIDHandle{ii});
                     end
                 end
             end
@@ -164,7 +165,7 @@ classdef Single < adi.common.Attribute & ...
         function result = getAllChipsDeviceAttributeRAW(obj, attr, isBooleanAttr)
             temp = zeros(size(obj.ChipID));
             for ii = 1:length(obj.ChipID)
-                temp(ii) = logical(obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii}));                
+                temp(ii) = obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii});
             end
             if isBooleanAttr
                 result = logical(temp);
@@ -182,7 +183,7 @@ classdef Single < adi.common.Attribute & ...
             validateattributes(values, {'char'}, {'size', size(obj.ChipID)});
             if obj.ConnectedToDevice
                 for ii = 1:length(obj.ChipID)
-                    obj.setDeviceAttributeRAW(attr,values(ii),obj.ChipIDHandle{ii});
+                    obj.setDeviceAttributeRAW(attr, values(ii), obj.ChipIDHandle{ii});
                 end
             end
         end        

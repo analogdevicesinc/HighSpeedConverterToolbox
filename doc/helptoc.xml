@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <toc>
-   <tocitem target="adi_bsp.html">Analog Devices, Inc Sensor Toolbox
+   <tocitem target="adi_bsp.html">Analog Devices, Inc High-Speed Converter Toolbox
       <!--<tocitem target="Blocks.html">Blocks</tocitem>-->
+      <tocitem target="Models.html">Behavioral Models
+        <tocitem target="sim/ad9081/top_level.html">AD9081
+            <tocitem target="sim/ad9081/top_level.html">Components
+                <tocitem target="sim/ad9081/adc.html">ADC and ADC Mux</tocitem>
+                <tocitem target="sim/ad9081/dac.html">DAC</tocitem>
+                <tocitem target="sim/ad9081/pfilt.html">Programmable FIR Filters (PFILT)</tocitem>
+                <tocitem target="sim/ad9081/ddc2.html">Digital Down Converters</tocitem>
+                <tocitem target="sim/ad9081/duc.html">Digital Up Converters</tocitem>
+            </tocitem>
+        </tocitem>
+      </tocitem>
+
       <tocitem target="SystemObjects.html">System Objects</tocitem>
       <tocitem target="SupportedHardware.html">Supported Hardware</tocitem>
       <tocitem target="Buffers.html">Buffers</tocitem>

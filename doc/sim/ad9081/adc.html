@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2021a"><title>AD9081 ADC and ADC Mux</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(213, 80, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: normal; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S2 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 20px; min-height: 0px; white-space: pre-wrap; color: rgb(60, 60, 60); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: bold; text-align: left;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 4px 4px 0px 0px; padding: 6px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { color: rgb(64, 64, 64); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 250px;    overflow: auto;}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement{    min-height: 18px;    max-height: 250px;    overflow: auto;}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2019 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    color: rgb(255,100,0);}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: rgb(255,100,0);    text-decoration: underline;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    color: rgb(230,0,0);}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: rgb(230,0,0);    text-decoration: underline;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 250px;    overflow: auto;}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 3px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S5 { margin: 10px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S6 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S8 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S9 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px; padding: 6px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>AD9081 ADC and ADC Mux</span></h1><div  class = 'S1'><span>The pipelined ADC models are simplied behavioral implementations that are based on the currently estimated specifications of the data converters. They are designed to be similar to the noise spectral density (NSD) of the converters. Note that since physical hardware does not exist these are estimated values and will likely change. There will be other distortions introduce by physical hardware as well, relating to front-end matches, internal chip structures, baluns, and gains stages among others. The ADC model should be considered similar but not exact.</span></div><h2  class = 'S2'><span>Top-Level Control</span></h2><div  class = 'S1'><span>There are two control properties related to ADC control: </span><span style=' font-weight: bold;'>SampleRate</span><span> and </span><span style=' font-weight: bold;'>Crossbar4x4Mux0</span><span>.</span></div><div  class = 'S1'><span style=' font-weight: bold;'>SampleRate</span><span> is the data rate of the converters themselves. Therefore, the output datarate of the model will be this SampleRate divided by the different decimations used.</span></div><div class="CodeBlock"><div class="inlineWrapper outputs"><div  class = 'S3'><span style="white-space: pre"><span >help </span><span style="color: rgb(170, 4, 249);">adi.sim.AD9081.Rx.SampleRate</span></span></div><div  class = 'S4'><div class="inlineElement eoOutputWrapper embeddedOutputsTextElement" uid="3C5B83F8" data-testid="output_0" data-width="428" data-height="45" data-hashorizontaloverflow="false" style="width: 458px; max-height: 261px; white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;"><div class="textElement" style="white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;">  <strong style="white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;">SampleRate</strong> Sample Rate of ADCs
+    Scalar in Hz. Currently this is fixed since NSD will change
+    with this number, which would make the model invalid</div></div></div></div></div><div  class = 'S5'><span style=' font-weight: bold;'>Crossbar4x4Mux0</span><span> is a full crossbar mux connecting the ADCs to the rest of the system.</span></div><div class="CodeBlock"><div class="inlineWrapper outputs"><div  class = 'S3'><span style="white-space: pre"><span >help </span><span style="color: rgb(170, 4, 249);">adi.sim.AD9081.Rx.Crossbar4x4Mux0</span></span></div><div  class = 'S4'><div class="inlineElement eoOutputWrapper embeddedOutputsTextElement scrollableOutput" uid="89F8CF86" data-testid="output_1" data-width="428" data-height="45" data-hashorizontaloverflow="true" style="width: 458px; max-height: 261px; white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;"><div class="textElement" style="white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;">  <strong style="white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;">Crossbar4x4Mux0</strong> Crossbar 4x4 Mux0
+    Array of input and output mapping. Index is the output and the
+    value is the selected input</div></div></div></div></div><h2  class = 'S2'><span>Example Configuration</span></h2><div  class = 'S1'><span>Here is a basic example were we want to map ADC0, ADC1, and ADC2 out only.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span >rx = adi.sim.AD9081.Rx;</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >rx.SampleRate = 4e9;</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >rx.Crossbar4x4Mux0 = [1,1,3,4];</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: rgb(2, 128, 9);">% Pass noise through model at 10% and 1% fullscale</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >noiseVolts1 = 1.4/2*0.1*randn(1000,1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >noiseVolts2 = 1.4/2*0.01*randn(1000,1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >[o1,o2,~,~,o3,o4] = rx(noiseVolts1,noiseVolts2,noiseVolts1,noiseVolts1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >outs = [o1,o2,o3,o4];</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: rgb(170, 4, 249);">'Mapped values identical %d\n'</span><span >,isequal(outs(:,1),outs(:,2)))</span></span></div><div  class = 'S4'><div class="inlineElement eoOutputWrapper embeddedOutputsTextElement" uid="85321D7B" data-testid="output_2" data-width="428" data-height="18" data-hashorizontaloverflow="false" style="width: 458px; max-height: 261px; white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;"><div class="textElement" style="white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;">Mapped values identical 1</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S9'><span style="white-space: pre"><span >fprintf(</span><span style="color: rgb(170, 4, 249);">'Mapped values identical %d\n'</span><span >,isequal(outs(:,3),outs(:,4)))</span></span></div><div  class = 'S4'><div class="inlineElement eoOutputWrapper embeddedOutputsTextElement" uid="87E9174D" data-testid="output_3" data-width="428" data-height="18" data-hashorizontaloverflow="false" style="width: 458px; max-height: 261px; white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;"><div class="textElement" style="white-space: pre; font-style: normal; color: rgb(64, 64, 64); font-size: 12px;">Mapped values identical 0</div></div></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% AD9081 ADC and ADC Mux
+% The pipelined ADC models are simplied behavioral implementations that are 
+% based on the currently estimated specifications of the data converters. They 
+% are designed to be similar to the noise spectral density (NSD) of the converters. 
+% Note that since physical hardware does not exist these are estimated values 
+% and will likely change. There will be other distortions introduce by physical 
+% hardware as well, relating to front-end matches, internal chip structures, baluns, 
+% and gains stages among others. The ADC model should be considered similar but 
+% not exact.
+%% Top-Level Control
+% There are two control properties related to ADC control: *SampleRate* and 
+% *Crossbar4x4Mux0*.
+% 
+% *SampleRate* is the data rate of the converters themselves. Therefore, the 
+% output datarate of the model will be this SampleRate divided by the different 
+% decimations used.
+
+help adi.sim.AD9081.Rx.SampleRate
+%% 
+% *Crossbar4x4Mux0* is a full crossbar mux connecting the ADCs to the rest of 
+% the system.
+
+help adi.sim.AD9081.Rx.Crossbar4x4Mux0
+%% Example Configuration
+% Here is a basic example were we want to map ADC0, ADC1, and ADC2 out only.
+
+rx = adi.sim.AD9081.Rx;
+rx.SampleRate = 4e9;
+rx.Crossbar4x4Mux0 = [1,1,3,4];
+% Pass noise through model at 10% and 1% fullscale
+noiseVolts1 = 1.4/2*0.1*randn(1000,1);
+noiseVolts2 = 1.4/2*0.01*randn(1000,1);
+[o1,o2,~,~,o3,o4] = rx(noiseVolts1,noiseVolts2,noiseVolts1,noiseVolts1);
+outs = [o1,o2,o3,o4];
+fprintf('Mapped values identical %d\n',isequal(outs(:,1),outs(:,2)))
+fprintf('Mapped values identical %d\n',isequal(outs(:,3),outs(:,4)))
+##### SOURCE END #####
+-->
+</div></body></html>

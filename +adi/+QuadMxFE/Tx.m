@@ -426,6 +426,10 @@ classdef Tx < adi.QuadMxFE.Base & adi.common.Tx
             obj.setDebugAttributeBool('pl_ddr_fifo_enable', 1, 0, getDev(obj, obj.devName));
 
             % Get SPI connected devs
+            obj.iioDev0 = getDev(obj, obj.devName0);
+            obj.iioDev1 = getDev(obj, obj.devName1);
+            obj.iioDev2 = getDev(obj, obj.devName2);
+            obj.iioDev3 = getDev(obj, obj.devName3);
             for k=0:3
                 obj.(sprintf('iioDevADF4371_%d',k)) = ...
                     iio_context_find_device(obj, obj.iioCtx, ...

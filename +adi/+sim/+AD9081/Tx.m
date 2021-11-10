@@ -92,7 +92,7 @@ classdef Tx < adi.sim.AD9081.Base & matlab.system.mixin.SampleTime & matlab.syst
         %           DAC3 = zeros
         %   Modes are dependent on interpolation settings since certain
         %   modes require use of NCOs
-        ModeSelectMux = 0;
+        ModeSelectMux = 1;
     end
     
     properties

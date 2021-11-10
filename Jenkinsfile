@@ -1,7 +1,7 @@
 @Library('tfc-lib') _
 
-dockerConfig = getDockerConfig(['MATLAB','Vivado'])
-dockerConfig.add("-e MLRELEASE=R2020b")
+dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
+dockerConfig.add("-e MLRELEASE=R2021a")
 dockerHost = 'docker'
 
 ////////////////////////////
@@ -27,6 +27,7 @@ stage("Build Toolbox") {
 		}
         }
         if (branchName == 'hdl_2018_r2') {
+	    archiveArtifacts artifacts: '*.mltbx'
             stash includes: '**', name: 'builtSources', useDefaultExcludes: false
         }
     }

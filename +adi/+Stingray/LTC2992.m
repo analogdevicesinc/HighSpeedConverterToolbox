@@ -23,7 +23,7 @@ classdef LTC2992
                 obj.DevHandle.system('echo 476 > /sys/class/gpio/export');
                 obj.DevHandle.system('echo 477 > /sys/class/gpio/export');
                 obj.DevHandle.system('echo 478 > /sys/class/gpio/export');
-                obj.DevHandle.system('echo 479 > /sys/class/gpio/export');            
+                obj.DevHandle.system('echo 479 > /sys/class/gpio/export');
                 obj.DevHandle.system('echo 0 > /sys/class/gpio/ltc2992-6a-GPIO1/value');
                 obj.DevHandle.system('echo 0 > /sys/class/gpio/ltc2992-6a-GPIO2/value');
                 obj.DevHandle.system('echo 0 > /sys/class/gpio/ltc2992-6a-GPIO3/value');

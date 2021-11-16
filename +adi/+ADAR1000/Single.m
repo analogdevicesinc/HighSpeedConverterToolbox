@@ -107,19 +107,19 @@ classdef Single < adi.common.Attribute & ...
         function delete(obj)
         end
         
-        function getAllChipsChannelAttribute(obj, attr, isOutput, AttrClass)
+        function result = getAllChipsChannelAttribute(obj, attr, isOutput, AttrClass)
             result = zeros(size(obj.ChannelElementMap));
             for d = 1:length(obj.ChipID)
                 for c = 0:3
                     channel = sprintf('voltage%d', c);
                     if strcmpi(AttrClass, 'logical')
-                        result(d, c+1) = obj.getAttributeBool(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = obj.getAttributeBool(channel, attr, isOutput, obj.ChipIDHandle{d});
                     elseif strcmpi(AttrClass, 'raw')
-                        result(d, c+1) = obj.getAttributeRAW(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = str2double(obj.getAttributeRAW(channel, attr, isOutput, obj.ChipIDHandle{d}));
                     elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
-                        result(d, c+1) = obj.getAttributeLongLong(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = obj.getAttributeLongLong(channel, attr, isOutput, obj.ChipIDHandle{d});
                     elseif strcmpi(AttrClass, 'double')
-                        result(d, c+1) = obj.getAttributeDouble(channel, attr, isOutput, obj.ChipIDHandle{ii});
+                        result(d, c+1) = obj.getAttributeDouble(channel, attr, isOutput, obj.ChipIDHandle{d});
                     end
                 end
             end
@@ -201,20 +201,20 @@ classdef Single < adi.common.Attribute & ...
                 for ii = 1:numel(obj.ChipID)
                     if (RxEnableMat(ii) && ~TxEnableMat(ii))
                         if strcmp(StateTxOrRxMat(ii), 'Rx')
-                            result(ii) = 'Rx';
+                            result(ii) = {'Rx'};
                         else
-                            result(ii) = 'Disabled';
+                            result(ii) = {'Disabled'};
                         end
                     elseif (TxEnableMat(ii) && ~RxEnableMat(ii))
                         if strcmp(StateTxOrRxMat(ii), 'Tx')
-                            result(ii) = 'Tx';
+                            result(ii) = {'Tx'};
                         else
-                            result(ii) = 'Disabled';
+                            result(ii) = {'Disabled'};
                         end
                     elseif (TxEnableMat(ii) && RxEnableMat(ii))
                         result(ii) = StateTxOrRxMat(ii);
                     else
-                        result(ii) = 'Disabled';
+                        result(ii) = {'Disabled'};
                     end
                 end
             end
@@ -302,9 +302,9 @@ classdef Single < adi.common.Attribute & ...
                 temp = getAllChipsDeviceAttributeRAW(obj,'tr_spi', true);
                 for ii = 1:numel(temp)
                     if temp(ii)
-                        result(ii) = 'Tx';
+                        result(ii) = {'Tx'};
                     else
-                        result(ii) = 'Rx';
+                        result(ii) = {'Rx'};
                     end
                 end
             end
@@ -350,11 +350,11 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function result = get.DetectorPower(obj)
-            result = true(size(obj.ChannelElementMap));
+            result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                obj.DetectorEnable = true(obj.ChannelElementMap);
+                obj.DetectorEnable = true(size(obj.ChannelElementMap));
                 result = getAllChipsChannelAttribute(obj, 'raw', true, 'raw');
-                obj.DetectorEnable = false(obj.ChannelElementMap);
+                obj.DetectorEnable = false(size(obj.ChannelElementMap));
             end
         end
         

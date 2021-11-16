@@ -8,7 +8,7 @@ classdef Stingray < matlab.mixin.SetGet
             18 22 21 17; 20 24 23 19; 26 30 29 25; 28 32 31 27];
     end
     
-    properties (Access = private)
+    properties
         ADAR1000Array
         SRayCtrl
         XCtrl

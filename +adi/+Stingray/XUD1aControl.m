@@ -25,12 +25,86 @@ classdef XUD1aControl < adi.common.Attribute & adi.common.Rx
     end
     
     properties
+        TXRX0
+        TXRX1
+        TXRX2
+        TXRX3
+        PllOutputSel
+        RxGainMode
+        %{
         GPIO0
         GPIO5
         IMU_GPIO3
+        %}
     end
     
     methods
+        function result = get.RxGainMode(obj)
+            result = false;
+            if ~isempty(obj.DevPtr)
+                result = obj.getAttributeRAW('voltage0', 'raw', true, obj.DevPtr);
+            end
+        end
+        
+        function set.RxGainMode(obj, value)
+            obj.setAttributeRAW('voltage0', 'raw', num2str(value), true, obj.DevPtr);
+        end
+        
+        function result = get.TXRX0(obj)
+            result = false;
+            if ~isempty(obj.DevPtr)
+                result = obj.getAttributeRAW('voltage1', 'raw', true, obj.DevPtr);
+            end
+        end
+        
+        function set.TXRX0(obj, value)
+            obj.setAttributeRAW('voltage1', 'raw', num2str(value), true, obj.DevPtr);
+        end
+        
+        function result = get.TXRX1(obj)
+            result = false;
+            if ~isempty(obj.DevPtr)
+                result = obj.getAttributeRAW('voltage2', 'raw', true, obj.DevPtr);
+            end
+        end
+        
+        function set.TXRX1(obj, value)
+            obj.setAttributeRAW('voltage2', 'raw', num2str(value), true, obj.DevPtr);
+        end
+        
+        function result = get.TXRX2(obj)
+            result = false;
+            if ~isempty(obj.DevPtr)
+                result = obj.getAttributeRAW('voltage3', 'raw', true, obj.DevPtr);
+            end
+        end
+        
+        function set.TXRX2(obj, value)
+            obj.setAttributeRAW('voltage3', 'raw', num2str(value), true, obj.DevPtr);
+        end
+        
+        function result = get.TXRX3(obj)
+            result = false;
+            if ~isempty(obj.DevPtr)
+                result = obj.getAttributeRAW('voltage4', 'raw', true, obj.DevPtr);
+            end
+        end
+        
+        function set.TXRX3(obj, value)
+            obj.setAttributeRAW('voltage4', 'raw', num2str(value), true, obj.DevPtr);
+        end
+        
+        function result = get.PllOutputSel(obj)
+            result = false;
+            if ~isempty(obj.DevPtr)
+                result = obj.getAttributeRAW('voltage5', 'raw', true, obj.DevPtr);
+            end
+        end
+        
+        function set.PllOutputSel(obj, value)
+            obj.setAttributeRAW('voltage5', 'raw', num2str(value), true, obj.DevPtr);
+        end
+        %{
         function result = get.GPIO0(obj)
             result = false;
             if ~isempty(obj.DevPtr)
@@ -63,6 +137,7 @@ classdef XUD1aControl < adi.common.Attribute & adi.common.Rx
         function set.IMU_GPIO3(obj, value)
             obj.setAttributeRAW('voltage2', 'raw', num2str(value), true, obj.DevPtr);
         end
+        %}
     end
     
     methods (Hidden, Access = protected)

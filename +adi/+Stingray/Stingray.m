@@ -125,6 +125,19 @@ classdef Stingray < matlab.mixin.SetGet
             
             % Ensure the PA_ON pin is high
             obj.SRayCtrl.PAOn = true;
+
+            % ADAR1000 Array
+            obj.ADAR1000Array = adi.ADAR1000.Array;
+            obj.ADAR1000Array.uri = obj.uri;
+            obj.ADAR1000Array.ChipID = cell(size(obj.ADAR1000s));
+            for ii = 1:2
+                for jj = 1:4
+                    obj.ADAR1000Array.ChipID{4*(ii-1)+jj} = sprintf('csb%d_chip%d', ii, jj);
+                end
+            end
+            obj.ADAR1000Array.ArrayElementMap = obj.ArrayElementMap;
+            obj.ADAR1000Array.ChannelElementMap = obj.ChannelElementMap;
+            obj.ADAR1000Array();
         end
     
         function PowerDown(obj)

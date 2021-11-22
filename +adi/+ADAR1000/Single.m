@@ -164,8 +164,12 @@ classdef Single < adi.common.Attribute & ...
         
         function result = getAllChipsDeviceAttributeRAW(obj, attr, isBooleanAttr)
             temp = zeros(size(obj.ChipID));
-            for ii = 1:length(obj.ChipID)
-                temp(ii) = obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii});
+            for ii = 1:numel(obj.ChipID)
+                if isBooleanAttr
+                    temp(ii) = obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii});
+                else
+                    temp(ii) = str2num(obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii}));
+                end
             end
             if isBooleanAttr
                 result = logical(temp);
@@ -174,16 +178,23 @@ classdef Single < adi.common.Attribute & ...
             end
         end
         
-        function setAllChipsDeviceAttributeRAW(obj, attr, values)
-            temp = char(ones(size(obj.ChipID)) * '1');
-            for ii = 1:size(values, 1)
-                temp(ii, :) = strrep(values(ii, :), ' ', '');
+        function setAllChipsDeviceAttributeRAW(obj, attr, values, isBooleanAttr)
+            if isBooleanAttr
+                temp = char(ones(size(obj.ChipID)) * '1');
+                for ii = 1:size(values, 1)
+                    temp(ii, :) = strrep(values(ii, :), ' ', '');
+                end
+                values = temp;
+                validateattributes(values, {'char'}, {'size', size(obj.ChipID)});
             end
-            values = temp;
-            validateattributes(values, {'char'}, {'size', size(obj.ChipID)});
+            
             if obj.ConnectedToDevice
-                for ii = 1:length(obj.ChipID)
-                    obj.setDeviceAttributeRAW(attr, values(ii), obj.ChipIDHandle{ii});
+                for ii = 1:numel(obj.ChipID)
+                    if isBooleanAttr
+                        obj.setDeviceAttributeRAW(attr, values(ii), obj.ChipIDHandle{ii});
+                    else
+                        obj.setDeviceAttributeRAW(attr, values{ii}, obj.ChipIDHandle{ii});
+                    end
                 end
             end
         end        
@@ -257,7 +268,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.RxEnable(obj, values)
-            setAllChipsDeviceAttributeRAW(obj, 'rx_en', num2str(values));
+            setAllChipsDeviceAttributeRAW(obj, 'rx_en', num2str(values), true);
         end
         
         function result = get.TxEnable(obj)
@@ -268,7 +279,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.TxEnable(obj, values)
-            setAllChipsDeviceAttributeRAW(obj, 'tx_en', num2str(values));
+            setAllChipsDeviceAttributeRAW(obj, 'tx_en', num2str(values), true);
         end
         
         function result = get.LNABiasOutEnable(obj)
@@ -279,7 +290,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.LNABiasOutEnable(obj, values)            
-            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_out_enable', num2str(values));
+            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_out_enable', num2str(values), true);
         end
         
         function result = get.LNABiasOn(obj)
@@ -291,8 +302,9 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.LNABiasOn(obj, values)
-            dac_codes = int(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
-            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_on', dac_codes);
+            dac_codes = int32(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            dac_codes = convertStringsToChars(string(dac_codes));
+            setAllChipsDeviceAttributeRAW(obj, 'lna_bias_on', dac_codes, false);
         end
         
         function result = get.StateTxOrRx(obj)
@@ -322,17 +334,17 @@ classdef Single < adi.common.Attribute & ...
                     ivalues(ii) = '0';
                 end
             end
-            setAllChipsDeviceAttributeRAW(obj, 'tr_spi', ivalues);
+            setAllChipsDeviceAttributeRAW(obj, 'tr_spi', ivalues, true);
         end
     end
     
     methods
         function LatchRxSettings(obj)
-            setAllChipsDeviceAttributeRAW(obj, 'rx_load_spi', ones(size(obj.ChipID)));
+            setAllChipsDeviceAttributeRAW(obj, 'rx_load_spi', ones(size(obj.ChipID)), true);
         end
         
         function LatchTxSettings(obj)
-            setAllChipsDeviceAttributeRAW(obj, 'Tx_load_spi', ones(size(obj.ChipID)));
+            setAllChipsDeviceAttributeRAW(obj, 'Tx_load_spi', ones(size(obj.ChipID)), true);
         end
     end
     
@@ -367,7 +379,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.PABiasOff(obj, values)
-            dac_codes = int(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            dac_codes = int32(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
             setAllChipsChannelAttribute(obj, dac_codes, 'pa_bias_off', true, 'int32');
         end
         
@@ -510,7 +522,7 @@ classdef Single < adi.common.Attribute & ...
                 { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',127}, ...
                 '', 'Gain');             
             obj.setAttributeRAW(sprintf('voltage%d', ChIndx), ...
-                'beam_pos_save', sprintf('%d, %d, %d, %f', State, 1 - int(Attn), Gain, Phase), false, obj.ChipIDHandles{ChipIDIndx});
+                'beam_pos_save', sprintf('%d, %d, %d, %f', State, 1 - int32(Attn), Gain, Phase), false, obj.ChipIDHandles{ChipIDIndx});
         end
         
         function SaveTxBeam(obj, ChipIDIndx, ChIndx, State, Attn, Gain, Phase)
@@ -521,7 +533,7 @@ classdef Single < adi.common.Attribute & ...
                 { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',127}, ...
                 '', 'Gain');             
             obj.setAttributeRAW(sprintf('voltage%d', ChIndx), ...
-                'beam_pos_save', sprintf('%d, %d, %d, %f', State, 1 - int(Attn), Gain, Phase), true, obj.ChipIDHandles{ChipIDIndx});
+                'beam_pos_save', sprintf('%d, %d, %d, %f', State, 1 - int32(Attn), Gain, Phase), true, obj.ChipIDHandles{ChipIDIndx});
         end
     end
     
@@ -654,7 +666,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.BeamMemEnable(obj, value)
-            dac_code = int(value / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            dac_code = int32(value / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
             obj.ADARParent.setAttributeBool(sprintf('voltage%d',obj.ADARChannel), 'pa_bias_off', true, dac_code);
         end
         %}

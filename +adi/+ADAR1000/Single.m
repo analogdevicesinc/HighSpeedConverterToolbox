@@ -816,7 +816,7 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function LatchTxSettings(obj)
-            setAllChipsDeviceAttributeRAW(obj, 'Tx_load_spi', ones(size(obj.ChipID)), true);
+            setAllChipsDeviceAttributeRAW(obj, 'tx_load_spi', ones(size(obj.ChipID)), true);
         end
     end
     

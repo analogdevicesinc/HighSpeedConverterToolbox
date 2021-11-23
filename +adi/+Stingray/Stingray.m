@@ -213,6 +213,9 @@ classdef Stingray < matlab.mixin.SetGet
                     end
                 end
                 
+                % Initialize the ADAR1000s
+                obj.ADAR1000Array.Initialize(-2.5, -2.5, -2, -2);
+                
 %                 if ~obj.PartiallyPowered
 %                     error('Board didn''t power up!');
 %                 end

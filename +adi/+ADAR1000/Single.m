@@ -31,7 +31,7 @@ classdef Single < adi.common.Attribute & ...
     
     properties
         Channels
-        BeamMemEnable
+        
     end
     
     properties(Nontunable, Hidden)
@@ -71,6 +71,15 @@ classdef Single < adi.common.Attribute & ...
         TxEnable = false
         LNABiasOutEnable = true
         LNABiasOn = -4.80012
+        BeamMemEnable = true
+        BiasDACEnable = true
+        BiasDACMode = {'On'}
+        BiasMemEnable = true
+        CommonMemEnable = true
+        CommonRxBeamState = 0
+        CommonTxBeamState = 0
+        ExternalTRPin = {'Pos'}
+        ExternalTRPolarity = false
         
         % Channel Attributes
         DetectorEnable = true(1, 4)
@@ -109,7 +118,7 @@ classdef Single < adi.common.Attribute & ...
         
         function result = getAllChipsChannelAttribute(obj, attr, isOutput, AttrClass)
             result = zeros(size(obj.ChannelElementMap));
-            for d = 1:length(obj.ChipID)
+            for d = 1:numel(obj.ChipID)
                 for c = 0:3
                     channel = sprintf('voltage%d', c);
                     if strcmpi(AttrClass, 'logical')
@@ -139,7 +148,7 @@ classdef Single < adi.common.Attribute & ...
             end
             
             if obj.ConnectedToDevice
-                for dev = 1:length(obj.ChipID)
+                for dev = 1:numel(obj.ChipID)
                     for ch = 1:4
                         channel = sprintf('voltage%d', ch-1);
                         if strcmpi(AttrClass, 'logical')
@@ -335,6 +344,147 @@ classdef Single < adi.common.Attribute & ...
                 end
             end
             setAllChipsDeviceAttributeRAW(obj, 'tr_spi', ivalues, true);
+        end
+        
+        function result = get.BeamMemEnable(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'beam_mem_enable', true);
+            end
+        end
+        
+        function set.BeamMemEnable(obj, values)            
+            setAllChipsDeviceAttributeRAW(obj, 'beam_mem_enable', num2str(values), true);
+        end
+        
+        function result = get.BiasDACEnable(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'bias_enable', true);
+            end
+        end
+        
+        function set.BiasDACEnable(obj, values)            
+            setAllChipsDeviceAttributeRAW(obj, 'bias_enable', num2str(values), true);
+        end
+        
+        function result = get.BiasDACMode(obj)
+            result = cell(size(obj.ChipID));
+            result(:) = {'On'};
+            if ~isempty(obj.ChipIDHandle)
+                temp = getAllChipsDeviceAttributeRAW(obj,'bias_ctrl', true);
+                for ii = 1:numel(temp)
+                    if temp(ii)
+                        result(ii) = {'Toggle'};
+                    else
+                        result(ii) = {'On'};
+                    end
+                end
+            end
+        end
+        
+        function set.BiasDACMode(obj, values)
+            ivalues = char(ones(size(values)) * '0');
+            for ii = 1:numel(values)
+                if ~(strcmpi(values(ii), 'Tx') || strcmpi(values(ii), 'Rx'))
+                    error('Expected ''Toggle'' or ''On'' for property, BiasDACMode');
+                end
+                if strcmpi(values(ii), 'Toggle')
+                    ivalues(ii) = '1';
+                else
+                    ivalues(ii) = '0';
+                end
+            end
+            setAllChipsDeviceAttributeRAW(obj, 'bias_ctrl', ivalues, true);
+        end
+        
+        function result = get.BiasMemEnable(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'bias_mem_enable', true);
+            end
+        end
+        
+        function set.BiasMemEnable(obj, values)            
+            setAllChipsDeviceAttributeRAW(obj, 'bias_mem_enable', num2str(values), true);
+        end
+        
+        function result = get.CommonMemEnable(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'common_mem_enable', true);
+            end
+        end
+        
+        function set.CommonMemEnable(obj, values)            
+            setAllChipsDeviceAttributeRAW(obj, 'common_mem_enable', num2str(values), true);
+        end
+        
+        function result = get.CommonRxBeamState(obj)
+            result = zeros(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'static_rx_beam_pos_load', false);
+            end            
+        end
+        
+        function set.CommonRxBeamState(obj, values)
+            values = int32(values);
+            values = convertStringsToChars(string(values));
+            setAllChipsDeviceAttributeRAW(obj, 'static_rx_beam_pos_load', values, false);
+        end
+        
+        function result = get.CommonTxBeamState(obj)
+            result = zeros(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'static_tx_beam_pos_load', false);
+            end            
+        end
+        
+        function set.CommonTxBeamState(obj, values)
+            values = int32(values);
+            values = convertStringsToChars(string(values));
+            setAllChipsDeviceAttributeRAW(obj, 'static_tx_beam_pos_load', values, false);
+        end
+        
+        function result = get.ExternalTRPin(obj)
+            result = cell(size(obj.ChipID));
+            result(:) = {'Pos'};
+            if ~isempty(obj.ChipIDHandle)
+                temp = getAllChipsDeviceAttributeRAW(obj,'sw_drv_tr_mode_sel', true);
+                for ii = 1:numel(temp)
+                    if temp(ii)
+                        result(ii) = {'Neg'};
+                    else
+                        result(ii) = {'Pos'};
+                    end
+                end
+            end
+        end
+        
+        function set.ExternalTRPin(obj, values)
+            ivalues = char(ones(size(values)) * '0');
+            for ii = 1:numel(values)
+                if ~(strcmpi(values(ii), 'Tx') || strcmpi(values(ii), 'Rx'))
+                    error('Expected ''Toggle'' or ''On'' for property, BiasDACMode');
+                end
+                if strcmpi(values(ii), 'Neg')
+                    ivalues(ii) = '1';
+                else
+                    ivalues(ii) = '0';
+                end
+            end
+            setAllChipsDeviceAttributeRAW(obj, 'sw_drv_tr_mode_sel', ivalues, true);
+        end
+        
+        function result = get.ExternalTRPolarity(obj)
+            result = true(size(obj.ChipID));
+            if ~isempty(obj.ChipIDHandle)
+                result = getAllChipsDeviceAttributeRAW(obj,'sw_drv_tr_state', true);
+            end
+        end
+        
+        function set.ExternalTRPolarity(obj, values)            
+            setAllChipsDeviceAttributeRAW(obj, 'sw_drv_tr_state', num2str(values), true);
         end
     end
     

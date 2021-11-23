@@ -149,7 +149,7 @@ classdef Stingray < matlab.mixin.SetGet
                 obj.ADAR1000Array.Mode = Mode;
                 PABiasOn = zeros(size(obj.ADAR1000Array.ChannelElementMap));
                 PABiasOn(1,1) = -1.1;
-                obj.ADAR1000Array.PABiasOn = PABiasOn;
+                % obj.ADAR1000Array.PABiasOn = PABiasOn;
                 
                 % Send a signal to power down the +5V rail
                 obj.PulsePowerPin('5v_ctrl');

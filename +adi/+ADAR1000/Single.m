@@ -63,6 +63,11 @@ classdef Single < adi.common.Attribute & ...
         isOutput = false;
     end
     
+    properties (SetAccess = private)
+        % Channel Attributes
+        DetectorPower = 255*ones(1, 4)
+    end
+    
     properties
         % Device Attributes
         Mode = {'Rx'}
@@ -102,7 +107,6 @@ classdef Single < adi.common.Attribute & ...
         
         % Channel Attributes
         DetectorEnable = true(1, 4)
-        DetectorPower = 255*ones(1, 4)
         PABiasOff = -4.80012*ones(1, 4)
         PABiasOn = -4.80012*ones(1, 4)
         RxAttn = true(1, 4)
@@ -137,6 +141,7 @@ classdef Single < adi.common.Attribute & ...
                 error('Expected equal number of elements in ArrayElementMap and ChannelElementMap');
             end
         end
+        
         % Destructor
         function delete(obj)
         end
@@ -197,10 +202,14 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function result = getAllChipsDeviceAttributeRAW(obj, attr, isBooleanAttr)
-            temp = zeros(size(obj.ChipID));
+            if isBooleanAttr
+                temp = false(size(obj.ChipID));
+            else
+                temp = zeros(size(obj.ChipID));
+            end
             for ii = 1:numel(obj.ChipID)
                 if isBooleanAttr
-                    temp(ii) = obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii});
+                    temp(ii) = logical(str2num(obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii})));
                 else
                     temp(ii) = str2num(obj.getDeviceAttributeRAW(attr, 128, obj.ChipIDHandle{ii}));
                 end
@@ -275,17 +284,17 @@ classdef Single < adi.common.Attribute & ...
                          || strcmpi(values{ii}, 'Disabled'))
                     error('Expected ''Tx'' or ''Rx'' or ''Disabled'' for property, Mode');
                 end
-                if ~strcmpi(values{ii}, 'Disabled')
-%                     RxEnableMat(ii) = false;
-%                     TxEnableMat(ii) = false;
-%                 else
+                if strcmpi(values{ii}, 'Disabled')
+                    RxEnableMat(ii) = '0';
+                    TxEnableMat(ii) = '0';
+                else
                     StateTxOrRxMat{ii} = values{ii};
                     if strcmpi(values(ii), 'Tx')
-%                         RxEnableMat(ii) = false;
+                        RxEnableMat(ii) = '0';
                         TxEnableMat(ii) = '1';                        
                     else
                         RxEnableMat(ii) = '1';
-%                         TxEnableMat(ii) = false;
+                        TxEnableMat(ii) = '0';
                     end
                 end
             end
@@ -871,12 +880,12 @@ classdef Single < adi.common.Attribute & ...
         function result = get.RxAttn(obj)
             result = true(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = ~getAllChipsChannelAttribute(obj, 'attenuation', false, 'logical');
+                result = getAllChipsChannelAttribute(obj, 'attenuation', false, 'logical');
             end
         end
         
         function set.RxAttn(obj, values)
-            setAllChipsChannelAttribute(obj, ~values, 'attenuation', false, 'logical');
+            setAllChipsChannelAttribute(obj, values, 'attenuation', false, 'logical');
         end
         
         function result = get.RxBeamState(obj)
@@ -888,7 +897,7 @@ classdef Single < adi.common.Attribute & ...
         
         function set.RxBeamState(obj, values)
             validateattributes( values, { 'double', 'single', 'uint32'}, ...
-                { 'real', 'nonnegative','scalar', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',120}, ...
+                { 'real', 'nonnegative', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',120}, ...
                 '', 'RxBeamState');
             setAllChipsChannelAttribute(obj, values, 'beam_pos_load', false, 'int32');
         end
@@ -907,12 +916,15 @@ classdef Single < adi.common.Attribute & ...
         function result = get.RxGain(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = getAllChipsChannelAttribute(obj, 'hardwaregain', false, 'int32');
+                result = -1000*getAllChipsChannelAttribute(obj, 'hardwaregain', false, 'double');
             end
         end
         
         function set.RxGain(obj, values)
-            setAllChipsChannelAttribute(obj, values, 'hardwaregain', false, 'int32');
+            validateattributes( values, { 'double', 'single', 'uint32'}, ...
+                { 'real', 'nonnegative', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',127}, ...
+                '', 'RxGain');
+            setAllChipsChannelAttribute(obj, values, 'hardwaregain', false, 'double');
         end
         
         function result = get.RxPhase(obj)
@@ -923,6 +935,9 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.RxPhase(obj, values)
+            validateattributes( values, { 'double', 'single', 'uint32'}, ...
+                { 'real', 'nonnegative', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',357}, ...
+                '', 'RxPhase');
             setAllChipsChannelAttribute(obj, values, 'phase', false, 'double');
         end
         
@@ -965,12 +980,15 @@ classdef Single < adi.common.Attribute & ...
         function result = get.TxGain(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = getAllChipsChannelAttribute(obj, 'hardwaregain', true, 'int32');
+                result = getAllChipsChannelAttribute(obj, 'hardwaregain', true, 'double');
             end
         end
         
         function set.TxGain(obj, values)
-            setAllChipsChannelAttribute(obj, values, 'hardwaregain', true, 'int32');
+            validateattributes( values, { 'double', 'single', 'uint32'}, ...
+                { 'real', 'nonnegative', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',127}, ...
+                '', 'TxGain');
+            setAllChipsChannelAttribute(obj, values, 'hardwaregain', true, 'double');
         end
         
         function result = get.TxPhase(obj)
@@ -981,13 +999,16 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.TxPhase(obj, values)
+            validateattributes( values, { 'double', 'single', 'uint32'}, ...
+                { 'real', 'nonnegative', 'finite', 'nonnan', 'nonempty','integer','>=',0,'<=',357}, ...
+                '', 'TxPhase');
             setAllChipsChannelAttribute(obj, values, 'phase', true, 'double');
         end
         
         function result = get.RxBiasState(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = ~getAllChipsChannelAttribute(obj, 'bias_set_load', false, 'int32');
+                result = getAllChipsChannelAttribute(obj, 'bias_set_load', false, 'int32');
             end
         end
         
@@ -998,23 +1019,23 @@ classdef Single < adi.common.Attribute & ...
         function result = get.RxSequencerStart(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = ~getAllChipsChannelAttribute(obj, 'sequence_start', false, 'logical');
+                result = getAllChipsChannelAttribute(obj, 'sequence_start', false, 'logical');
             end
         end
         
         function set.RxSequencerStart(obj, values)
-            setAllChipsChannelAttribute(obj, ~values, 'sequence_start', false, 'logical');
+            setAllChipsChannelAttribute(obj, values, 'sequence_start', false, 'logical');
         end
         
         function result = get.RxSequencerStop(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = ~getAllChipsChannelAttribute(obj, 'sequence_stop', false, 'logical');
+                result = getAllChipsChannelAttribute(obj, 'sequence_end', false, 'logical');
             end
         end
         
         function set.RxSequencerStop(obj, values)
-            setAllChipsChannelAttribute(obj, ~values, 'sequence_stop', false, 'logical');
+            setAllChipsChannelAttribute(obj, values, 'sequence_end', false, 'logical');
         end
         
         function result = get.TxBiasState(obj)
@@ -1042,12 +1063,12 @@ classdef Single < adi.common.Attribute & ...
         function result = get.TxSequencerStop(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = ~getAllChipsChannelAttribute(obj, 'sequence_stop', true, 'logical');
+                result = ~getAllChipsChannelAttribute(obj, 'sequence_end', true, 'logical');
             end
         end
         
         function set.TxSequencerStop(obj, values)
-            setAllChipsChannelAttribute(obj, ~values, 'sequence_stop', true, 'logical');
+            setAllChipsChannelAttribute(obj, ~values, 'sequence_end', true, 'logical');
         end
     end
     

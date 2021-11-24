@@ -30,11 +30,11 @@ classdef Stingray < matlab.mixin.SetGet
             
     methods
         function result = get.PartiallyPowered(obj)
-            result = logical(obj.PowerSequencerEnable && obj.PowerSequencerPowerGood);
+            result = ~logical(obj.PowerSequencerEnable || obj.PowerSequencerPowerGood);
         end
         
         function result = get.FullyPowered(obj)
-            result = logical(obj.PartiallyPowered && obj.EnableP5V && obj.PowerGoodP5V);
+            result = ~logical(~obj.PartiallyPowered || obj.EnableP5V || obj.PowerGoodP5V);
         end
         
         function result = get.PowerSequencerEnable(obj)
@@ -108,7 +108,7 @@ classdef Stingray < matlab.mixin.SetGet
             obj.Monitor();
             
             % Ensure that the board is powered down
-            for i = 1:5
+            for i = 1:10
                 fprintf('%d\n\n',i)
                 obj.PowerDown();
                 try
@@ -142,7 +142,7 @@ classdef Stingray < matlab.mixin.SetGet
     
         function PowerDown(obj)
             % Power down the +5V rail if it's up
-            if obj.PowerGoodP5V
+            if ~obj.PowerGoodP5V
                 % Turn on a single PA to help bring this down faster
                 Mode = cell(size(obj.ADAR1000Array.ChipID));
                 Mode(:) = {'tx'};
@@ -168,7 +168,7 @@ classdef Stingray < matlab.mixin.SetGet
             end
             
             % Power down the remaining rails if they're up
-            if obj.PowerSequencerPowerGood
+            if ~obj.PowerSequencerPowerGood
                 % Turn on a single cell's LNAs to help bring this down faster
                 obj.ADAR1000Array.LNABiasOutEnable = false(size(obj.ADAR1000Array.ChipID));
                 
@@ -199,7 +199,7 @@ classdef Stingray < matlab.mixin.SetGet
             disp(obj.PowerSequencerEnable);
             disp(obj.PowerSequencerPowerGood);
             disp(obj.PowerGoodP5V);
-            if ~obj.FullyPowered % if ~obj.PartiallyPowered
+            if (~Enable5V && ~obj.FullyPowered) % if ~obj.PartiallyPowered
                 % Send a signal to power up the Stingray board's first few rails
                 obj.PulsePowerPin('pwr_up_down');
                 

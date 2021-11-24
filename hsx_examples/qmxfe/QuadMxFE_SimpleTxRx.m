@@ -6,29 +6,55 @@
 % system. This script requires the use of the Analog Devices, Inc. High
 % Speed Converter Toolbox.
 %
-% Author: Mike Jones
-% Date: 10/27/2020
+% Author: Chas Frick
+% Date: 6/15/2021
 
 % Gain Access to the Analog Devices, Inc. High Speed Converter Toolbox at:
 % https://github.com/analogdevicesinc/HighSpeedConverterToolbox
 
 instrreset;
 %% Reload FPGA Code
+% Make sure to program the FPGA using the following .tcl script for each
+% variant. Supported use cases:
+% ADQUADMXFE1EBZ = run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc.tcl
+% ADQUADMXFE2EBZ = run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc_nz1.tcl
+% ADQUADMXFE3EBZ = run.vcu118_quad_ad9082_204c_txmode_3_rxmode_2.tcl
+
+% Example:
 % LoadVcu118Code('C:\Xilinx\Vivado_Lab\2019.2\bin\xsdb.bat',...
-%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4.tcl')
+%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc.tcl')
+
 
 %% Setup Parameters
 close all;
 clearvars;
+
+% Select board variant number here
+% 1 = ADQUADMXFE1EBZ, 2 = ADQUADMXFE2EBZ, 3 = ADQUADMXFE3EBZ
+boardVariantNumber = 1;
+
 uri = 'ip:192.168.2.1'; %Default IP Address To Connect To VCU118
-fs_Rx = 4000e6; %ADC Sample Rate [Hz]
 fs_RxIQ = 250e6; %Rx Decimated IQ Sample Rate [Hz]
-carrierFreq = 3.2e9; %Tx NCO Frequency & Unfolded Rx NCO Frequency [Hz]
-amplitude = 2^15*db2mag(-6); %Tx Baseband Amplitude [dBFS]
 periods = 32; %Desired Number Of Periods For Tx Signal
 basebandFreq = fs_RxIQ/8; %Baseband Frequency [Hz]
 plotResults = 1; %0: Do not plot intermediate results, 1: Plot intermediate results
 useCalibrationBoard = 1; %0: Not using calibration board, 1: Using calibration board
+
+switch(boardVariantNumber)
+    case 1
+        amplitude = 2^15*db2mag(-20); %Tx Baseband Amplitude [dBFS]
+        fs_Rx = 4000e6; %ADC Sample Rate [Hz]
+        carrierFreq = 3.2e9; %Tx NCO Frequency & Unfolded Rx NCO Frequency [Hz]
+    case 2
+        amplitude = 2^15*db2mag(-20); %Tx Baseband Amplitude [dBFS]
+        fs_Rx = 4000e6; %ADC Sample Rate [Hz]
+        carrierFreq = 1.8e9; %Tx NCO Frequency & Rx NCO Frequency [Hz]
+    case 3
+        amplitude = 2^15*db2mag(-6); %Tx Baseband Amplitude [dBFS]
+        fs_Rx = 6000e6; %ADC Sample Rate [Hz]
+        carrierFreq = 3.2e9; %Tx NCO Frequency & Unfolded Rx NCO Frequency [Hz]
+end
+
 
 %% Setup Tx Configuration
 tx = adi.QuadMxFE.Tx;
@@ -37,12 +63,36 @@ tx.DACFullScaleCurrentuA = 40000;
 
 tx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
 tx.uri = uri;
-tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
-tx.num_fine_attr_channels = 8; %Number of Fine DUCs Used Per MxFE
-tx.num_data_channels = 4*tx.num_fine_attr_channels; %Total Number of Fine DUCs Used In System
-tx.num_dds_channels = tx.num_data_channels*4; %Total Number of DDSs Used In System (Not Used For 'DMA' Mode)
-tx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,...
-    17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]; %Enabled Tx Channels, Only Needed for DMA
+
+switch(boardVariantNumber)
+    case {1,2}
+        tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
+        tx.num_fine_attr_channels = 8; %Number of Fine DUCs Used Per MxFE
+        tx.num_data_channels = 4*tx.num_fine_attr_channels; %Total Number of Fine DUCs Used In System
+        tx.num_dds_channels = tx.num_data_channels*4; %Total Number of DDSs Used In System (Not Used For 'DMA' Mode)
+        tx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,...
+            17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]; %Enabled Tx Channels, Only Needed for DMA
+        % 12-Bit Normalized Digital Gain Code (Valid Values 0 to 1)
+        % 0<=Gain<=(2^12-1)/2^11=1.9995; Gain=GainCode/2048
+        % Normalized Gain Code = GainCode/2
+        tx.ChannelNCOGainScalesChipA  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE0 Digital Gain Code
+        tx.ChannelNCOGainScalesChipB  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE1 Digital Gain Code
+        tx.ChannelNCOGainScalesChipC  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE2 Digital Gain Code
+        tx.ChannelNCOGainScalesChipD  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE3 Digital Gain Code
+    case 3
+        tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
+        tx.num_fine_attr_channels = 4; %Number of Fine DUCs Used Per MxFE
+        tx.num_data_channels = 4*tx.num_fine_attr_channels; %Total Number of Fine DUCs Used In System
+        tx.num_dds_channels = tx.num_data_channels*4; %Total Number of DDSs Used In System (Not Used For 'DMA' Mode)
+        tx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Tx Channels, Only Needed for DMA
+        % 12-Bit Normalized Digital Gain Code (Valid Values 0 to 1)
+        % 0<=Gain<=(2^12-1)/2^11=1.9995; Gain=GainCode/2048
+        % Normalized Gain Code = GainCode/2
+        tx.ChannelNCOGainScalesChipA  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE0 Digital Gain Code
+        tx.ChannelNCOGainScalesChipB  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE1 Digital Gain Code
+        tx.ChannelNCOGainScalesChipC  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE2 Digital Gain Code
+        tx.ChannelNCOGainScalesChipD  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE3 Digital Gain Code
+end
 tx.EnableResampleFilters = 0; %Enable A Divide-By-Two Resampling
 tx.DataSource = 'DMA'; %'DMA' or 'DDS'
 tx.EnableCyclicBuffers = 1; %0: Don't Cycle Tx Waveform, 1: Cycle Tx Waveform
@@ -66,13 +116,6 @@ tx.NCOEnablesChipA = ones(1,tx.num_fine_attr_channels); %MxFE0 Fine DUC Enables
 tx.NCOEnablesChipB = ones(1,tx.num_fine_attr_channels); %MxFE1 Fine DUC Enables
 tx.NCOEnablesChipC = ones(1,tx.num_fine_attr_channels); %MxFE2 Fine DUC Enables
 tx.NCOEnablesChipD = ones(1,tx.num_fine_attr_channels); %MxFE3 Fine DUC Enables
-% 12-Bit Normalized Digital Gain Code (Valid Values 0 to 1)
-% 0<=Gain<=(2^12-1)/2^11=1.9995; Gain=GainCode/2048
-% Normalized Gain Code = GainCode/2
-tx.ChannelNCOGainScalesChipA  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE0 Digital Gain Code
-tx.ChannelNCOGainScalesChipB  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE1 Digital Gain Code
-tx.ChannelNCOGainScalesChipC  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE2 Digital Gain Code
-tx.ChannelNCOGainScalesChipD  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE3 Digital Gain Code
 
 %% Inject Single-Tone Waveform Into Each Tx Channel
 % This Example Injects Same Waveform Into All Tx Channels, But Each
@@ -128,29 +171,58 @@ pause(1);
 if (useCalibrationBoard)
     CalibrationBoard = CalBoardVCU118;
 %     CalibrationBoard.ConfigureCombinedLoopback(tx);
-    CalibrationBoard.ConfigureAdjacentIndividualLoopback(tx);
 %     CalibrationBoard.ConfigureTxOutToSMA(tx);
 %     AD8318_voltage = CalibrationBoard.QueryAD8318_voltage(tx);
 %     CalibrationBoard.ConfigureRxInFromSMA(tx); 
+    switch(boardVariantNumber)
+        case {1,2}
+            CalibrationBoard.ConfigureAdjacentIndividualLoopback(tx);
+        case 3
+            CalibrationBoard.ConfigureCombinedLoopback(tx);
+    end
 end
-
-%% Setup HMC7043 Coarse/Fine SYSREF Delays
-%         tx.setRegister(hex2dec('00'),'EA',tx.iioDevHMC7043); %SYSREF1 Coarse Digital Delay Set To Zero
 
 %% Setup Rx Configuration
 rx = adi.QuadMxFE.Rx;
 rx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
 rx.uri = uri;
-rx.num_coarse_attr_channels = 4; %Number of Coarse DDCs Used Per MxFE
-rx.num_fine_attr_channels = 4; %Number of Fine DDCs Used Per MxFE
-rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
-rx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Rx Channels
-% Keep In Mind That NCO Frequencies Range From -fs_RxIQ/2 to +rx_RxIQ/2
-% If In 2nd Nyquist Enter The Folded NCO Frequency
-rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
-rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
-rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
-rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
+switch(boardVariantNumber)
+    case 1
+        rx.num_coarse_attr_channels = 4; %Number of Coarse DDCs Used Per MxFE
+        rx.num_fine_attr_channels = 4; %Number of Fine DDCs Used Per MxFE
+        rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
+        rx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Rx Channels
+        % Keep In Mind That NCO Frequencies Range From -fs_RxIQ/2 to +fs_RxIQ/2
+        % If In 2nd Nyquist Enter The Folded NCO Frequency
+        rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
+        rx.ExternalAttenuation = -15; %On-Platform Digital Step Attenuator Gain Within RF Front-End [dB]. Max -15dB
+    case 2
+        rx.num_coarse_attr_channels = 4; %Number of Coarse DDCs Used Per MxFE
+        rx.num_fine_attr_channels = 4; %Number of Fine DDCs Used Per MxFE
+        rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
+        rx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Rx Channels
+        rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
+        rx.ExternalAttenuation = -15; %On-Platform Digital Step Attenuator Gain Within RF Front-End [dB]. Max -15dB
+    case 3
+        rx.num_coarse_attr_channels = 2; %Number of Coarse DDCs Used Per MxFE
+        rx.num_fine_attr_channels = 2; %Number of Fine DDCs Used Per MxFE
+        rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
+        rx.EnabledChannels = 1:8;
+        % Keep In Mind That NCO Frequencies Range From -fs_RxIQ/2 to +fs_RxIQ/2
+        % In 2nd Nyquist so Enter The Folded NCO Frequency
+        rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
+        rx.ExternalAttenuation = 0; %On-Platform Digital Step Attenuator Gain Within RF Front-End [dB]. Max -15dB
+end
+
 rx.ChannelNCOFrequenciesChipA = zeros(1,rx.num_fine_attr_channels); %MxFE0 Fine DDC NCO Frequencies [Hz]
 rx.ChannelNCOFrequenciesChipB = zeros(1,rx.num_fine_attr_channels); %MxFE1 Fine DDC NCO Frequencies [Hz]
 rx.ChannelNCOFrequenciesChipC = zeros(1,rx.num_fine_attr_channels); %MxFE2 Fine DDC NCO Frequencies [Hz]
@@ -163,7 +235,6 @@ rx.ChannelNCOPhasesChipA = zeros(1,rx.num_fine_attr_channels); %MxFE0 Fine DDC N
 rx.ChannelNCOPhasesChipB = zeros(1,rx.num_fine_attr_channels); %MxFE1 Fine DDC NCO Phase Offsets [Degrees*1e3]
 rx.ChannelNCOPhasesChipC = zeros(1,rx.num_fine_attr_channels); %MxFE2 Fine DDC NCO Phase Offsets [Degrees*1e3]
 rx.ChannelNCOPhasesChipD = zeros(1,rx.num_fine_attr_channels); %MxFE3 Fine DDC NCO Phase Offsets [Degrees*1e3]
-rx.ExternalAttenuation = -23; %On-Platform Digital Step Attenuator Gain Within RF Front-End [dB]
 rx.SamplesPerFrame = 2^12; %Number Of Samples To Capture
 rx.kernelBuffersCount = 1; %Number Of Buffers To Subsequently Capture
 rx.EnableResampleFilters = 0; %Enable A Divide-By-Two Resampling
@@ -229,7 +300,7 @@ if (plotResults==1)
         fftComplex1 = fft(windowedData1);
         fftComplexShifted1 = fftshift(fftComplex1);
         fftMags1 = abs(fftComplexShifted1);
-        fftMagsdB1(chanNum,:) = 20 * log10(fftMags1); %#ok<SAGROW>
+        fftMagsdB1(chanNum,:) = 20 * log10(fftMags1); 
         if (rx.EnableResampleFilters)
             freqAxis1 = linspace((-fs_RxIQ/1e6/2/2), (fs_RxIQ/1e6/2/2), length(fftMagsdB1));
         else

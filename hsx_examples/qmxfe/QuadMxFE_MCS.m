@@ -21,7 +21,7 @@
 instrreset;
 %% Reload FPGA Code
 % LoadVcu118Code('C:\Xilinx\Vivado_Lab\2019.2\bin\xsdb.bat',...
-%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4.tcl')
+%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc.tcl')
 
 %% Setup Parameters
 close all;
@@ -30,7 +30,7 @@ graphicsInfo = groot;
 
 uri = 'ip:192.168.2.1';
 carrierFreq = 3.2e9; %Tx NCO Frequency & Unfolded Rx NCO Frequency [Hz]
-amplitude = 2^15*db2mag(-6); %Tx Baseband Amplitude [dBFS]
+amplitude = 2^15*db2mag(-8); %Tx Baseband Amplitude [dBFS]
 periods = 32; %Desired Number Of Periods For Tx Signal
 basebandFreq = 1.953125e6; %Baseband Frequency Used For Intermediate Results [Hz]
 plotResults = 1; %0: Do not plot intermediate results, 1: Plot intermediate results
@@ -742,7 +742,7 @@ if (plotResults==1)
 
     % Inject A Single-Tone Waveform Into Memory
     amplitude = 2^15*db2mag(-6);
-    rx.ExternalAttenuation = -8; % Set DSA Attenuation In Rx Front-Ends
+    rx.ExternalAttenuation = -10; % Set DSA Attenuation In Rx Front-Ends
     swv1 = dsp.SineWave(amplitude, basebandFreq);
     swv1.ComplexOutput = true;
     swv1.SampleRate = fs_RxIQ;
@@ -860,8 +860,53 @@ if (plotResults==1)
 
     %% Now Configure Calibration Board For Adjacent Loopback
     if (useCalibrationBoard)
+        %% Change data to be a bit backed off in amplitude
+        % Now test with single frequency
+        % Ensure Integer Periods To Make Waveform Cycling Contiguous
+        if (basebandFreq ~= 0)
+            samplesPerFrame = (1/basebandFreq*fs_RxIQ*periods);
+            samplesPerFrameCheck = samplesPerFrame;
+            while rem(samplesPerFrameCheck,1)~=0
+                samplesPerFrameCheck = samplesPerFrameCheck + samplesPerFrame;
+            end
+            samplesPerFrame = samplesPerFrameCheck;
+            while (samplesPerFrame > 2^12) % Max is 8k samples
+                if (periods>1)
+                    periods = periods - 1;
+                    samplesPerFrame = (1/basebandFreq*fs_RxIQ*periods);
+                    samplesPerFrameCheck = samplesPerFrame;
+                    while rem(samplesPerFrameCheck,1)~=0
+                        samplesPerFrameCheck = samplesPerFrameCheck + samplesPerFrame;
+                    end
+                    samplesPerFrame = samplesPerFrameCheck;
+                else
+                    basebandFreq = 0e6;
+                    samplesPerFrame = 2^12; %Max is 8k samples
+                end
+            end    
+        else
+            samplesPerFrame = 2^12; %Max is 8k samples
+        end
+        while (samplesPerFrame < 32) %Need minimum of 32 samples
+            periods = periods*2;
+            samplesPerFrame = (1/basebandFreq*fs_RxIQ*periods);
+            samplesPerFrameCheck = samplesPerFrame;
+            while rem(samplesPerFrameCheck,1)~=0
+                samplesPerFrameCheck = samplesPerFrameCheck + samplesPerFrame;
+            end
+            samplesPerFrame = samplesPerFrameCheck;
+        end
+        amplitude = 2^15*db2mag(-18);
+        swv1 = dsp.SineWave(amplitude, basebandFreq);
+        swv1.ComplexOutput = true;
+        swv1.SampleRate = fs_RxIQ;
+        swv1.SamplesPerFrame = samplesPerFrame;
+        y1 = swv1();
+        tx(ones(samplesPerFrame,size(tx.EnabledChannels,2)).*y1); %Output Tx Waveform
+        
+        %% Work on cal board
         CalibrationBoard.ConfigureAdjacentIndividualLoopback(tx); % Set Calibration Board For Adjacent Loopback
-        rx.ExternalAttenuation = -24; % Set DSA Attenuation For All Rx Front-Ends
+        rx.ExternalAttenuation = -15; % Set DSA Attenuation For All Rx Front-Ends
         data = rx(); % Grab Rx Data & Save To 'data' Matrix
 
         adjacentLoopbackFigureHandle = figure('Name','Adjacent Loopback Performance','Position',graphicsInfo.ScreenSize);
@@ -1083,7 +1128,7 @@ if (plotResults==1)
             end
             samplesPerFrame = samplesPerFrameCheck;
         end
-        amplitude = 2^15*db2mag(-6);
+        amplitude = 2^15*db2mag(-9);
         swv1 = dsp.SineWave(amplitude, basebandFreq);
         swv1.ComplexOutput = true;
         swv1.SampleRate = fs_RxIQ;
@@ -1091,7 +1136,7 @@ if (plotResults==1)
         y1 = swv1();
         tx(ones(samplesPerFrame,size(tx.EnabledChannels,2)).*y1); %Output Tx Waveform
 
-        rx.ExternalAttenuation = -10;
+        rx.ExternalAttenuation = -7;
         data = rx();
         subplot(3,2,2);
         plot(real(data));

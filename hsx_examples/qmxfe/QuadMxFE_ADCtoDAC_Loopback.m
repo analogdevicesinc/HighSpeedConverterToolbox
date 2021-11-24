@@ -22,7 +22,7 @@ instrreset;
 %% Reload FPGA Code
 % Load the 1GSPS, JES204c, 8Tx/8Rx Build To Demonstrate Rx-to-Tx Loopback
 % LoadVcu118Code('C:\Xilinx\Vivado_Lab\2019.2\bin\xsdb.bat',...
-%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_10_rxmode_11.tcl')
+%     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_10_rxmode_11_revc.tcl')
 
 %% Setup Parameters
 close all;

@@ -163,13 +163,24 @@ classdef Array < adi.ADAR1000.Single
             if strcmpi(RxOrTx, 'Rx')
                 obj.RxAzimuth = Azimuth;
                 obj.RxElevation = Elevation;
-                obj.RxAzimuth_phi = AzimuthPhi;
-                obj.RxElevation_phi = ElevationPhi;
+                obj.RxAzimuthPhi = AzimuthPhi;
+                obj.RxElevationPhi = ElevationPhi;
             else
                 obj.TxAzimuth = Azimuth;
                 obj.TxElevation = Elevation;
-                obj.TxAzimuth_phi = AzimuthPhi;
-                obj.TxElevation_phi = ElevationPhi;
+                obj.TxAzimuthPhi = AzimuthPhi;
+                obj.TxElevationPhi = ElevationPhi;
+            end
+            
+            % Steer the elements in the array and Latch in the new phases
+            ColumnPhase = obj.ElementC*AzimuthPhi;
+            RowPhase = obj.ElementR*ElevationPhi;
+            if strcmpi(RxOrTx, 'Rx')
+                obj.RxPhase = ColumnPhase + RowPhase;
+                obj.LatchRxSettings();
+            else
+                obj.TxPhase = ColumnPhase + RowPhase;
+                obj.LatchTxSettings();
             end
         end
         
@@ -187,15 +198,14 @@ classdef Array < adi.ADAR1000.Single
             ElR = Elevation * pi / 180;
 
             % Calculate the phase increment (Φ) for each element in the array in both directions (in degrees)
-            AzPhi = 2 * self.frequency * self.element_spacing * sin(AzR) * 180 / 3e8;
-            ElPhi = 2 * self.frequency * self.element_spacing * sin(ElR) * 180 / 3e8;
+            AzPhi = 2 * obj.Frequency * obj.ElementSpacing * sin(AzR) * 180 / 3e8;
+            ElPhi = 2 * obj.Frequency * obj.ElementSpacing * sin(ElR) * 180 / 3e8;
         end
     end
     
     methods (Hidden, Access = protected)
         function setupInit(obj)
             setupInit@adi.ADAR1000.Single(obj);
-            x = 1;
         end
     end
 end

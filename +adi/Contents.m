@@ -1,5 +1,5 @@
 % Analog Devices, Inc. High Speed Converter Toolbox
-% Version 20.1.2 (R2020a)
+% Version 20.1.3 (R2020a)
 %
 % ==== Table of Contents (TOC) ====
 %

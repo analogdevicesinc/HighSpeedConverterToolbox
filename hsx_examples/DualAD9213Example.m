@@ -1,4 +1,4 @@
-clc;
+clear all;
 
 % Dual AD9213 system object
 rx = adi.AD9213.Rx('uri','ip:10.48.65.15');

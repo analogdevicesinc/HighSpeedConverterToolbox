@@ -36,6 +36,16 @@ classdef LTC2992
             result = str2double(strtrim(obj.DevHandle.system('cat /sys/class/hwmon/hwmon20/in0_input')))/1000;            
         end
         
+        function result = Ch2Voltage(obj)
+            % Read the voltage for Channel 1
+            result = str2double(strtrim(obj.DevHandle.system('cat /sys/class/hwmon/hwmon20/in1_input')))/1000;
+        end
+        
+        function result = Ch1Current(obj)
+            % Read the current for Channel 2
+            result = str2double(strtrim(obj.DevHandle.system('cat /sys/class/hwmon/hwmon20/curr1_input')))/1000;
+        end
+        
         function result = Ch2Current(obj)
             % Read the current for Channel 2
             result = str2double(strtrim(obj.DevHandle.system('cat /sys/class/hwmon/hwmon20/curr2_input')))/1000;

@@ -63,11 +63,6 @@ classdef Single < adi.common.Attribute & ...
         isOutput = false;
     end
     
-    properties (SetAccess = private)
-        % Channel Attributes
-        DetectorPower = 255*ones(1, 4)
-    end
-    
     properties
         % Device Attributes
         Mode = {'Rx'}
@@ -107,6 +102,7 @@ classdef Single < adi.common.Attribute & ...
         
         % Channel Attributes
         DetectorEnable = true(1, 4)
+        DetectorPower = 255*ones(1, 4)
         PABiasOff = -4.80012*ones(1, 4)
         PABiasOn = -4.80012*ones(1, 4)
         RxAttn = true(1, 4)

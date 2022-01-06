@@ -120,7 +120,8 @@ classdef Single < adi.common.Attribute & ...
         RxSequencerStop = false(1, 4)
         TxBiasState = zeros(1, 4)        
         TxSequencerStart = false(1, 4)
-        TxSequencerStop = false(1, 4)        
+        TxSequencerStop = false(1, 4)
+        Temp = 0
     end
     
     %% API Functions
@@ -1008,12 +1009,12 @@ classdef Single < adi.common.Attribute & ...
         function result = get.RxBiasState(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = getAllChipsChannelAttribute(obj, 'bias_set_load', false, 'int32');
+                result = getAllChipsChannelAttribute(obj, 'bias_set_load', false, 'logical');
             end
         end
         
         function set.RxBiasState(obj, values)
-            setAllChipsChannelAttribute(obj, values, 'bias_set_load', false, 'int32');
+            setAllChipsChannelAttribute(obj, values, 'bias_set_load', false, 'logical');
         end
         
         function result = get.RxSequencerStart(obj)
@@ -1041,12 +1042,12 @@ classdef Single < adi.common.Attribute & ...
         function result = get.TxBiasState(obj)
             result = zeros(size(obj.ChannelElementMap));
             if ~isempty(obj.ChipIDHandle)
-                result = ~getAllChipsChannelAttribute(obj, 'bias_set_load', true, 'int32');
+                result = ~getAllChipsChannelAttribute(obj, 'bias_set_load', true, 'logical');
             end
         end
         
         function set.TxBiasState(obj, values)
-            setAllChipsChannelAttribute(obj, values, 'bias_set_load', true, 'int32');
+            setAllChipsChannelAttribute(obj, values, 'bias_set_load', true, 'logical');
         end
         
         function result = get.TxSequencerStart(obj)
@@ -1069,6 +1070,13 @@ classdef Single < adi.common.Attribute & ...
         
         function set.TxSequencerStop(obj, values)
             setAllChipsChannelAttribute(obj, ~values, 'sequence_end', true, 'logical');
+        end
+        
+        function result = get.Temp(obj)
+            result = zeros(numel(obj.ChipID), 1);
+            for d = 1:numel(obj.ChipID)
+                result(d) = str2double(obj.getAttributeRAW('temp0', 'raw', false, obj.ChipIDHandle{d}));
+            end            
         end
     end
     

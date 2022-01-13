@@ -16,8 +16,8 @@ classdef Single < adi.common.Attribute & ...
         %   is instantiated, the array class will handle the instantiation 
         %   of individual adar1000 handles.
         ChipID = {'csb1_chip1'};
-        ArrayElementMap = [1 2 3 4];
-        ChannelElementMap = [2 1 4 3];
+        ArrayElementMap = [1; 2; 3; 4];
+        ChannelElementMap = [2; 1; 4; 3];
     end
     
     properties (Dependent)
@@ -35,13 +35,9 @@ classdef Single < adi.common.Attribute & ...
     end
     
     properties(Nontunable, Hidden)
-%         Timeout = Inf;
         kernelBuffersCount = 0;
         dataTypeStr = 'int16';
-%         phyDevName = 'adar1000';
-        % Name of driver instance in device tree
         iioDriverName = 'adar1000';
-%         iioDevPHY
         devName = 'adar1000';
         SamplesPerFrame = 0;
     end
@@ -56,7 +52,6 @@ classdef Single < adi.common.Attribute & ...
     
     properties(Nontunable, Hidden, Constant)
         Type = 'Rx';
-%         channel_names = {''};
     end
     
     properties (Hidden, Nontunable, Access = protected)

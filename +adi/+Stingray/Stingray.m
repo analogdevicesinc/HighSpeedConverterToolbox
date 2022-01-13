@@ -1,11 +1,11 @@
 classdef Stingray < matlab.mixin.SetGet
     properties
         Frequency = 10e9
-        ADAR1000s = [1 2 3 4;5 6 7 8];
+        ADAR1000s = [1 2 3 4;5 6 7 8]';
         ArrayElementMap = [1 2 3 4;5 6 7 8; 9 10 11 12; 13 14 15 16; ...
-            17 18 19 20; 21 22 23 24; 25 26 27 28; 29 30 31 32];
+            17 18 19 20; 21 22 23 24; 25 26 27 28; 29 30 31 32]';
         ChannelElementMap = [2 6 5 1; 4 8 7 3; 10 14 13 9; 12 16 15 11; ...
-            18 22 21 17; 20 24 23 19; 26 30 29 25; 28 32 31 27];
+            18 22 21 17; 20 24 23 19; 26 30 29 25; 28 32 31 27]';
     end
     
     properties
@@ -13,6 +13,8 @@ classdef Stingray < matlab.mixin.SetGet
         SRayCtrl
         XCtrl
         Monitor
+        TDD
+        Synth
     end
     
     properties
@@ -106,7 +108,17 @@ classdef Stingray < matlab.mixin.SetGet
             % HW-Monitor
             obj.Monitor = adi.Stingray.LTC2992(obj.uri);
             obj.Monitor();
+
+            % PLL
+            obj.Synth = adi.Stingray.ADF4371;
+            obj.Synth.uri = obj.uri;
+            obj.Synth();
             
+            % TDD
+            % obj.TDD = adi.Stingray.AXICoreTDD;
+            % obj.TDD.uri = obj.uri;
+            % obj.TDD();
+
             % Ensure that the board is powered down
             for i = 1:10
                 fprintf('%d\n\n',i)

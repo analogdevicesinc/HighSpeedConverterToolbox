@@ -1,17 +1,18 @@
 // Pipeline
 lock(label: 'adgt_test_harness_boards') {
-  @Library('sdgtt-lib@master') _ // Not necessary when we turn on global libraries :)
+  @Library('sdgtt-lib@adgt-test-harness') _ // Not necessary when we turn on global libraries :)
   def hdlBranch = "NA"
   def linuxBranch = "NA"
   def bootPartitionBranch = "release"
-  def firmwareVersion = 'v0.32'
+  def firmwareVersion = 'v0.34'
   def bootfile_source = 'artifactory' // options: sftp, artifactory, http, local
   def harness = getGauntlet(hdlBranch, linuxBranch, bootPartitionBranch, firmwareVersion, bootfile_source)
 
   //Udpate repos
   harness.set_env('nebula_repo', 'https://github.com/sdgtt/nebula.git')
-  harness.set_env('nebula_branch', 'dev_fixes')
-  harness.set_env('libiio_branch', 'v0.21')
+  harness.set_env('nebula_branch', 'dev')
+  harness.set_env('nebula_config_branch','release')
+  harness.set_env('libiio_branch', 'v0.23')
   harness.set_env('telemetry_repo', 'https://github.com/sdgtt/telemetry.git')
   harness.set_env('telemetry_branch', 'master')
   harness.set_env('matlab_repo', 'https://github.com/analogdevicesinc/HighSpeedConverterToolbox.git') // Not necessary when using checkout scm
@@ -25,6 +26,7 @@ lock(label: 'adgt_test_harness_boards') {
   harness.set_enable_docker(true)
   harness.set_docker_host_mode(false)
   harness.set_send_telemetry(false)
+  harness.set_log_jira(true)
   harness.set_enable_resource_queuing(true)
   harness.set_lock_agent(true) // Required for MATLAB toolbox tests
   harness.set_elastic_server('192.168.10.1')
@@ -39,10 +41,10 @@ lock(label: 'adgt_test_harness_boards') {
   // Test stage
   harness.set_matlab_commands(["addpath(genpath('test'))",
                         "pyenv('Version','/usr/bin/python3')",
-                        "runHWTests"])
+                        "runHWTests(getenv('board'))"])
   harness.add_stage(harness.stage_library("MATLABTests"),'continueWhenFail')
   
-  // harness.add_stage(harness.stage_library('SendResults'),'continueWhenFail')
+  harness.add_stage(harness.stage_library('SendResults'),'continueWhenFail')
 
   // // Go go
   harness.run_stages()

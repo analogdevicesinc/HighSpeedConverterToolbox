@@ -1,30 +1,33 @@
-import matlab.unittest.TestRunner;
-import matlab.unittest.TestSuite;
-import matlab.unittest.plugins.TestReportPlugin;
-import matlab.unittest.plugins.XMLPlugin
+function runHWTests(board)
 
-try
-    suite = testsuite({'DAQ2Tests'});
-    runner = TestRunner.withNoPlugins;
-    xmlFile = 'HWTestResults.xml';
-    plugin = XMLPlugin.producingJUnitFormat(xmlFile);
-    
-    runner.addPlugin(plugin);
-    results = runner.run(suite);
-    
-    t = table(results);
-    disp(t);
-    disp(repmat('#',1,80));
-    for test = results
-        if test.Failed
-            disp(test.Name);
+    import matlab.unittest.TestRunner;
+    import matlab.unittest.TestSuite;
+    import matlab.unittest.plugins.TestReportPlugin;
+    import matlab.unittest.plugins.XMLPlugin
+
+    try
+        suite = testsuite({'DAQ2Tests'});
+        runner = TestRunner.withNoPlugins;
+        xmlFile = board+"_HWTestResults.xml";
+        plugin = XMLPlugin.producingJUnitFormat(xmlFile);
+        
+        runner.addPlugin(plugin);
+        results = runner.run(suite);
+        
+        t = table(results);
+        disp(t);
+        disp(repmat('#',1,80));
+        for test = results
+            if test.Failed
+                disp(test.Name);
+            end
         end
+    catch e
+        disp(getReport(e,'extended'));
+        bdclose('all');
+        exit(1);
     end
-catch e
-    disp(getReport(e,'extended'));
+    save(['BSPTest_',datestr(now,'dd_mm_yyyy-HH_MM_SS'),'.mat'],'t');
     bdclose('all');
-    exit(1);
+    exit(any([results.Failed]));
 end
-save(['BSPTest_',datestr(now,'dd_mm_yyyy-HH:MM:SS'),'.mat'],'t');
-bdclose('all');
-exit(any([results.Failed]));

@@ -96,26 +96,26 @@ classdef Single < adi.common.Attribute & ...
         TxVMEnable = false
         
         % Channel Attributes
-        DetectorEnable = true(1, 4)
-        DetectorPower = 255*ones(1, 4)
-        PABiasOff = -4.80012*ones(1, 4)
-        PABiasOn = -4.80012*ones(1, 4)
-        RxAttn = true(1, 4)
-        RxBeamState = zeros(1, 4)
-        RxPowerDown = false(1, 4)
-        RxGain = ones(1, 4)
-        RxPhase = zeros(1, 4)
-        TxAttn = true(1, 4)
-        TxBeamState = zeros(1, 4)
-        TxPowerDown = false(1, 4)
-        TxGain = ones(1, 4)
-        TxPhase = zeros(1, 4)
-        RxBiasState = zeros(1, 4)
-        RxSequencerStart = false(1, 4)
-        RxSequencerStop = false(1, 4)
-        TxBiasState = zeros(1, 4)        
-        TxSequencerStart = false(1, 4)
-        TxSequencerStop = false(1, 4)
+        DetectorEnable = true(4, 1)
+        DetectorPower = 255*ones(4, 1)
+        PABiasOff = -4.80012*ones(4, 1)
+        PABiasOn = -4.80012*ones(4, 1)
+        RxAttn = true(4, 1)
+        RxBeamState = zeros(4, 1)
+        RxPowerDown = false(4, 1)
+        RxGain = ones(4, 1)
+        RxPhase = zeros(4, 1)
+        TxAttn = true(4, 1)
+        TxBeamState = zeros(4, 1)
+        TxPowerDown = false(4, 1)
+        TxGain = ones(4, 1)
+        TxPhase = zeros(4, 1)
+        RxBiasState = zeros(4, 1)
+        RxSequencerStart = false(4, 1)
+        RxSequencerStop = false(4, 1)
+        TxBiasState = zeros(4, 1)
+        TxSequencerStart = false(4, 1)
+        TxSequencerStop = false(4, 1)
         Temp = 0
     end
     
@@ -144,13 +144,13 @@ classdef Single < adi.common.Attribute & ...
                 for c = 0:3
                     channel = sprintf('voltage%d', c);
                     if strcmpi(AttrClass, 'logical')
-                        result(d, c+1) = obj.getAttributeBool(channel, attr, isOutput, obj.ChipIDHandle{d});
+                        result(c+1, d) = obj.getAttributeBool(channel, attr, isOutput, obj.ChipIDHandle{d});
                     elseif strcmpi(AttrClass, 'raw')
-                        result(d, c+1) = str2double(obj.getAttributeRAW(channel, attr, isOutput, obj.ChipIDHandle{d}));
+                        result(c+1, d) = str2double(obj.getAttributeRAW(channel, attr, isOutput, obj.ChipIDHandle{d}));
                     elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
-                        result(d, c+1) = obj.getAttributeLongLong(channel, attr, isOutput, obj.ChipIDHandle{d});
+                        result(c+1, d) = obj.getAttributeLongLong(channel, attr, isOutput, obj.ChipIDHandle{d});
                     elseif strcmpi(AttrClass, 'double')
-                        result(d, c+1) = obj.getAttributeDouble(channel, attr, isOutput, obj.ChipIDHandle{d});
+                        result(c+1, d) = obj.getAttributeDouble(channel, attr, isOutput, obj.ChipIDHandle{d});
                     end
                 end
             end
@@ -175,18 +175,18 @@ classdef Single < adi.common.Attribute & ...
                         channel = sprintf('voltage%d', ch-1);
                         if strcmpi(AttrClass, 'logical')
                             obj.setAttributeBool(channel, attr, ...
-                                values(dev, ch), isOutput, obj.ChipIDHandle{dev});
+                                values(ch, dev), isOutput, obj.ChipIDHandle{dev});
                         elseif strcmpi(AttrClass, 'raw')
                             obj.setAttributeRAW(channel, attr, ...
-                                values(dev, ch), isOutput, obj.ChipIDHandle{dev});
+                                values(ch, dev), isOutput, obj.ChipIDHandle{dev});
                         elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
                             tol = 0;
                             obj.setAttributeLongLong(channel, attr, ...
-                                values(dev, ch), isOutput, tol, obj.ChipIDHandle{dev});
+                                values(ch, dev), isOutput, tol, obj.ChipIDHandle{dev});
                         elseif strcmpi(AttrClass, 'double')
                             tol = sqrt(eps);
                             obj.setAttributeDouble(channel, attr, ...
-                                values(dev, ch), isOutput, tol, obj.ChipIDHandle{dev});
+                                values(ch, dev), isOutput, tol, obj.ChipIDHandle{dev});
                         end
                     end
                 end

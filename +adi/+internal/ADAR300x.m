@@ -1,0 +1,402 @@
+classdef (Abstract) ADAR300x < adi.common.Attribute & ...
+        adi.common.Channel & ...
+        adi.common.DebugAttribute & adi.common.Rx & ...
+        matlabshared.libiio.base
+    %ADAR300x Beamformer
+    properties
+        AmpBiasMuteELV = [3,3,3,3];
+        AmpBiasOperationalELH = [3, 3, 3, 3];
+        AmpBiasOperationalELV = [3, 3, 3, 3]
+        AmpBiasResetELV = [3, 3, 3, 3];
+        AmpBiasSleepELH = [3, 3, 3, 3];
+        AmpBiasSleepELV = [3, 3, 3, 3];
+        AmpENMuteELV = [0, 0, 0, 0];
+        AmpENOperationalELH = [0, 0, 0, 0];
+        AmpENOperationalELV = [0, 0, 0, 0];
+        AmpENResetELV = [0, 0, 0, 0];
+        AmpENSleepELH = [0, 0, 0, 0];
+        AmpENSleepELV = [0, 0, 0, 0];
+    end
+    
+    properties(Hidden, Constant)
+        AmpBiasMuteELVAttrs = {...
+            'amp_bias_mute_EL0V',...
+            'amp_bias_mute_EL1V',...
+            'amp_bias_mute_EL2V',...
+            'amp_bias_mute_EL3V'};
+        AmpBiasOperationalELHAttrs = {...
+            'amp_bias_operational_EL0H',...
+            'amp_bias_operational_EL0H',...
+            'amp_bias_operational_EL0H',...
+            'amp_bias_operational_EL0H'};
+        AmpBiasOperationalELVAttrs = {...
+            'amp_bias_operational_EL0V',...
+            'amp_bias_operational_EL0V',...
+            'amp_bias_operational_EL0V',...
+            'amp_bias_operational_EL0V'};
+        AmpBiasResetELVAttrs = {...
+            'amp_bias_reset_EL0V',...
+            'amp_bias_reset_EL1V',...
+            'amp_bias_reset_EL2V',...
+            'amp_bias_reset_EL3V'};
+        AmpBiasSleepELHAttrs = {...
+            'amp_bias_sleep_EL0H',...
+            'amp_bias_sleep_EL1H',...
+            'amp_bias_sleep_EL2H',...
+            'amp_bias_sleep_EL3H'};
+        AmpBiasSleepELVAttrs = {...
+            'amp_bias_sleep_EL0V',...
+            'amp_bias_sleep_EL1V',...
+            'amp_bias_sleep_EL2V',...
+            'amp_bias_sleep_EL3V'};
+        AmpENMuteELVAttrs = {...
+            'amp_en_mute_EL0V',...
+            'amp_en_mute_EL1V',...
+            'amp_en_mute_EL2V',...
+            'amp_en_mute_EL3V'};
+        AmpENOperationalELHAttrs = {...
+            'amp_en_operational_EL0H',...
+            'amp_en_operational_EL1H',...
+            'amp_en_operational_EL2H',...
+            'amp_en_operational_EL3H'};
+        AmpENOperationalELVAttrs = {...
+            'amp_en_operational_EL0V',...
+            'amp_en_operational_EL1V',...
+            'amp_en_operational_EL2V',...
+            'amp_en_operational_EL3V'};
+        AmpENResetELVAttrs = {...
+            'amp_en_reset_EL0V',...
+            'amp_en_reset_EL1V',...
+            'amp_en_reset_EL2V',...
+            'amp_en_reset_EL3V'};
+        AmpENSleepELHAttrs = {...
+            'amp_en_sleep_EL0H',...
+            'amp_en_sleep_EL0H',...
+            'amp_en_sleep_EL0H',...
+            'amp_en_sleep_EL0H'};
+        AmpENSleepELVAttrs = {...
+            'amp_en_sleep_EL0V',...
+            'amp_en_sleep_EL0V',...
+            'amp_en_sleep_EL0V',...
+            'amp_en_sleep_EL0V'};
+    end
+    
+    properties
+        PhasesH = [1, 1, 1, 1, 1, 1, 1, 1];
+        PhasesV = [8, 8, 8, 8, 8, 8, 8, 8];
+        PowersH = [0, 0, 0, 0, 0, 0, 0, 0];
+        PowersV = [0, 0, 0, 0, 0, 0, 0, 0];
+        PropertyType = 'raw';
+        UpdateIntfCtrl = 'pin';
+    end
+    
+    properties(Hidden,Constant)
+        PropertyTypeSet = matlab.system.StringSet({ ...
+            'raw','SI'})
+        UpdateIntfCtrlSet = matlab.system.StringSet({ ...
+            'pin','spi'})
+    end
+    
+    properties(Nontunable, Hidden)
+        Timeout = Inf;
+        kernelBuffersCount = 0;
+        dataTypeStr = 'int16';
+        phyDevName = 'adar3002_csb_0_0';
+        % Name of driver instance in device tree
+        iioDriverName = 'dev';
+        iioDevPHY
+        devName = 'adar3002_T0';
+        SamplesPerFrame = 0;
+    end
+    
+    properties (Hidden, Constant, Logical)
+        ComplexData = false;
+    end
+    
+    properties (Hidden)
+        beam_devs = {};
+        HPhaseChannelNames = {};
+        VPhaseChannelNames = {};
+        HPowerChannelNames = {};
+        VPowerChannelNames = {};
+    end
+    
+    properties(Nontunable, Hidden, Constant)
+        Type = 'Rx';
+        channel_names = {''};
+    end
+    
+    properties (Hidden, Nontunable, Access = protected)
+        isOutput = false;
+    end
+    
+    methods
+        %% Constructor
+        function obj = ADAR300x(varargin)
+            coder.allowpcode('plain');
+            obj = obj@matlabshared.libiio.base(varargin{:});
+        end
+        % Destructor
+        function delete(obj)
+        end
+        function val = CheckDims(obj,attr,val)
+%             rows = length(obj.Beams);
+            rows = 1;
+            assert(isequal(size(val),[rows,4]), [attr ' must be of size length(Beams) x 4']);
+        end
+        function setAllDevs(obj,values,attr,output)
+            tol = 1;
+            for devIndx = 1:length(obj.beam_devs)
+                for c = 1:4
+                    chan = sprintf('voltage%d',c-1);
+                    dev = obj.beam_devs{devIndx};
+                    obj.setAttributeDouble(chan,attr,...
+                        values(devIndx,c),output,tol,dev);
+                end
+            end
+        end
+        % Check PhasesH
+        function set.PhasesH(obj, values)
+            obj.setAllRelatedChannelAttrs('raw',values,obj.HPhaseChannelNames,true,[]);
+            obj.PhasesH = values;
+        end
+        % Check PhasesV
+        function set.PhasesV(obj, values)
+            obj.setAllRelatedChannelAttrs('raw',values,obj.VPhaseChannelNames,true,[]);
+            obj.PhasesV = values;
+        end
+        % Check PowersH
+        function set.PowersH(obj, values)
+            obj.setAllRelatedChannelAttrs('raw',values,obj.HPowerChannelNames,true,[]);
+            obj.PowersH = values;
+        end
+        % Check PowersV
+        function set.PowersV(obj, values)
+            obj.setAllRelatedChannelAttrs('raw',values,obj.VPowerChannelNames,true,[]);
+            obj.PowersV = values;
+        end
+        % Check AmpBiasMuteELV
+        function set.AmpBiasMuteELV(obj, value)
+            obj.AmpBiasMuteELV = obj.CheckDims('AmpBiasMuteELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpBiasMuteELVAttrs,...
+                    obj.AmpBiasMuteELV,[]);
+            end
+        end
+        % Check AmpBiasOperationalELH
+        function set.AmpBiasOperationalELH(obj, value)
+            obj.AmpBiasOperationalELH = obj.CheckDims('AmpBiasOperationalELH', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpBiasOperationalELHAttrs,...
+                    obj.AmpBiasOperationalELH,[]);
+            end
+        end
+        % Check AmpBiasOperationalELV
+        function set.AmpBiasOperationalELV(obj, value)
+            obj.AmpBiasOperationalELV = obj.CheckDims('AmpBiasOperationalELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpBiasOperationalELVAttrs,...
+                    obj.AmpBiasOperationalELV,[]);
+            end
+        end
+        % Check AmpBiasResetELV
+        function set.AmpBiasResetELV(obj, value)
+            obj.AmpBiasResetELV = obj.CheckDims('AmpBiasResetELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpBiasResetELVAttrs,...
+                    obj.AmpBiasResetELV,[]);
+            end
+        end
+        % Check AmpBiasSleepELH
+        function set.AmpBiasSleepELH(obj, value)
+            obj.AmpBiasSleepELH = obj.CheckDims('AmpBiasSleepELH', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpBiasSleepELHAttrs,...
+                    obj.AmpBiasSleepELH,[]);
+            end
+        end
+        % Check AmpBiasSleepELV
+        function set.AmpBiasSleepELV(obj, value)
+            obj.AmpBiasSleepELV = obj.CheckDims('AmpBiasSleepELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpBiasSleepELVAttrs,...
+                    obj.AmpBiasSleepELV,[]);
+            end
+        end
+        % Check AmpENMuteELV
+        function set.AmpENMuteELV(obj, value)
+            obj.AmpENMuteELV = obj.CheckDims('AmpENMuteELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpENMuteELVAttrs,...
+                    obj.AmpENMuteELV,[]);
+            end
+        end
+        % Check AmpENOperationalELH
+        function set.AmpENOperationalELH(obj, value)
+            obj.AmpENOperationalELH = obj.CheckDims('AmpENOperationalELH', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpENOperationalELHAttrs,...
+                    obj.AmpENOperationalELH,[]);
+            end
+        end
+        % Check AmpENOperationalELV
+        function set.AmpENOperationalELV(obj, value)
+            obj.AmpENOperationalELV = obj.CheckDims('AmpENOperationalELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpENOperationalELVAttrs,...
+                    obj.AmpENOperationalELV,[]);
+            end
+        end
+        % Check AmpENResetELV
+        function set.AmpENResetELV(obj, value)
+            obj.AmpENResetELV = obj.CheckDims('AmpENResetELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpENResetELVAttrs,...
+                    obj.AmpENResetELV,[]);
+            end
+        end    
+        % Check AmpENSleepELH
+        function set.AmpENSleepELH(obj, value)
+            obj.AmpENSleepELH = obj.CheckDims('AmpENSleepELH', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpENSleepELHAttrs,...
+                    obj.AmpENSleepELH,[]);
+            end
+        end
+        % Check AmpENSleepELV
+        function set.AmpENSleepELV(obj, value)
+            obj.AmpENSleepELV = obj.CheckDims('AmpENSleepELV', value);
+            if obj.ConnectedToDevice
+                obj.setAllRelatedDevAttrs(obj.AmpENSleepELVAttrs,...
+                    obj.AmpENSleepELV,[]);
+            end
+        end
+    end
+    
+    %% API Functions
+    methods (Hidden, Access = protected)
+        
+        function setupImpl(obj)
+            % Setup LibIIO
+            setupLib(obj);
+            % Initialize the pointers
+            initPointers(obj);
+            getContext(obj);
+            setContextTimeout(obj);
+            % Flags
+            obj.needsTeardown = true;
+            obj.ConnectedToDevice = true;
+            % Call final stage
+            setupInit(obj);
+        end
+        function [data,valid] = stepImpl(~)
+            data = 0;
+            valid = false;
+        end
+        function setAllRelatedDevAttrs(obj,attrs,values,devices)
+            for indx = 1:length(values)
+                obj.setDeviceAttributeLongLong(attrs{indx},values(indx));
+            end
+        end
+        function values = getAllRelatedDevAttrs(obj,attrs,devices)
+            values = zeros(1,length(attrs));
+            for indx = 1:length(attrs)
+                values(indx) = obj.getDeviceAttributeLongLong(attrs{indx});
+            end
+        end
+        
+        function setAllRelatedChannelAttrs(obj,attr,values,channels,output,devices)
+            for indx = 1:length(values)
+                obj.setAttributeLongLong(channels{indx},attr,values(indx),output,0);
+            end
+        end
+        
+        function channel_names = get_channel_names_for_prop(obj,phydev,rxs)
+            chanCount = obj.iio_device_get_channels_count(phydev);
+            channel_names = {};
+            for c = 1:chanCount
+                chanPtr = obj.iio_device_get_channel(phydev,c-1);
+                status = cPtrCheck(obj,chanPtr);
+                if status < 0
+                    continue;
+                end
+                id = obj.iio_channel_get_id(chanPtr);
+                attrCount = obj.iio_channel_get_attrs_count(chanPtr);
+                for a = 1:attrCount
+                    attr = obj.iio_channel_get_attr(chanPtr, a-1);
+%                     disp(attr);
+                    if strcmpi(attr,'label')
+                        [bytes, label] = iio_channel_attr_read(obj,chanPtr,attr,1024);
+%                         disp(label);
+                        if ~isempty(regexp(label,rxs, 'once'))
+%                             channel_names = [channel_names(:)', {label}];
+                            channel_names = [channel_names(:)', {id}];
+                        end
+                    end
+                end
+            end
+        end
+        
+        function setupInit(obj)
+            % Do writes directly to hardware without using set methods.
+            % This is required sine Simulink support doesn't support
+            % modification to nontunable variables at SetupImpl
+            
+            numDevs = obj.iio_context_get_devices_count(obj.iioCtx);
+            obj.beam_devs = {};
+            for k = 1:numDevs
+                devPtr = obj.iio_context_get_device(obj.iioCtx, k-1);
+                name = obj.iio_device_get_name(devPtr);
+                disp(name);
+            end
+            
+            % Get all phase related channels
+            phydev = getDev(obj, obj.phyDevName);
+            obj.HPhaseChannelNames = obj.get_channel_names_for_prop(phydev, "BEAM\d_H_EL\d_DELAY");
+            obj.VPhaseChannelNames = obj.get_channel_names_for_prop(phydev, "BEAM\d_V_EL\d_DELAY");
+            obj.HPowerChannelNames = obj.get_channel_names_for_prop(phydev, "BEAM\d_H_EL\d_ATTENUATION");
+            obj.VPowerChannelNames = obj.get_channel_names_for_prop(phydev, "BEAM\d_V_EL\d_ATTENUATION");
+
+            % Check dimensions of arrays
+            %             rows = length(obj.Beams);
+            %             assert(isequal(size(obj.RxPhases),[rows,4]), 'RxPhases must be of size 4 x length(Beams)');
+            %             assert(isequal(size(obj.TxPhases),[rows,4]), 'TxPhases must be of size 4 x length(Beams)');
+            %             assert(isequal(size(obj.RxGains),[rows,4]), 'RxGains must be of size 4 x length(Beams)');
+            %             assert(isequal(size(obj.TxGains),[rows,4]), 'TxGains must be of size 4 x length(Beams)');
+            
+            % Set props
+            obj.setAllRelatedDevAttrs(obj.AmpBiasMuteELVAttrs,obj.AmpBiasMuteELV,[]);
+            obj.setAllRelatedDevAttrs(obj.AmpBiasOperationalELHAttrs,obj.AmpBiasOperationalELH,[]);            
+            obj.setAllRelatedDevAttrs(obj.AmpBiasOperationalELVAttrs,obj.AmpBiasOperationalELV,[]);            
+            obj.setAllRelatedDevAttrs(obj.AmpBiasResetELVAttrs,obj.AmpBiasResetELV,[]);            
+            obj.setAllRelatedDevAttrs(obj.AmpBiasSleepELHAttrs,obj.AmpBiasSleepELH,[]);
+            obj.setAllRelatedDevAttrs(obj.AmpBiasSleepELVAttrs,obj.AmpBiasSleepELV,[]);
+            obj.setAllRelatedDevAttrs(obj.AmpENMuteELVAttrs,obj.AmpENMuteELV,[]);  
+            obj.setAllRelatedDevAttrs(obj.AmpENOperationalELHAttrs,obj.AmpENOperationalELH,[]); 
+            obj.setAllRelatedDevAttrs(obj.AmpENOperationalELVAttrs,obj.AmpENOperationalELV,[]);
+            obj.setAllRelatedDevAttrs(obj.AmpENResetELVAttrs,obj.AmpENResetELV,[]);
+            obj.setAllRelatedDevAttrs(obj.AmpENSleepELHAttrs,obj.AmpENSleepELH,[]);            
+            obj.setAllRelatedDevAttrs(obj.AmpENSleepELVAttrs,obj.AmpENSleepELV,[]);            
+            
+%             out = obj.getAllRelatedDevAttrs(obj.AmpBiasMuteELVAttrs,[]);
+%             disp(out)
+        end
+    end
+    
+    %% External Dependency Methods
+    methods (Hidden, Static)
+        
+        function tf = isSupportedContext(bldCfg)
+            tf = matlabshared.libiio.ExternalDependency.isSupportedContext(bldCfg);
+        end
+        
+        function updateBuildInfo(buildInfo, bldCfg)
+            % Call the matlabshared.libiio.method first
+            matlabshared.libiio.ExternalDependency.updateBuildInfo(buildInfo, bldCfg);
+        end
+        
+    end
+end
+
+
+

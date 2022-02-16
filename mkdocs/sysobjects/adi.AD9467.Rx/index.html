@@ -7,7 +7,7 @@
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.2.3, mkdocs-material-8.1.11" name="generator"/>
-<title>adi.AD9364.Rx - Analog Devices, Inc. High-Speed Converter Toolbox</title>
+<title>adi.AD9467.Rx - Analog Devices, Inc. High-Speed Converter Toolbox</title>
 <link href="../../assets/stylesheets/main.50e68009.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -44,7 +44,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              adi.AD9364.Rx
+              adi.AD9467.Rx
             
           </span>
 </div>
@@ -136,8 +136,8 @@
         Examples
       </a>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" id="__nav_7" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" id="__nav_7" type="checkbox"/>
 <label class="md-nav__link" for="__nav_7">
           Reference API
           <span class="md-nav__icon md-icon"></span>
@@ -198,8 +198,8 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" id="__nav_7_2" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" id="__nav_7_2" type="checkbox"/>
 <label class="md-nav__link" for="__nav_7_2">
           Device Interfaces
           <span class="md-nav__icon md-icon"></span>
@@ -220,8 +220,9 @@
         adi.AD9081.Tx
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../adi.AD9467.Rx/">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<a class="md-nav__link md-nav__link--active" href="./">
         adi.AD9467.Rx
       </a>
 </li>
@@ -248,21 +249,21 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1>adi.AD9364.Rx</h1>
-<!-- <div class="sysobj_h1">adi.AD9364.Rx</div> -->
+<h1>adi.AD9467.Rx</h1>
+<!-- <div class="sysobj_h1">adi.AD9467.Rx</div> -->
 <!-- <div class="sysobj_top_desc">
 Receive data from Analog Devices AD9361 transceiver
 </div> -->
 <!-- <div class="sysobj_desc_title">Description</div> -->
 <div class="sysobj_desc_txt">
 <span>
-    The adi.AD9361.Rx System object is a signal source that can receive<br/>    complex data from the AD9364.<br/> <br/>    rx = adi.AD9364.Rx;<br/>    rx = adi.AD9364.Rx('uri','ip:192.168.2.1');<br/> <br/> <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9364.pdf">AD9364 Datasheet</a><br/> <br/>
+    The adi.AD9467.Rx System object is a signal source that can receive<br/>    complex data from the AD9467.<br/> <br/>    rx = adi.AD9467.Rx;<br/>    rx = adi.AD9467.Rx('uri','ip:192.168.2.1');<br/> <br/> <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9467.pdf">AD9467 Datasheet</a><br/>
 </span>
 </div>
 <div class="sysobj_desc_title">Creation</div>
 <p>The class can be instantiated in the following way with and without property name value pairs.</p>
-<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9364</span><span class="p">.</span><span class="n">Rx</span><span class="w"></span>
-<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9364</span><span class="p">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9467</span><span class="p">.</span><span class="n">Rx</span><span class="w"></span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9467</span><span class="p">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <div class="sysobj_desc_title">Properties</div>
 <div class="sysobj_desc_txt">
@@ -275,93 +276,33 @@ For more information on changing property values, see <a href="https://www.mathw
 </span>
 </div>
 <div class="property">
-<button class="collapsible-property collapsible-property-CenterFrequency" onclick="collapse('CenterFrequency')" type="button">CenterFrequency <span class="plus-CenterFrequency" style="text-align:right">+</span></button>
-<div class="content content-CenterFrequency" style="display: none;">
-<p style="padding: 0px;">RF center frequency, specified in Hz as a scalar. The default is 2.4e9. This property is tunable.Help for adi.AD9364.Rx/CenterFrequency is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
 <button class="collapsible-property collapsible-property-SamplingRate" onclick="collapse('SamplingRate')" type="button">SamplingRate <span class="plus-SamplingRate" style="text-align:right">+</span></button>
 <div class="content content-SamplingRate" style="display: none;">
-<p style="padding: 0px;">Baseband sampling rate in Hz, specified as a scalar from 65105 to 61.44e6 samples per second.Help for adi.AD9364.Rx/SamplingRate is inherited from superclass ADI.AD9361.RX</p>
+<p style="padding: 0px;">Baseband sampling rate in Hz, specified as a scalar in samples per second. This value read from the hardware after the object is setup.</p>
 </div>
 </div>
 <div class="property">
-<button class="collapsible-property collapsible-property-RFBandwidth" onclick="collapse('RFBandwidth')" type="button">RFBandwidth <span class="plus-RFBandwidth" style="text-align:right">+</span></button>
-<div class="content content-RFBandwidth" style="display: none;">
-<p style="padding: 0px;">RF Bandwidth of front-end analog filter in Hz, specified as a scalar from 200 kHz to 56 MHz.Help for adi.AD9364.Rx/RFBandwidth is inherited from superclass ADI.AD9361.RX</p>
+<button class="collapsible-property collapsible-property-TestMode" onclick="collapse('TestMode')" type="button">TestMode <span class="plus-TestMode" style="text-align:right">+</span></button>
+<div class="content content-TestMode" style="display: none;">
+<p style="padding: 0px;">Select ADC test mode. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn_long' 'pn_short' 'one_zero_toggle'</p>
 </div>
 </div>
 <div class="property">
-<button class="collapsible-property collapsible-property-GainControlModeChannel0" onclick="collapse('GainControlModeChannel0')" type="button">GainControlModeChannel0 <span class="plus-GainControlModeChannel0" style="text-align:right">+</span></button>
-<div class="content content-GainControlModeChannel0" style="display: none;">
-<p style="padding: 0px;">specified as one of the following: 'slow_attack' — For signals with slowly changing power levels 'fast_attack' — For signals with rapidly changing power levels 'manual' — For setting the gain manually with the Gain property 'hybrid' — For configuring hybrid AGC modeHelp for adi.AD9364.Rx/GainControlModeChannel0 is inherited from superclass ADI.AD9361.RX</p>
+<button class="collapsible-property collapsible-property-FilterHighPass3dbFrequency" onclick="collapse('FilterHighPass3dbFrequency')" type="button">FilterHighPass3dbFrequency <span class="plus-FilterHighPass3dbFrequency" style="text-align:right">+</span></button>
+<div class="content content-FilterHighPass3dbFrequency" style="display: none;">
+<p style="padding: 0px;">FilterHighPass3dbFrequency</p>
 </div>
 </div>
 <div class="property">
-<button class="collapsible-property collapsible-property-GainChannel0" onclick="collapse('GainChannel0')" type="button">GainChannel0 <span class="plus-GainChannel0" style="text-align:right">+</span></button>
-<div class="content content-GainChannel0" style="display: none;">
-<p style="padding: 0px;">Channel 0 gain, specified as a scalar from -3 dB to 71 dB. The acceptable minimum and maximum gain setting depends on the center frequency.Help for adi.AD9364.Rx/GainChannel0 is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-GainControlModeChannel1" onclick="collapse('GainControlModeChannel1')" type="button">GainControlModeChannel1 <span class="plus-GainControlModeChannel1" style="text-align:right">+</span></button>
-<div class="content content-GainControlModeChannel1" style="display: none;">
-<p style="padding: 0px;">specified as one of the following: 'slow_attack' — For signals with slowly changing power levels 'fast_attack' — For signals with rapidly changing power levels 'manual' — For setting the gain manually with the Gain property 'hybrid' — For configuring hybrid AGC modeHelp for adi.AD9364.Rx/GainControlModeChannel1 is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-GainChannel1" onclick="collapse('GainChannel1')" type="button">GainChannel1 <span class="plus-GainChannel1" style="text-align:right">+</span></button>
-<div class="content content-GainChannel1" style="display: none;">
-<p style="padding: 0px;">Channel 1 gain, specified as a scalar from -3 dB to 71 dB. The acceptable minimum and maximum gain setting depends on the center frequency.Help for adi.AD9364.Rx/GainChannel1 is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-LoopbackMode" onclick="collapse('LoopbackMode')" type="button">LoopbackMode <span class="plus-LoopbackMode" style="text-align:right">+</span></button>
-<div class="content content-LoopbackMode" style="display: none;">
-<p style="padding: 0px;">Option to set digital loopback mode, specified as 0, 1 or 2. Allows either to digitally loopback TX data into the RX path or vice versa. Value  | Mode ---------------------------  0 |  Disable  1 |  Digital TX -&gt; Digital RX  2 |  RF RX -&gt; RF TX Help for adi.AD9364.Rx/LoopbackMode is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-EnableQuadratureTracking" onclick="collapse('EnableQuadratureTracking')" type="button">EnableQuadratureTracking <span class="plus-EnableQuadratureTracking" style="text-align:right">+</span></button>
-<div class="content content-EnableQuadratureTracking" style="display: none;">
-<p style="padding: 0px;">Option to enable quadrature tracking, specified as true or false. When this property is true, IQ imbalance compensation is applied to the input signal.Help for adi.AD9364.Rx/EnableQuadratureTracking is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-EnableRFDCTracking" onclick="collapse('EnableRFDCTracking')" type="button">EnableRFDCTracking <span class="plus-EnableRFDCTracking" style="text-align:right">+</span></button>
-<div class="content content-EnableRFDCTracking" style="display: none;">
-<p style="padding: 0px;">Option to enable RF DC tracking, specified as true or false. When this property is true, an RF DC blocking filter is applied to the input signal.Help for adi.AD9364.Rx/EnableRFDCTracking is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-EnableBasebandDCTracking" onclick="collapse('EnableBasebandDCTracking')" type="button">EnableBasebandDCTracking <span class="plus-EnableBasebandDCTracking" style="text-align:right">+</span></button>
-<div class="content content-EnableBasebandDCTracking" style="display: none;">
-<p style="padding: 0px;">Option to enable baseband DC tracking, specified as true or false. When this property is true, a baseband DC blocking filter is applied to the input signal.Help for adi.AD9364.Rx/EnableBasebandDCTracking is inherited from superclass ADI.AD9361.RX</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-RFPortSelect" onclick="collapse('RFPortSelect')" type="button">RFPortSelect <span class="plus-RFPortSelect" style="text-align:right">+</span></button>
-<div class="content content-RFPortSelect" style="display: none;">
-<p style="padding: 0px;">'A_BALANCED' 'B_BALANCED' 'C_BALANCED' 'A_N' 'A_P' 'B_N' 'B_P' 'C_N' 'C_P' 'TX_MONITOR1' 'TX_MONITOR2' 'TX_MONITOR1_2'Help for adi.AD9364.Rx/RFPortSelect is inherited from superclass ADI.AD9361.RX</p>
+<button class="collapsible-property collapsible-property-Scale" onclick="collapse('Scale')" type="button">Scale <span class="plus-Scale" style="text-align:right">+</span></button>
+<div class="content content-Scale" style="display: none;">
+<p style="padding: 0px;">Scale received data. Possible options are: 0.030517 0.032043 0.033569 0.035095 0.036621 0.038146</p>
 </div>
 </div>
 <div class="property">
 <button class="collapsible-property collapsible-property-SamplesPerFrame" onclick="collapse('SamplesPerFrame')" type="button">SamplesPerFrame <span class="plus-SamplesPerFrame" style="text-align:right">+</span></button>
 <div class="content content-SamplesPerFrame" style="display: none;">
-<p style="padding: 0px;">Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-EnableCustomFilter" onclick="collapse('EnableCustomFilter')" type="button">EnableCustomFilter <span class="plus-EnableCustomFilter" style="text-align:right">+</span></button>
-<div class="content content-EnableCustomFilter" style="display: none;">
-<p style="padding: 0px;">Enable use of custom filter file to set SamplingRate, RFBandwidth, and FIR in datapaths</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-CustomFilterFileName" onclick="collapse('CustomFilterFileName')" type="button">CustomFilterFileName <span class="plus-CustomFilterFileName" style="text-align:right">+</span></button>
-<div class="content content-CustomFilterFileName" style="display: none;">
-<p style="padding: 0px;">Path to custom filter file created from filter wizard</p>
+<p style="padding: 0px;">Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9467.Rx/SamplesPerFrame is inherited from superclass ADI.AD9467.BASE</p>
 </div>
 </div>
 <div class="property">
@@ -373,18 +314,12 @@ For more information on changing property values, see <a href="https://www.mathw
 <div class="property">
 <button class="collapsible-property collapsible-property-uri" onclick="collapse('uri')" type="button">uri <span class="plus-uri" style="text-align:right">+</span></button>
 <div class="content content-uri" style="display: none;">
-<p style="padding: 0px;">Hostname or IP address of remote libIIO deviceHelp for adi.AD9364.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE</p>
-</div>
-</div>
-<div class="property">
-<button class="collapsible-property collapsible-property-enIO" onclick="collapse('enIO')" type="button">enIO <span class="plus-enIO" style="text-align:right">+</span></button>
-<div class="content content-enIO" style="display: none;">
-<p style="padding: 0px;">If true, connects to libIIO device during simulationHelp for adi.AD9364.Rx/enIO is inherited from superclass MATLABSHARED.LIBIIO.BASE</p>
+<p style="padding: 0px;">Hostname or IP address of remote libIIO deviceHelp for adi.AD9467.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE</p>
 </div>
 </div>
 <div class="sysobj_desc_title">Example Usage</div>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>%% Rx set up
-<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>rx = adi.adi.AD9364.Rx.Rx('uri','ip:analog.local');
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>rx = adi.adi.AD9467.Rx.Rx('uri','ip:analog.local');
 <a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>rx.CenterFrequency = 1e9;
 <a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>rx.EnabledChannels = 1;
 <a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>%% Run
@@ -400,6 +335,34 @@ For more information on changing property values, see <a href="https://www.mathw
 </div>
 </main>
 <footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: adi.AD9081.Tx" class="md-footer__link md-footer__link--prev" href="../adi.AD9081.Tx/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Previous
+              </span>
+              adi.AD9081.Tx
+            </div>
+</div>
+</a>
+<a aria-label="Next: adi.DAQ2.Rx" class="md-footer__link md-footer__link--next" href="../adi.DAQ2.Rx/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Next
+              </span>
+              adi.DAQ2.Rx
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+</div>
+</a>
+</nav>
 <div class="md-footer-meta md-typeset">
 <div class="md-footer-meta__inner md-grid">
 <div class="md-copyright">

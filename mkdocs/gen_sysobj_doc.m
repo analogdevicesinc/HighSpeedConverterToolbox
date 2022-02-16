@@ -5,19 +5,31 @@ files = dir(filepath);
 
 mfiledir = fullfile('adi');
 docdir = fullfile('doc');
-parts = {'AD9081'; 'AD9363'; 'AD9364'; ...
-    'ADRV9002'};
-trx_files = {'Tx','Rx'};
+% parts = {'AD9081'; 'AD9363'; 'AD9364'; ...
+%     'ADRV9002'};
+% trx_files = {'Tx','Rx'};
+
+rootClasses = {...
+    {'AD9081',{'Rx','Tx'}},...
+    {'AD9144',{'Tx'}},...
+    {'AD9467',{'Rx'}},...
+    {'AD9680',{'Rx'}},...
+    {'DAQ2',{'Rx','Tx'}},...
+    {'QuadMxFE',{'Rx','Tx'}}...
+    };
 
 all_devs = [];
-for ii = 1:numel(parts)
-    for jj = 1:numel(trx_files)
+for ii = 1:2:numel(rootClasses)
+    for jj = 1:numel(rootClasses{ii}{2})
+        part = rootClasses{ii}{1};
+        tmp = rootClasses{ii}{2};
+        trx_file = tmp{jj};
         all_props = [];
-        dotmfilename = strcat(mfiledir, '.', parts{ii}, '.', trx_files{jj});
+        dotmfilename = strcat(mfiledir, '.', part, '.', trx_file);
         props = properties(dotmfilename);
         for prop = 1:length(props)
 
-            if prop == "enIO"
+            if props{prop} == "enIO"
                 continue;
             end
             pdoc = help(strcat(dotmfilename,'.',props{prop}));

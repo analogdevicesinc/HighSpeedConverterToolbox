@@ -1,12 +1,18 @@
 classdef ADAR3002 < adi.internal.ADAR300x
-    %ADAR1000 Beamformer
+    %ADAR3002 Beamformer Single Chip Interface
     properties (Nontunable)
+        
     end
     
     properties
     end
     
     properties(Nontunable, Hidden)
+        ArrayMapInternal = 1:4;
+    end
+    
+    properties(Hidden)
+        deviceNames = {'adar3002_csb_0_0'};
     end
         
     methods

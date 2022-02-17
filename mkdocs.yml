@@ -18,19 +18,12 @@ theme:
 nav:
  - Overview: index.md
  - Installation: install.md
- - Simulation Models: models.md
  - Data Streaming: streaming.md
  - HDL Targeting: targeting.md
  - Examples: examples.md
  - Reference API:
     - HDL Reference Designs:
-       - fmcomms2: hdlrefdesigns/fmcomms2.md
-       - adrv9361z7035: hdlrefdesigns/adrv9361z7035.md
-       - adrv9364z7020: hdlrefdesigns/adrv9364z7020.md
-       - pluto: hdlrefdesigns/pluto.md
-       - adrv9371: hdlrefdesigns/adrv9371.md
-       - adrv9002: hdlrefdesigns/adrv9002.md
-       - adrv9009: hdlrefdesigns/adrv9009.md
+       - daq2: hdlrefdesigns/daq2.md
     - Device Interfaces:
        - adi.AD9081.Rx: sysobjects/adi.AD9081.Rx.md
        - adi.AD9081.Tx: sysobjects/adi.AD9081.Tx.md

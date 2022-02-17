@@ -40,12 +40,12 @@ To provide a complete example we can do more advanced configuration like so to d
 rx = adi.AD9081.Rx;
 rx.uri = 'ip:192.168.2.1';
 rx.SamplesPerFrame = 1024;
-rx.CenterFrequency = 1e9;
-dataLO1 = rx();
+rx.ChannelNCOFrequencies = [1e9,1e9,1e9,1e9];
+dataNCO1 = rx();
 
 % Update tunable property
-rx.CenterFrequency = 2e9;
-dataLO2 = rx();
+rx.ChannelNCOFrequencies = [2e9,2e9,2e9,2e9];
+dataNCO2 = rx();
 
 % Update non-tunable property
 rx.release();
@@ -55,10 +55,10 @@ dataLargerBuffer = rx();
 
 ## Receiving Data
 
-To receive or capture data from a given device first you must instantiate that device's interface class. For example on a AD9361 based system, this would be as follows:
+To receive or capture data from a given device first you must instantiate that device's interface class. For example on a DAQ2 based system, this would be as follows:
 
 ```
-rx = adi.AD9361.Rx;
+rx = adi.DAQ2.Rx;
 ```
 
 Once instantiated you can configure the number of samples to be captured by setting the property **SamplesPerFrame.**
@@ -76,20 +76,20 @@ data = rx(); % Operator method
 data = rx.step(); % Step method
 ```
 
-Both method calls are equivalent, and the produced matrix **data** will be of size [SamplesPerFrame x length(EnabledChannels)]. **EnabledChannels** determines the channels which data will be collected from. **EnabledChannels** is a [1xN] vector with indexes starting at 1 of the desired channels. If the device transmits or receive complex data, these indexes are for complex channel pairs. For example, the AD9361 has 2 receivers (4 ADC) and setting **EnabledChannels** as so will capture data from all 4 converters:
+Both method calls are equivalent, and the produced matrix **data** will be of size [SamplesPerFrame x length(EnabledChannels)]. **EnabledChannels** determines the channels which data will be collected from. **EnabledChannels** is a [1xN] vector with indexes starting at 1 of the desired channels. If the device transmits or receive complex data, these indexes are for complex channel pairs. For example, the AD9081 can have 16 complex channels from 4 ADCs and setting **EnabledChannels** as so will capture data from all 16 converters:
 
 ```
-rx.EnabledChannels = [1,2];
+rx.EnabledChannels = 1:16;
 ```
 
 You cannot enable individual converters on complex data based devices, and the **EnabledChannels** property is always sorted so the channel mappings cannot be changed within the produced data.
 
 ## Sending Data
 
-Transmitting data is very similar to receiving it, a transmitter class needs to be instantiated to send data first. For a ADRV9009 based device this would be as follows:
+Transmitting data is very similar to receiving it, a transmitter class needs to be instantiated to send data first. For an AD9081 based device this would be as follows:
 
 ```
-tx = adi.ADRV9009.Tx;
+tx = adi.AD9081.Tx;
 ```
 
 Unlike the receivers, transmit objects automatically create their internal buffers based on the data passed to them during their operator or step methods. These methods can be called as follows with some data:
@@ -105,13 +105,13 @@ However, once the step or operator method is called the object becomes locked an
 Unlike the receiver, transmit objects have the ability to utilize [cyclic buffers](https://analogdevicesinc.github.io/libiio/group__Buffer.html#ga6caadf077c112ae55a64276aa24ef832) which will continuously transmit a provided vector without gaps forever. To utilize cyclic buffers set the **EnableCyclicBuffers** property then pass the operator data as follows:
 
 ```
-tx = adi.ADRV9009.Tx;
+tx = adi.AD9081.Tx;
 tx.EnableCyclicBuffers = true;
 tx_data = complex(2^15.*randn(1024,1),2^15.*randn(1024,1));
 tx(tx_data); % Data will repeat forever
 ```
 
-One a vector is passed to the object with **EnableCyclicBuffers** set to **true**, the object will not accept future buffers unless first release or cleared.
+Once a vector is passed to the object with **EnableCyclicBuffers** set to **true**, the object will not accept future buffers unless first release or cleared.
 
 By default the system objects will utilize **DMA** as the source of data for the DACs, which will use data past from the operator. This can be set manually through the **DataSource** properties as follows:
 

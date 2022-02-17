@@ -119,11 +119,6 @@
         Installation
       </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../models/">
-        Simulation Models
-      </a>
-</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
@@ -173,75 +168,45 @@
       </a>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" id="__nav_7" type="checkbox"/>
-<label class="md-nav__link" for="__nav_7">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6">
           Reference API
           <span class="md-nav__icon md-icon"></span>
 </label>
 <nav aria-label="Reference API" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_7">
+<label class="md-nav__title" for="__nav_6">
 <span class="md-nav__icon md-icon"></span>
           Reference API
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_1" id="__nav_7_1" type="checkbox"/>
-<label class="md-nav__link" for="__nav_7_1">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_1" id="__nav_6_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6_1">
           HDL Reference Designs
           <span class="md-nav__icon md-icon"></span>
 </label>
 <nav aria-label="HDL Reference Designs" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_7_1">
+<label class="md-nav__title" for="__nav_6_1">
 <span class="md-nav__icon md-icon"></span>
           HDL Reference Designs
         </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../hdlrefdesigns/fmcomms2/">
-        fmcomms2
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../hdlrefdesigns/adrv9361z7035/">
-        adrv9361z7035
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../hdlrefdesigns/adrv9364z7020/">
-        adrv9364z7020
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../hdlrefdesigns/pluto/">
-        pluto
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../hdlrefdesigns/adrv9371/">
-        adrv9371
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../hdlrefdesigns/adrv9002/">
-        adrv9002
-      </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../hdlrefdesigns/adrv9009/">
-        adrv9009
+<a class="md-nav__link" href="../hdlrefdesigns/daq2.md">
+        daq2
       </a>
 </li>
 </ul>
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" id="__nav_7_2" type="checkbox"/>
-<label class="md-nav__link" for="__nav_7_2">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_2" id="__nav_6_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6_2">
           Device Interfaces
           <span class="md-nav__icon md-icon"></span>
 </label>
 <nav aria-label="Device Interfaces" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="__nav_7_2">
+<label class="md-nav__title" for="__nav_6_2">
 <span class="md-nav__icon md-icon"></span>
           Device Interfaces
         </label>
@@ -362,12 +327,12 @@ Once the object becomes locked it must be released if the sample rate or buffers
 <span class="normal"><a href="#__codelineno-2-14">14</a></span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>rx = adi.AD9081.Rx;
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a>rx.uri = 'ip:192.168.2.1';
 <a id="__codelineno-2-3" name="__codelineno-2-3"></a>rx.SamplesPerFrame = 1024;
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a>rx.CenterFrequency = 1e9;
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a>dataLO1 = rx();
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>rx.ChannelNCOFrequencies = [1e9,1e9,1e9,1e9];
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>dataNCO1 = rx();
 <a id="__codelineno-2-6" name="__codelineno-2-6"></a>
 <a id="__codelineno-2-7" name="__codelineno-2-7"></a>% Update tunable property
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a>rx.CenterFrequency = 2e9;
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a>dataLO2 = rx();
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a>rx.ChannelNCOFrequencies = [2e9,2e9,2e9,2e9];
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a>dataNCO2 = rx();
 <a id="__codelineno-2-10" name="__codelineno-2-10"></a>
 <a id="__codelineno-2-11" name="__codelineno-2-11"></a>% Update non-tunable property
 <a id="__codelineno-2-12" name="__codelineno-2-12"></a>rx.release();
@@ -376,8 +341,8 @@ Once the object becomes locked it must be released if the sample rate or buffers
 </code></pre></div>
 </td></tr></table></p>
 <h2 id="receiving-data">Receiving Data</h2>
-<p>To receive or capture data from a given device first you must instantiate that device's interface class. For example on a AD9361 based system, this would be as follows:</p>
-<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>rx = adi.AD9361.Rx;
+<p>To receive or capture data from a given device first you must instantiate that device's interface class. For example on a DAQ2 based system, this would be as follows:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>rx = adi.DAQ2.Rx;
 </code></pre></div>
 <p>Once instantiated you can configure the number of samples to be captured by setting the property <strong>SamplesPerFrame.</strong></p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>rx.SamplesPerFrame = 1e6;
@@ -387,13 +352,13 @@ Once the object becomes locked it must be released if the sample rate or buffers
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>data = rx(); % Operator method
 <a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>data = rx.step(); % Step method
 </code></pre></div>
-<p>Both method calls are equivalent, and the produced matrix <strong>data</strong> will be of size [SamplesPerFrame x length(EnabledChannels)]. <strong>EnabledChannels</strong> determines the channels which data will be collected from. <strong>EnabledChannels</strong> is a [1xN] vector with indexes starting at 1 of the desired channels. If the device transmits or receive complex data, these indexes are for complex channel pairs. For example, the AD9361 has 2 receivers (4 ADC) and setting <strong>EnabledChannels</strong> as so will capture data from all 4 converters:</p>
-<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>rx.EnabledChannels = [1,2];
+<p>Both method calls are equivalent, and the produced matrix <strong>data</strong> will be of size [SamplesPerFrame x length(EnabledChannels)]. <strong>EnabledChannels</strong> determines the channels which data will be collected from. <strong>EnabledChannels</strong> is a [1xN] vector with indexes starting at 1 of the desired channels. If the device transmits or receive complex data, these indexes are for complex channel pairs. For example, the AD9081 can have 16 complex channels from 4 ADCs and setting <strong>EnabledChannels</strong> as so will capture data from all 16 converters:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>rx.EnabledChannels = 1:16;
 </code></pre></div>
 <p>You cannot enable individual converters on complex data based devices, and the <strong>EnabledChannels</strong> property is always sorted so the channel mappings cannot be changed within the produced data.</p>
 <h2 id="sending-data">Sending Data</h2>
-<p>Transmitting data is very similar to receiving it, a transmitter class needs to be instantiated to send data first. For a ADRV9009 based device this would be as follows:</p>
-<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>tx = adi.ADRV9009.Tx;
+<p>Transmitting data is very similar to receiving it, a transmitter class needs to be instantiated to send data first. For an AD9081 based device this would be as follows:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>tx = adi.AD9081.Tx;
 </code></pre></div>
 <p>Unlike the receivers, transmit objects automatically create their internal buffers based on the data passed to them during their operator or step methods. These methods can be called as follows with some data:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>tx_data = complex(2^15.*randn(1024,1),2^15.*randn(1024,1));
@@ -402,12 +367,12 @@ Once the object becomes locked it must be released if the sample rate or buffers
 </code></pre></div>
 <p>However, once the step or operator method is called the object becomes locked and future passed data vectors must be the same length. As with the receive classes, the size of the passed data must be [SomeFixedSize x EnabledChannels]. <strong>EnabledChannels</strong> has the same definition as the receive side, except applied to DACs.</p>
 <p>Unlike the receiver, transmit objects have the ability to utilize <a href="https://analogdevicesinc.github.io/libiio/group__Buffer.html#ga6caadf077c112ae55a64276aa24ef832">cyclic buffers</a> which will continuously transmit a provided vector without gaps forever. To utilize cyclic buffers set the <strong>EnableCyclicBuffers</strong> property then pass the operator data as follows:</p>
-<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>tx = adi.ADRV9009.Tx;
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>tx = adi.AD9081.Tx;
 <a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>tx.EnableCyclicBuffers = true;
 <a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a>tx_data = complex(2^15.*randn(1024,1),2^15.*randn(1024,1));
 <a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a>tx(tx_data); % Data will repeat forever
 </code></pre></div>
-<p>One a vector is passed to the object with <strong>EnableCyclicBuffers</strong> set to <strong>true</strong>, the object will not accept future buffers unless first release or cleared.</p>
+<p>Once a vector is passed to the object with <strong>EnableCyclicBuffers</strong> set to <strong>true</strong>, the object will not accept future buffers unless first release or cleared.</p>
 <p>By default the system objects will utilize <strong>DMA</strong> as the source of data for the DACs, which will use data past from the operator. This can be set manually through the <strong>DataSource</strong> properties as follows:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>rx.DataSource = 'DMA';
 </code></pre></div>
@@ -427,7 +392,7 @@ Once the object becomes locked it must be released if the sample rate or buffers
 </main>
 <footer class="md-footer">
 <nav aria-label="Footer" class="md-footer__inner md-grid">
-<a aria-label="Previous: Simulation Models" class="md-footer__link md-footer__link--prev" href="../models/" rel="prev">
+<a aria-label="Previous: Installation" class="md-footer__link md-footer__link--prev" href="../install/" rel="prev">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -436,7 +401,7 @@ Once the object becomes locked it must be released if the sample rate or buffers
 <span class="md-footer__direction">
                 Previous
               </span>
-              Simulation Models
+              Installation
             </div>
 </div>
 </a>

@@ -139,7 +139,15 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function result = getAllChipsChannelAttribute(obj, attr, isOutput, AttrClass)
-            result = zeros(size(obj.ChannelElementMap));
+            if strcmpi(AttrClass, 'logical')
+                result = false(size(obj.ChannelElementMap));
+            elseif strcmpi(AttrClass, 'raw')
+                result = zeros(size(obj.ChannelElementMap));
+            elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
+                result = zeros(size(obj.ChannelElementMap));
+            elseif strcmpi(AttrClass, 'double')
+                result = zeros(size(obj.ChannelElementMap));
+            end
             for d = 1:numel(obj.ChipID)
                 for c = 0:3
                     channel = sprintf('voltage%d', c);
@@ -490,8 +498,8 @@ classdef Single < adi.common.Attribute & ...
         function set.ExternalTRPin(obj, values)
             ivalues = char(ones(size(values)) * '0');
             for ii = 1:numel(values)
-                if ~(strcmpi(values(ii), 'Tx') || strcmpi(values(ii), 'Rx'))
-                    error('Expected ''Toggle'' or ''On'' for property, BiasDACMode');
+                if ~(strcmpi(values(ii), 'Pos') || strcmpi(values(ii), 'Neg'))
+                    error('Expected ''Pos'' or ''Neg'' for property, ExternalTRPin');
                 end
                 if strcmpi(values(ii), 'Neg')
                     ivalues(ii) = '1';

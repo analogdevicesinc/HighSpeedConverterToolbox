@@ -8,17 +8,15 @@
 
 <center>
 <div class="dark-logo">
-<img src="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/raw/master/logos/logo_black.png" alt="Transceiver Toolbox" width="80%">
+<img src="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/raw/master/logos/logo_black.png" alt="HSX Toolbox" width="80%">
 </div>
 <div class="light-logo">
-<img src="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/raw/master/logos/logo_white.png" alt="Transceiver Toolbox" width="80%">
+<img src="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/raw/master/logos/logo_white.png" alt="HSX Toolbox" width="80%">
 </div>
 </center>
 
-<!-- # Analog Devices, Inc. Transceiver Toolbox -->
 
-
-ADI maintains a set of tools to model, interface, and target with ADI transceiver devices within MATLAB and Simulink. These are combined into single Toolbox which contains a set of Board Support Packages (BSP). The list of supported boards is provided below.
+ADI maintains a set of tools to model, interface, and target with ADI high-speed devices within MATLAB and Simulink. These are combined into single Toolbox which contains a set of Board Support Packages (BSP). The list of supported boards is provided below.
 
 The following have device-specific implementations in MATLAB and Simulink. If a device has an IIO driver, MATLAB support is possible, but a device-specific MATLAB or Simulink interface may not exist yet.
 

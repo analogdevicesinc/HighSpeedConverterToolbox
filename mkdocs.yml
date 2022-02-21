@@ -1,8 +1,8 @@
 site_name: Analog Devices, Inc. High-Speed Converter Toolbox
 
 theme: 
-  name: material
   logo: assets/matlab_white_icon.svg
+  name: material
   palette:
     - scheme: default
       primary: blue
@@ -18,9 +18,20 @@ theme:
 nav:
  - Overview: index.md
  - Installation: install.md
+ - Behavioral Models:
+    - About: models.md
+    - Component Models:
+       - AD9081:
+          - Overview: models/ad9081/top_level.tex.md
+          - ADC: models/ad9081/adc.tex.md
+          - DAC: models/ad9081/dac.tex.md
+          - DDC: models/ad9081/ddc2.tex.md
+          - DUC: models/ad9081/duc.tex.md
+          - PFILT: models/ad9081/pfilt.tex.md
  - Data Streaming: streaming.md
  - HDL Targeting: targeting.md
  - Examples: examples.md
+ - Support: support.md
  - Reference API:
     - HDL Reference Designs:
        - daq2: hdlrefdesigns/daq2.md

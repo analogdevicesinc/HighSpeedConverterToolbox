@@ -1,4 +1,4 @@
-classdef Rx < adi.common.Rx & adi.AD9680.Base
+classdef Rx < adi.common.Rx & adi.AD9680.Base & adi.common.Attribute
     % adi.AD9680.Rx Receive data from the AD9680 high speed ADC
     %   The adi.AD9680.Rx System object is a signal source that can receive
     %   complex data from the AD9680.
@@ -10,11 +10,11 @@ classdef Rx < adi.common.Rx & adi.AD9680.Base
     %
     %   See also adi.DAQ2.Rx
     
-    properties (Constant)
+    properties (Dependent)
         %SamplingRate Sampling Rate
         %   Baseband sampling rate in Hz, specified as a scalar
         %   in samples per second. This value is constant
-        SamplingRate = 1e9;
+        SamplingRate
     end
     properties (Hidden, Nontunable, Access = protected)
         isOutput = false;
@@ -26,6 +26,7 @@ classdef Rx < adi.common.Rx & adi.AD9680.Base
     
     properties (Nontunable, Hidden)
         devName = 'axi-ad9680-hpc';
+        phyDevName = 'axi-ad9680-hpc';
         channel_names = {'voltage0','voltage1'};
     end
     
@@ -35,6 +36,13 @@ classdef Rx < adi.common.Rx & adi.AD9680.Base
             % Returns the matlabshared.libiio.base object
             coder.allowpcode('plain');
             obj = obj@adi.AD9680.Base(varargin{:});
+        end
+        function value = get.SamplingRate(obj)
+            if obj.ConnectedToDevice
+                value= obj.getAttributeLongLong('voltage0','sampling_frequency',false);
+            else
+                value = NaN;
+            end
         end
     end   
     

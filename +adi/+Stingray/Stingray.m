@@ -12,7 +12,6 @@ classdef Stingray < matlab.mixin.SetGet
         ADAR1000Array
         SRayCtrl
         XCtrl
-        Monitor
         TDD
         Synth
     end
@@ -49,10 +48,6 @@ classdef Stingray < matlab.mixin.SetGet
             obj.XCtrl.uri = obj.uri;
             obj.XCtrl();
             
-            % HW-Monitor
-            obj.Monitor = adi.Stingray.LTC2992(obj.uri);
-            obj.Monitor();
-
             % PLL
             obj.Synth = adi.Stingray.ADF4371;
             obj.Synth.uri = obj.uri;

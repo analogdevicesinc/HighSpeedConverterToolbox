@@ -166,7 +166,7 @@ classdef XUD1aControl < adi.common.Attribute & adi.common.Rx
                 end
             end
             if ~found
-                error('Unable to locate %s in context',obj.ChipID{ChipIDIndx});
+                error('Unable to locate %s in context',obj.DevLabel);
             end
         end
     end

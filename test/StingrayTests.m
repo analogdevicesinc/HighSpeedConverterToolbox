@@ -5,43 +5,20 @@ classdef StingrayTests < HardwareTests
         sray
     end
     
-    methods(TestClassSetup)
-        %{
-        % Check hardware connected
-        function CheckForHardware(testCase)
-            Device = @()adi.Stingray.Stingray;
-            testCase.CheckDevice('ip',Device,testCase.uri(4:end),false);
-        end
-        %}
+    methods(TestMethodSetup)
         function SetupStingray(testCase)
             % Setup Stingray
             testCase.sray = adi.Stingray.Stingray(testCase.uri);
-            try
-                testCase.sray.Configure();    
-            catch ME
-                disp(ME);
-            end
+            values(:) = {'Disabled'};
+            testCase.sray.ADAR1000Array.Mode = values;
         end        
     end
     
-    %{
     methods(TestMethodTeardown)
-        %{
-        % Check hardware connected
-        function CheckForHardware(testCase)
-            Device = @()adi.Stingray.Stingray;
-            testCase.CheckDevice('ip',Device,testCase.uri(4:end),false);
-        end
-        %}
         function ResetStingray(testCase)
-            try
-                testCase.sray.Configure();    
-            catch ME
-                disp(ME);
-            end
-        end        
+            clear testCase.sray;
+        end
     end
-    %}
     
     % Device Attribute Tests
     methods (Test)
@@ -53,6 +30,8 @@ classdef StingrayTests < HardwareTests
             testCase.sray.ADAR1000Array.Mode = values;
             rvalues = testCase.sray.ADAR1000Array.Mode;
             testCase.verifyEqual(rvalues,values);
+            values(:) = {'Disabled'};
+            testCase.sray.ADAR1000Array.Mode = values;
         end
         
         function testStateTxOrRx(testCase)
@@ -62,6 +41,8 @@ classdef StingrayTests < HardwareTests
             testCase.sray.ADAR1000Array.StateTxOrRx = values;
             rvalues = testCase.sray.ADAR1000Array.StateTxOrRx;
             testCase.verifyEqual(rvalues,values);
+            values(:) = {'Rx'};
+            testCase.sray.ADAR1000Array.StateTxOrRx = values;
         end
         
         function testRxEnable(testCase)
@@ -88,12 +69,13 @@ classdef StingrayTests < HardwareTests
         end
         
         function testLNABiasOn(testCase)
-            values = randi([127 255], size(testCase.sray.ADAR1000Array.ChipID))*...
+            values = randi([60 100], size(testCase.sray.ADAR1000Array.ChipID))*...
                 testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
             testCase.sray.ADAR1000Array.LNABiasOn = values;
             rvalues = testCase.sray.ADAR1000Array.LNABiasOn;
             testCase.verifyEqual(rvalues,values);
-            testCase.sray.ADAR1000Array.LNABiasOn = 200*ones(size(testCase.sray.ADAR1000Array.ChipID));
+            testCase.sray.ADAR1000Array.LNABiasOn = 100*ones(size(testCase.sray.ADAR1000Array.ChipID))*...
+                testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
         end
         
         function testBeamMemEnable(testCase)
@@ -102,14 +84,14 @@ classdef StingrayTests < HardwareTests
             rvalues = testCase.sray.ADAR1000Array.BeamMemEnable;
             testCase.verifyEqual(rvalues,values);
         end
-        
+        %{
         function testBiasDACEnable(testCase)
             values = logical(randi([0 1], size(testCase.sray.ADAR1000Array.ChipID)));
             testCase.sray.ADAR1000Array.BiasDACEnable = values;
             rvalues = testCase.sray.ADAR1000Array.BiasDACEnable;
             testCase.verifyEqual(rvalues,values);
         end
-        
+        %}
         function testBiasDACMode(testCase)
             values = cell(size(testCase.sray.ADAR1000Array.ChipID));
             values(:) = {'Toggle'};            
@@ -118,14 +100,14 @@ classdef StingrayTests < HardwareTests
             rvalues = testCase.sray.ADAR1000Array.BiasDACMode;
             testCase.verifyEqual(rvalues,values);
         end
-        
+        %{
         function testBiasMemEnable(testCase)
             values = logical(randi([0 1], size(testCase.sray.ADAR1000Array.ChipID)));
             testCase.sray.ADAR1000Array.BiasMemEnable = values;
             rvalues = testCase.sray.ADAR1000Array.BiasMemEnable;
             testCase.verifyEqual(rvalues,values);
         end
-        
+        %}
         function testCommonMemEnable(testCase)
             values = logical(randi([0 1], size(testCase.sray.ADAR1000Array.ChipID)));
             testCase.sray.ADAR1000Array.CommonMemEnable = values;
@@ -174,12 +156,13 @@ classdef StingrayTests < HardwareTests
         end
         
         function testLNABiasOff(testCase)
-            values = randi([127 255], size(testCase.sray.ADAR1000Array.ChipID))*...
+            values = randi([60 100], size(testCase.sray.ADAR1000Array.ChipID))*...
                 testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
             testCase.sray.ADAR1000Array.LNABiasOff = values;
             rvalues = testCase.sray.ADAR1000Array.LNABiasOff;
             testCase.verifyEqual(rvalues,values);
-            testCase.sray.ADAR1000Array.LNABiasOn = 255*ones(size(testCase.sray.ADAR1000Array.ChipID));
+            testCase.sray.ADAR1000Array.LNABiasOn = 100*ones(size(testCase.sray.ADAR1000Array.ChipID))*...
+                testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
         end
         
         function testPolState(testCase)
@@ -325,30 +308,31 @@ classdef StingrayTests < HardwareTests
     
     % Channel Attribute Tests
     methods (Test)
+        %{
         function testDetectorEnable(testCase)
             values = logical(randi([0 1], size(testCase.sray.ADAR1000Array.ChannelElementMap)));
             testCase.sray.ADAR1000Array.DetectorEnable = values;
             rvalues = testCase.sray.ADAR1000Array.DetectorEnable;
             testCase.verifyEqual(rvalues,values);
         end
-        
+        %}
         function testPABiasOff(testCase)
-            values = randi([127 255], size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
+            values = randi([60 100], size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
                 testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
             testCase.sray.ADAR1000Array.PABiasOff = values;
             rvalues = testCase.sray.ADAR1000Array.PABiasOff;
             testCase.verifyEqual(rvalues,values);
-            testCase.sray.ADAR1000Array.PABiasOff = 255*ones(size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
+            testCase.sray.ADAR1000Array.PABiasOff = 100*ones(size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
                 testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
         end
         
         function testPABiasOn(testCase)
-            values = randi([127 255], size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
+            values = randi([60 100], size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
                 testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
             testCase.sray.ADAR1000Array.PABiasOn = values;
             rvalues = testCase.sray.ADAR1000Array.PABiasOn;
             testCase.verifyEqual(rvalues,values);
-            testCase.sray.ADAR1000Array.PABiasOn = 255*ones(size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
+            testCase.sray.ADAR1000Array.PABiasOn = 100*ones(size(testCase.sray.ADAR1000Array.ChannelElementMap))*...
                 testCase.sray.ADAR1000Array.BIAS_CODE_TO_VOLTAGE_SCALE;
         end
         
@@ -374,14 +358,14 @@ classdef StingrayTests < HardwareTests
             testCase.verifyEqual(rvalues,values);
             testCase.sray.ADAR1000Array.RxPowerDown = false(size(testCase.sray.ADAR1000Array.ChannelElementMap));
         end
-        
+        %{
         function testRxGain(testCase)
             values = randi([0 127], size(testCase.sray.ADAR1000Array.ChannelElementMap));
             testCase.sray.ADAR1000Array.RxGain = values;
             rvalues = testCase.sray.ADAR1000Array.RxGain;
             testCase.verifyEqual(rvalues,values);
         end
-        
+        %}
         function testRxPhase(testCase)
             values = randi([0 127], size(testCase.sray.ADAR1000Array.ChannelElementMap));
             testCase.sray.ADAR1000Array.RxPhase = values;
@@ -411,14 +395,14 @@ classdef StingrayTests < HardwareTests
             testCase.verifyEqual(rvalues,values);
             testCase.sray.ADAR1000Array.TxPowerDown = false(size(testCase.sray.ADAR1000Array.ChannelElementMap));
         end
-        
+        %{
         function testTxGain(testCase)
             values = randi([0 127], size(testCase.sray.ADAR1000Array.ChannelElementMap));
             testCase.sray.ADAR1000Array.TxGain = values;
             rvalues = testCase.sray.ADAR1000Array.TxGain;
             testCase.verifyEqual(rvalues,values);
         end
-        
+        %}
         function testTxPhase(testCase)
             values = randi([0 127], size(testCase.sray.ADAR1000Array.ChannelElementMap));
             testCase.sray.ADAR1000Array.TxPhase = values;
@@ -427,7 +411,8 @@ classdef StingrayTests < HardwareTests
         end
         %{
         function testRxBiasState(testCase)
-            values = logical(randi([0 1], size(testCase.sray.ADAR1000Array.ChannelElementMap)));
+            tmp_size = size(testCase.sray.ADAR1000Array.ChannelElementMap);
+            values = repmat(logical(randi([0 1], 1, tmp_size(2))), tmp_size(1), 1);
             testCase.sray.ADAR1000Array.RxBiasState = values;
             rvalues = testCase.sray.ADAR1000Array.RxBiasState;
             testCase.verifyEqual(rvalues,values);
@@ -452,7 +437,8 @@ classdef StingrayTests < HardwareTests
         end
         %{
         function testTxBiasState(testCase)
-            values = logical(randi([0 1], size(testCase.sray.ADAR1000Array.ChannelElementMap)));
+            tmp_size = size(testCase.sray.ADAR1000Array.ChannelElementMap);
+            values = repmat(logical(randi([0 1], 1, tmp_size(2))), tmp_size(1), 1);
             testCase.sray.ADAR1000Array.TxBiasState = values;
             rvalues = testCase.sray.ADAR1000Array.TxBiasState;
             testCase.verifyEqual(rvalues,values);

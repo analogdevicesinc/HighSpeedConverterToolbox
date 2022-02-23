@@ -164,7 +164,12 @@ classdef Single < adi.common.Attribute & ...
             end
         end
         
-        function setAllChipsChannelAttribute(obj, values, attr, isOutput, AttrClass)
+        function setAllChipsChannelAttribute(obj, values, attr, isOutput, AttrClass, varargin)
+            if (nargin == 6)
+                Tol = varargin{1};
+            else
+                Tol = 0;
+            end
             if strcmpi(AttrClass, 'logical')
                 validateattributes(values, {'logical'},...
                     {'size', size(obj.ChannelElementMap)});
@@ -188,13 +193,11 @@ classdef Single < adi.common.Attribute & ...
                             obj.setAttributeRAW(channel, attr, ...
                                 values(ch, dev), isOutput, obj.ChipIDHandle{dev});
                         elseif strcmpi(AttrClass, 'int32') || strcmpi(AttrClass, 'int64')
-                            tol = 0;
                             obj.setAttributeLongLong(channel, attr, ...
-                                values(ch, dev), isOutput, tol, obj.ChipIDHandle{dev});
+                                values(ch, dev), isOutput, Tol, obj.ChipIDHandle{dev});
                         elseif strcmpi(AttrClass, 'double')
-                            tol = sqrt(eps);
                             obj.setAttributeDouble(channel, attr, ...
-                                values(ch, dev), isOutput, tol, obj.ChipIDHandle{dev});
+                                values(ch, dev), isOutput, Tol, obj.ChipIDHandle{dev});
                         end
                     end
                 end
@@ -394,7 +397,7 @@ classdef Single < adi.common.Attribute & ...
         function result = get.BiasDACEnable(obj)
             result = true(size(obj.ChipID));
             if ~isempty(obj.ChipIDHandle)
-                result = getAllChipsDeviceAttributeRAW(obj,'bias_enable', true);
+                result = ~getAllChipsDeviceAttributeRAW(obj,'bias_enable', true);
             end
         end
         
@@ -860,8 +863,8 @@ classdef Single < adi.common.Attribute & ...
         end
         
         function set.PABiasOff(obj, values)
-            dac_codes = int32(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
-            setAllChipsChannelAttribute(obj, dac_codes, 'pa_bias_off', true, 'int32');
+            dac_codes = int64(values / obj.BIAS_CODE_TO_VOLTAGE_SCALE);
+            setAllChipsChannelAttribute(obj, dac_codes, 'pa_bias_off', true, 'int64');
         end
         
         function result = get.PABiasOn(obj)
@@ -940,7 +943,7 @@ classdef Single < adi.common.Attribute & ...
                 { 'real', 'nonnegative', 'finite', 'nonnan', 'nonempty','>=',0,'<=',357}, ...
                 '', 'RxPhase');
             %}
-            setAllChipsChannelAttribute(obj, values, 'phase', false, 'double');
+            setAllChipsChannelAttribute(obj, values, 'phase', false, 'double', 4);
         end
         
         function result = get.TxAttn(obj)
@@ -1006,7 +1009,7 @@ classdef Single < adi.common.Attribute & ...
                 { 'real', 'nonnegative', 'finite', 'nonnan', 'nonempty','>=',0,'<=',357}, ...
                 '', 'TxPhase');
             %}
-            setAllChipsChannelAttribute(obj, values, 'phase', true, 'double');
+            setAllChipsChannelAttribute(obj, values, 'phase', true, 'double', 4);
         end
         
         function result = get.RxBiasState(obj)

@@ -108,7 +108,6 @@ classdef Array < adi.ADAR1000.Single
     methods
         %% Constructor
         function obj = Array(varargin)
-            % Support name-value pair arguments when constructing object
             obj = obj@adi.ADAR1000.Single(varargin{:});
             if ~any(strcmp(varargin,'ArrayElementMap'))
                 obj.ArrayElementMap = [1 2 3 4; 5 6 7 8; 9 10 11 12; 13 14 15 16];

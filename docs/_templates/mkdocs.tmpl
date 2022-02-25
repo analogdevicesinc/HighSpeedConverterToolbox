@@ -32,6 +32,9 @@ nav:
  - HDL Targeting: targeting.md
  - Examples: examples.md
  - Support: support.md
+{%- if matlab %}
+ - Hardware Interface APIs: objects.md
+{%- endif %}
  - Reference API:
     - HDL Reference Designs:
 {%- for design in designs %}
@@ -46,6 +49,9 @@ nav:
 extra_css:
    - stylesheets/style.css
    - stylesheets/rd_style.css
+{%- if matlab %}
+   - stylesheets/ml_style.css
+{%- endif %}
 
 extra_javascript:
    - js/sys_objects.js

@@ -1,4 +1,8 @@
-
+---
+hide:
+  - navigation
+  - toc
+---
 
 <!-- <div class="sysobj_h1">adi.AD9081.Rx</div> -->
 

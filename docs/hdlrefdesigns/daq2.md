@@ -1,5 +1,6 @@
 
 
+
 # daq2 Reference Design Integration
 
 This page outlines the HDL reference design integration for the *daq2* reference design for the Analog Devices

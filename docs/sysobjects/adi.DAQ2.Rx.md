@@ -1,4 +1,8 @@
-
+---
+hide:
+  - navigation
+  - toc
+---
 
 <!-- <div class="sysobj_h1">adi.DAQ2.Rx</div> -->
 

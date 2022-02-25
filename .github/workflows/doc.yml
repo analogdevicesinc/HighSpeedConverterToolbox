@@ -18,6 +18,7 @@ jobs:
           pip install -r requirements_doc.txt
       - name: Check doc build
         run: |
+          make -C CI/gen_doc doc
           mkdocs build -v
 
       - name: Publish master doc

@@ -8,6 +8,15 @@
       <tocitem target="install/index.html">Install</tocitem>
       <tocitem target="targeting/index.html">Targeting</tocitem>
       <tocitem target="streaming/index.html">Streaming</tocitem>
+      <tocitem target="models/index.html">Behavioral Models
+          <tocitem target="models/ad9081/top_level.tex/index.html">AD9081: MxFE
+              <tocitem target="models/ad9081/adc.tex/index.html">ADC</tocitem>
+              <tocitem target="models/ad9081/dac.tex/index.html">DAC</tocitem>
+              <tocitem target="models/ad9081/ddc2.tex/index.html">DDC</tocitem>
+              <tocitem target="models/ad9081/duc.tex/index.html">DUC</tocitem>
+              <tocitem target="models/ad9081/pfilt.tex/index.html">PFILT</tocitem>
+         </tocitem>
+     </tocitem>
       <tocitem target="objects/index.html">Hardware Interface APIs
           <tocitem target="sysobjects/adi.AD9081.Rx/index.html">adi.AD9081.Rx</tocitem>
           <tocitem target="sysobjects/adi.AD9081.Tx/index.html">adi.AD9081.Tx</tocitem>

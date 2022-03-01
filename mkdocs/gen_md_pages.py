@@ -48,6 +48,8 @@ def gen_pages_and_toc(matlab, devices, designs):
 
     pages = []
     for template_filename in template_filenames:
+        if matlab and template_filename == "models.md":
+            continue
         if template_filename in ["header.tmpl", "toc.tmpl"]:
             continue
         gen_page(template_filename, matlab)

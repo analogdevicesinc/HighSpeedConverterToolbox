@@ -4,5 +4,4 @@ function hRD = plugin_rd_tx
 %   Copyright 2014-2015 The MathWorks, Inc.
 
 % Call the common reference design definition function
-hRD = AnalogDevices.daq2.common.plugin_rd('ZCU102', 'Tx');
-AnalogDevices.daq2.zcu102.add_io(hRD, 'Tx');
+hRD = AnalogDevices.plugin_rd('daq2', 'ZCU102', 'Tx');

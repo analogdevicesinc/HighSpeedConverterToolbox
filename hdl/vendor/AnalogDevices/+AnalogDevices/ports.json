@@ -1,0 +1,88 @@
+{
+    "daq2": {
+        "chip": "DAQ2",
+        "complex": "true",
+        "fpga": [
+            "zcu102"
+        ],
+        "supported_rd": [
+            "rx",
+            "tx",
+            "rx & tx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9680_cpack/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9680_core/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9680_cpack/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9680_cpack/adc_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9680_core/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9680_core/adc_data_1",
+                        "type": "data"
+                    }
+                ],
+                "tx": [
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9144_upack/dac_valid_out_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9144_core/dac_ddata_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9144_core/dac_ddata_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9144_upack/dac_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9144_upack/dac_data_1",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    }
+}

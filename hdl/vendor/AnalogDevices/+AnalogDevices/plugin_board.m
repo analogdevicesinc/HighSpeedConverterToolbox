@@ -36,23 +36,13 @@ switch lower(project)
 %                 hB.FPGASpeed    = '';
 %                 hB.FPGAFamily   = 'Zynq';
 %         end
-    case {'adrv9009','fmcomms8'}
+    case {'daq2'}
         switch(upper(board))
-        	case 'ZC706'
-                hB.FPGADevice   = sprintf('xc7%s', 'z045');
-                hB.FPGAPackage  = 'ffg900';
-                hB.FPGASpeed    = '-2';
-                hB.FPGAFamily   = 'Zynq';
             case 'ZCU102'
                 hB.FPGADevice   = sprintf('xc%s', 'zu9eg-ffvb1156-2-e');
                 hB.FPGAPackage  = '';
                 hB.FPGASpeed    = '';
                 hB.FPGAFamily   = 'Zynq UltraScale+';
-            otherwise
-                hB.FPGADevice   = sprintf('xc%s', 'zu9eg-ffvb1156-2-e');
-                hB.FPGAPackage  = '';
-                hB.FPGASpeed    = '';
-                hB.FPGAFamily   = 'Zynq';
         end
 %     case 'adrv9361-z7035'
 %         hB.FPGADevice   = sprintf('xc7%s', 'z035i');

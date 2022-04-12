@@ -17,12 +17,7 @@ with open(ports_json_file) as json_file:
                                 tmp_list = tmp_dict['name'].split("_")
                                 last_ele = tmp_list[-1]
                                 if (len(last_ele) == 1):
-                                    res = divmod(int(last_ele), 2)
-                                    if res[1]:
-                                        i_or_q = "Q"
-                                    else:
-                                        i_or_q = "I"
-                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {i_or_q}{res[0]}"
+                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {last_ele} IN"
                                 elif (len(last_ele) == 2):
                                     tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {last_ele.upper()}"                                
                         elif (tmp_dict['input'] == "false"):
@@ -45,12 +40,7 @@ with open(ports_json_file) as json_file:
                                 tmp_list = tmp_dict['name'].split("_")
                                 last_ele = tmp_list[-1]
                                 if (len(last_ele) == 1):
-                                    res = divmod(int(last_ele), 2)
-                                    if res[1]:
-                                        i_or_q = "Q"
-                                    else:
-                                        i_or_q = "I"
-                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} DAC Data {i_or_q}{res[0]}"
+                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} DAC Data {last_ele} OUT"
                                 elif (len(last_ele) == 2):
                                     tmp_dict[tmp_key] = f"{ports[key0]['chip']} DAC Data {last_ele.upper()}"
                         elif (tmp_dict['input'] == "true"):

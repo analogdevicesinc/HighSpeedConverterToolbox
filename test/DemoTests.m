@@ -31,6 +31,8 @@ classdef DemoTests < matlab.uitest.TestCase
                     vivado = '2018.2';
                 case '(R2021a)'
                     vivado = '2018.2';
+                case '(R2021b)'
+                    vivado = '2019.1';
             end
             if ispc
                 hdlsetuptoolpath('ToolName', 'Xilinx Vivado', ...

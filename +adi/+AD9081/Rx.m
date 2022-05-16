@@ -46,7 +46,7 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         %   'pn15' 'pn31' 'ramp'
         TestMode = 'off';
     end
-    
+
     properties (Nontunable, Logical)
         %EnablePFIRs Enable PFIRs
         %   Enable use of PFIR/PFILT filters
@@ -58,6 +58,20 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         %   Path(s) to FPIR/PFILT filter file(s). Input can be a string or
         %   cell array of strings. Files are loading in order
         PFIRFilenames = '';
+    end
+    
+    properties
+        %MainFfhGpioModeEnable Main FFH GPIO Mode Enable
+        %   Enable FFH control through GPIO.
+        MainFfhGpioModeEnable = [true,true,true,true];
+        %MainFfhMode Main FFH Mode
+        %   FFH Mode. Options:
+        %   0 - instantaneous_update
+        %   1 - synchronous_update_by_transfer_bit
+        %   2 - synchronous_update_by_gpio
+        MainFfhMode = [0,0,0,0];
+        %MainNCOFfhIndex Main NCO FFH Index
+        MainNCOFfhIndex = [0,0,0,0];
     end
     
     properties (Hidden, Nontunable, Access = protected)
@@ -108,6 +122,9 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             obj.MainNCOFrequencies = zeros(1,obj.num_coarse_attr_channels);
             obj.ChannelNCOPhases = zeros(1,obj.num_fine_attr_channels);
             obj.MainNCOPhases = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainFfhGpioModeEnable = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhMode = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndex = zeros(1,obj.num_coarse_attr_channels);
         end
         
         function value = get.SamplingRate(obj)
@@ -160,12 +177,45 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
                 '', 'EnablePFIRs');
             obj.EnablePFIRs = value;
         end
+        %%
         % Check PFIRFilenames
         function set.PFIRFilenames(obj, value)
             obj.PFIRFilenames = value;
             if obj.EnablePFIRs && obj.ConnectedToDevice
                 writeFilterFile(obj);
             end
+        end
+        %%
+        % Check MainFfhGpioModeEnable
+        function set.MainFfhGpioModeEnable(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnable',...
+                'main_ffh_gpio_mode_en', obj.iioDev);
+            obj.MainFfhGpioModeEnable = value;
+        end
+        %%
+        % Check MainFfhGpioModeEnable
+        function set.MainFfhMode(obj, value)
+            mapped_value = cell(size(value));
+            for ii = 1:size(value, 2)
+                switch(value(1, ii))
+                    case 0
+                        mapped_value{1,ii} = 'instantaneous_update';
+                    case 1
+                        mapped_value{1,ii} = 'synchronous_update_by_transfer_bit';
+                    case 2
+                        mapped_value{1,ii} = 'synchronous_update_by_gpio';
+                end
+            end
+            obj.CheckAndUpdateHWRaw(mapped_value,'MainFfhMode',...
+                'main_ffh_mode', obj.iioDev);
+            obj.MainFfhMode = value;
+        end
+        %%
+        % Check MainNCOFfhIndex
+        function set.MainNCOFfhIndex(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndex',...
+                'main_nco_ffh_index', obj.iioDev);
+            obj.MainNCOFfhIndex = value;
         end
     end 
     
@@ -220,7 +270,27 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             if obj.EnablePFIRs
                 obj.writeFilterFile();
             end
-
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnable,...
+                'MainFfhGpioModeEnable','main_ffh_gpio_mode_en', ...
+                obj.iioDev);
+            %%
+            mapped_value = cell(size(obj.MainFfhMode));
+            for ii = 1:size(obj.MainFfhMode, 2)
+                switch(obj.MainFfhMode(1, ii))
+                    case 0
+                        mapped_value{1,ii} = 'instantaneous_update';
+                    case 1
+                        mapped_value{1,ii} = 'synchronous_update_by_transfer_bit';
+                    case 2
+                        mapped_value{1,ii} = 'synchronous_update_by_gpio';
+                end
+            end
+            obj.CheckAndUpdateHWRaw(mapped_value,'MainFfhMode',...
+                'main_ffh_mode', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndex,'MainNCOFfhIndex',...
+                'main_nco_ffh_index', obj.iioDev);
         end
 
     end

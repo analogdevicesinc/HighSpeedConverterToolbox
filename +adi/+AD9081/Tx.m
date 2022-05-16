@@ -40,6 +40,12 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
         NCOEnables = [false,false,false,false];
     end
        
+    properties
+        %MainFfhGpioModeEnable Main FFH GPIO Mode Enable
+        %   Enable FFH control through GPIO.
+        MainFfhGpioModeEnable = [true,true,true,true];
+    end
+
     properties (Hidden, Nontunable, Access = protected)
         isOutput = true;
     end
@@ -91,6 +97,7 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             obj.MainNCOPhases = zeros(1,obj.num_coarse_attr_channels);
             obj.ChannelNCOGainScales = zeros(1,obj.num_fine_attr_channels);
             obj.NCOEnables = zeros(1,obj.num_fine_attr_channels) > 0;
+            obj.MainFfhGpioModeEnable = false(1,obj.num_coarse_attr_channels);
         end
         % Check ChannelNCOFrequencies
         function set.ChannelNCOFrequencies(obj, value)
@@ -132,6 +139,13 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             obj.CheckAndUpdateHWBool(value,'NCOEnables',...
                 'en', obj.phyDev, true);
             obj.NCOEnables = value;
+        end
+        %%
+        % Check MainFfhGpioModeEnable
+        function set.MainFfhGpioModeEnable(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnable',...
+                'main_ffh_gpio_mode_en', obj.phyDev, true);
+            obj.MainFfhGpioModeEnable = value;
         end
     end
     
@@ -180,6 +194,10 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             if strcmp(obj.DataSource,'DDS')
                 obj.DDSUpdate();
             end
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnable,...
+                'MainFfhGpioModeEnable','main_ffh_gpio_mode_en', ...
+                obj.phyDev, true);
         end
 
     end

@@ -63,15 +63,20 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
     properties
         %MainFfhGpioModeEnable Main FFH GPIO Mode Enable
         %   Enable FFH control through GPIO.
-        MainFfhGpioModeEnable = [true,true,true,true];
+        MainFfhGpioModeEnable = [false,false,false,false];
         %MainFfhMode Main FFH Mode
         %   FFH Mode. Options:
-        %   0 - instantaneous_update
-        %   1 - synchronous_update_by_transfer_bit
-        %   2 - synchronous_update_by_gpio
-        MainFfhMode = [0,0,0,0];
+        %   instantaneous_update
+        %   synchronous_update_by_transfer_bit
+        %   synchronous_update_by_gpio
+        MainFfhMode = {'instantaneous_update', 'instantaneous_update', ...
+            'instantaneous_update', 'instantaneous_update'};
+        %MainFfhTrigHopEnable Main FFH Trigger Hop Enable
+        MainFfhTrigHopEnable = [false,false,false,false];
         %MainNCOFfhIndex Main NCO FFH Index
         MainNCOFfhIndex = [0,0,0,0];
+        %MainNCOFfhSelect Main NCO FFH Select
+        MainNCOFfhSelect = [0,0,0,0];
     end
     
     properties (Hidden, Nontunable, Access = protected)
@@ -123,8 +128,11 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             obj.ChannelNCOPhases = zeros(1,obj.num_fine_attr_channels);
             obj.MainNCOPhases = zeros(1,obj.num_coarse_attr_channels);
             obj.MainFfhGpioModeEnable = false(1,obj.num_coarse_attr_channels);
-            obj.MainFfhMode = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainFfhMode = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhMode(:) = {'instantaneous_update'};
+            obj.MainFfhTrigHopEnable = false(1,obj.num_coarse_attr_channels);
             obj.MainNCOFfhIndex = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelect = zeros(1,obj.num_coarse_attr_channels);
         end
         
         function value = get.SamplingRate(obj)
@@ -193,22 +201,18 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             obj.MainFfhGpioModeEnable = value;
         end
         %%
-        % Check MainFfhGpioModeEnable
+        % Check MainFfhMode
         function set.MainFfhMode(obj, value)
-            mapped_value = cell(size(value));
-            for ii = 1:size(value, 2)
-                switch(value(1, ii))
-                    case 0
-                        mapped_value{1,ii} = 'instantaneous_update';
-                    case 1
-                        mapped_value{1,ii} = 'synchronous_update_by_transfer_bit';
-                    case 2
-                        mapped_value{1,ii} = 'synchronous_update_by_gpio';
-                end
-            end
-            obj.CheckAndUpdateHWRaw(mapped_value,'MainFfhMode',...
+            obj.CheckAndUpdateHWRaw(value,'MainFfhMode',...
                 'main_ffh_mode', obj.iioDev);
             obj.MainFfhMode = value;
+        end
+        %%
+        % Check MainFfhTrigHopEnable
+        function set.MainFfhTrigHopEnable(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhTrigHopEnable',...
+                'main_ffh_trip_hop_en', obj.iioDev);
+            obj.MainFfhTrigHopEnable = value;
         end
         %%
         % Check MainNCOFfhIndex
@@ -216,6 +220,13 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             obj.CheckAndUpdateHW(value,'MainNCOFfhIndex',...
                 'main_nco_ffh_index', obj.iioDev);
             obj.MainNCOFfhIndex = value;
+        end
+        %%
+        % Check MainNCOFfhSelect
+        function set.MainNCOFfhSelect(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelect',...
+                'main_nco_ffh_select', obj.iioDev);
+            obj.MainNCOFfhSelect = value;
         end
     end 
     
@@ -275,22 +286,18 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
                 'MainFfhGpioModeEnable','main_ffh_gpio_mode_en', ...
                 obj.iioDev);
             %%
-            mapped_value = cell(size(obj.MainFfhMode));
-            for ii = 1:size(obj.MainFfhMode, 2)
-                switch(obj.MainFfhMode(1, ii))
-                    case 0
-                        mapped_value{1,ii} = 'instantaneous_update';
-                    case 1
-                        mapped_value{1,ii} = 'synchronous_update_by_transfer_bit';
-                    case 2
-                        mapped_value{1,ii} = 'synchronous_update_by_gpio';
-                end
-            end
-            obj.CheckAndUpdateHWRaw(mapped_value,'MainFfhMode',...
+            obj.CheckAndUpdateHWRaw(obj.MainFfhMode,'MainFfhMode',...
                 'main_ffh_mode', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnable,...
+                'MainFfhTrigHopEnable','main_ffh_trig_hop_en', ...
+                obj.iioDev);
             %%
             obj.CheckAndUpdateHW(obj.MainNCOFfhIndex,'MainNCOFfhIndex',...
                 'main_nco_ffh_index', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelect,'MainNCOFfhSelect',...
+                'main_nco_ffh_select', obj.iioDev);
         end
 
     end

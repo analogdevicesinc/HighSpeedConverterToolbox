@@ -43,7 +43,20 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
     properties
         %MainFfhGpioModeEnable Main FFH GPIO Mode Enable
         %   Enable FFH control through GPIO.
-        MainFfhGpioModeEnable = [true,true,true,true];
+        MainFfhGpioModeEnable = [false,false,false,false];
+        %MainFfhMode Main FFH Mode
+        %   FFH Mode. Options:
+        %   phase_continuous
+        %   phase_incontinuous
+        %   phase_coherent
+        MainFfhMode = {'phase_continuous', 'phase_continuous', ...
+            'phase_continuous', 'phase_continuous'};
+        %MainNCOFfhFrequency Main NCO FFH Frequency
+        MainNCOFfhFrequency = [0,0,0,0];
+        %MainNCOFfhIndex Main NCO FFH Index
+        MainNCOFfhIndex = [0,0,0,0];
+        %MainNCOFfhSelect Main NCO FFH Select
+        MainNCOFfhSelect = [0,0,0,0];
     end
 
     properties (Hidden, Nontunable, Access = protected)
@@ -98,6 +111,11 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             obj.ChannelNCOGainScales = zeros(1,obj.num_fine_attr_channels);
             obj.NCOEnables = zeros(1,obj.num_fine_attr_channels) > 0;
             obj.MainFfhGpioModeEnable = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhMode = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhMode(:) = {'phase_continuous'};
+            obj.MainNCOFfhFrequency = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndex = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelect = zeros(1,obj.num_coarse_attr_channels);
         end
         % Check ChannelNCOFrequencies
         function set.ChannelNCOFrequencies(obj, value)
@@ -146,6 +164,34 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnable',...
                 'main_ffh_gpio_mode_en', obj.phyDev, true);
             obj.MainFfhGpioModeEnable = value;
+        end
+        %%
+        % Check MainFfhMode
+        function set.MainFfhMode(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'MainFfhMode',...
+                'main_ffh_mode', obj.iioDev);
+            obj.MainFfhMode = value;
+        end
+        %%
+        % Check MainNCOFfhFrequency
+        function set.MainNCOFfhFrequency(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhFrequency',...
+                'main_nco_ffh_frequency', obj.iioDev);
+            obj.MainNCOFfhFrequency = value;
+        end
+        %%
+        % Check MainNCOFfhIndex
+        function set.MainNCOFfhIndex(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndex',...
+                'main_nco_ffh_index', obj.iioDev);
+            obj.MainNCOFfhIndex = value;
+        end
+        %%
+        % Check MainNCOFfhSelect
+        function set.MainNCOFfhSelect(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelect',...
+                'main_nco_ffh_select', obj.iioDev);
+            obj.MainNCOFfhSelect = value;
         end
     end
     
@@ -198,6 +244,19 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnable,...
                 'MainFfhGpioModeEnable','main_ffh_gpio_mode_en', ...
                 obj.phyDev, true);
+            %%
+            obj.CheckAndUpdateHWRaw(obj.MainFfhMode,'MainFfhMode',...
+                'main_ffh_mode', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhFrequency,...
+                'MainNCOFfhFrequency','main_nco_ffh_frequency', ...
+                obj.iioDev);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndex,'MainNCOFfhIndex',...
+                'main_nco_ffh_index', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelect,'MainNCOFfhSelect',...
+                'main_nco_ffh_select', obj.iioDev);
         end
 
     end

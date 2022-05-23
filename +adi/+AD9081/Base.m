@@ -81,7 +81,7 @@ classdef (Abstract) Base < ...
             if nargin < 6
                 output = false;
             end
-            if contains(attr,'channel_')
+            if contains(attr,'channel_') || contains(attr,'nyquist_')
                 N = obj.num_fine_attr_channels;
                 stride = 1;
             elseif contains(attr,'main_')
@@ -98,7 +98,7 @@ classdef (Abstract) Base < ...
             if obj.ConnectedToDevice
                 for k=1:N
                     id = sprintf('voltage%d_i',(k-1)*stride);
-                    obj.setAttributeRaw(id,attr,value{k},output,phy);
+                    obj.setAttributeRAW(id,attr,value{k},output,phy);
                 end
             end
         end

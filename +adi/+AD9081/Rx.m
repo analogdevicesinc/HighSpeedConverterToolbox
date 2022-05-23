@@ -1,4 +1,5 @@
-classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
+classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute & ...
+        adi.internal.MuxRxFFH & adi.internal.MuxRxNCO
     % adi.AD9081.Rx Receive data from the AD9081 high speed ADC
     %   The adi.AD9081.Rx System object is a signal source that can receive
     %   complex data from the AD9081.
@@ -47,6 +48,10 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         TestMode = 'off';
     end
 
+    properties (SetAccess = private, GetAccess = public)
+       ChannelNCOFrequencyAvailable
+    end
+
     properties (Nontunable, Logical)
         %EnablePFIRs Enable PFIRs
         %   Enable use of PFIR/PFILT filters
@@ -59,24 +64,49 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         %   cell array of strings. Files are loading in order
         PFIRFilenames = '';
     end
+
+    properties
+        %NyquistZone Nyquist Zone
+        %   Options:
+        %   odd
+        %   even
+        NyquistZone
+    end
     
     properties
-        %MainFfhGpioModeEnable Main FFH GPIO Mode Enable
+        %MainFfhGpioModeEnableIn Main FFH GPIO Mode Enable In
         %   Enable FFH control through GPIO.
-        MainFfhGpioModeEnable = [false,false,false,false];
-        %MainFfhMode Main FFH Mode
-        %   FFH Mode. Options:
+        MainFfhGpioModeEnableIn = [false,false,false,false];
+        %MainFfhModeIn Main FFH Mode In
+        %   Options:
         %   instantaneous_update
         %   synchronous_update_by_transfer_bit
         %   synchronous_update_by_gpio
-        MainFfhMode = {'instantaneous_update', 'instantaneous_update', ...
+        MainFfhModeIn = {'instantaneous_update', 'instantaneous_update', ...
             'instantaneous_update', 'instantaneous_update'};
-        %MainFfhTrigHopEnable Main FFH Trigger Hop Enable
-        MainFfhTrigHopEnable = [false,false,false,false];
-        %MainNCOFfhIndex Main NCO FFH Index
-        MainNCOFfhIndex = [0,0,0,0];
-        %MainNCOFfhSelect Main NCO FFH Select
-        MainNCOFfhSelect = [0,0,0,0];
+        %MainFfhTrigHopEnableIn Main FFH Trigger Hop Enable In
+        MainFfhTrigHopEnableIn = [false,false,false,false];
+        %MainNCOFfhIndexIn Main NCO FFH Index In
+        MainNCOFfhIndexIn = [0,0,0,0];
+        %MainNCOFfhSelectIn Main NCO FFH Select In
+        MainNCOFfhSelectIn = [0,0,0,0];
+
+        %MainFfhGpioModeEnableOut Main FFH GPIO Mode Enable Out
+        %   Enable FFH control through GPIO.
+        MainFfhGpioModeEnableOut = [false,false,false,false];
+        %MainFfhModeOut Main FFH Mode Out
+        %   FFH Mode. Options:
+        %   phase_continuous
+        %   phase_incontinuous
+        %   phase_coherent
+        MainFfhModeOut = {'phase_continuous', 'phase_continuous', ...
+            'phase_continuous', 'phase_continuous'};
+        %MainNCOFfhFrequencyOut Main NCO FFH Frequency Out
+        MainNCOFfhFrequencyOut = [0,0,0,0];
+        %MainNCOFfhIndexOut Main NCO FFH Index Out
+        MainNCOFfhIndexOut = [0,0,0,0];
+        %MainNCOFfhSelectOut Main NCO FFH Select Out
+        MainNCOFfhSelectOut = [0,0,0,0];
     end
     
     properties (Hidden, Nontunable, Access = protected)
@@ -127,12 +157,23 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             obj.MainNCOFrequencies = zeros(1,obj.num_coarse_attr_channels);
             obj.ChannelNCOPhases = zeros(1,obj.num_fine_attr_channels);
             obj.MainNCOPhases = zeros(1,obj.num_coarse_attr_channels);
-            obj.MainFfhGpioModeEnable = false(1,obj.num_coarse_attr_channels);
-            obj.MainFfhMode = cell(1,obj.num_coarse_attr_channels);
-            obj.MainFfhMode(:) = {'instantaneous_update'};
-            obj.MainFfhTrigHopEnable = false(1,obj.num_coarse_attr_channels);
-            obj.MainNCOFfhIndex = zeros(1,obj.num_coarse_attr_channels);
-            obj.MainNCOFfhSelect = zeros(1,obj.num_coarse_attr_channels);
+
+            obj.NyquistZone = cell(1,obj.num_coarse_attr_channels);
+            obj.NyquistZone(:) = {'odd'};
+            
+            obj.MainFfhGpioModeEnableIn = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeIn = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeIn(:) = {'instantaneous_update'};
+            obj.MainFfhTrigHopEnableIn = false(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexIn = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectIn = zeros(1,obj.num_coarse_attr_channels);
+
+            obj.MainFfhGpioModeEnableOut = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeOut = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeOut(:) = {'phase_continuous'};
+            obj.MainNCOFfhFrequencyOut = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexOut = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectOut = zeros(1,obj.num_coarse_attr_channels);
         end
         
         function value = get.SamplingRate(obj)
@@ -143,6 +184,15 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             end
         end
         
+        % Get ChannelNCOFrequencyAvailable
+        function value = get.ChannelNCOFrequencyAvailable(obj)
+            if obj.ConnectedToDevice
+                value= obj.getAttributeRAW('voltage0_i','channel_nco_frequency_available',false);
+            else
+                value = NaN;
+            end
+        end
+
         % Check ChannelNCOFrequencies
         function set.ChannelNCOFrequencies(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOFrequencies',...
@@ -194,39 +244,81 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             end
         end
         %%
-        % Check MainFfhGpioModeEnable
-        function set.MainFfhGpioModeEnable(obj, value)
-            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnable',...
+        % Check NyquistZone
+        function set.NyquistZone(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'NyquistZone',...
+                'nyquist_zone', obj.iioDev);
+            obj.NyquistZone = value;
+        end
+        %%
+        % Check MainFfhGpioModeEnableIn
+        function set.MainFfhGpioModeEnableIn(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableIn',...
                 'main_ffh_gpio_mode_en', obj.iioDev);
-            obj.MainFfhGpioModeEnable = value;
+            obj.MainFfhGpioModeEnableIn = value;
         end
         %%
-        % Check MainFfhMode
-        function set.MainFfhMode(obj, value)
-            obj.CheckAndUpdateHWRaw(value,'MainFfhMode',...
+        % Check MainFfhModeIn
+        function set.MainFfhModeIn(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'MainFfhModeIn',...
                 'main_ffh_mode', obj.iioDev);
-            obj.MainFfhMode = value;
+            obj.MainFfhModeIn = value;
         end
         %%
-        % Check MainFfhTrigHopEnable
-        function set.MainFfhTrigHopEnable(obj, value)
-            obj.CheckAndUpdateHWBool(value,'MainFfhTrigHopEnable',...
-                'main_ffh_trip_hop_en', obj.iioDev);
-            obj.MainFfhTrigHopEnable = value;
+        % Check MainFfhTrigHopEnableIn
+        function set.MainFfhTrigHopEnableIn(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhTrigHopEnableIn',...
+                'main_ffh_trig_hop_en', obj.iioDev);
+            obj.MainFfhTrigHopEnableIn = value;
         end
         %%
-        % Check MainNCOFfhIndex
-        function set.MainNCOFfhIndex(obj, value)
-            obj.CheckAndUpdateHW(value,'MainNCOFfhIndex',...
+        % Check MainNCOFfhIndexIn
+        function set.MainNCOFfhIndexIn(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexIn',...
                 'main_nco_ffh_index', obj.iioDev);
-            obj.MainNCOFfhIndex = value;
+            obj.MainNCOFfhIndexIn = value;
         end
         %%
-        % Check MainNCOFfhSelect
-        function set.MainNCOFfhSelect(obj, value)
-            obj.CheckAndUpdateHW(value,'MainNCOFfhSelect',...
+        % Check MainNCOFfhSelectIn
+        function set.MainNCOFfhSelectIn(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectIn',...
                 'main_nco_ffh_select', obj.iioDev);
-            obj.MainNCOFfhSelect = value;
+            obj.MainNCOFfhSelectIn = value;
+        end
+        %%
+        % Check MainFfhGpioModeEnableOut
+        function set.MainFfhGpioModeEnableOut(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableOut',...
+                'main_ffh_gpio_mode_en', obj.iioDev, true);
+            obj.MainFfhGpioModeEnableOut = value;
+        end
+        %%
+        % Check MainFfhModeOut
+        function set.MainFfhModeOut(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'MainFfhModeOut',...
+                'main_ffh_mode', obj.iioDev, true);
+            obj.MainFfhModeOut = value;
+        end
+        %%
+        % Check MainNCOFfhFrequencyOut
+        function set.MainNCOFfhFrequencyOut(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhFrequencyOut',...
+                'main_nco_ffh_frequency', obj.iioDev, true);
+            obj.MainNCOFfhFrequencyOut = value;
+        end
+        %%
+        % Check MainNCOFfhIndexOut
+        function set.MainNCOFfhIndexOut(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexOut',...
+                'main_nco_ffh_index', obj.iioDev, true);
+            obj.MainNCOFfhIndexOut = value;
+        end
+        %%
+        % Check MainNCOFfhSelectOut
+        function set.MainNCOFfhSelectOut(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectOut',...
+                'main_nco_ffh_select', obj.iioDev, true);
+            obj.MainNCOFfhSelectOut = value;
         end
     end 
     
@@ -282,22 +374,48 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
                 obj.writeFilterFile();
             end
             %%
-            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnable,...
-                'MainFfhGpioModeEnable','main_ffh_gpio_mode_en', ...
+            obj.CheckAndUpdateHWRaw(obj.NyquistZone,'NyquistZone',...
+                'nyquist_zone', obj.iioDev);            
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableIn,...
+                'MainFfhGpioModeEnableIn','main_ffh_gpio_mode_en', ...
                 obj.iioDev);
             %%
-            obj.CheckAndUpdateHWRaw(obj.MainFfhMode,'MainFfhMode',...
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeIn,'MainFfhModeIn',...
                 'main_ffh_mode', obj.iioDev);
             %%
-            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnable,...
-                'MainFfhTrigHopEnable','main_ffh_trig_hop_en', ...
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableIn,...
+                'MainFfhTrigHopEnableIn','main_ffh_trig_hop_en', ...
                 obj.iioDev);
             %%
-            obj.CheckAndUpdateHW(obj.MainNCOFfhIndex,'MainNCOFfhIndex',...
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexIn,'MainNCOFfhIndexIn',...
                 'main_nco_ffh_index', obj.iioDev);
             %%
-            obj.CheckAndUpdateHW(obj.MainNCOFfhSelect,'MainNCOFfhSelect',...
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectIn,'MainNCOFfhSelectIn',...
                 'main_nco_ffh_select', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableOut,...
+                'MainFfhGpioModeEnableOut','main_ffh_gpio_mode_en', ...
+                obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeOut,'MainFfhModeOut',...
+                'main_ffh_mode', obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhFrequencyOut,...
+                'MainNCOFfhFrequencyOut','main_nco_ffh_frequency', ...
+                obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexOut,'MainNCOFfhIndexOut',...
+                'main_nco_ffh_index', obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectOut,'MainNCOFfhSelectOut',...
+                'main_nco_ffh_select', obj.iioDev, true);
+
+            % MuxRxFFH Control
+            setupInit@adi.internal.MuxRxFFH(obj);
+
+            % MuxRxNCO Control
+            setupInit@adi.internal.MuxRxNCO(obj);
         end
 
     end

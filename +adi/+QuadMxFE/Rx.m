@@ -1,4 +1,5 @@
-classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
+classdef Rx < adi.QuadMxFE.Base & adi.common.Rx & ...
+        adi.internal.MuxRxFFH & adi.internal.MuxRxNCO
     % adi.QuadMxFE.Rx Receive data from the QuadMxFE development board
     %   The adi.QuadMxFE.Rx System object is a signal source that can receive
     %   complex data from the QuadMxFE.
@@ -161,6 +162,187 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
     end
     
     properties
+        %NyquistZoneChipA Nyquist Zone Chip A
+        %   Options:
+        %   odd
+        %   even
+        NyquistZoneChipA
+        %NyquistZoneChipB Nyquist Zone Chip B
+        %   Options:
+        %   odd
+        %   even
+        NyquistZoneChipB
+        %NyquistZoneChipC Nyquist Zone Chip C
+        %   Options:
+        %   odd
+        %   even
+        NyquistZoneChipC
+        %NyquistZoneChipD Nyquist Zone Chip D
+        %   Options:
+        %   odd
+        %   even
+        NyquistZoneChipD
+    end
+    
+    properties
+        %MainFfhGpioModeEnableInChipA Main FFH GPIO Mode Enable In Chip A
+        %   Enable FFH control through GPIO for Chip A.
+        MainFfhGpioModeEnableInChipA = [false,false,false,false];
+        %MainFfhGpioModeEnableInChipB Main FFH GPIO Mode Enable In Chip B
+        %   Enable FFH control through GPIO for Chip B.
+        MainFfhGpioModeEnableInChipB = [false,false,false,false];
+        %MainFfhGpioModeEnableInChipC Main FFH GPIO Mode Enable In Chip C
+        %   Enable FFH control through GPIO for Chip C.
+        MainFfhGpioModeEnableInChipC = [false,false,false,false];
+        %MainFfhGpioModeEnableInChipD Main FFH GPIO Mode Enable In Chip D
+        %   Enable FFH control through GPIO for Chip D.
+        MainFfhGpioModeEnableInChipD = [false,false,false,false];
+    end
+
+    properties
+        %MainFfhModeInChipA Main FFH Mode In Chip A
+        %   Options:
+        %   instantaneous_update
+        %   synchronous_update_by_transfer_bit
+        %   synchronous_update_by_gpio
+        MainFfhModeInChipA = {'instantaneous_update', 'instantaneous_update', ...
+            'instantaneous_update', 'instantaneous_update'};
+        %MainFfhModeInChipB Main FFH Mode In Chip B
+        %   Options:
+        %   instantaneous_update
+        %   synchronous_update_by_transfer_bit
+        %   synchronous_update_by_gpio
+        MainFfhModeInChipB = {'instantaneous_update', 'instantaneous_update', ...
+            'instantaneous_update', 'instantaneous_update'};
+        %MainFfhModeInChipC Main FFH Mode In Chip C
+        %   Options:
+        %   instantaneous_update
+        %   synchronous_update_by_transfer_bit
+        %   synchronous_update_by_gpio
+        MainFfhModeInChipC = {'instantaneous_update', 'instantaneous_update', ...
+            'instantaneous_update', 'instantaneous_update'};
+        %MainFfhModeInChipD Main FFH Mode In Chip D
+        %   Options:
+        %   instantaneous_update
+        %   synchronous_update_by_transfer_bit
+        %   synchronous_update_by_gpio
+        MainFfhModeInChipD = {'instantaneous_update', 'instantaneous_update', ...
+            'instantaneous_update', 'instantaneous_update'};
+    end
+
+    properties
+        %MainFfhTrigHopEnableInChipA Main NCO FFH Frequency In Chip A
+        MainFfhTrigHopEnableInChipA = [0,0,0,0];
+        %MainFfhTrigHopEnableInChipB Main NCO FFH Frequency In Chip B
+        MainFfhTrigHopEnableInChipB = [0,0,0,0];
+        %MainFfhTrigHopEnableInChipC Main NCO FFH Frequency In Chip C
+        MainFfhTrigHopEnableInChipC = [0,0,0,0];
+        %MainFfhTrigHopEnableInChipD Main NCO FFH Frequency In Chip D
+        MainFfhTrigHopEnableInChipD = [0,0,0,0];
+    end
+
+    properties
+        %MainNCOFfhIndexInChipA Main NCO FFH Index In Chip A
+        MainNCOFfhIndexInChipA = [0,0,0,0];
+        %MainNCOFfhIndexInChipB Main NCO FFH Index In Chip B
+        MainNCOFfhIndexInChipB = [0,0,0,0];
+        %MainNCOFfhIndexInChipC Main NCO FFH Index In Chip C
+        MainNCOFfhIndexInChipC = [0,0,0,0];
+        %MainNCOFfhIndexInChipD Main NCO FFH Index In Chip D
+        MainNCOFfhIndexInChipD = [0,0,0,0];
+    end
+
+    properties
+        %MainNCOFfhSelectInChipA Main NCO FFH Select In Chip A
+        MainNCOFfhSelectInChipA = [0,0,0,0];
+        %MainNCOFfhSelectInChipB Main NCO FFH Select In Chip B
+        MainNCOFfhSelectInChipB = [0,0,0,0];
+        %MainNCOFfhSelectInChipC Main NCO FFH Select In Chip C
+        MainNCOFfhSelectInChipC = [0,0,0,0];
+        %MainNCOFfhSelectInChipD Main NCO FFH Select In Chip D
+        MainNCOFfhSelectInChipD = [0,0,0,0];
+    end
+
+    properties
+        %MainFfhGpioModeEnableOutChipA Main FFH GPIO Mode Enable Out Chip A
+        %   Enable FFH control through GPIO for Chip A.
+        MainFfhGpioModeEnableOutChipA = [false,false,false,false];
+        %MainFfhGpioModeEnableOutChipB Main FFH GPIO Mode Enable Out Chip B
+        %   Enable FFH control through GPIO for Chip B.
+        MainFfhGpioModeEnableOutChipB = [false,false,false,false];
+        %MainFfhGpioModeEnableOutChipC Main FFH GPIO Mode Enable Out Chip C
+        %   Enable FFH control through GPIO for Chip C.
+        MainFfhGpioModeEnableOutChipC = [false,false,false,false];
+        %MainFfhGpioModeEnableOutChipD Main FFH GPIO Mode Enable Out Chip D
+        %   Enable FFH control through GPIO for Chip D.
+        MainFfhGpioModeEnableOutChipD = [false,false,false,false];
+    end
+
+    properties
+        %MainFfhModeOutChipA Main FFH Mode Out Chip A
+        %   Options:
+        %   phase_continuous
+        %   phase_incontinuous
+        %   phase_coherent
+        MainFfhModeOutChipA = {'phase_continuous', 'phase_continuous', ...
+            'phase_continuous', 'phase_continuous'};
+        %MainFfhModeOutChipB Main FFH Mode Out Chip B
+        %   Options:
+        %   phase_continuous
+        %   phase_incontinuous
+        %   phase_coherent
+        MainFfhModeOutChipB = {'phase_continuous', 'phase_continuous', ...
+            'phase_continuous', 'phase_continuous'};
+        %MainFfhModeOutChipC Main FFH Mode Out Chip C
+        %   Options:
+        %   phase_continuous
+        %   phase_incontinuous
+        %   phase_coherent
+        MainFfhModeOutChipC = {'phase_continuous', 'phase_continuous', ...
+            'phase_continuous', 'phase_continuous'};
+        %MainFfhModeOutChipD Main FFH Mode Out Chip D
+        %   Options:
+        %   phase_continuous
+        %   phase_incontinuous
+        %   phase_coherent
+        MainFfhModeOutChipD = {'phase_continuous', 'phase_continuous', ...
+            'phase_continuous', 'phase_continuous'};
+    end
+    
+    properties
+        %MainNCOFfhFrequencyOutChipA Main NCO FFH Frequency Out Chip A
+        MainNCOFfhFrequencyOutChipA = [0,0,0,0];
+        %MainNCOFfhFrequencyOutChipB Main NCO FFH Frequency Out Chip B
+        MainNCOFfhFrequencyOutChipB = [0,0,0,0];
+        %MainNCOFfhFrequencyOutChipC Main NCO FFH Frequency Out Chip C
+        MainNCOFfhFrequencyOutChipC = [0,0,0,0];
+        %MainNCOFfhFrequencyOutChipD Main NCO FFH Frequency Out Chip D
+        MainNCOFfhFrequencyOutChipD = [0,0,0,0];
+    end
+
+    properties
+        %MainNCOFfhIndexOutChipA Main NCO FFH Index Out Chip A
+        MainNCOFfhIndexOutChipA = [0,0,0,0];
+        %MainNCOFfhIndexOutChipB Main NCO FFH Index Out Chip B
+        MainNCOFfhIndexOutChipB = [0,0,0,0];
+        %MainNCOFfhIndexOutChipC Main NCO FFH Index Out Chip C
+        MainNCOFfhIndexOutChipC = [0,0,0,0];
+        %MainNCOFfhIndexOutChipD Main NCO FFH Index Out Chip D
+        MainNCOFfhIndexOutChipD = [0,0,0,0];
+    end
+
+    properties
+        %MainNCOFfhSelectOutChipA Main NCO FFH Select Out Chip A
+        MainNCOFfhSelectOutChipA = [0,0,0,0];
+        %MainNCOFfhSelectOutChipB Main NCO FFH Select Out Chip B
+        MainNCOFfhSelectOutChipB = [0,0,0,0];
+        %MainNCOFfhSelectOutChipC Main NCO FFH Select Out Chip C
+        MainNCOFfhSelectOutChipC = [0,0,0,0];
+        %MainNCOFfhSelectOutChipD Main NCO FFH Select Out Chip D
+        MainNCOFfhSelectOutChipD = [0,0,0,0];
+    end
+
+    properties
         %ExternalAttenuation External Attenuation
         %   Attenuation value of external HMC425a
        ExternalAttenuation = 0; 
@@ -192,6 +374,7 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
     properties(Nontunable, Hidden, Constant)
         Type = 'Rx';
     end
+    
     properties(Nontunable, Hidden)
         channel_names = {};
         num_data_channels = 16;
@@ -210,6 +393,10 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
        iioHMC425a;
     end
     
+    properties (SetAccess = private, GetAccess = public)
+       ChannelNCOFrequencyAvailable
+    end
+
     methods
         %% Constructor
         function obj = Rx(varargin)
@@ -227,19 +414,99 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             obj.ChannelNCOFrequenciesChipB = zeros(1,obj.num_fine_attr_channels);
             obj.ChannelNCOFrequenciesChipC = zeros(1,obj.num_fine_attr_channels);
             obj.ChannelNCOFrequenciesChipD = zeros(1,obj.num_fine_attr_channels);
+            
             obj.MainNCOFrequenciesChipA = zeros(1,obj.num_coarse_attr_channels);
             obj.MainNCOFrequenciesChipB = zeros(1,obj.num_coarse_attr_channels);
             obj.MainNCOFrequenciesChipC = zeros(1,obj.num_coarse_attr_channels);
             obj.MainNCOFrequenciesChipD = zeros(1,obj.num_coarse_attr_channels);
+            
             obj.ChannelNCOPhasesChipA = zeros(1,obj.num_fine_attr_channels);
             obj.ChannelNCOPhasesChipB = zeros(1,obj.num_fine_attr_channels);
             obj.ChannelNCOPhasesChipC = zeros(1,obj.num_fine_attr_channels);
             obj.ChannelNCOPhasesChipD = zeros(1,obj.num_fine_attr_channels);
+            
             obj.MainNCOPhasesChipA = zeros(1,obj.num_coarse_attr_channels);
             obj.MainNCOPhasesChipB = zeros(1,obj.num_coarse_attr_channels);
             obj.MainNCOPhasesChipC = zeros(1,obj.num_coarse_attr_channels);
             obj.MainNCOPhasesChipD = zeros(1,obj.num_coarse_attr_channels);
+            
+            obj.NyquistZoneChipA = cell(1,obj.num_coarse_attr_channels);
+            obj.NyquistZoneChipA(:) = {'odd'};
+            obj.NyquistZoneChipB = cell(1,obj.num_coarse_attr_channels);
+            obj.NyquistZoneChipB(:) = {'odd'};
+            obj.NyquistZoneChipC = cell(1,obj.num_coarse_attr_channels);
+            obj.NyquistZoneChipC(:) = {'odd'};
+            obj.NyquistZoneChipD = cell(1,obj.num_coarse_attr_channels);
+            obj.NyquistZoneChipD(:) = {'odd'};
+            
+            obj.MainFfhGpioModeEnableInChipA = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhGpioModeEnableInChipB = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhGpioModeEnableInChipC = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhGpioModeEnableInChipD = false(1,obj.num_coarse_attr_channels);
+
+            obj.MainFfhModeInChipA = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeInChipA(:) = {'instantaneous_update'};
+            obj.MainFfhModeInChipB = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeInChipB(:) = {'instantaneous_update'};
+            obj.MainFfhModeInChipC = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeInChipC(:) = {'instantaneous_update'};
+            obj.MainFfhModeInChipD = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeInChipD(:) = {'instantaneous_update'};
+
+            obj.MainFfhTrigHopEnableInChipA = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhTrigHopEnableInChipB = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhTrigHopEnableInChipC = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhTrigHopEnableInChipD = false(1,obj.num_coarse_attr_channels);
+
+            obj.MainNCOFfhIndexInChipA = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexInChipB = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexInChipC = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexInChipD = zeros(1,obj.num_coarse_attr_channels);
+
+            obj.MainNCOFfhSelectInChipA = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectInChipB = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectInChipC = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectInChipD = zeros(1,obj.num_coarse_attr_channels);
+
+            obj.MainFfhGpioModeEnableOutChipA = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhGpioModeEnableOutChipB = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhGpioModeEnableOutChipC = false(1,obj.num_coarse_attr_channels);
+            obj.MainFfhGpioModeEnableOutChipD = false(1,obj.num_coarse_attr_channels);
+
+            obj.MainFfhModeOutChipA = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeOutChipA(:) = {'phase_continuous'};
+            obj.MainFfhModeOutChipB = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeOutChipB(:) = {'phase_continuous'};
+            obj.MainFfhModeOutChipC = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeOutChipC(:) = {'phase_continuous'};
+            obj.MainFfhModeOutChipD = cell(1,obj.num_coarse_attr_channels);
+            obj.MainFfhModeOutChipD(:) = {'phase_continuous'};
+
+            obj.MainNCOFfhFrequencyOutChipA = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhFrequencyOutChipB = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhFrequencyOutChipC = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhFrequencyOutChipD = zeros(1,obj.num_coarse_attr_channels);
+            
+            obj.MainNCOFfhIndexOutChipA = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexOutChipB = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexOutChipC = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhIndexOutChipD = zeros(1,obj.num_coarse_attr_channels);
+
+            obj.MainNCOFfhSelectOutChipA = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectOutChipB = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectOutChipC = zeros(1,obj.num_coarse_attr_channels);
+            obj.MainNCOFfhSelectOutChipD = zeros(1,obj.num_coarse_attr_channels);
         end
+        
+        % Get ChannelNCOFrequencyAvailable
+        function value = get.ChannelNCOFrequencyAvailable(obj)
+            if obj.ConnectedToDevice
+                value= obj.getAttributeRAW('voltage0_i','channel_nco_frequency_available',false);
+            else
+                value = NaN;
+            end
+        end
+        
         % Check ChannelNCOFrequenciesChipA
         function set.ChannelNCOFrequenciesChipA(obj, value)
             obj.CheckAndUpdateHW(value,'ChannelNCOFrequenciesChipA',...
@@ -436,6 +703,282 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
                 obj.setAttributeLongLong(id,'hardwaregain',value,true,0,obj.iioHMC425a);
             end
         end
+
+        %%
+        % Check NyquistZoneChipA
+        function set.NyquistZoneChipA(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'NyquistZoneChipA',...
+                'nyquist_zone', obj.iioDev0);
+            obj.NyquistZoneChipA = value;
+        end
+        % Check NyquistZoneChipB
+        function set.NyquistZoneChipB(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'NyquistZoneChipB',...
+                'nyquist_zone', obj.iioDev1);
+            obj.NyquistZoneChipB = value;
+        end
+        % Check NyquistZoneChipC
+        function set.NyquistZoneChipC(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'NyquistZoneChipC',...
+                'nyquist_zone', obj.iioDev2);
+            obj.NyquistZoneChipC = value;
+        end
+        % Check NyquistZoneChipD
+        function set.NyquistZoneChipD(obj, value)
+            obj.CheckAndUpdateHWRaw(value,'NyquistZoneChipD',...
+                'nyquist_zone', obj.iioDev);
+            obj.NyquistZoneChipD = value;
+        end
+        %%
+        % Check MainFfhGpioModeEnableInChipA
+        function set.MainFfhGpioModeEnableInChipA(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableInChipA',...
+                'main_ffh_gpio_mode_en', obj.iioDev0);
+            obj.MainFfhGpioModeEnableInChipA = value;
+        end
+        % Check MainFfhGpioModeEnableInChipB
+        function set.MainFfhGpioModeEnableInChipB(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableInChipB',...
+                'main_ffh_gpio_mode_en', obj.iioDev1);
+            obj.MainFfhGpioModeEnableInChipB = value;
+        end
+        % Check MainFfhGpioModeEnableInChipC
+        function set.MainFfhGpioModeEnableInChipC(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableInChipC',...
+                'main_ffh_gpio_mode_en', obj.iioDev2);
+            obj.MainFfhGpioModeEnableInChipC = value;
+        end
+        % Check MainFfhGpioModeEnableInChipC
+        function set.MainFfhGpioModeEnableInChipD(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableInChipD',...
+                'main_ffh_gpio_mode_en', obj.iioDev);
+            obj.MainFfhGpioModeEnableInChipD = value;
+        end
+        %%
+        % Check MainFfhModeInChipA
+        function set.MainFfhModeInChipA(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeInChipA',...
+                'main_ffh_mode', obj.iioDev0);
+            obj.MainFfhModeInChipA = value;
+        end
+        % Check MainFfhGpioModeEnableInChipB
+        function set.MainFfhModeInChipB(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeInChipB',...
+                'main_ffh_mode', obj.iioDev1);
+            obj.MainFfhModeInChipB = value;
+        end
+        % Check MainFfhGpioModeEnableInChipC
+        function set.MainFfhModeInChipC(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeInChipC',...
+                'main_ffh_mode', obj.iioDev2);
+            obj.MainFfhModeInChipC = value;
+        end
+        % Check MainFfhGpioModeEnableInChipC
+        function set.MainFfhModeInChipD(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeInChipD',...
+                'main_ffh_mode', obj.iioDev);
+            obj.MainFfhModeInChipD = value;
+        end
+        %%
+        % Check MainFfhTrigHopEnableInChipA
+        function set.MainFfhTrigHopEnableInChipA(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhTrigHopEnableInChipA',...
+                'main_ffh_trig_hop_en', obj.iioDev0);
+            obj.MainFfhTrigHopEnableInChipA = value;
+        end
+        % Check MainFfhTrigHopEnableInChipB
+        function set.MainFfhTrigHopEnableInChipB(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhTrigHopEnableInChipB',...
+                'main_ffh_trig_hop_en', obj.iioDev1);
+            obj.MainFfhTrigHopEnableInChipB = value;
+        end
+        % Check MainFfhTrigHopEnableInChipC
+        function set.MainFfhTrigHopEnableInChipC(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhTrigHopEnableInChipC',...
+                'main_ffh_trig_hop_en', obj.iioDev2);
+            obj.MainFfhTrigHopEnableInChipC = value;
+        end
+        % Check MainFfhTrigHopEnableInChipD
+        function set.MainFfhTrigHopEnableInChipD(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhTrigHopEnableInChipD',...
+                'main_ffh_trig_hop_en', obj.iioDev);
+            obj.MainFfhTrigHopEnableInChipD = value;
+        end
+        %%
+        % Check MainNCOFfhIndexInChipA
+        function set.MainNCOFfhIndexInChipA(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexInChipA',...
+                'main_nco_ffh_index', obj.iioDev0);
+            obj.MainNCOFfhIndexInChipA = value;
+        end
+        % Check MainNCOFfhIndexInChipB
+        function set.MainNCOFfhIndexInChipB(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexInChipB',...
+                'main_nco_ffh_index', obj.iioDev1);
+            obj.MainNCOFfhIndexInChipB = value;
+        end
+        % Check MainNCOFfhIndexInChipC
+        function set.MainNCOFfhIndexInChipC(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexInChipC',...
+                'main_nco_ffh_index', obj.iioDev2);
+            obj.MainNCOFfhIndexInChipC = value;
+        end
+        % Check MainNCOFfhIndexInChipD
+        function set.MainNCOFfhIndexInChipD(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexInChipD',...
+                'main_nco_ffh_index', obj.iioDev);
+            obj.MainNCOFfhIndexInChipD = value;
+        end
+        %%
+        % Check MainNCOFfhSelectInChipA
+        function set.MainNCOFfhSelectInChipA(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectInChipA',...
+                'main_nco_ffh_select', obj.iioDev0);
+            obj.MainNCOFfhSelectInChipA = value;
+        end
+        % Check MainNCOFfhSelectInChipB
+        function set.MainNCOFfhSelectInChipB(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectInChipB',...
+                'main_nco_ffh_select', obj.iioDev1);
+            obj.MainNCOFfhSelectInChipB = value;
+        end
+        % Check MainNCOFfhSelectInChipC
+        function set.MainNCOFfhSelectInChipC(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectInChipC',...
+                'main_nco_ffh_select', obj.iioDev2);
+            obj.MainNCOFfhSelectInChipC = value;
+        end
+        % Check MainNCOFfhSelectInChipD
+        function set.MainNCOFfhSelectInChipD(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectInChipD',...
+                'main_nco_ffh_select', obj.iioDev);
+            obj.MainNCOFfhSelectInChipD = value;
+        end
+        %%
+        % Check MainFfhGpioModeEnableOutChipA
+        function set.MainFfhGpioModeEnableOutChipA(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableOutChipA',...
+                'main_ffh_gpio_mode_en', obj.iioDev0, true);
+            obj.MainFfhGpioModeEnableOutChipA = value;
+        end
+        % Check MainFfhGpioModeEnableOutChipB
+        function set.MainFfhGpioModeEnableOutChipB(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableOutChipB',...
+                'main_ffh_gpio_mode_en', obj.iioDev1, true);
+            obj.MainFfhGpioModeEnableOutChipB = value;
+        end
+        % Check MainFfhGpioModeEnableOutChipC
+        function set.MainFfhGpioModeEnableOutChipC(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableOutChipC',...
+                'main_ffh_gpio_mode_en', obj.iioDev2, true);
+            obj.MainFfhGpioModeEnableOutChipC = value;
+        end
+        % Check MainFfhGpioModeEnableOutChipC
+        function set.MainFfhGpioModeEnableOutChipD(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhGpioModeEnableOutChipD',...
+                'main_ffh_gpio_mode_en', obj.iioDev, true);
+            obj.MainFfhGpioModeEnableOutChipD = value;
+        end
+        %%
+        % Check MainFfhModeOutChipA
+        function set.MainFfhModeOutChipA(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeOutChipA',...
+                'main_ffh_mode', obj.iioDev0, true);
+            obj.MainFfhModeOutChipA = value;
+        end
+        % Check MainFfhGpioModeEnableOutChipB
+        function set.MainFfhModeOutChipB(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeOutChipB',...
+                'main_ffh_mode', obj.iioDev1, true);
+            obj.MainFfhModeOutChipB = value;
+        end
+        % Check MainFfhGpioModeEnableOutChipC
+        function set.MainFfhModeOutChipC(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeOutChipC',...
+                'main_ffh_mode', obj.iioDev2, true);
+            obj.MainFfhModeOutChipC = value;
+        end
+        % Check MainFfhGpioModeEnableOutChipC
+        function set.MainFfhModeOutChipD(obj, value)
+            obj.CheckAndUpdateHWBool(value,'MainFfhModeOutChipD',...
+                'main_ffh_mode', obj.iioDev, true);
+            obj.MainFfhModeOutChipD = value;
+        end
+        %%
+        % Check MainNCOFfhFrequencyOutChipA
+        function set.MainNCOFfhFrequencyOutChipA(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhFrequencyOutChipA',...
+                'main_nco_ffh_frequency', obj.iioDev0, true);
+            obj.MainNCOFfhFrequencyOutChipA = value;
+        end
+        % Check MainNCOFfhFrequencyOutChipB
+        function set.MainNCOFfhFrequencyOutChipB(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhFrequencyOutChipB',...
+                'main_nco_ffh_frequency', obj.iioDev1, true);
+            obj.MainNCOFfhFrequencyOutChipB = value;
+        end
+        % Check MainNCOFfhFrequencyOutChipC
+        function set.MainNCOFfhFrequencyOutChipC(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhFrequencyOutChipC',...
+                'main_nco_ffh_frequency', obj.iioDev2, true);
+            obj.MainNCOFfhFrequencyOutChipC = value;
+        end
+        % Check MainNCOFfhFrequencyOutChipD
+        function set.MainNCOFfhFrequencyOutChipD(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhFrequencyOutChipD',...
+                'main_nco_ffh_frequency', obj.iioDev, true);
+            obj.MainNCOFfhFrequencyOutChipD = value;
+        end
+        %%
+        % Check MainNCOFfhIndexOutChipA
+        function set.MainNCOFfhIndexOutChipA(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexOutChipA',...
+                'main_nco_ffh_index', obj.iioDev0, true);
+            obj.MainNCOFfhIndexOutChipA = value;
+        end
+        % Check MainNCOFfhIndexOutChipB
+        function set.MainNCOFfhIndexOutChipB(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexOutChipB',...
+                'main_nco_ffh_index', obj.iioDev1, true);
+            obj.MainNCOFfhIndexOutChipB = value;
+        end
+        % Check MainNCOFfhIndexOutChipC
+        function set.MainNCOFfhIndexOutChipC(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexOutChipC',...
+                'main_nco_ffh_index', obj.iioDev2, true);
+            obj.MainNCOFfhIndexOutChipC = value;
+        end
+        % Check MainNCOFfhIndexOutChipD
+        function set.MainNCOFfhIndexOutChipD(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhIndexOutChipD',...
+                'main_nco_ffh_index', obj.iioDev, true);
+            obj.MainNCOFfhIndexOutChipD = value;
+        end
+        %%
+        % Check MainNCOFfhSelectOutChipA
+        function set.MainNCOFfhSelectOutChipA(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectOutChipA',...
+                'main_nco_ffh_select', obj.iioDev0, true);
+            obj.MainNCOFfhSelectOutChipA = value;
+        end
+        % Check MainNCOFfhSelectOutChipB
+        function set.MainNCOFfhSelectOutChipB(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectOutChipB',...
+                'main_nco_ffh_select', obj.iioDev1, true);
+            obj.MainNCOFfhSelectOutChipB = value;
+        end
+        % Check MainNCOFfhSelectOutChipC
+        function set.MainNCOFfhSelectOutChipC(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectOutChipC',...
+                'main_nco_ffh_select', obj.iioDev2, true);
+            obj.MainNCOFfhSelectOutChipC = value;
+        end
+        % Check MainNCOFfhSelectOutChipD
+        function set.MainNCOFfhSelectOutChipD(obj, value)
+            obj.CheckAndUpdateHW(value,'MainNCOFfhSelectOutChipD',...
+                'main_nco_ffh_select', obj.iioDev, true);
+            obj.MainNCOFfhSelectOutChipD = value;
+        end
     end
        
     %% API Functions
@@ -567,7 +1110,135 @@ classdef Rx < adi.QuadMxFE.Base & adi.common.Rx
             %%
             obj.setAttributeLongLong('voltage0','hardwaregain',...
                 obj.ExternalAttenuation,true,0,obj.iioHMC425a);
+            %%
+            obj.CheckAndUpdateHWRaw(obj.NyquistZoneChipA,'NyquistZoneChipA',...
+                'nyquist_zone', obj.iioDev0); 
+            obj.CheckAndUpdateHWRaw(obj.NyquistZoneChipB,'NyquistZoneChipB',...
+                'nyquist_zone', obj.iioDev1); 
+            obj.CheckAndUpdateHWRaw(obj.NyquistZoneChipC,'NyquistZoneChipC',...
+                'nyquist_zone', obj.iioDev2); 
+            obj.CheckAndUpdateHWRaw(obj.NyquistZoneChipD,'NyquistZoneChipD',...
+                'nyquist_zone', obj.iioDev); 
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableInChipA,...
+                'MainFfhGpioModeEnableInChipA','main_ffh_gpio_mode_en', ...
+                obj.iioDev0);
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableInChipB,...
+                'MainFfhGpioModeEnableInChipB','main_ffh_gpio_mode_en', ...
+                obj.iioDev1);
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableInChipC,...
+                'MainFfhGpioModeEnableInChipC','main_ffh_gpio_mode_en', ...
+                obj.iioDev2);
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableInChipD,...
+                'MainFfhGpioModeEnableInChipD','main_ffh_gpio_mode_en', ...
+                obj.iioDev);
+            %%
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeInChipA,...
+                'MainFfhModeInChipA','main_ffh_mode', obj.iioDev0);
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeInChipB,...
+                'MainFfhModeInChipB','main_ffh_mode', obj.iioDev1);
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeInChipC,...
+                'MainFfhModeInChipC','main_ffh_mode', obj.iioDev2);
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeInChipD,...
+                'MainFfhModeInChipD','main_ffh_mode', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableInChipA,...
+                'MainFfhTrigHopEnableInChipA','main_ffh_trig_hop_en', ...
+                obj.iioDev0);
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableInChipB,...
+                'MainFfhTrigHopEnableInChipB','main_ffh_trig_hop_en', ...
+                obj.iioDev1);
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableInChipC,...
+                'MainFfhTrigHopEnableInChipC','main_ffh_trig_hop_en', ...
+                obj.iioDev2);
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableInChipD,...
+                'MainFfhTrigHopEnableInChipD','main_ffh_trig_hop_en', ...
+                obj.iioDev);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexInChipA,...
+                'MainNCOFfhIndexInChipA','main_nco_ffh_index', obj.iioDev0);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexInChipB,...
+                'MainNCOFfhIndexInChipB','main_nco_ffh_index', obj.iioDev1);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexInChipC,...
+                'MainNCOFfhIndexInChipC','main_nco_ffh_index', obj.iioDev2);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexInChipD,...
+                'MainNCOFfhIndexInChipD','main_nco_ffh_index', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectInChipA,...
+                'MainNCOFfhSelectInChipA','main_nco_ffh_select', obj.iioDev0);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectInChipB,...
+                'MainNCOFfhSelectInChipB','main_nco_ffh_select', obj.iioDev1);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectInChipC,...
+                'MainNCOFfhSelectInChipC','main_nco_ffh_select', obj.iioDev2);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectInChipD,...
+                'MainNCOFfhSelectInChipD','main_nco_ffh_select', obj.iioDev);
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableOutChipA,...
+                'MainFfhGpioModeEnableOutChipA','main_ffh_gpio_mode_en', ...
+                obj.iioDev0, true);
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableOutChipB,...
+                'MainFfhGpioModeEnableOutChipB','main_ffh_gpio_mode_en', ...
+                obj.iioDev1, true);
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableOutChipC,...
+                'MainFfhGpioModeEnableOutChipC','main_ffh_gpio_mode_en', ...
+                obj.iioDev2, true);
+            obj.CheckAndUpdateHWBool(obj.MainFfhGpioModeEnableOutChipD,...
+                'MainFfhGpioModeEnableOutChipD','main_ffh_gpio_mode_en', ...
+                obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeOutChipA,...
+                'MainFfhModeOutChipA','main_ffh_mode', obj.iioDev0, true);
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeOutChipB,...
+                'MainFfhModeOutChipB','main_ffh_mode', obj.iioDev1, true);
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeOutChipC,...
+                'MainFfhModeOutChipC','main_ffh_mode', obj.iioDev2, true);
+            obj.CheckAndUpdateHWRaw(obj.MainFfhModeOutChipD,...
+                'MainFfhModeOutChipD','main_ffh_mode', obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableOutChipA,...
+                'MainFfhTrigHopEnableOutChipA','main_ffh_trig_hop_en', ...
+                obj.iioDev0, true);
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableOutChipB,...
+                'MainFfhTrigHopEnableOutChipB','main_ffh_trig_hop_en', ...
+                obj.iioDev1, true);
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableOutChipC,...
+                'MainFfhTrigHopEnableOutChipC','main_ffh_trig_hop_en', ...
+                obj.iioDev2, true);
+            obj.CheckAndUpdateHWBool(obj.MainFfhTrigHopEnableOutChipD,...
+                'MainFfhTrigHopEnableOutChipD','main_ffh_trig_hop_en', ...
+                obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexOutChipA,...
+                'MainNCOFfhIndexOutChipA','main_nco_ffh_index',...
+                obj.iioDev0, true);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexOutChipB,...
+                'MainNCOFfhIndexOutChipB','main_nco_ffh_index',...
+                obj.iioDev1, true);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexOutChipC,...
+                'MainNCOFfhIndexOutChipC','main_nco_ffh_index',...
+                obj.iioDev2, true);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhIndexOutChipD,...
+                'MainNCOFfhIndexOutChipD','main_nco_ffh_index',...
+                obj.iioDev, true);
+            %%
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectOutChipA,...
+                'MainNCOFfhSelectOutChipA','main_nco_ffh_select',...
+                obj.iioDev0, true);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectOutChipB,...
+                'MainNCOFfhSelectOutChipB','main_nco_ffh_select',...
+                obj.iioDev1, true);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectOutChipC,...
+                'MainNCOFfhSelectOutChipC','main_nco_ffh_select',...
+                obj.iioDev2, true);
+            obj.CheckAndUpdateHW(obj.MainNCOFfhSelectOutChipD,...
+                'MainNCOFfhSelectOutChipD','main_nco_ffh_select',...
+                obj.iioDev, true);
 
+            % MuxRxFFH Control
+            setupInit@adi.internal.MuxRxFFH(obj);
+
+            % MuxRxNCO Control
+            setupInit@adi.internal.MuxRxNCO(obj);
         end
 
     end

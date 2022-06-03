@@ -30,12 +30,12 @@ proc preprocess_bd {project carrier rxtx} {
                 connect_bd_net [get_bd_pins axi_ad9144_jesd_rstgen/slowest_sync_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
             
                 # axi_ad9144_core tx_clk reconnect
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_core/tx_clk]
-                connect_bd_net [get_bd_pins axi_ad9144_core/tx_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_tpl/link_clk]
+                connect_bd_net [get_bd_pins axi_ad9144_tpl/link_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
             
                 # upack dac_clk reconnect
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_upack/dac_clk]
-                connect_bd_net [get_bd_pins axi_ad9144_upack/dac_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_upack/clk]
+                connect_bd_net [get_bd_pins axi_ad9144_upack/clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
                 
                 # TX FIFO
                 disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_fifo/dac_clk]

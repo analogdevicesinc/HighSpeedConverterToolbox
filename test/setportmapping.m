@@ -12,6 +12,11 @@ if contains(lower(ReferenceDesignName),'daq2')
     mdl = 'testModel_Rx64Tx64';
     portWidthRX = 64;
     portWidthTX = 64;
+elseif contains(lower(ReferenceDesignName),'ad9081')
+    dev = 'AD9081';
+    mdl = 'testModel';
+    portWidthRX = 16;
+    portWidthTX = 16;
 else
     error('Unknown device');
 end

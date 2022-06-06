@@ -50,9 +50,9 @@ switch mode
             hdlset_param([mdl,'/HDL_DUT/in3'], 'IOInterfaceMapping', ['[0:',num2str(portWidthTX-1),']']);
             hdlset_param([mdl,'/HDL_DUT/in4'], 'IOInterface', ['IP Data 3 IN [0:',num2str(portWidthTX-1),']']);
             hdlset_param([mdl,'/HDL_DUT/in4'], 'IOInterfaceMapping', ['[0:',num2str(portWidthTX-1),']']);
-            hdlset_param([mdl,'/HDL_DUT/out3'], 'IOInterface', [dev,' DAC Data 2 [0:',num2str(portWidthTX-1),']']);
+            hdlset_param([mdl,'/HDL_DUT/out3'], 'IOInterface', [dev,' DAC Data 2 OUT [0:',num2str(portWidthTX-1),']']);
             hdlset_param([mdl,'/HDL_DUT/out3'], 'IOInterfaceMapping', ['[0:',num2str(portWidthTX-1),']']);
-            hdlset_param([mdl,'/HDL_DUT/out4'], 'IOInterface', [dev,' DAC Data 3 [0:',num2str(portWidthTX-1),']']);
+            hdlset_param([mdl,'/HDL_DUT/out4'], 'IOInterface', [dev,' DAC Data 3 OUT [0:',num2str(portWidthTX-1),']']);
             hdlset_param([mdl,'/HDL_DUT/out4'], 'IOInterfaceMapping', ['[0:',num2str(portWidthTX-1),']']);
         end
     case 'rx'

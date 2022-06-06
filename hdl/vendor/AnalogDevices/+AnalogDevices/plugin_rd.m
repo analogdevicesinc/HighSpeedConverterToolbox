@@ -5,6 +5,9 @@ function hRD = plugin_rd(project, board, design)
 
 pname = upper(project);
 ppath = project;
+if strcmpi(project, 'ad9081')
+    ppath = 'ad9081_fmca_ebz';
+end
 
 % Construct reference design object
 hRD = hdlcoder.ReferenceDesign('SynthesisTool', 'Xilinx Vivado');

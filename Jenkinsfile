@@ -32,7 +32,7 @@ stage("Build Toolbox") {
         }
     }
 }
-
+/*
 /////////////////////////////////////////////////////
 
 boardNames = ['daq2','ad9081']
@@ -117,9 +117,9 @@ node {
         }
     }
 }
-
+*/
 //////////////////////////////////////////////////////
-boardNames = ['daq2','ad9081']
+boardNames = ['daq2']
 dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
 
 stage("HDL Tests") {
@@ -130,7 +130,7 @@ stage("HDL Tests") {
                 unstash "builtSources"
                 sh 'make -C ./CI/scripts test_synth'
                 junit testResults: 'test/*.xml', allowEmptyResults: true
-                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+                archiveArtifacts artifacts: 'test/**/*.log', followSymlinks: false, allowEmptyArchive: true
             }
         }
     }

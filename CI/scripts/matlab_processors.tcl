@@ -29,7 +29,7 @@ proc preprocess_bd {project carrier rxtx} {
                 disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_jesd_rstgen/slowest_sync_clk]
                 connect_bd_net [get_bd_pins axi_ad9144_jesd_rstgen/slowest_sync_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
             
-                # axi_ad9144_core tx_clk reconnect
+                # axi_ad9144_tpl tx_clk reconnect
                 disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_tpl/link_clk]
                 connect_bd_net [get_bd_pins axi_ad9144_tpl/link_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
             
@@ -95,28 +95,18 @@ proc preprocess_bd {project carrier rxtx} {
                 # Reset reconnect
                 delete_bd_objs [get_bd_nets tx_device_clk_1]
                 connect_bd_net [get_bd_pins tx_device_clk_rstgen/slowest_sync_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
-                # disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_jesd_rstgen/slowest_sync_clk]
-                # connect_bd_net [get_bd_pins axi_ad9144_jesd_rstgen/slowest_sync_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
 
                 # UPACK reconnect
                 connect_bd_net [get_bd_pins util_mxfe_upack/clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
-                #disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_core/tx_clk]
-                #connect_bd_net [get_bd_pins axi_ad9144_core/tx_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
 
                 # DAC FIFO reconnect
                 connect_bd_net [get_bd_pins mxfe_dac_fifo/dac_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
-                # disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_upack/dac_clk]
-                # connect_bd_net [get_bd_pins axi_ad9144_upack/dac_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
 
                 # TX TPL Core
                 connect_bd_net [get_bd_pins tx_mxfe_tpl_core/link_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
-                # disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_fifo/dac_clk]
-                # connect_bd_net [get_bd_pins axi_ad9144_fifo/dac_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
 
                 # TX JESD
                 connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/device_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
-                # disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_jesd/device_clk]
-                # connect_bd_net [get_bd_pins axi_ad9144_jesd/device_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
 
                 connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins util_mxfe_xcvr/tx_clk_0]
                 connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins util_mxfe_xcvr/tx_clk_1]

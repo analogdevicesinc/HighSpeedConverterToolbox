@@ -118,3 +118,20 @@ node {
     }
 }
 
+//////////////////////////////////////////////////////
+boardNames = ['daq2','ad9081']
+dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
+
+stage("HDL Tests") {
+    dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+        branchName ->
+        withEnv(['BOARD='+branchName]) {
+            stage("Synth") {
+                unstash "builtSources"
+                sh 'make -C ./CI/scripts test_synth'
+                junit testResults: 'test/*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            }
+        }
+    }
+}

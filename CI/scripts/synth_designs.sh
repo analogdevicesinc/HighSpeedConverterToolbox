@@ -10,6 +10,7 @@ fi
 
 MLPATH=/usr/local/MATLAB
 
+alias vivado='vivado -stack 2000'
 cd ../.. 
 cp hdl/vendor/AnalogDevices/hdlcoder_board_customization.m test/hdlcoder_board_customization_local.m
 sed -i "s/hdlcoder_board_customization/hdlcoder_board_customization_local/g" test/hdlcoder_board_customization_local.m

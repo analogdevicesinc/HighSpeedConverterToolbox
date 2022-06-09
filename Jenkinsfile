@@ -119,7 +119,7 @@ node {
 }
 */
 //////////////////////////////////////////////////////
-boardNames = ['daq2.zcu102.plugin_rd_rx']
+boardNames = ['daq2_zcu102_plugin_rd_rxtx']
 dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
 
 stage("HDL Tests") {

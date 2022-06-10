@@ -2,10 +2,10 @@ classdef Version
     %Version
     %   BSP Version information
     properties(Constant)
-        HDL = 'hdl_2018_r2';
-        Vivado = '2018.2';
-        MATLAB = 'R2021a';
-        Release = '21.1.1';
+        HDL = 'hdl_2019_r2';
+        Vivado = '2019.1';
+        MATLAB = 'R2021b';
+        Release = '21.2.1';
         AppName = 'Analog Devices, Inc. High-Speed Converter Toolbox';
         ToolboxName = 'HighSpeedConverterToolbox';
         ToolboxNameShort = 'hsx';

@@ -78,7 +78,7 @@ sed -i 's/16.27/30/' hdl/projects/pluto/system_constr.xdc
 mv hdl $TARGET
 
 # Post-process ports.json
-mv ./scripts/ports.json ./
+cp ./scripts/ports.json ./
 python3 ./scripts/read_ports_json.py
 cp ports.json ../hdl/vendor/AnalogDevices/+AnalogDevices/
 
@@ -87,6 +87,7 @@ cp scripts/matlab_processors.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scr
 cp scripts/adi_project_xilinx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx.tcl
 cp scripts/system_project_rxtx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/system_project_rxtx.tcl
 cp scripts/adi_build.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_build.tcl
+cp scripts/adi_build_win.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_build_win.tcl
 
 # Copy fsbl files
 cp scripts/fsbl_build_zynq.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/fsbl_build_zynq.tcl

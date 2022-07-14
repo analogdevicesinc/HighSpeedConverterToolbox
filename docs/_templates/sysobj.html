@@ -75,15 +75,24 @@ tx.EnabledChannels = [1,2];
 tx([y1,y2]);
 {% else %}
 %% Rx set up
+% Test DDS output
+tx = adi.AD9081.Tx('uri',testCase.uri);
+tx.CenterFrequency = 1e9;
+tx.DataSource = 'DDS';
+toneFreq = 45e6;
+tx.DDSFrequencies = repmat(toneFreq,2,2);
+tx();
+pause(1);
 rx = {{ obj.name }}('uri','ip:analog.local');
 rx.CenterFrequency = 1e9;
 rx.EnabledChannels = 1;
-%% Run
+valid = false;
 for k=1:10
     valid = false;
     while ~valid
         [out, valid] = rx();
     end
 end
+rx.release();
 {% endif %}
 ```

@@ -1,0 +1,287 @@
+[
+  {
+    "name": "adi.AD9081.Rx",
+    "dec": "    The adi.AD9081.Rx System object is a signal source that can receive<br>    complex data from the AD9081.<br> <br>    rx = adi.AD9081.Rx;<br>    rx = adi.AD9081.Rx('uri','192.168.2.1');<br> <br>    <a href=\"http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf\">AD9081 Datasheet</a><br> <br>    See also adi.DAQ2.Rx<br>    Documentation for adi.AD9081.Rx<br>       doc adi.AD9081.Rx<br>",
+    "props": [
+      {
+        "prop_name": "SamplingRate",
+        "prop_title": " SamplingRate Sampling Rate",
+        "prop_description": "Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is only readable once connected to hardware"
+      },
+      {
+        "prop_name": "ChannelNCOFrequencies",
+        "prop_title": " ChannelNCOFrequencies Channel NCO Frequencies ",
+        "prop_description": "Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available."
+      },
+      {
+        "prop_name": "MainNCOFrequencies",
+        "prop_title": " MainNCOFrequencies Main NCO Frequencies ",
+        "prop_description": "Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available."
+      },
+      {
+        "prop_name": "ChannelNCOPhases",
+        "prop_title": " ChannelNCOPhases Channel NCO Phases ",
+        "prop_description": "Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available."
+      },
+      {
+        "prop_name": "MainNCOPhases",
+        "prop_title": " MainNCOPhases Main NCO Phases ",
+        "prop_description": "Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available."
+      },
+      {
+        "prop_name": "TestMode",
+        "prop_title": " TestMode Test Mode ",
+        "prop_description": "Test mode of receive path. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7' 'pn15' 'pn31' 'ramp'"
+      },
+      {
+        "prop_name": "EnablePFIRs",
+        "prop_title": " EnablePFIRs Enable PFIRs",
+        "prop_description": "Enable use of PFIR/PFILT filters"
+      },
+      {
+        "prop_name": "PFIRFilenames",
+        "prop_title": " PFIRFilenames PFIR File names",
+        "prop_description": "Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9081.Rx/SamplesPerFrame is inherited from superclass ADI.AD9081.BASE"
+      },
+      {
+        "prop_name": "EnabledChannels",
+        "prop_title": " EnabledChannels Enabled Channels",
+        "prop_description": "Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant"
+      },
+      {
+        "prop_name": "uri",
+        "prop_title": "  URI - remote host URI",
+        "prop_description": "Hostname or IP address of remote libIIO deviceHelp for adi.AD9081.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      }
+    ]
+  },
+  {
+    "name": "adi.AD9081.Tx",
+    "dec": "    The adi.AD9081.Tx System object is a signal sink that can tranmsit<br>    complex data from the AD9081.<br> <br>    tx = adi.AD9081.Tx;<br>    tx = adi.AD9081.Tx('uri','ip:192.168.2.1');<br> <br>    <a href=\"http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf\">AD9081 Datasheet</a><br>    Documentation for adi.AD9081.Tx<br>       doc adi.AD9081.Tx<br>",
+    "props": [
+      {
+        "prop_name": "ChannelNCOFrequencies",
+        "prop_title": " ChannelNCOFrequencies Channel NCO Frequencies ",
+        "prop_description": "Frequency of NCO in fine decimators in transmit path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz."
+      },
+      {
+        "prop_name": "MainNCOFrequencies",
+        "prop_title": " MainNCOFrequencies Main NCO Frequencies ",
+        "prop_description": "Frequency of NCO in fine decimators in transmit path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz."
+      },
+      {
+        "prop_name": "ChannelNCOPhases",
+        "prop_title": " ChannelNCOPhases Channel NCO Phases ",
+        "prop_description": "Frequency of NCO in fine decimators in transmit path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz."
+      },
+      {
+        "prop_name": "MainNCOPhases",
+        "prop_title": " MainNCOPhases Main NCO Phases ",
+        "prop_description": "Frequency of NCO in fine decimators in transmit path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz."
+      },
+      {
+        "prop_name": "ChannelNCOGainScales",
+        "prop_title": " ChannelNCOGainScales Channel NCO Gain Scales ",
+        "prop_description": "Frequency of NCO in fine decimators in transmit path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz."
+      },
+      {
+        "prop_name": "NCOEnables",
+        "prop_title": " NCOEnables NCO Enables ",
+        "prop_description": "Vector of logicals which enabled individual NCOs in channel interpolators"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9081.Tx/SamplesPerFrame is inherited from superclass ADI.AD9081.BASE"
+      },
+      {
+        "prop_name": "EnabledChannels",
+        "prop_title": " EnabledChannels Enabled Channels",
+        "prop_description": "Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant"
+      },
+      {
+        "prop_name": "uri",
+        "prop_title": "  URI - remote host URI",
+        "prop_description": "Hostname or IP address of remote libIIO deviceHelp for adi.AD9081.Tx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      },
+      {
+        "prop_name": "DataSource",
+        "prop_title": " DataSource Data Source",
+        "prop_description": "Data source, specified as one of the following: 'DMA' — Specify the host as the source of the data. 'DDS' — Specify the DDS on the radio hardware as the source of the data. In this case, each channel has two additive tones.Help for adi.AD9081.Tx/DataSource is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "DDSFrequencies",
+        "prop_title": " DDSFrequencies DDS Frequencies",
+        "prop_description": "Frequencies values in Hz of the DDS tone generators. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.AD9081.Tx/DDSFrequencies is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "DDSScales",
+        "prop_title": " DDSScales DDS Scales",
+        "prop_description": "Scale of DDS tones in range [0,1]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.AD9081.Tx/DDSScales is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "DDSPhases",
+        "prop_title": " DDSPhases DDS Phases",
+        "prop_description": "Phases of DDS tones in range [0,360000]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.AD9081.Tx/DDSPhases is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "EnableCyclicBuffers",
+        "prop_title": " EnableCyclicBuffers Enable Cyclic Buffers",
+        "prop_description": "Enable Cyclic Buffers, configures transmit buffers to be cyclic, which makes them continuously repeatHelp for adi.AD9081.Tx/EnableCyclicBuffers is inherited from superclass ADI.COMMON.DDS"
+      }
+    ]
+  },
+  {
+    "name": "adi.AD9467.Rx",
+    "dec": "    The adi.AD9467.Rx System object is a signal source that can receive<br>    complex data from the AD9467.<br> <br>    rx = adi.AD9467.Rx;<br>    rx = adi.AD9467.Rx('uri','192.168.2.1');<br> <br>    <a href=\"http://www.analog.com/media/en/technical-documentation/data-sheets/AD9467.pdf\">AD9467 Datasheet</a><br>    Documentation for adi.AD9467.Rx<br>       doc adi.AD9467.Rx<br>",
+    "props": [
+      {
+        "prop_name": "SamplingRate",
+        "prop_title": " SamplingRate Sampling Rate",
+        "prop_description": "Baseband sampling rate in Hz, specified as a scalar in samples per second. This value read from the hardware after the object is setup."
+      },
+      {
+        "prop_name": "TestMode",
+        "prop_title": " TestMode Test Mode",
+        "prop_description": "Select ADC test mode. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn_long' 'pn_short' 'one_zero_toggle'"
+      },
+      {
+        "prop_name": "FilterHighPass3dbFrequency",
+        "prop_title": " FilterHighPass3dbFrequency Filter High Pass 3db Frequency",
+        "prop_description": "FilterHighPass3dbFrequency"
+      },
+      {
+        "prop_name": "Scale",
+        "prop_title": " Scale Scale",
+        "prop_description": "Scale received data. Possible options are: 0.030517 0.032043 0.033569 0.035095 0.036621 0.038146"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9467.Rx/SamplesPerFrame is inherited from superclass ADI.AD9467.BASE"
+      },
+      {
+        "prop_name": "EnabledChannels",
+        "prop_title": " EnabledChannels Enabled Channels",
+        "prop_description": "Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant"
+      },
+      {
+        "prop_name": "uri",
+        "prop_title": "  URI - remote host URI",
+        "prop_description": "Hostname or IP address of remote libIIO deviceHelp for adi.AD9467.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      }
+    ]
+  },
+  {
+    "name": "adi.DAQ2.Rx",
+    "dec": "    The adi.DAQ2.Rx System object is a signal source that can <br>    receive complex data from the DAQ2.<br> <br>    rx = adi.DAQ2.Rx;<br>    rx = adi.DAQ2.Rx('uri','192.168.2.1');<br> <br>    <a href=\"https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz\">User Guide</a><br> <br>    See also adi.AD9680.Rx, adi.DAQ2.Tx<br>    Documentation for adi.DAQ2.Rx<br>       doc adi.DAQ2.Rx<br>",
+    "props": [
+      {
+        "prop_name": "SamplingRate",
+        "prop_title": " SamplingRate Sampling Rate",
+        "prop_description": "Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is constantHelp for adi.DAQ2.Rx.SamplingRate is inherited from superclass ADI.AD9680.RX"
+      },
+      {
+        "prop_name": "EnabledChannels",
+        "prop_title": " EnabledChannels Enabled Channels",
+        "prop_description": "Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant"
+      },
+      {
+        "prop_name": "uri",
+        "prop_title": "  URI - remote host URI",
+        "prop_description": "Hostname or IP address of remote libIIO deviceHelp for adi.DAQ2.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.DAQ2.Rx/SamplesPerFrame is inherited from superclass ADI.AD9680.BASE"
+      },
+      {
+        "prop_name": "kernelBuffersCount",
+        "prop_title": "  Kernel buffers count",
+        "prop_description": "The number of buffers allocated in the kernel for data transfersHelp for adi.DAQ2.Rx/kernelBuffersCount is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      },
+      {
+        "prop_name": "dataTypeStr",
+        "prop_title": "  Data type for the output data",
+        "prop_description": "A String Representing the data typeHelp for adi.DAQ2.Rx/dataTypeStr is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.DAQ2.Rx/SamplesPerFrame is inherited from superclass ADI.AD9680.BASE"
+      }
+    ]
+  },
+  {
+    "name": "adi.DAQ2.Tx",
+    "dec": "    The adi.DAQ2.Tx System object is a signal source that can <br>    send complex data to the DAQ2.<br> <br>    tx = adi.DAQ2.Tx;<br>    tx = adi.DAQ2.Tx('uri','192.168.2.1');<br> <br>    <a href=\"https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz\">User Guide</a><br> <br>    See also adi.AD9144.Tx, adi.DAQ2.Rx<br>    Documentation for adi.DAQ2.Tx<br>       doc adi.DAQ2.Tx<br>",
+    "props": [
+      {
+        "prop_name": "SamplingRate",
+        "prop_title": " SamplingRate Sampling Rate",
+        "prop_description": "Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is constantHelp for adi.DAQ2.Tx.SamplingRate is inherited from superclass ADI.AD9144.TX"
+      },
+      {
+        "prop_name": "EnabledChannels",
+        "prop_title": " EnabledChannels Enabled Channels",
+        "prop_description": "Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant"
+      },
+      {
+        "prop_name": "uri",
+        "prop_title": "  URI - remote host URI",
+        "prop_description": "Hostname or IP address of remote libIIO deviceHelp for adi.DAQ2.Tx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.DAQ2.Tx/SamplesPerFrame is inherited from superclass ADI.AD9144.BASE"
+      },
+      {
+        "prop_name": "kernelBuffersCount",
+        "prop_title": "  Kernel buffers count",
+        "prop_description": "The number of buffers allocated in the kernel for data transfersHelp for adi.DAQ2.Tx/kernelBuffersCount is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      },
+      {
+        "prop_name": "dataTypeStr",
+        "prop_title": "  Data type for the output data",
+        "prop_description": "A String Representing the data typeHelp for adi.DAQ2.Tx/dataTypeStr is inherited from superclass MATLABSHARED.LIBIIO.BASE"
+      },
+      {
+        "prop_name": "DataSource",
+        "prop_title": " DataSource Data Source",
+        "prop_description": "Data source, specified as one of the following: 'DMA' — Specify the host as the source of the data. 'DDS' — Specify the DDS on the radio hardware as the source of the data. In this case, each channel has two additive tones.Help for adi.DAQ2.Tx/DataSource is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "DDSFrequencies",
+        "prop_title": " DDSFrequencies DDS Frequencies",
+        "prop_description": "Frequencies values in Hz of the DDS tone generators. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.DAQ2.Tx/DDSFrequencies is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "DDSScales",
+        "prop_title": " DDSScales DDS Scales",
+        "prop_description": "Scale of DDS tones in range [0,1]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.DAQ2.Tx/DDSScales is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "DDSPhases",
+        "prop_title": " DDSPhases DDS Phases",
+        "prop_description": "Phases of DDS tones in range [0,360000]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.DAQ2.Tx/DDSPhases is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "EnableCyclicBuffers",
+        "prop_title": " EnableCyclicBuffers Enable Cyclic Buffers",
+        "prop_description": "Enable Cyclic Buffers, configures transmit buffers to be cyclic, which makes them continuously repeatHelp for adi.DAQ2.Tx/EnableCyclicBuffers is inherited from superclass ADI.COMMON.DDS"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.DAQ2.Tx/SamplesPerFrame is inherited from superclass ADI.AD9144.BASE"
+      }
+    ]
+  }
+]

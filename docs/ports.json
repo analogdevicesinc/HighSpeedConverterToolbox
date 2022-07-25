@@ -1,0 +1,80 @@
+{
+    "daq2": {
+        "chip": "AD9680 and AD9144",
+        "complex": true,
+        "hdl_rd_doc": "https://wiki.analog.com/resources/eval/user-guides/daq2/reference_hdl",
+        "fpga": [
+            "zc706",
+            "zcu102"
+        ],
+        "supported_rd": [
+            "rx",
+            "tx",
+            "rx & tx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": false,
+                        "width": 1,
+                        "name": "util_ad9680_cpack/fifo_wr_en",
+                        "count": 1,
+                        "type": "valid"
+                    },
+                    {
+                        "input": true,
+                        "width": 1,
+                        "name": "rx_ad9680_tpl_core/adc_valid_0",
+                        "count": 1,
+                        "type": "valid"
+                    },
+                    {
+                        "input": false,
+                        "width": 16,
+                        "name": "util_ad9680_cpack/fifo_wr_data_@",
+                        "count": 4,
+                        "type": "data"
+                    },
+                    {
+                        "input": true,
+                        "width": 16,
+                        "name": "rx_ad9680_tpl_core/adc_data_@",
+                        "count": 4,
+                        "type": "data"
+                    }
+                ],
+                "tx": [
+                    {
+                        "input": true,
+                        "width": 1,
+                        "name": "util_ad9144_upack/fifo_rd_valid",
+                        "count": 1,
+                        "type": "valid"
+                    },
+                    {
+                        "input": false,
+                        "width": 1,
+                        "name": "util_ad9144_upack/fifo_rd_en",
+                        "count": 1,
+                        "type": "valid"
+                    },
+                    {
+                        "input": false,
+                        "width": 16,
+                        "name": "ad9144_tpl_core/dac_data_@",
+                        "count": 4,
+                        "type": "data"
+                    },
+                    {
+                        "input": true,
+                        "width": 16,
+                        "name": "util_ad9144_upack/fifo_rd_data_@",
+                        "count": 4,
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    }
+}

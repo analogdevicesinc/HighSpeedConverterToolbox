@@ -26,7 +26,7 @@ classdef Rx < adi.common.Rx & adi.AD9213.Base
     
     properties (Nontunable, Hidden)
         devName = 'axi-ad9213-rx-hpc';
-        channel_names = {'voltage0','voltage1'};
+        channel_names = {'voltage0'};
     end
     
     methods

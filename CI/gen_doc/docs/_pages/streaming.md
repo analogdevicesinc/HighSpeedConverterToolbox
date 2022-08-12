@@ -21,7 +21,7 @@ data = rx();
 ```
 With the code above, the hardware is not contacted until the operator or step method is called on line 3. Therefore, any properties that are set or defined before line 3 are not applied or updated on the hardware until after line 3. However, after line 3 has completed the object will become locked and certain configuration changes cannot be applied after this point. These will primarily sample rates and buffer sizes.
 
-The state of the object follows the flow of the diagram below triggered by line line 3 above.
+The state of the object follows the flow of the diagram below triggered by line 3 above.
 
 ``` mermaid
 graph LR

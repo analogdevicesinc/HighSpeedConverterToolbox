@@ -9,9 +9,14 @@ Vivado
 Walkthrough
 Workflow
 util
-fifowr
+fifo
+wr
 axi
+TX
 Tx
+tx
+RX
+Rx
 rx
 upack
 cpack
@@ -19,6 +24,7 @@ tpl
 uri
 ip usb
 dout
+Pluto
 pluto
 Mux
 balun
@@ -47,6 +53,7 @@ adijif
 JESD204B
 JESD204C
 libiio
+libIIO
 pypi
 conda
 JESD

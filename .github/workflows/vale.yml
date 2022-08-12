@@ -24,4 +24,4 @@ jobs:
     - name: Lint doc
       run: |
         export PATH="./bin:$PATH"
-        vale --config=./bin docs
+        vale docs

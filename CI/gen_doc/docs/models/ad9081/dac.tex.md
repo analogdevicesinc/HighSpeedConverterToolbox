@@ -1,7 +1,7 @@
 # AD9081 DAC
 
 
-The DAC models are simplied behavioral implementations that are based on the currently estimated specifications of the data converters. They are designed to match the noise spectral density (NSD). Note that since physical hardware does not exist these are estimated values and will likely change by a few dB.
+The DAC models are simplified behavioral implementations that are based on the currently estimated specifications of the data converters. They are designed to match the noise spectral density (NSD). Note that since physical hardware does not exist these are estimated values and will likely change by a few dB.
 
 
 # Top-Level Control

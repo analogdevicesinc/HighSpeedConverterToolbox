@@ -1,7 +1,7 @@
 # AD9081 ADC and ADC Mux
 
 
-The pipelined ADC models are simplied behavioral implementations that are based on the currently estimated specifications of the data converters. They are designed to be similar to the noise spectral density (NSD) of the converters. Note that since physical hardware does not exist these are estimated values and will likely change. There will be other distortions introduce by physical hardware as well, relating to front-end matches, internal chip structures, baluns, and gains stages among others. The ADC model should be considered similar but not exact.
+The pipelined ADC models are simplified behavioral implementations that are based on the currently estimated specifications of the data converters. They are designed to be similar to the noise spectral density (NSD) of the converters. Note that since physical hardware does not exist these are estimated values and will likely change. There will be other distortions introduce by physical hardware as well, relating to front-end matches, internal chip structures, baluns, and gains stages among others. The ADC model should be considered similar but not exact.
 
 
 # Top-Level Control

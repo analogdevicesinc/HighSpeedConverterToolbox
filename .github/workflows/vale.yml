@@ -15,6 +15,7 @@ jobs:
         pip install rst2html
         wget https://github.com/errata-ai/vale/releases/download/v2.15.4/vale_2.15.4_Linux_64-bit.tar.gz
         mkdir bin && tar -xvzf vale_2.15.4_Linux_64-bit.tar.gz -C bin
+        cd bin && wget https://github.com/errata-ai/vale/blob/v2/.vale.ini && cd ..
         export PATH="./bin:$PATH"
         vale -v
         cd .github/doc

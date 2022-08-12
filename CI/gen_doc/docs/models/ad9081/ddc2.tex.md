@@ -85,7 +85,7 @@ help adi.sim.AD9081.Rx.FDDCNCOEnable
     1x4 Array of booleans to enable NCOs in channelizer path
 ```
 
-## NCO Frequeny and Phase
+## NCO Frequency and Phase
 
 
 Once the NCOs are enabled the frequencies and phases of the NCOs can be controlled individually. This is done through the **CDDCNCOFrequencies, FDDCNCOFrequencies**, **CDDCNCOPhases**, and **FDDCNCOPhases**. The frequencies will be limited based on the rate going into the NCO at that stage. Note that both the frequency and phase values are internally quantized to 48-bits based on the effective range of the NCO based on the sample rate into a given stage.

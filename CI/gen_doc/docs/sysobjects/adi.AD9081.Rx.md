@@ -90,7 +90,7 @@ For more information on changing property values, see <a href="https://www.mathw
 <div class="property">
   <button type="button" onclick="collapse('SamplesPerFrame')" class="collapsible-property collapsible-property-SamplesPerFrame">SamplesPerFrame <span style="text-align:right" class="plus-SamplesPerFrame">+</span></button>
   <div class="content content-SamplesPerFrame" style="display: none;">
-    <p style="padding: 0px;">Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9081.Rx/SamplesPerFrame is inherited from superclass ADI.AD9081.BASE</p>
+    <p style="padding: 0px;">Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance. Help for adi.AD9081.Rx/SamplesPerFrame is inherited from superclass ADI.AD9081.BASE</p>
   </div>
   </div>
 <div class="property">
@@ -102,7 +102,7 @@ For more information on changing property values, see <a href="https://www.mathw
 <div class="property">
   <button type="button" onclick="collapse('uri')" class="collapsible-property collapsible-property-uri">uri <span style="text-align:right" class="plus-uri">+</span></button>
   <div class="content content-uri" style="display: none;">
-    <p style="padding: 0px;">Hostname or IP address of remote libIIO deviceHelp for adi.AD9081.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE</p>
+    <p style="padding: 0px;">Hostname or IP address of remote libiio deviceHelp for adi.AD9081.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE</p>
   </div>
   </div>
 

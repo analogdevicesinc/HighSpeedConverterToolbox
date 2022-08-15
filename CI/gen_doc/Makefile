@@ -40,19 +40,18 @@ endif
 GITTAG := $(shell git describe --tags HEAD)
 
 .ONESHELL:
-build:
-	# Uses the HDLBRANCH variable
-	bash build_bsp.sh
 
 doc_ml:
 	cd ../.. ; \
 	cd docs ; \
+	cp ../../scripts/ports.json . ; \
 	MATLAB=ON python3 gen_all_doc.py ; \
 	cd .. ; \
 	mkdocs build -d doc
 
 doc:
 	cd docs ; \
+	cp ../../scripts/ports.json . ; \
 	python3 gen_all_doc.py ; \
 	cd .. ; \
 	mkdocs build -d doc ; \

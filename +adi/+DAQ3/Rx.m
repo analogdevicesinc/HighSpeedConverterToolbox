@@ -1,14 +1,14 @@
 classdef Rx < adi.AD9680.Rx
-    % adi.DAQ2.Rx Receive data from the DAQ2 evaluation platform
-    %   The adi.DAQ2.Rx System object is a signal source that can 
-    %   receive complex data from the DAQ2.
+    % adi.DAQ3.Rx Receive data from the DAQ3 evaluation platform
+    %   The adi.DAQ3.Rx System object is a signal source that can 
+    %   receive complex data from the DAQ3.
     %
-    %   rx = adi.DAQ2.Rx;
-    %   rx = adi.DAQ2.Rx('uri','192.168.2.1');
+    %   rx = adi.DAQ3.Rx;
+    %   rx = adi.DAQ3.Rx('uri','192.168.2.1');
     %
-    %   <a href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz">User Guide</a>
+    %   <a href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcDAQ3-ebz">User Guide</a>
     %
-    %   See also adi.AD9680.Rx, adi.DAQ2.Tx
+    %   See also adi.AD9680.Rx, adi.DAQ3.Tx
     methods
         %% Constructor
         function obj = Rx(varargin)

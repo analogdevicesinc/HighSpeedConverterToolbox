@@ -1,3 +1,8 @@
+:root > * {
+  --md-primary-fg-color--light: #0370B8;
+  --md-primary-fg-color--dark:  #0370B8;
+}
+
 [data-md-color-scheme="slate"] {
     --prop-box-color: var(--md-code-bg-color);
     --logo-light-mode: none;

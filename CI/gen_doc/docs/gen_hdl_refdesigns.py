@@ -116,7 +116,7 @@ def update_hdl_refdesigns():
 
     for obj in objs:
         # Render template
-        objs[obj] = cleanup(objs[obj])
+        # objs[obj] = cleanup(objs[obj])
         objs[obj]["name"] = obj
 
         if objs[obj]["name"] in ["fmcomms2", "adrv9361z7035", "adrv9364z7020", "pluto"]:

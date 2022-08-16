@@ -56,7 +56,7 @@ The Transceiver Toolbox itself can be installed either from:
 
 To install the toolbox from within MATLAB using the Add-On Explorer, first launch the Explorer from MATLAB's Home tab:
 
-<img class="screenshot" src="/assets/add_ex.png">
+<img class="screenshot" src="../assets/add_ex.png">
 
 Search for the toolbox:
 

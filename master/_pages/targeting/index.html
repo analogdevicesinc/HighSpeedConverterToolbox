@@ -13,7 +13,7 @@
     
     
       
-        <title>Targeting - Analog Devices, Inc. High-Speed Converter Toolbox</title>
+        <title>HDL Targeting with HDL-Coder - Analog Devices, Inc. High-Speed Converter Toolbox</title>
       
     
     
@@ -99,7 +99,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Targeting
+              HDL Targeting with HDL-Coder
             
           </span>
         </div>
@@ -862,6 +862,19 @@
     Getting Started
   </a>
   
+    <nav class="md-nav" aria-label="Getting Started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#checking-for-supported-designs" class="md-nav__link">
+    Checking For Supported Designs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -878,15 +891,42 @@
                 
 
 
-<p>{% include 'header.tmpl' %}</p>
 <h1 id="hdl-targeting-with-hdl-coder">HDL Targeting with HDL-Coder</h1>
-<p>Transceiver Toolbox supports the IP Core generation flow from MathWorks which allows for automated integration of DSP into HDL reference designs from Analog Devices. This workflow will take Simulink subsystems, run HDL-Coder to generate source Verilog, and then integrate that into a larger reference design. The figure below is a simplified block diagram of a SoC (Fabric+ARM) device, where specialized IP are inserted into the receive and transmit datapaths. This is supported on specific FPGA families and transceiver based reference designs. This support is based on the Zynq HDL-Coder and support</p>
+<p>High-Speed Converter Toolbox supports the IP Core generation flow from MathWorks which allows for automated integration of DSP into HDL reference designs from Analog Devices. This workflow will take Simulink subsystems, run HDL-Coder to generate source Verilog, and then integrate that into a larger reference design. The figure below is a simplified block diagram of a SoC (Fabric+ARM) device, where specialized IP are inserted into the receive and transmit datapaths. This is supported on specific FPGA families and high-speed based reference designs. This support is based on the Zynq HDL-Coder and support</p>
 <p><img src="../assets/MATLAB_HDL_Ref_Design.png"></p>
 <h2 id="recommended-review">Recommended Review</h2>
 <ul>
 <li><a href="https://www.mathworks.com/support/search.html/videos/getting-started-with-zynq-80338.html?fq%5B%5D=asset_type_name:video&amp;fq%5B%5D=category:hdlcoder/index&amp;page=1">Getting started with Zynq</a></li>
 </ul>
 <h2 id="getting-started">Getting Started</h2>
+<p>To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2019.1. Using other versions are not supported. To build the necessary BOOT.BIN files will require the Xilinx SDK as well.</p>
+<p>Once you have the installed the necessary 3rd party tools MATLAB needs to be told where they are installed by use of the <a href="https://www.mathworks.com/help/hdlcoder/ref/hdlsetuptoolpath.html">hdlsetuptoolpath</a> command. For Windows the following MATLAB command can be used:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">&#39;ToolName&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Xilinx Vivado&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;ToolPath&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;C:\Xilinx\Vivado\2019.1\bin\vivado.bat&#39;</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+<p>or Linux:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">&#39;ToolName&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Xilinx Vivado&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;ToolPath&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;/opt/Xilinx/Vivado/2019.1/bin/vivado&#39;</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+<p>Please change the tool path if it is different on your system.</p>
+<h3 id="checking-for-supported-designs">Checking For Supported Designs</h3>
+<p>To verify that the ADI reference designs are available to <a href="https://www.mathworks.com/help/hdlcoder/ug/overview-of-workflows-in-hdl-workflow-advisor.html">HDL Workflow Advisor</a> a Simulink model needs to be opened. To do so launch Simulink with the following command:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">simulink</span><span class="w"></span>
+</code></pre></div>
+<p>After it launches open a "Blank DUT" model from the "HDL Coder" dropdown of the Simulink Start Page.</p>
+<p><img src="../assets/simulink_blank_dut.png"></p>
+<!-- <img src="/tmp/HighSpeedConverterToolbox/doc/assets/simulink_blank_dut.png"> -->
+
+<p>After the model opens, click on the green subsystem to select it. Then open the "Apps" tap, open the apps menu and
+scroll down to HDL-Coder.</p>
+<p><img src="../assets/simulink_hdl_coder.png"></p>
+<!-- <img src="/tmp/HighSpeedConverterToolbox/doc/assets/simulink_hdl_coder.png"> -->
+
+<p>This will open the HDL-Coder menu, from here the Workflow Advisor is selectable. Click on it to launch the advisor.</p>
+<p><img src="../assets/simulink_wa.png"></p>
+<!-- <img src="/tmp/HighSpeedConverterToolbox/doc/assets/simulink_wa.png"> -->
+
+<p>Once launch go to Step 1.1 on the left side column. Then on the right side of the window select "IP Core Generation" for "Target workflow". Then the ADI reference designs should be available in the "Target platform" menu as so:</p>
+<p><img src="../assets/hwa_11_crop.png"></p>
+<!-- <img src="/tmp/HighSpeedConverterToolbox/doc/assets/hwa_11_crop.png"> -->
 
               
             </article>

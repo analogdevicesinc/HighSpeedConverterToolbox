@@ -606,6 +606,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ad9081/" class="md-nav__link">
+        ad9081
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -673,8 +687,92 @@
   
   
     <li class="md-nav__item">
+      <a href="../../sysobjects/adi.AD9083.Rx/" class="md-nav__link">
+        adi.AD9083.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.AD9144.Tx/" class="md-nav__link">
+        adi.AD9144.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.AD9152.Tx/" class="md-nav__link">
+        adi.AD9152.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.AD9213.Rx/" class="md-nav__link">
+        adi.AD9213.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.DualAD9213.Rx/" class="md-nav__link">
+        adi.DualAD9213.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../sysobjects/adi.AD9467.Rx/" class="md-nav__link">
         adi.AD9467.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.AD9680.Rx/" class="md-nav__link">
+        adi.AD9680.Rx
       </a>
     </li>
   
@@ -703,6 +801,62 @@
     <li class="md-nav__item">
       <a href="../../sysobjects/adi.DAQ2.Tx/" class="md-nav__link">
         adi.DAQ2.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.DAQ3.Rx/" class="md-nav__link">
+        adi.DAQ3.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.DAQ3.Tx/" class="md-nav__link">
+        adi.DAQ3.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.QuadMxFE.Rx/" class="md-nav__link">
+        adi.QuadMxFE.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.QuadMxFE.Tx/" class="md-nav__link">
+        adi.QuadMxFE.Tx
       </a>
     </li>
   
@@ -778,11 +932,10 @@
 
 <h1 id="daq2-reference-design-integration">daq2 Reference Design Integration</h1>
 <p>This page outlines the HDL reference design integration for the <em>daq2</em> reference design for the Analog Devices
-AD9680 and AD9144 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants: </p>
+DAQ2 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants: </p>
 <ul>
-<li><a href="https://wiki.analog.com/resources/eval/user-guides/daq2/reference_hdl">Base reference design documentation</a></li>
+<li><a href="">Base reference design documentation</a></li>
 <li>Supported FPGA carriers:<ul>
-<li>ZC706</li>
 <li>ZCU102</li>
 </ul>
 </li>
@@ -1140,143 +1293,80 @@ AD9680 and AD9144 component. The IP-Core Generation follow is available on the b
 </thead>
 <tbody>
 <tr>
-<td>VALID-OUT</td>
+<td>VALID-IN</td>
 <td>IP Data Valid OUT</td>
-<td>util_ad9680_cpack/fifo_wr_en</td>
+<td>axi_ad9680_cpack/fifo_wr_en</td>
 <td>1</td>
 <td>RX</td>
 </tr>
 <tr>
 <td>VALID-IN</td>
 <td>IP Valid Rx Data IN</td>
-<td>rx_ad9680_tpl_core/adc_valid_0</td>
+<td>axi_ad9680_tpl/adc_valid_0</td>
 <td>1</td>
 <td>RX</td>
 </tr>
 <tr>
-<td>DATA-OUT</td>
+<td>DATA-IN</td>
 <td>IP Data 0 OUT</td>
-<td>util_ad9680_cpack/fifo_wr_data_0</td>
-<td>16</td>
+<td>axi_ad9680_cpack/fifo_wr_data_0</td>
+<td>64</td>
 <td>RX</td>
 </tr>
 <tr>
-<td>DATA-OUT</td>
+<td>DATA-IN</td>
 <td>IP Data 1 OUT</td>
-<td>util_ad9680_cpack/fifo_wr_data_1</td>
-<td>16</td>
-<td>RX</td>
-</tr>
-<tr>
-<td>DATA-OUT</td>
-<td>IP Data 2 OUT</td>
-<td>util_ad9680_cpack/fifo_wr_data_2</td>
-<td>16</td>
-<td>RX</td>
-</tr>
-<tr>
-<td>DATA-OUT</td>
-<td>IP Data 3 OUT</td>
-<td>util_ad9680_cpack/fifo_wr_data_3</td>
-<td>16</td>
+<td>axi_ad9680_cpack/fifo_wr_data_1</td>
+<td>64</td>
 <td>RX</td>
 </tr>
 <tr>
 <td>DATA-IN</td>
-<td>AD9680 and AD9144 ADC Data Q0</td>
-<td>rx_ad9680_tpl_core/adc_data_0</td>
-<td>16</td>
+<td>DAQ2 ADC Data 0 IN</td>
+<td>axi_ad9680_tpl/adc_data_0</td>
+<td>64</td>
 <td>RX</td>
 </tr>
 <tr>
 <td>DATA-IN</td>
-<td>AD9680 and AD9144 ADC Data I0</td>
-<td>rx_ad9680_tpl_core/adc_data_1</td>
-<td>16</td>
-<td>RX</td>
-</tr>
-<tr>
-<td>DATA-IN</td>
-<td>AD9680 and AD9144 ADC Data Q1</td>
-<td>rx_ad9680_tpl_core/adc_data_2</td>
-<td>16</td>
-<td>RX</td>
-</tr>
-<tr>
-<td>DATA-IN</td>
-<td>AD9680 and AD9144 ADC Data I1</td>
-<td>rx_ad9680_tpl_core/adc_data_3</td>
-<td>16</td>
+<td>DAQ2 ADC Data 1 IN</td>
+<td>axi_ad9680_tpl/adc_data_1</td>
+<td>64</td>
 <td>RX</td>
 </tr>
 <tr>
 <td>VALID-IN</td>
 <td>IP Valid Tx Data IN</td>
-<td>util_ad9144_upack/fifo_rd_valid</td>
+<td>axi_ad9144_upack/fifo_rd_valid</td>
 <td>1</td>
 <td>TX</td>
 </tr>
 <tr>
-<td>VALID-OUT</td>
-<td>IP Load Tx Data OUT</td>
-<td>util_ad9144_upack/fifo_rd_en</td>
-<td>1</td>
+<td>DATA-IN</td>
+<td>DAQ2 DAC Data 0 OUT</td>
+<td>axi_ad9144_tpl/dac_data_0</td>
+<td>64</td>
 <td>TX</td>
 </tr>
 <tr>
-<td>DATA-OUT</td>
-<td>AD9680 and AD9144 DAC Data Q0</td>
-<td>ad9144_tpl_core/dac_data_0</td>
-<td>16</td>
-<td>TX</td>
-</tr>
-<tr>
-<td>DATA-OUT</td>
-<td>AD9680 and AD9144 DAC Data I0</td>
-<td>ad9144_tpl_core/dac_data_1</td>
-<td>16</td>
-<td>TX</td>
-</tr>
-<tr>
-<td>DATA-OUT</td>
-<td>AD9680 and AD9144 DAC Data Q1</td>
-<td>ad9144_tpl_core/dac_data_2</td>
-<td>16</td>
-<td>TX</td>
-</tr>
-<tr>
-<td>DATA-OUT</td>
-<td>AD9680 and AD9144 DAC Data I1</td>
-<td>ad9144_tpl_core/dac_data_3</td>
-<td>16</td>
+<td>DATA-IN</td>
+<td>DAQ2 DAC Data 1 OUT</td>
+<td>axi_ad9144_tpl/dac_data_1</td>
+<td>64</td>
 <td>TX</td>
 </tr>
 <tr>
 <td>DATA-IN</td>
 <td>IP Data 0 IN</td>
-<td>util_ad9144_upack/fifo_rd_data_0</td>
-<td>16</td>
+<td>axi_ad9144_upack/fifo_rd_data_0</td>
+<td>64</td>
 <td>TX</td>
 </tr>
 <tr>
 <td>DATA-IN</td>
 <td>IP Data 1 IN</td>
-<td>util_ad9144_upack/fifo_rd_data_1</td>
-<td>16</td>
-<td>TX</td>
-</tr>
-<tr>
-<td>DATA-IN</td>
-<td>IP Data 2 IN</td>
-<td>util_ad9144_upack/fifo_rd_data_2</td>
-<td>16</td>
-<td>TX</td>
-</tr>
-<tr>
-<td>DATA-IN</td>
-<td>IP Data 3 IN</td>
-<td>util_ad9144_upack/fifo_rd_data_3</td>
-<td>16</td>
+<td>axi_ad9144_upack/fifo_rd_data_1</td>
+<td>64</td>
 <td>TX</td>
 </tr>
 </tbody>
@@ -1310,13 +1400,13 @@ AD9680 and AD9144 component. The IP-Core Generation follow is available on the b
       
       
         
-        <a href="../../sysobjects/adi.AD9081.Rx/" class="md-footer__link md-footer__link--next" aria-label="Next: adi.AD9081.Rx" rel="next">
+        <a href="../ad9081/" class="md-footer__link md-footer__link--next" aria-label="Next: ad9081" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              adi.AD9081.Rx
+              ad9081
             </div>
           </div>
           <div class="md-footer__button md-icon">

@@ -10,10 +10,10 @@
 
 <center>
 <div class="dark-logo">
-<img src="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/raw/master/logos/logo_black.png" alt="HSX Toolbox" width="80%">
+<img src="https://raw.githubusercontent.com/analogdevicesinc/HighSpeedConverterToolbox/master/CI/doc/hsx_300.png" alt="HSX Toolbox" width="80%">
 </div>
 <div class="light-logo">
-<img src="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/raw/master/logos/logo_white.png" alt="HSX Toolbox" width="80%">
+<img src="https://raw.githubusercontent.com/analogdevicesinc/HighSpeedConverterToolbox/master/CI/doc/hsx_w_300.png" alt="HSX Toolbox" width="80%">
 </div>
 </center>
 

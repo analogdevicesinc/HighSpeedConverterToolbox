@@ -27,17 +27,17 @@ The following have device-specific implementations in MATLAB and Simulink. If a 
 | DAQ2 (AD9680/AD9144)	| ZC706	| Yes	| No	| ADI (2019a) |
 | | ZCU102 | Yes	| Yes	| ADI (2019a) |
 | | Arria10 SoC	| Yes	| No	| ADI (2019a) |
-| DAQ3 (AD9680/AD9152)	| ZC706	| Yes	| No	| ADI (2019a) |
-| | ZCU102 | Yes	| No	| ADI (2019a) |
-| | KCU105 | Yes	| No	| ADI (2019a) |
-| | Arria10 SoC	| Yes	| No	| ADI (2019a) |
+| DAQ3 (AD9680/AD9152)	| ZC706	| Yes	| No	| ADI (2021b) |
+| | ZCU102 | Yes	| No	| ADI (2021b) |
+| | KCU105 | Yes	| No	| ADI (2021b) |
+| | Arria10 SoC	| Yes	| No	| ADI (2021b) |
 | DualAD9213	| Stratix 10	| Yes	| No	| ADI (2021b) |
 | AD9081/AD9082	| ZCU102	| Yes	| Yes	| ADI (2020a) |
 | | VCU118	| Yes	| No	| ADI (2020a) |
-| AD9083	| ZCU102	| Yes	| Yes	| ADI (2020a) |
+| AD9083	| ZCU102	| Yes	| No	| ADI (2021b) |
 | AD9988/AD9986	| ZCU102	| Yes	| Yes	| ADI (2020a) |
 | | VCU118	| Yes	| No	| ADI (2020a) |
-| AD9209/AD9177	| ZCU102	| Yes	| No	| ADI (2020a) |
+| AD9209/AD9177	| ZCU102	| Yes	| Yes	| ADI (2020a) |
 | | VCU118	| Yes	| No	| ADI (2020a) |
 | QuadMxFE (AD9081 x4)	| VCU118	| Yes	| No	| ADI (2020a) |
 | AD9467	| Zedboard	| Yes	| No	| ADI (2018b) |

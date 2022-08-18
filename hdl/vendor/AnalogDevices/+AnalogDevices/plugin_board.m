@@ -52,6 +52,15 @@ switch lower(project)
                 hB.FPGASpeed    = '';
                 hB.FPGAFamily   = 'Zynq UltraScale+';
         end
+    case {'lldk'}
+        switch(upper(board))
+            case 'ZED'
+                hB.FPGADevice   = sprintf('xc7%s', 'z020');
+                hB.FPGAPackage  = 'clg484';
+                hB.FPGASpeed    = '-1';
+                hB.FPGAFamily   = 'Zynq';
+        end
+
 %     case 'adrv9361-z7035'
 %         hB.FPGADevice   = sprintf('xc7%s', 'z035i');
 %         hB.FPGAPackage  = 'fbg676';

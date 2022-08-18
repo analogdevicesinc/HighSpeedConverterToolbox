@@ -137,5 +137,25 @@ proc preprocess_bd {project carrier rxtx} {
                 }
             }
         }
+        lldk_fmc {
+            if {$rxtx == "rx"} {
+
+                # Disconnect the ADC PACK pins
+		delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_data]
+		delete_bd_objs [get_bd_nets axi_ltc2387_1_adc_data]
+		delete_bd_objs [get_bd_nets axi_ltc2387_2_adc_data]
+		delete_bd_objs [get_bd_nets axi_ltc2387_3_adc_data]
+
+		delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_valid]
+            }
+            switch $carrier {
+                zed {
+                    if {$rxtx == "rx"} {
+                        set_property -dict [list CONFIG.NUM_MI {23}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M22_ACLK] [get_bd_pins axi_clkgen/clk_0]
+                    }
+                }
+            }
+        }
     }
 }

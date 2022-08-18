@@ -20,6 +20,15 @@ switch project
             otherwise
                 error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
         end
+   case 'lldk'
+        switch fpga
+            case{'ZED'}
+                InterfaceConnection = 'axi_cpu_interconnect/M22_AXI';
+                BaseAddress = '0x43C00000';
+                MasterAddressSpace = 'sys_ps7/Data';
+            otherwise
+                error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
+        end
     otherwise
         error(sprintf('Unknown Project %s',project)); %#ok<*SPERR>
 end

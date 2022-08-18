@@ -7,6 +7,8 @@ pname = upper(project);
 ppath = project;
 if strcmpi(project, 'ad9081')
     ppath = 'ad9081_fmca_ebz';
+elseif strcmpi(project, 'lldk')
+    ppath = 'lldk_fmc';	
 end
 
 % Construct reference design object

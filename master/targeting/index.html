@@ -509,6 +509,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#moving-bitstreams-to-hardware" class="md-nav__link">
+    Moving Bitstreams To Hardware
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -938,6 +945,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#moving-bitstreams-to-hardware" class="md-nav__link">
+    Moving Bitstreams To Hardware
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -988,6 +1002,13 @@ scroll down to HDL-Coder.</p>
 <p>Once launch go to Step 1.1 on the left side column. Then on the right side of the window select "IP Core Generation" for "Target workflow". Then the ADI reference designs should be available in the "Target platform" menu as so:</p>
 <p><img src="../assets/hwa_11_crop.png"></p>
 <!-- <img src="/tmp/HighSpeedConverterToolbox/doc/assets/hwa_11_crop.png"> -->
+
+<h2 id="moving-bitstreams-to-hardware">Moving Bitstreams To Hardware</h2>
+<p>Unlike support packages provided by MathWorks, the update process for the bitstreams requires the creation of a BOOT.BIN file which will be compatible with the ADI SD card. BOOT.BIN's contain the bitstream (system_top.bit), FSBL, and u-boot for ADI platforms.</p>
+<p>First, make sure you have a valid SD card for your platform with the necessary device tree and kernel image selected. <a href="https://wiki.analog.com/resources/tools-software/linux-software/embedded_arm_images">Follow this process here</a>.</p>
+<p>Once your SD card is ready, in step 4.3 "Build FPGA Bitstream" of HDL Workflow Advisor select a custom Tcl file for synthesis build. Utilize this <a href="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/blob/master/CI/scripts/adi_build.tcl">adi_build.tcl</a> file for Linux or this <a href="https://github.com/analogdevicesinc/HighSpeedConverterToolbox/blob/master/CI/scripts/adi_build_win.tcl">adi_build_win.tcl</a> file for Windows located within the BSP as your custom tcl file. </p>
+<p><img src="../assets/hwa_custom.png"></p>
+<p>Once the bitstream is built it will generate the BOOT.BIN necessary for booting your system. Place the generated BOOT.BIN in the root of your ADI SD card's BOOT partition.</p>
 
               
             </article>

@@ -125,6 +125,37 @@ proc preprocess_bd {project carrier rxtx} {
                     }
                 }
             }
-        }        
+        }
+        lldk {
+            if {$rxtx == "rx"} {
+		#Remove filter
+		#delete_bd_objs [get_bd_cells axi_adc_decimate_0]
+		#delete_bd_objs [get_bd_cells axi_adc_decimate_1]
+
+                delete_bd_objs [get_bd_nets /axi_ltc2387_1_adc_valid] [get_bd_nets /axi_ltc2387_0_adc_data] [get_bd_nets /axi_adc_decimate_0_adc_dec_valid_a ] [get_bd_nets /axi_adc_decimate_0_adc_dec_data_a] [get_bd_nets /axi_ltc2387_0_adc_valid] [get_bd_nets /axi_ltc2387_1_adc_data] [get_bd_nets /axi_adc_decimate_0_adc_dec_data_b]
+
+                delete_bd_objs [get_bd_nets /axi_adc_decimate_1_adc_dec_data_a] [get_bd_nets /axi_adc_decimate_1_adc_dec_data_b] [get_bd_nets /axi_ltc2387_3_adc_valid] [get_bd_nets /axi_ltc2387_2_adc_valid] [get_bd_nets /axi_ltc2387_3_adc_data] [get_bd_nets /axi_ltc2387_2_adc_data] [get_bd_nets /axi_adc_decimate_1_adc_dec_valid_a]
+                # Disconnect the ADC PACK pins
+		delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_data]
+		delete_bd_objs [get_bd_nets axi_ltc2387_1_adc_data]
+		delete_bd_objs [get_bd_nets axi_ltc2387_2_adc_data]
+		delete_bd_objs [get_bd_nets axi_ltc2387_3_adc_data]
+
+		delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_valid]
+
+                # Connect the ADC PACK valid signals together
+                connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_1/adc_valid]
+                connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_2/adc_valid]
+                connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_3/adc_valid]
+            }
+            switch $carrier {
+                zed {
+                    if {$rxtx == "rx"} {
+                        set_property -dict [list CONFIG.NUM_MI {23}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M22_ACLK] [get_bd_pins axi_clkgen/clk_0]
+                    }
+                }
+            }
+        } 
     }
 }

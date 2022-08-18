@@ -55,3 +55,15 @@ Once launch go to Step 1.1 on the left side column. Then on the right side of th
 
 <img src="../assets/hwa_11_crop.png">
 <!-- <img src="/tmp/HighSpeedConverterToolbox/doc/assets/hwa_11_crop.png"> -->
+
+## Moving Bitstreams To Hardware
+
+Unlike support packages provided by MathWorks, the update process for the bitstreams requires the creation of a BOOT.BIN file which will be compatible with the ADI SD card. BOOT.BIN's contain the bitstream (system_top.bit), FSBL, and u-boot for ADI platforms.
+
+First, make sure you have a valid SD card for your platform with the necessary device tree and kernel image selected. [Follow this process here](https://wiki.analog.com/resources/tools-software/linux-software/embedded_arm_images).
+
+Once your SD card is ready, in step 4.3 "Build FPGA Bitstream" of HDL Workflow Advisor select a custom Tcl file for synthesis build. Utilize this [adi_build.tcl](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/blob/master/CI/scripts/adi_build.tcl) file for Linux or this [adi_build_win.tcl](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/blob/master/CI/scripts/adi_build_win.tcl) file for Windows located within the BSP as your custom tcl file. 
+
+<img src="../assets/hwa_custom.png">
+
+Once the bitstream is built it will generate the BOOT.BIN necessary for booting your system. Place the generated BOOT.BIN in the root of your ADI SD card's BOOT partition.

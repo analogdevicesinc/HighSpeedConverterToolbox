@@ -126,7 +126,7 @@ proc preprocess_bd {project carrier rxtx} {
                 }
             }
         }
-        lldk {
+        lldk_fmc {
             if {$rxtx == "rx"} {
 		#Remove filter
 		#delete_bd_objs [get_bd_cells axi_adc_decimate_0]
@@ -144,9 +144,9 @@ proc preprocess_bd {project carrier rxtx} {
 		delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_valid]
 
                 # Connect the ADC PACK valid signals together
-                connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_1/adc_valid]
-                connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_2/adc_valid]
-                connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_3/adc_valid]
+                #connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_1/adc_valid]
+                #connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_2/adc_valid]
+                #connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_3/adc_valid]
             }
             switch $carrier {
                 zed {

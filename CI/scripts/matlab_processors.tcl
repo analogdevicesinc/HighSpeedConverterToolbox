@@ -1,4 +1,4 @@
-proc preprocess_bd {project carrier rxtx} {
+proc preprocess_bd {project carrier rxtx rx_jesd_m rx_jesd_l} {
 
     puts "Preprocessing $project $carrier $rxtx"
 
@@ -67,11 +67,12 @@ proc preprocess_bd {project carrier rxtx} {
                 disconnect_bd_net /rx_mxfe_tpl_core_adc_data_1 [get_bd_pins util_mxfe_cpack/fifo_wr_data_1]
                 disconnect_bd_net /rx_mxfe_tpl_core_adc_data_2 [get_bd_pins util_mxfe_cpack/fifo_wr_data_2]
                 disconnect_bd_net /rx_mxfe_tpl_core_adc_data_3 [get_bd_pins util_mxfe_cpack/fifo_wr_data_3]
-                disconnect_bd_net /rx_mxfe_tpl_core_adc_data_4 [get_bd_pins util_mxfe_cpack/fifo_wr_data_4]
-                disconnect_bd_net /rx_mxfe_tpl_core_adc_data_5 [get_bd_pins util_mxfe_cpack/fifo_wr_data_5]
-                disconnect_bd_net /rx_mxfe_tpl_core_adc_data_6 [get_bd_pins util_mxfe_cpack/fifo_wr_data_6]
-                disconnect_bd_net /rx_mxfe_tpl_core_adc_data_7 [get_bd_pins util_mxfe_cpack/fifo_wr_data_7]
-
+                if {$RX_JESD_M == "4" && $RX_JESD_L == "8"} {
+                    disconnect_bd_net /rx_mxfe_tpl_core_adc_data_4 [get_bd_pins util_mxfe_cpack/fifo_wr_data_4]
+                    disconnect_bd_net /rx_mxfe_tpl_core_adc_data_5 [get_bd_pins util_mxfe_cpack/fifo_wr_data_5]
+                    disconnect_bd_net /rx_mxfe_tpl_core_adc_data_6 [get_bd_pins util_mxfe_cpack/fifo_wr_data_6]
+                    disconnect_bd_net /rx_mxfe_tpl_core_adc_data_7 [get_bd_pins util_mxfe_cpack/fifo_wr_data_7]
+                }
                 # Connect the ADC PACK valid signals together
                 # connect_bd_net [get_bd_pins axi_ad9680_cpack/adc_valid_0] [get_bd_pins axi_ad9680_cpack/adc_valid_1]
             }
@@ -84,10 +85,12 @@ proc preprocess_bd {project carrier rxtx} {
                 delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_1]
                 delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_2]
                 delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_3]
-                delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_4]
-                delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_5]
-                delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_6]
-                delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_7]
+                if {$RX_JESD_M == "4" && $RX_JESD_L == "8"} {
+                    delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_4]
+                   delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_5]
+                    delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_6]
+                    delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_7]
+                }
             }
             if {$rxtx == "rxtx"} {
                 # Connect TX clocking to RX path

@@ -2,9 +2,10 @@ import json
 
 # open ports.json file and parse
 ports_json_file = 'ports.json'
+
+data_index = 0
 with open(ports_json_file) as json_file:
     ports = json.load(json_file)
-
     tmp_key = "m_name"
     for key0 in ports.keys():
         for key1 in ports[key0]['ports'][0].keys():
@@ -16,10 +17,14 @@ with open(ports_json_file) as json_file:
                             if tmp_key not in tmp_dict:
                                 tmp_list = tmp_dict['name'].split("_")
                                 last_ele = tmp_list[-1]
+                                print(tmp_list[-1])
                                 if (len(last_ele) == 1):
                                     tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {last_ele} IN"
-                                elif (len(last_ele) == 2):
-                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {last_ele.upper()}"                                
+                                #elif (len(last_ele) == 2):
+                                else:
+                                    print(last_ele)
+                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {data_index} {last_ele.upper()}" 
+                                    data_index += 1
                         elif (tmp_dict['input'] == "false"):
                             if tmp_key not in tmp_dict:                            
                                 tmp_list = tmp_dict['name'].split("_")

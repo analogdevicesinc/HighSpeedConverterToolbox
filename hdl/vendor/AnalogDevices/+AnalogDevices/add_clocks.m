@@ -40,15 +40,16 @@ switch lower(project)
             case 'RX'
                 hRD.addClockInterface( ...
                     'ClockConnection',   'axi_clkgen/clk_0', ...
-                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
+                    'ResetConnection',   'pack_sys_rstgen/peripheral_aresetn');
+
             case 'TX'
                 hRD.addClockInterface( ...
                     'ClockConnection',   'axi_clkgen/clk_0', ...
-                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
+                    'ResetConnection',   'pack_sys_rstgen/peripheral_aresetn');
             case 'RX & TX'
                 hRD.addClockInterface( ...
                     'ClockConnection',   'axi_clkgen/clk_0', ...
-                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
+                    'ResetConnection',   'pack_sys_rstgen/peripheral_aresetn');
             otherwise
                 error('Unknown reference design');
         end

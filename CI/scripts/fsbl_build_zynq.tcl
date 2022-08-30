@@ -7,10 +7,10 @@ set cdir [pwd]
 set sdk_loc $cdir/vivado_prj.sdk
 
 ### Create fsbl
-hsi open_hw_design $sdk_loc/system_top.hdf
+hsi open_hw_design $sdk_loc/system_top.xsa
 set cpu_name [lindex [hsi get_cells -filter {IP_TYPE==PROCESSOR}] 0]
 sdk setws $sdk_loc
-sdk createhw -name hw_0 -hwspec $sdk_loc/system_top.hdf
+sdk createhw -name hw_0 -hwspec $sdk_loc/system_top.xsa
 sdk createapp -name fsbl -hwproject hw_0 -proc $cpu_name -os standalone -lang C -app {Zynq FSBL}
 configapp -app fsbl build-config release
 sdk projects -build -type all

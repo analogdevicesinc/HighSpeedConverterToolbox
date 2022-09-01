@@ -23,7 +23,7 @@ switch project
    case 'lldk'
         switch fpga
             case{'ZED'}
-                InterfaceConnection = 'axi_cpu_interconnect/M22_AXI';
+                InterfaceConnection = 'axi_cpu_interconnect/M20_AXI';
                 BaseAddress = '0x43C00000';
                 MasterAddressSpace = 'sys_ps7/Data';
             otherwise

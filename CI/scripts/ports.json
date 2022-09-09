@@ -314,5 +314,147 @@
                 ]
             }
         ]
+    },
+    "ad9656": {
+        "chip": "AD9656",
+        "complex": "true",
+        "fpga": [
+            "zcu102"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_en",
+                        "type": "valid",
+                        "m_name": "IP Data Valid OUT"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "rx_ad9656_tpl_core/adc_valid_0",
+                        "type": "valid",
+                        "m_name": "IP Valid Rx Data IN"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_0",
+                        "type": "data",
+                        "m_name": "IP Data 0 OUT"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_1",
+                        "type": "data",
+                        "m_name": "IP Data 1 OUT"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_2",
+                        "type": "data",
+                        "m_name": "IP Data 2 OUT"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_3",
+                        "type": "data",
+                        "m_name": "IP Data 3 OUT"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_4",
+                        "type": "data",
+                        "m_name": "IP Data 4 OUT"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_5",
+                        "type": "data",
+                        "m_name": "IP Data 5 OUT"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_6",
+                        "type": "data",
+                        "m_name": "IP Data 6 OUT"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "util_ad9656_rx_cpack/fifo_wr_data_7",
+                        "type": "data",
+                        "m_name": "IP Data 7 OUT"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_0",
+                        "type": "data",
+                        "m_name": "AD9656 ADC Data I0"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_1",
+                        "type": "data",
+                        "m_name": "AD9656 ADC Data Q0"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_2",
+                        "type": "data",
+                        "m_name": "AD9656 ADC Data I1"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_3",
+                        "type": "data",
+                        "m_name": "AD9656 ADC Data Q1"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_4",
+                        "type": "data",
+                        "m_name": "AD9656 ADC Data I2"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_5",
+                        "type": "data",
+                        "m_name": "ADRV9009 ADC Data Q2"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_6",
+                        "type": "data",
+                        "m_name": "AD9656 ADC Data I3"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "rx_ad9656_tpl_core/adc_data_7",
+                        "type": "data",
+                        "m_name": "AD9656 ADC Data Q3"
+                    }
+                ]
+            }
+        ]
     }
 }

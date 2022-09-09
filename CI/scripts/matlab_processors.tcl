@@ -58,6 +58,29 @@ proc preprocess_bd {project carrier rxtx} {
                 }
             }
         }
+        ad9656_fmc {            
+            if {$rxtx == "rx"} {
+            
+                #Remove decimators
+                delete_bd_objs [get_bd_nets rx_ad9656_tpl_core_adc_data_0] [get_bd_nets rx_ad9656_tpl_core_adc_data_1] [get_bd_nets rx_ad9656_tpl_core_adc_data_2]  [get_bd_nets rx_ad9656_tpl_core_adc_data_3] [get_bd_nets rx_ad9656_tpl_core_adc_enable_0] [get_bd_nets rx_ad9656_tpl_core_adc_enable_1] [get_bd_nets rx_ad9656_tpl_core_adc_enable_2] [get_bd_nets rx_ad9656_tpl_core_adc_enable_3] [get_bd_nets rx_ad9656_tpl_core_adc_valid_0] 
+                
+                # Connect the ADC PACK valid signals together
+                connect_bd_net [get_bd_pins util_ad9656_rx_cpack/enable_0] [get_bd_pins util_ad9656_rx_cpack/enable_1]
+                connect_bd_net [get_bd_pins util_ad9656_rx_cpack/enable_0] [get_bd_pins util_ad9656_rx_cpack/enable_2]
+                connect_bd_net [get_bd_pins util_ad9656_rx_cpack/enable_0] [get_bd_pins util_ad9656_rx_cpack/enable_3]
+                # Connect enables
+                connect_bd_net [get_bd_pins rx_ad9656_tpl_core/adc_enable_0] [get_bd_pins util_ad9656_rx_cpack/enable_0]  
+            }
+            switch $carrier {                
+                zcu102 {                    
+                    # Add 1 extra AXI master ports to the interconnect
+                    set_property -dict [list CONFIG.NUM_MI {6}] [get_bd_cells axi_cpu_interconnect]
+                    # Connect clock and reset
+                    connect_bd_net [get_bd_pins axi_cpu_interconnect/M05_ACLK] [get_bd_pins util_ad9656_xcvr/rx_out_clk_0]       
+                    #connect_bd_net [get_bd_pins axi_cpu_interconnect/M05_ARESETN] [get_bd_pins ad9656_rx_device_clk_rstgen/peripheral_reset]
+                }                
+            }
+        }
         ad9081_fmca_ebz {
             if {$rxtx == "rx" || $rxtx == "rxtx"} {
                 # Disconnect the ADC PACK pins

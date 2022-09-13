@@ -211,7 +211,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   }
 
   if {$mode == 0} {
-    set project_system_dir "./$project_name.srcs/sources_1/bd/system"
+    set project_system_dir "$project_root/$project_name.srcs/sources_1/bd/system"
     if {$MATLAB == 0} {
         create_project $project_name . -part $p_device -force
     }

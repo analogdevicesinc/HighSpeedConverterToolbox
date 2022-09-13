@@ -136,3 +136,30 @@ node {
 //     }
 // }
 //
+
+/////////////////////////////////////////////////////
+
+boardNames = ['ad9565']
+dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
+
+stage("HDL Tests") {
+    dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+        branchName ->
+        withEnv(['BOARD='+branchName]) {
+            stage("Source") {
+                unstash "builtSources"
+                sh 'make -C ./CI/scripts test'
+		junit testResults: 'test/*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            }
+            stage("Installer") {
+                unstash "builtSources"
+                sh 'make -C ./CI/scripts test_installer'
+		junit testResults: 'test/*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            }
+        }
+    }
+}
+
+/////////////////////////////////////////////////////

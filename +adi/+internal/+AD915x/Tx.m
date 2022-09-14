@@ -1,5 +1,5 @@
 classdef Tx < adi.common.Tx & adi.AD915x.Base & adi.common.DDS & adi.common.Attribute
-    % adi.AD915x.Tx Transmit data to the AD9144 high speed DAC
+    % adi.AD915x.Tx 
     %   
     %
     

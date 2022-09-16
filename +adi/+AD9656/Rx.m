@@ -1,7 +1,7 @@
 classdef Rx < adi.common.Rx & adi.AD9656.Base & adi.common.Attribute
-    % adi.AD9656.Rx Receive data from the AD9680 high speed ADC
+    % adi.AD9656.Rx Receive data from the AD9656 high speed ADC
     %   The adi.AD9656.Rx System object is a signal source that can receive
-    %   complex data from the AD9680.
+    %   complex data from the AD9656.
     %
     %   rx = adi.AD9656.Rx;
     %   rx = adi.AD9656.Rx('uri','192.168.2.1');
@@ -25,7 +25,8 @@ classdef Rx < adi.common.Rx & adi.AD9656.Base & adi.common.Attribute
     end
     
     properties (Nontunable, Hidden)
-        devName = 'ad9656';
+        devName = 'axi-ad9656-hpc';
+        phyDevName = 'axi-ad9656-hpc';
         channel_names = {'voltage0','voltage1'};
     end
     

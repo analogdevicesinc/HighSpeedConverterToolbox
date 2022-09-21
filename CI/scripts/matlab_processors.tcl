@@ -38,8 +38,8 @@ proc preprocess_bd {project carrier rxtx} {
                 connect_bd_net [get_bd_pins axi_ad9144_upack/clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
                 
                 # TX FIFO
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_fifo/dac_clk]
-                connect_bd_net [get_bd_pins axi_ad9144_fifo/dac_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_offload/m_axis_aclk]
+                connect_bd_net [get_bd_pins axi_ad9144_offload/m_axis_aclk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
             
                 # TX JESD
                 disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_jesd/device_clk]
@@ -48,12 +48,12 @@ proc preprocess_bd {project carrier rxtx} {
             switch $carrier {                
                 zcu102 {                    
                     if {$rxtx == "rx" || $rxtx == "rxtx"} {
-                        set_property -dict [list CONFIG.NUM_MI {10}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M09_ACLK] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M11_ACLK] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
                     }
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {10}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M09_ACLK] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M11_ACLK] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
                     }
                 }
             }

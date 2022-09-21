@@ -100,7 +100,7 @@ proc preprocess_bd {project carrier rxtx} {
                 connect_bd_net [get_bd_pins util_mxfe_upack/clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
 
                 # DAC FIFO reconnect
-                connect_bd_net [get_bd_pins mxfe_dac_fifo/dac_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins mxfe_tx_data_offload/m_axis_aclk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
 
                 # TX TPL Core
                 connect_bd_net [get_bd_pins tx_mxfe_tpl_core/link_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
@@ -116,12 +116,12 @@ proc preprocess_bd {project carrier rxtx} {
             switch $carrier {                
                 zcu102 {                    
                     if {$rxtx == "rx" || $rxtx == "rxtx"} {
-                        set_property -dict [list CONFIG.NUM_MI {10}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M09_ACLK] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M11_ACLK] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
                     }
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {10}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M09_ACLK] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M11_ACLK] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
                     }
                 }
             }

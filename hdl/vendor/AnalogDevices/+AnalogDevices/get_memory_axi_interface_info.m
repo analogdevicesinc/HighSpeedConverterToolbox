@@ -14,7 +14,7 @@ switch project
     case 'ad9081'
         switch fpga
             case {'ZCU102'}
-                InterfaceConnection = 'axi_cpu_interconnect/M09_AXI';
+                InterfaceConnection = 'axi_cpu_interconnect/M11_AXI';
                 BaseAddress = '0x9D000000';
                 MasterAddressSpace = 'sys_ps8/Data';
             otherwise

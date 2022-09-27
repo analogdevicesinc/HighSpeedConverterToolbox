@@ -48,7 +48,7 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         %Sync Sync
         %   JESD204 FSM CTRL. Options are:
         %   '0' '1'
-        Sync
+        Sync = '0'
     end
     
     properties (Nontunable, Logical)

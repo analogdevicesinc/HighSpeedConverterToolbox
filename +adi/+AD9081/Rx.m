@@ -45,6 +45,10 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
         %   'pn15' 'pn31' 'ramp'
         TestMode = 'off';
+        %Sync Sync
+        %   JESD204 FSM CTRL. Options are:
+        %   '0' '1'
+        Sync
     end
     
     properties (Nontunable, Logical)
@@ -152,6 +156,11 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
                 obj.iioDev);
             obj.TestMode = value;
         end
+        %% Check Sync
+        function set.Sync(obj, value)
+            obj.setDeviceAttributeRAW('jesd204_fsm_ctrl',value);
+            obj.Sync = value;
+        end
         %%
         % Check EnablePFIRs
         function set.EnablePFIRs(obj, value)
@@ -194,7 +203,7 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             % Write all attributes to device once connected through set
             % methods
             % Do writes directly to hardware without using set methods.
-            % This is required sine Simulink support doesn't support
+            % This is required since Simulink support doesn't support
             % modification to nontunable variables at SetupImpl
                                     
             % Update attributes
@@ -220,6 +229,8 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             if obj.EnablePFIRs
                 obj.writeFilterFile();
             end
+            %%
+            obj.setDeviceAttributeRAW('jesd204_fsm_ctrl',obj.Sync);
 
         end
 

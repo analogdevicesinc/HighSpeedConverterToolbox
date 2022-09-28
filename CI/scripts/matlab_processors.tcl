@@ -1,4 +1,4 @@
-proc preprocess_bd {project carrier rxtx} {
+    proc preprocess_bd {project carrier rxtx} {
 
     puts "Preprocessing $project $carrier $rxtx"
 
@@ -54,6 +54,23 @@ proc preprocess_bd {project carrier rxtx} {
                     if {$rxtx == "tx"} {
                         set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
                         connect_bd_net [get_bd_pins axi_cpu_interconnect/M11_ACLK] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
+                    }
+                }
+            }
+        }
+        ad9434_fmc {
+            if {$rxtx == "rx"} {
+                # Disconnect the ADC pins
+                disconnect_bd_net /adc_data_p_1 [get_bd_pins axi_ad9434/adc_data_in_p]
+                disconnect_bd_net /adc_data_n_1 [get_bd_pins axi_ad9434/adc_data_in_n]
+                
+            }
+            switch $carrier {                
+                zc706 {                    
+                    if {$rxtx == "rx"} {
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins sys_ps7/FCLK_CLK0]
+                        connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M08_ARESETN]
                     }
                 }
             }

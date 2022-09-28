@@ -37,7 +37,7 @@ stage("Build Toolbox") {
 
 /////////////////////////////////////////////////////
 
-boardNames = ['daq2','ad9081']
+boardNames = ['daq2','ad9081', 'ad9434']
 dockerConfig.add("-e HDLBRANCH=hdl_2021_r1")
 
 stage("HDL Tests") {

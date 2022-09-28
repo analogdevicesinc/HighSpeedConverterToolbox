@@ -1,4 +1,4 @@
-proc preprocess_bd {project carrier rxtx} {
+    proc preprocess_bd {project carrier rxtx} {
 
     puts "Preprocessing $project $carrier $rxtx"
 
@@ -55,6 +55,59 @@ proc preprocess_bd {project carrier rxtx} {
                     if {$rxtx == "tx"} {
                         set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
                         connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
+                    }
+                }
+            }
+        }
+        ad9434_fmc {
+            if {$rxtx == "rx"} {
+                #Disconnect valid pins
+                delete_bd_objs [get_bd_nets axi_ad9434_adc_valid]
+                
+                # Disconnect the ADC pins
+                delete_bd_objs [get_bd_nets axi_ad9434_adc_data]
+
+                set i 3
+                while {$i >= 0} {
+                    create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_$i
+                    set_property -dict [list CONFIG.DIN_TO [expr $i * 12] CONFIG.DIN_FROM [expr ($i +1) * 12 -1] CONFIG.DIN_WIDTH {64} CONFIG.DOUT_WIDTH {12}] [get_bd_cells xlslice_$i]
+                    # Connect the axi_ad9434 out to the slice blocks
+                    connect_bd_net [get_bd_pins xlslice_${i}/Din] [get_bd_pins axi_ad9434/adc_data]
+
+                    set i [expr $i - 1]
+                }
+                #create an extra slice for the leftover bits 
+                create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_4
+                
+                set_property -dict [list CONFIG.DIN_TO {48} CONFIG.DIN_FROM {63} CONFIG.DIN_WIDTH {64} CONFIG.DOUT_WIDTH {16}] [get_bd_cells xlslice_4]
+
+                connect_bd_net [get_bd_pins axi_ad9434/adc_data] [get_bd_pins xlslice_4/Din]
+                
+
+                #Create Concat block
+                create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
+                set_property -dict [list CONFIG.NUM_PORTS {5}] [get_bd_cells xlconcat_0]
+
+
+                set j 3
+                while {$j >= 0 } {
+                    set_property -dict [list CONFIG.IN${j}_WIDTH.VALUE_SRC USER] [get_bd_cells xlconcat_0]
+                    set_property -dict [list CONFIG.IN${j}_WIDTH {12}] [get_bd_cells xlconcat_0]
+
+                    set j [expr $j - 1]
+                }
+                set_property -dict [list CONFIG.IN4_WIDTH.VALUE_SRC USER] [get_bd_cells xlconcat_0]
+                set_property -dict [list CONFIG.IN4_WIDTH {16}] [get_bd_cells xlconcat_0]
+
+                # connect the concat block to the axi_ad9434_dma
+                connect_bd_net [get_bd_pins axi_ad9434_dma/fifo_wr_din] [get_bd_pins xlconcat_0/dout]
+            }
+            switch $carrier {                
+                zc706 {                    
+                    if {$rxtx == "rx"} {
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9434/adc_clk]
+                        connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M08_ARESETN]
                     }
                 }
             }

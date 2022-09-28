@@ -8,7 +8,9 @@ ppath = project;
 if strcmpi(project, 'ad9081')
     ppath = 'ad9081_fmca_ebz';
 end
-
+if strcmpi(project, 'ad9434')
+    ppath = 'ad9434_fmc';
+end
 % Construct reference design object
 hRD = hdlcoder.ReferenceDesign('SynthesisTool', 'Xilinx Vivado');
 

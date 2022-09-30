@@ -1,4 +1,5 @@
 import json
+import re
 
 # open ports.json file and parse
 ports_json_file = 'ports.json'
@@ -11,48 +12,49 @@ with open(ports_json_file) as json_file:
             if (key1 == "rx"):
                 for ii in range(0, len(ports[key0]['ports'][0][key1])):
                     tmp_dict = ports[key0]['ports'][0][key1][ii]
-                    if (tmp_dict['type'].lower() == "data"):
-                        if (tmp_dict['input'] == "true"):
-                            if tmp_key not in tmp_dict:
-                                tmp_list = tmp_dict['name'].split("_")
-                                last_ele = tmp_list[-1]
-                                if (len(last_ele) == 1):
-                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {last_ele} IN"
-                                elif (len(last_ele) == 2):
-                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {last_ele.upper()}"                                
-                        elif (tmp_dict['input'] == "false"):
-                            if tmp_key not in tmp_dict:                            
-                                tmp_list = tmp_dict['name'].split("_")
-                                last_ele = tmp_list[-1]
-                                tmp_dict[tmp_key] = f"IP Data {last_ele.upper()} OUT"
-                    elif (tmp_dict['type'].lower() == "valid"):
-                        if (tmp_dict['input'] == "true"):
-                            tmp_dict[tmp_key] = f"IP Valid Rx Data IN"
-                        elif (tmp_dict['input'] == "false"):
-                            tmp_dict[tmp_key] = f"IP Data Valid OUT"
+
+                    if tmp_key not in tmp_dict:
+                        tmp_list = re.split('_|/',tmp_dict['name'] )
+                        last_ele = tmp_list[-1]
+                        name = ""
+                        for el in tmp_list:
+                            name += " " + el
+
+                        if (tmp_dict['type'].lower() == "data"):
+                            if (tmp_dict['input'] == "true"):
+                                tmp_dict[tmp_key] = f"{ports[key0]['chip']} ADC Data {name.upper()} IN"
+
+                            elif (tmp_dict['input'] == "false"):
+                                if tmp_key not in tmp_dict:  
+                                    tmp_dict[tmp_key] = f"IP Data {name.upper()} OUT"
+                               
+                        elif (tmp_dict['type'].lower() == "valid"):
+                            if (tmp_dict['input'] == "true"):
+                                tmp_dict[tmp_key] = f"IP Valid Rx Data IN"
+                            elif (tmp_dict['input'] == "false"):
+                                tmp_dict[tmp_key] = f"IP Data Valid OUT"
                     ports[key0]['ports'][0][key1][ii] = tmp_dict
+
             elif (key1 == "tx"):
                 for ii in range(0, len(ports[key0]['ports'][0][key1])):
                     tmp_dict = ports[key0]['ports'][0][key1][ii]
-                    if (tmp_dict['type'].lower() == "data"):
-                        if (tmp_dict['input'] == "false"):
-                            if tmp_key not in tmp_dict:                            
-                                tmp_list = tmp_dict['name'].split("_")
-                                last_ele = tmp_list[-1]
-                                if (len(last_ele) == 1):
-                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} DAC Data {last_ele} OUT"
-                                elif (len(last_ele) == 2):
-                                    tmp_dict[tmp_key] = f"{ports[key0]['chip']} DAC Data {last_ele.upper()}"
-                        elif (tmp_dict['input'] == "true"):
-                            if tmp_key not in tmp_dict:                            
-                                tmp_list = tmp_dict['name'].split("_")
-                                last_ele = tmp_list[-1]
-                                tmp_dict[tmp_key] = f"IP Data {last_ele.upper()} IN"
-                    elif (tmp_dict['type'].lower() == "valid"):
-                        if (tmp_dict['input'] == "true"):
-                            tmp_dict[tmp_key] = f"IP Valid Tx Data IN"
-                        elif (tmp_dict['input'] == "false"):
-                            tmp_dict[tmp_key] = f"IP Load Tx Data OUT"
+                    if tmp_key not in tmp_dict:  
+                        tmp_list = re.split('_|/',tmp_dict['name'] )
+                        last_ele = tmp_list[-1]
+                        name = ""
+                        for el in tmp_list:
+                            name += " " + el
+                        if (tmp_dict['type'].lower() == "data"):
+                            if (tmp_dict['input'] == "false"): 
+                                tmp_dict[tmp_key] = f"{ports[key0]['chip']} DAC Data {name.upper()} OUT"
+                            elif (tmp_dict['input'] == "true"):
+                                tmp_dict[tmp_key] = f"IP Data {name.upper()} IN"
+
+                        elif (tmp_dict['type'].lower() == "valid"):
+                            if (tmp_dict['input'] == "true"):
+                                tmp_dict[tmp_key] = f"IP Valid Tx Data IN"
+                            elif (tmp_dict['input'] == "false"):
+                                tmp_dict[tmp_key] = f"IP Load Tx Data OUT"
                     ports[key0]['ports'][0][key1][ii] = tmp_dict
 
 with open(ports_json_file, 'w') as json_file:

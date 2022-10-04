@@ -62,4 +62,13 @@ switch lower(project)
             otherwise
                 error('Unknown reference design');
         end
+    case 'fmcjesdadc1'
+        switch(upper(design))
+            case 'RX'
+                hRD.addClockInterface( ...
+                    'ClockConnection',   'util_fmcjesdadc1_xcvr/rx_clk_0', ...
+                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
+            otherwise
+                error('Unknown reference design');
+        end
 end

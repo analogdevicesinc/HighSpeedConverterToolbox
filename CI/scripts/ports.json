@@ -638,5 +638,81 @@
                 ]
             }
         ]
+    },
+    "fmcjesdadc1": {
+        "chip": "FMCJESDADC1",
+        "complex": "true",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9250_cpack/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9250_core/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_3",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
     }
 }

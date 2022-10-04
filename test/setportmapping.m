@@ -25,6 +25,10 @@ elseif contains(lower(ReferenceDesignName),'ad9265')
     dev = 'AD9265';
     mdl = 'testModel';
     portWidthRX = 16;
+elseif contains(lower(ReferenceDesignName),'fmcjesdadc1')
+    dev = 'FMCJESDADC1';
+    mdl = 'testModel';
+    portWidthRX = 16;
 else
     error('Unknown device');
 end
@@ -74,7 +78,7 @@ for k = 1:numel(fn)
                         hdlset_param([mdl,'/HDL_DUT/out',num2str(outIndex)], 'IOInterfaceMapping', ['[0:',num2str(portWidthRX-1),']']);
                         outIndex = outIndex + 1;
                     end
-                elseif (element.type == "valid")                   
+                elseif (element.type == "valid")
                     if(element.input == "true")
                         hdlset_param([mdl,'/HDL_DUT/validIn',num2str(validInIndex)], 'IOInterface', element.m_name);
                         hdlset_param([mdl,'/HDL_DUT/validIn',num2str(validInIndex)], 'IOInterfaceMapping', '[0]');
@@ -86,7 +90,7 @@ for k = 1:numel(fn)
                     end
                 end
             end
-    
+
         end
         if (mode == "tx") || (mode == "rxtx")
             tx = x.ports.tx;
@@ -106,7 +110,7 @@ for k = 1:numel(fn)
                         hdlset_param([mdl,'/HDL_DUT/out',num2str(outIndex)], 'IOInterfaceMapping', ['[0:',num2str(portWidthTX-1),']']);
                         outIndex = outIndex + 1;
                     end
-                elseif (element.type == "valid")                   
+                elseif (element.type == "valid")
                     if(element.input == "true")
                         hdlset_param([mdl,'/HDL_DUT/validIn',num2str(validInIndex)], 'IOInterface', element.m_name);
                         hdlset_param([mdl,'/HDL_DUT/validIn',num2str(validInIndex)], 'IOInterfaceMapping', '[0]');
@@ -121,4 +125,3 @@ for k = 1:numel(fn)
         end
     end
 end
-  

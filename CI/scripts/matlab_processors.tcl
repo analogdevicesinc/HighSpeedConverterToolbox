@@ -246,7 +246,32 @@
                     }
                 }
             }
-        }
+        } 
+        
+        fmcjesdadc1 {
+            if {$rxtx == "rx" } {
+                # Disconnect the ADC PACK pins
+                disconnect_bd_net /axi_ad9250_core_adc_valid_0 [get_bd_pins axi_ad9250_cpack/fifo_wr_en]
+               
+
+                disconnect_bd_net /axi_ad9250_core_adc_data_0 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_0]
+                disconnect_bd_net /axi_ad9250_core_adc_data_1 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_1]
+                disconnect_bd_net /axi_ad9250_core_adc_data_2 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_2]
+                disconnect_bd_net /axi_ad9250_core_adc_data_3 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_3]
+               
+
+                # Connect the ADC PACK valid signals together
+                 
+            }
+            switch $carrier {                
+                zcu102 {                    
+                    if {$rxtx == "rx" } {
+                        set_property -dict [list CONFIG.NUM_MI {11}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ACLK] [get_bd_pins util_fmcjesdadc1_xcvr/rx_clk_0]
+                    }
+                }
+            }
+        } 
     }
 }
 

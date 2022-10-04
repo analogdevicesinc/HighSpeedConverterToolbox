@@ -314,5 +314,69 @@
                 ]
             }
         ]
+    },
+    "ad9739a": {
+        "chip": "AD9739A",
+        "complex": "true",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "tx"
+        ],
+        "ports": [
+            {
+                "tx": [
+                    {
+                        "input": "true",
+                        "width": 14,
+                        "name": "axi_ad9739a/dac_data_out_a_p",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 14,
+                        "name": "axi_ad9739a/dac_data_out_a_n",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 14,
+                        "name": "axi_ad9739a/dac_data_out_b_p",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 14,
+                        "name": "axi_ad9739a/dac_data_out_b_n",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 14,
+                        "name": "dac_data_out_a_p",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 14,
+                        "name": "dac_data_out_a_n",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 14,
+                        "name": "dac_data_out_b_p",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 14,
+                        "name": "dac_data_out_b_n",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
     }
 }

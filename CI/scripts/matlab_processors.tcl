@@ -58,6 +58,25 @@ proc preprocess_bd {project carrier rxtx} {
                 }
             }
         }
+        ad9739a_fmc {
+         
+            if {$rxtx == "tx" || $rxtx == "rxtx"} {
+                # Disconnect the DAC PACK pins
+                # VALID PINS NOT CONNECTED TO INTERFACE CORE ON DAC SIDE
+                delete_bd_objs [get_bd_nets axi_ad9739a_dac_data_out_a_p]
+                delete_bd_objs [get_bd_nets axi_ad9739a_dac_data_out_a_n]
+                delete_bd_objs [get_bd_nets axi_ad9739a_dac_data_out_b_p]
+                delete_bd_objs [get_bd_nets axi_ad9739a_dac_data_out_b_n]
+            }
+            switch $carrier {                
+                zc706 {                    
+                    if {$rxtx == "tx"} {
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins dac_clk_in_p]
+                    }
+                }
+            }
+        }
         ad9081_fmca_ebz {
             if {$rxtx == "rx" || $rxtx == "rxtx"} {
                 # Disconnect the ADC PACK pins

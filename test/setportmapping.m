@@ -18,6 +18,11 @@ elseif contains(lower(ReferenceDesignName),'ad9081')
     portWidthRX = 16;
     portWidthTX = 16;
     numChannels = 4;
+elseif contains(lower(ReferenceDesignName),'ad9739a')
+    dev = 'AD9739A';
+    mdl = 'testModel';
+    portWidthTX = 14;
+    numChannels = 1;
 else
     error('Unknown device');
 end

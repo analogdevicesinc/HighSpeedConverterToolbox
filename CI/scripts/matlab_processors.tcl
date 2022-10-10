@@ -69,7 +69,7 @@
                 zc706 {                    
                     if {$rxtx == "rx"} {
                         set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins sys_ps7/FCLK_CLK0]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9434/adc_clk]
                         connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M08_ARESETN]
                     }
                 }

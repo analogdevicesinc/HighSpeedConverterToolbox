@@ -264,7 +264,7 @@
                  
             }
             switch $carrier {                
-                zcu102 {                    
+                zc706 {                    
                     if {$rxtx == "rx" } {
                         set_property -dict [list CONFIG.NUM_MI {11}] [get_bd_cells axi_cpu_interconnect]
                         connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ACLK] [get_bd_pins util_fmcjesdadc1_xcvr/rx_clk_0]

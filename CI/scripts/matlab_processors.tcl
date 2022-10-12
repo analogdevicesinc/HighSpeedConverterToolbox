@@ -1,4 +1,4 @@
-proc preprocess_bd {project carrier rxtx} {
+ proc preprocess_bd {project carrier rxtx} {
 
     puts "Preprocessing $project $carrier $rxtx"
 
@@ -60,7 +60,7 @@ proc preprocess_bd {project carrier rxtx} {
         }
         ad9739a_fmc {
          
-            if {$rxtx == "tx" || $rxtx == "rxtx"} {
+            if {$rxtx == "tx"} {
                 # Disconnect the DAC PACK pins
                 # VALID PINS NOT CONNECTED TO INTERFACE CORE ON DAC SIDE
                 delete_bd_objs [get_bd_nets axi_ad9739a_dac_data_out_a_p]
@@ -72,7 +72,7 @@ proc preprocess_bd {project carrier rxtx} {
                 zc706 {                    
                     if {$rxtx == "tx"} {
                         set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins dac_clk_in_p]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9739a/dac_clk_out_p]
                     }
                 }
             }

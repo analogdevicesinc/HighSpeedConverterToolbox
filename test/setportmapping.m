@@ -20,7 +20,7 @@ elseif contains(lower(ReferenceDesignName),'ad9081')
     numChannels = 4;
 elseif contains(lower(ReferenceDesignName),'ad9739a')
     dev = 'AD9739A';
-    mdl = 'testModel';
+    mdl = 'testModel_Rx14Tx14';
     portWidthTX = 14;
     numChannels = 1;
 else

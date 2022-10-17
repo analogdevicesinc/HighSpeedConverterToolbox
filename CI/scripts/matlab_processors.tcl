@@ -125,6 +125,28 @@ proc preprocess_bd {project carrier rxtx} {
                     }
                 }
             }
-        }        
+        } 
+        ad9208_dual_ebz {
+            if {$rxtx == "rx"} {
+                # Disconnect the ADC PACK pins
+                delete_bd_objs [get_bd_nets rx_ad9208_0_tpl_core_adc_valid_0]
+                
+
+                delete_bd_objs [get_bd_nets rx_ad9208_0_tpl_core_adc_data_0]
+                delete_bd_objs [get_bd_nets rx_ad9208_0_tpl_core_adc_data_1]
+                delete_bd_objs [get_bd_nets rx_ad9208_1_tpl_core_adc_data_0]
+                delete_bd_objs [get_bd_nets rx_ad9208_1_tpl_core_adc_data_1]
+                
+            }
+            switch $carrier {                
+                vcu118 {     
+                    set_property -dict [list  CONFIG.NUM_CLKS {3}] [get_bd_cells axi_cpu_interconnect]             
+                    if {$rxtx == "rx"} {
+                        set_property -dict [list CONFIG.NUM_MI {18}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk2] [get_bd_pins glbl_clk_0]
+                    }
+                }
+            }
+        }       
     }
 }

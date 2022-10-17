@@ -1,0 +1,376 @@
+{
+    "daq2": {
+        "chip": "DAQ2",
+        "complex": "true",
+        "fpga": [
+            "zcu102"
+        ],
+        "supported_rd": [
+            "rx",
+            "tx",
+            "rx & tx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9680_cpack/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9680_tpl/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9680_cpack/fifo_wr_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9680_cpack/fifo_wr_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9680_tpl/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9680_tpl/adc_data_1",
+                        "type": "data"
+                    }
+                ],
+                "tx": [
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9144_upack/fifo_rd_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9144_tpl/dac_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9144_tpl/dac_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9144_upack/fifo_rd_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "axi_ad9144_upack/fifo_rd_data_1",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    },
+    "ad9081": {
+        "chip": "AD9081",
+        "complex": "true",
+        "fpga": [
+            "zcu102"
+        ],
+        "supported_rd": [
+            "rx",
+            "tx",
+            "rx & tx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "util_mxfe_cpack/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "rx_mxfe_tpl_core/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_4",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_5",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_6",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "util_mxfe_cpack/fifo_wr_data_7",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_4",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_5",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_6",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "rx_mxfe_tpl_core/adc_data_7",
+                        "type": "data"
+                    }
+                ],
+                "tx": [
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "util_mxfe_upack/fifo_rd_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_4",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_5",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_6",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_7",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_4",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_5",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_6",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "util_mxfe_upack/fifo_rd_data_7",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    },
+    "ad9265": {
+        "chip": "AD9265",
+        "complex": "false",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9265/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9265/adc_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 12,
+                        "name": "xlslice_0/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 12,
+                        "name": "xlslice_0/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 12,
+                        "name": "xlslice_0/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "axi_ad9265_dma/fifo_wr_din",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "axi_ad9265/adc_data",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    }
+}

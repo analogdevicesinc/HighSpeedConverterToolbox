@@ -79,5 +79,14 @@ switch lower(project)
                     'ResetConnection',   'axi_ad9783/dac_rst');
             otherwise
                 error('Unknown reference design');
+        end 
+    case 'ad9208'
+        switch(upper(design))
+            case 'RX'
+                hRD.addClockInterface( ...
+                    'ClockConnection',   'glbl_clk_0', ...
+                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
+            otherwise
+                error('Unknown reference design');
         end
 end

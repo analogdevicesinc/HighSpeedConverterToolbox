@@ -46,7 +46,7 @@ switch project
                 BaseAddress = '0x50000000';
                 MasterAddressSpace = 'sys_ps7/Data';
             otherwise
-                error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); 
+                error(sprintf('Unknown Project FPGA %s/%s',project,fpga));
         end
     case 'ad9739a'
         switch fpga
@@ -55,10 +55,19 @@ switch project
                 BaseAddress = '0x50000000';
                 MasterAddressSpace = 'sys_ps7/Data';
             otherwise
-                error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); 
+                error(sprintf('Unknown Project FPGA %s/%s',project,fpga));
+        end
+    case 'ad9783'
+        switch fpga
+            case {'ZCU102'}
+                InterfaceConnection = 'axi_cpu_interconnect/M03_AXI';
+                BaseAddress = '0x9D000000';
+                MasterAddressSpace = 'sys_ps8/Data';
+            otherwise
+                error(sprintf('Unknown Project FPGA %s/%s',project,fpga));
         end
     otherwise
-        error(sprintf('Unknown Project %s',project)); 
+        error(sprintf('Unknown Project %s',project));
 end
 
 out = struct('InterfaceConnection', InterfaceConnection, ...

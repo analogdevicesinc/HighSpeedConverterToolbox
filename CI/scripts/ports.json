@@ -714,5 +714,51 @@
                 ]
             }
         ]
+    },
+    "ad9783": {
+        "chip": "AD9783",
+        "complex": "true",
+        "fpga": [
+            "zcu102"
+        ],
+        "supported_rd": [
+            "tx"
+        ],
+        "ports": [
+            {
+                "tx": [
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9783/dac_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9783/dac_ddata_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9783/dac_ddata_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "util_ad9783_dac_upack/fifo_rd_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "util_ad9783_dac_upack/fifo_rd_data_1",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
     }
 }

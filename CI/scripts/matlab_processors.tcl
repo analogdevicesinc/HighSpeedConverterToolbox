@@ -272,6 +272,24 @@
                 }
             }
         } 
+
+        ad9783_ebz {            
+            if {$rxtx == "tx"} {
+                # DATA PINS
+                delete_bd_objs [get_bd_nets util_ad9783_dac_upack_fifo_rd_data_0]
+                delete_bd_objs [get_bd_nets util_ad9783_dac_upack_fifo_rd_data_1]
+            }
+            switch $carrier {                
+                zcu102 {                    
+                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
+                        
+                    if {$rxtx == "tx"} {
+                        set_property -dict [list CONFIG.NUM_MI {4}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins axi_ad9783/dac_div_clk]
+                    }
+                }
+            }
+        }
     }
 }
 

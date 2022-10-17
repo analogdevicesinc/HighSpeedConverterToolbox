@@ -29,6 +29,10 @@ elseif contains(lower(ReferenceDesignName),'fmcjesdadc1')
     dev = 'FMCJESDADC1';
     mdl = 'testModel_Rx32Tx32';
     portWidthRX = 32;
+elseif contains(lower(ReferenceDesignName),'ad9783')
+    dev = 'AD9783';
+    mdl = 'testModel_RxTx64';
+    portWidthTX = 64;
 else
     error('Unknown device');
 end

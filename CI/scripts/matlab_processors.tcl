@@ -129,44 +129,51 @@ proc preprocess_bd {project carrier rxtx} {
         fmcomms11 {
             if {$rxtx == "rx" || $rxtx == "rxtx"} {
                 # Disconnect the ADC PACK pins
-                disconnect_bd_net /axi_ad9680_tpl_adc_valid_0 [get_bd_pins axi_ad9680_cpack/fifo_wr_en]
-            
-                disconnect_bd_net /axi_ad9680_tpl_adc_data_0 [get_bd_pins axi_ad9680_cpack/fifo_wr_data_0]
-                disconnect_bd_net /axi_ad9680_tpl_adc_data_1 [get_bd_pins axi_ad9680_cpack/fifo_wr_data_1]
-            
-                # Connect the ADC PACK valid signals together
-                # connect_bd_net [get_bd_pins axi_ad9680_cpack/adc_valid_0] [get_bd_pins axi_ad9680_cpack/adc_valid_1]
+                disconnect_bd_net /axi_ad9625_fifo_dma_wr [get_bd_pins axi_ad9625_fifo/dma_wr]
+                disconnect_bd_net /axi_ad9625_fifo_dma_wdata [get_bd_pins axi_ad9625_fifo/dma_wdata]
             }
             if {$rxtx == "tx" || $rxtx == "rxtx"} {
                 # Disconnect the DAC PACK pins
                 # VALID PINS NOT CONNECTED TO INTERFACE CORE ON DAC SIDE
             
                 # DATA PINS
-                delete_bd_objs [get_bd_nets dac_data_0_1]
-                delete_bd_objs [get_bd_nets dac_data_1_1]
+                delete_bd_objs [get_bd_nets util_ad9162_upack_fifo_rd_data_0]
+                delete_bd_objs [get_bd_nets util_ad9162_upack_fifo_rd_data_1]
             }
             if {$rxtx == "rxtx"} {
+            
+                #remove Tx clock net
+                delete_bd_objs [get_bd_nets util_fmcomms11_xcvr_tx_out_clk_0]
+
+
                 # Connect TX clocking to RX path
-            
                 # Reset reconnect
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_jesd_rstgen/slowest_sync_clk]
-                connect_bd_net [get_bd_pins axi_ad9144_jesd_rstgen/slowest_sync_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins axi_ad9162_jesd_rstgen/slowest_sync_clk] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+
+                # util_ad9162_upack dac_clk reconnect
+                connect_bd_net [get_bd_pins util_ad9162_upack/clk] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
             
-                # axi_ad9144_tpl tx_clk reconnect
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_tpl/link_clk]
-                connect_bd_net [get_bd_pins axi_ad9144_tpl/link_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
-            
-                # upack dac_clk reconnect
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_upack/clk]
-                connect_bd_net [get_bd_pins axi_ad9144_upack/clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
-                
-                # TX FIFO
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_fifo/dac_clk]
-                connect_bd_net [get_bd_pins axi_ad9144_fifo/dac_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
-            
-                # TX JESD
-                disconnect_bd_net /util_daq2_xcvr_tx_out_clk_0 [get_bd_pins axi_ad9144_jesd/device_clk]
-                connect_bd_net [get_bd_pins axi_ad9144_jesd/device_clk] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                # axi_ad9162_fifo dac_clk reconnect
+                connect_bd_net [get_bd_pins axi_ad9162_fifo/dac_clk] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+
+                # axi_ad9162_core link_clk reconnect
+                connect_bd_net [get_bd_pins axi_ad9162_core/link_clk] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+
+                # axi_ad9162_jesd link_clk reconnect
+                connect_bd_net [get_bd_pins axi_ad9162_jesd/link_clk] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+
+                # axi_ad9162_jesd link_clk reconnect
+                connect_bd_net [get_bd_pins axi_ad9162_jesd/device_clk] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+
+                # util_fmcomms11_xcvr reconnect
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_0] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_1] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_2] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_3] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_4] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_5] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_6] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_fmcomms11_xcvr/tx_clk_7] [get_bd_pins util_fmcomms11_xcvr/rx_out_clk_0]
             }
             switch $carrier {                
                 zc706 {                    

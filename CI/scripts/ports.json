@@ -333,69 +333,57 @@
                     {
                         "input": "false",
                         "width": 1,
-                        "name": "axi_ad9680_cpack/fifo_wr_en",
+                        "name": "axi_ad9625_dma/s_axis_valid",
                         "type": "valid"
                     },
                     {
                         "input": "true",
                         "width": 1,
-                        "name": "axi_ad9680_tpl/adc_valid_0",
+                        "name": "axi_ad9625_fifo/dma_wr",
                         "type": "valid"
                     },
                     {
                         "input": "false",
                         "width": 64,
-                        "name": "axi_ad9680_cpack/fifo_wr_data_0",
-                        "type": "data"
-                    },
-                    {
-                        "input": "false",
-                        "width": 64,
-                        "name": "axi_ad9680_cpack/fifo_wr_data_1",
+                        "name": "axi_ad9625_dma/s_axis_data",
                         "type": "data"
                     },
                     {
                         "input": "true",
                         "width": 64,
-                        "name": "axi_ad9680_tpl/adc_data_0",
-                        "type": "data"
-                    },
-                    {
-                        "input": "true",
-                        "width": 64,
-                        "name": "axi_ad9680_tpl/adc_data_1",
+                        "name": "axi_ad9625_fifo/dma_wdata",
                         "type": "data"
                     }
                 ],
                 "tx": [
-                    {
+                     {
                         "input": "true",
                         "width": 1,
-                        "name": "axi_ad9144_upack/fifo_rd_valid",
+                        "name": "tx_mxfe_tpl_core/fifo_rd_valid",
                         "type": "valid"
                     },
                     {
                         "input": "false",
-                        "width": 64,
-                        "name": "axi_ad9144_tpl/dac_data_0",
+                        "width": 128,
+                        "name": "axi_ad9162_core/dac_data_0",
                         "type": "data"
                     },
                     {
                         "input": "false",
-                        "width": 64,
-                        "name": "axi_ad9144_tpl/dac_data_1",
+                        "width": 128,
+                        "name": "axi_ad9162_core/dac_data_1",
                         "type": "data"
                     },
                     {
                         "input": "true",
-                        "width": 64,
-                        "name": "axi_ad9144_upack/fifo_rd_data_0",
+                        "width": 128,
+                        "name": "util_ad9162_upack/fifo_rd_data_0",
                         "type": "data"
                     },
                     {
                         "input": "true",
-                        "width": 64,
-                        "name": "axi_ad9144_upack/fifo_rd_data_1",
+                        "width": 128,
+                        "name": "util_ad9162_upack/fifo_rd_data_1",
                         "type": "data"
                     }
                 ]

@@ -18,6 +18,12 @@ elseif contains(lower(ReferenceDesignName),'ad9081')
     portWidthRX = 16;
     portWidthTX = 16;
     numChannels = 4;
+elseif contains(lower(ReferenceDesignName),'fmcomms11')
+    dev = 'FMCOMMS11';
+    mdl = 'testModel_Rx64Tx128';
+    portWidthRX = 64;
+    portWidthTX = 128;
+    numChannels = 2;
 else
     error('Unknown device');
 end

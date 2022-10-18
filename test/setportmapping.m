@@ -18,6 +18,11 @@ elseif contains(lower(ReferenceDesignName),'ad9081')
     portWidthRX = 16;
     portWidthTX = 16;
     numChannels = 4;
+elseif contains(lower(ReferenceDesignName),'fmcjesdadc1')
+    dev = 'FMCJESDADC1';
+    mdl = 'testModel_Rx32Tx32';
+    portWidthRX = 32;
+    numChannels = 4;
 else
     error('Unknown device');
 end

@@ -27,7 +27,7 @@ set sdk_loc vivado_prj.sdk
 # Export the hdf
 file delete -force $sdk_loc
 file mkdir $sdk_loc
-file copy -force vivado_prj.runs/impl_1/system_top.sysdef $sdk_loc/system_top.hdf
+file copy -force vivado_prj.runs/impl_1/system_top.bit $sdk_loc/system_top.xsa
 
 # Close the Vivado project
 close_project

@@ -26,8 +26,8 @@ proc pack_ip_core {} {
   }
 }
 
-source hdl/library/scripts/adi_ip.tcl
-source hdl/library/scripts/adi_env.tcl
+source hdl/library/scripts/adi_ip_xilinx.tcl
+source hdl/scripts/adi_env.tcl
 
 cd hdl
 

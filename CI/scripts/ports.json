@@ -316,7 +316,7 @@
         ]
     },
     "lldk": {
-        "chip": "LTC2387",
+        "chip": "LLDK",
         "complex": "true",
         "fpga": [
             "zed"

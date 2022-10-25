@@ -152,6 +152,7 @@ proc preprocess_bd {project carrier rxtx} {
                 zed {
                     if {$rxtx == "rx"} {
                         set_property -dict [list CONFIG.NUM_MI {21}] [get_bd_cells axi_cpu_interconnect]
+                        #connect_bd_net [get_bd_pins axi_cpu_interconnect/M20_ACLK] [get_bd_pins sys_ps7/FCLK_CLK0]
                         connect_bd_net [get_bd_pins axi_cpu_interconnect/M20_ACLK] [get_bd_pins axi_clkgen/clk_0]
                     }
                 }

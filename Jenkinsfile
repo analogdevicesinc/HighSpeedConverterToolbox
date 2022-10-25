@@ -16,6 +16,8 @@ stage("Build Toolbox") {
 		    checkout scm
 	            sh 'git submodule update --init'
 		    sh 'make -C ./CI/scripts build'
+		    sh 'pip3 install -r CI/gen_doc/requirements_doc.txt'
+		    sh 'make -C CI/gen_doc doc'
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
         } catch(Exception ex) {

@@ -27,6 +27,7 @@ classdef Tx < adi.common.Tx & adi.AD3552R.Base & adi.common.DDS
     
     properties (Nontunable, Hidden)
         devName = 'ad3552r';
+        phyDevName = 'ad3552r';
         channel_names = {'voltage0','voltage1'};
     end
     

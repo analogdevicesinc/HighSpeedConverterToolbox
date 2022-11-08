@@ -8,7 +8,7 @@ classdef Rx < adi.common.Rx & adi.LTC2387.Base & adi.common.Attribute
     %
     %   <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/LTC2387.pdf">LTC2387 Datasheet</a>
     %
-    %   See also adi.DAQ2.Rx
+    %   See also adi.LLDK.Rx
     
     properties (Dependent)
         %SamplingRate Sampling Rate
@@ -26,8 +26,8 @@ classdef Rx < adi.common.Rx & adi.LTC2387.Base & adi.common.Attribute
     
     properties (Nontunable, Hidden)
         devName = 'ltc2387';
-        phyDevName = 'axi-ad9680-hpc';
-        channel_names = {'voltage0','voltage1'};
+        phyDevName = 'ltc2387';
+        channel_names = {'voltage0','voltage1','voltage2','voltage3'};
     end
     
     methods

@@ -1,7 +1,6 @@
 classdef (Abstract) Base < ...
         adi.common.RxTx & ...
-        matlabshared.libiio.base & ...
-        matlab.system.mixin.CustomIcon
+        matlabshared.libiio.base 
     %AD3552R Base Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -16,7 +15,7 @@ classdef (Abstract) Base < ...
     properties(Nontunable, Hidden)
         Timeout = Inf;
         kernelBuffersCount = 2;
-        dataTypeStr = 'int16';
+        dataTypeStr = 'uint16';
     end
     
     properties (Abstract, Hidden, Constant)

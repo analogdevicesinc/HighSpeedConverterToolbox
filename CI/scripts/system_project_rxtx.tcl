@@ -9,7 +9,9 @@ cd projects/$project/$carrier
 source ../../scripts/adi_make.tcl
 adi_make::lib all
 
+set ::env(ADI_SKIP_SYNTHESIS) 1
 set ::env(SKIP_SYNTHESIS) 1
+set ::env(ADI_MATLAB) 1
 set ::env(MATLAB) 1
 
 source ./system_project.tcl

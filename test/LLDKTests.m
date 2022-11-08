@@ -1,7 +1,7 @@
 classdef LLDKTests < HardwareTests
     
     properties
-        uri = 'ip:analog';
+        uri = 'ip:10.48.65.153';
         author = 'ADI';
     end
     

@@ -60,7 +60,7 @@ stage("HDL Tests") {
 
 /////////////////////////////////////////////////////
 
-boardNames = ['daq2', 'NonHW']
+boardNames = ['NonHW']
 dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
 
 stage("Demo Tests") {

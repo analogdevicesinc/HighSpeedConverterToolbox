@@ -48,7 +48,6 @@ with open(ports_json_file) as json_file:
             elif (key1 == "tx"):
                 for ii in range(0, len(ports[key0]['ports'][0][key1])):
                     tmp_dict = ports[key0]['ports'][0][key1][ii]
-
                     if tmp_key not in tmp_dict :                       
                         if (tmp_dict['type'].lower() == "data") :                            
                             if (tmp_dict['input'] == "false"): 

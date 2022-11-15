@@ -329,50 +329,194 @@
                 "tx": [
                     {
                         "input": "true",
-                        "width": 14,
-                        "name": "axi_ad9739a/dac_data_out_a_p",
+                        "width": 16,
+                        "name": "xlslice_0/Dout",
                         "type": "data"
                     },
                     {
                         "input": "true",
-                        "width": 14,
-                        "name": "axi_ad9739a/dac_data_out_a_n",
+                        "width": 16,
+                        "name": "xlslice_1/Dout",
                         "type": "data"
                     },
                     {
                         "input": "true",
-                        "width": 14,
-                        "name": "axi_ad9739a/dac_data_out_b_p",
+                        "width": 16,
+                        "name": "xlslice_2/Dout",
                         "type": "data"
                     },
                     {
                         "input": "true",
-                        "width": 14,
-                        "name": "axi_ad9739a/dac_data_out_b_n",
+                        "width": 16,
+                        "name": "xlslice_3/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_4/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_5/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_6/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_7/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_8/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_9/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_10/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_11/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_12/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_13/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_14/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_15/Dout",
                         "type": "data"
                     },
                     {
                         "input": "false",
-                        "width": 14,
-                        "name": "dac_data_out_a_p",
+                        "width": 16,
+                        "name": "xlconcat_0/In0",
                         "type": "data"
                     },
                     {
                         "input": "false",
-                        "width": 14,
-                        "name": "dac_data_out_a_n",
+                        "width": 16,
+                        "name": "xlconcat_0/In1",
                         "type": "data"
                     },
                     {
                         "input": "false",
-                        "width": 14,
-                        "name": "dac_data_out_b_p",
+                        "width": 16,
+                        "name": "xlconcat_0/In2",
                         "type": "data"
                     },
                     {
                         "input": "false",
-                        "width": 14,
-                        "name": "dac_data_out_b_n",
+                        "width": 16,
+                        "name": "xlconcat_0/In3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In4",
+                        "type": "data"
+                    },
+                     {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In5",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In6",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In7",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In8",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In9",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In10",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In11",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In12",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In13",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In14",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In15",
                         "type": "data"
                     }
                 ]

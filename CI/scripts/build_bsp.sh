@@ -2,7 +2,7 @@
 set -x
 
 if [ -z "${HDLBRANCH}" ]; then
-HDLBRANCH='dev_ad3552r'
+HDLBRANCH='dev_lldk'
 fi
 
 # Script is designed to run from specific location

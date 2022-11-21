@@ -11,6 +11,7 @@ switch project
             otherwise
                 error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
         end
+    
     case 'ad9081'
         switch fpga
             case {'ZCU102'}
@@ -19,6 +20,16 @@ switch project
                 MasterAddressSpace = 'sys_ps8/Data';
             otherwise
                 error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
+        end
+
+    case 'ad9265'
+        switch fpga
+            case {'ZC706'}
+                InterfaceConnection = 'axi_cpu_interconnect/M08_AXI';
+                BaseAddress = '0x50000000';
+                MasterAddressSpace = 'sys_ps7/Data';
+            otherwise
+                error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); 
         end
     otherwise
         error(sprintf('Unknown Project %s',project)); %#ok<*SPERR>

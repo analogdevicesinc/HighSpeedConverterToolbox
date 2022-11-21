@@ -598,5 +598,45 @@
                 ]
             }
         ]
+    },
+    "ad9265": {
+        "chip": "AD9265",
+        "complex": "false",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9265_dma/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9265/adc_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "axi_ad9265_dma/fifo_wr_din",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "axi_ad9265/adc_data",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
     }
 }

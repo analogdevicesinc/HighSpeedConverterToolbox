@@ -109,13 +109,13 @@ proc preprocess_bd {project carrier rxtx} {
                 # TX JESD
                 connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/link_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
 
-		disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins axi_mxfe_tx_jesd/link_clk]
-		connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins axi_mxfe_tx_jesd/link_clk]
-
-		disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_0]
-		disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_1]
-		disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_2]
-		disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_3]
+		        disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins axi_mxfe_tx_jesd/link_clk]
+		        connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins axi_mxfe_tx_jesd/link_clk]
+        
+		        disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_0]
+		        disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_1]
+		        disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_2]
+		        disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins util_mxfe_xcvr/tx_clk_3]
 
                 connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins util_mxfe_xcvr/tx_clk_0]
                 connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins util_mxfe_xcvr/tx_clk_1]
@@ -136,5 +136,23 @@ proc preprocess_bd {project carrier rxtx} {
                 }
             }
         }
+        ad9265_fmc {
+            if {$rxtx == "rx"} {
+                # Disconnect the ADC pins
+                disconnect_bd_net /axi_ad9265_adc_valid [get_bd_pins axi_ad9265_dma/fifo_wr_en]
+                disconnect_bd_net /axi_ad9265_adc_data [get_bd_pins axi_ad9265_dma/fifo_wr_din]
+
+             }
+ 
+            switch $carrier {
+                zc706 {
+    		    if {$rxtx == "rx" } {
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9265/adc_clk]
+                    }
+                }
+            }
+        }
     }
 }
+

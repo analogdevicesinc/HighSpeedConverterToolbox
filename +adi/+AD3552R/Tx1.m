@@ -1,4 +1,4 @@
-classdef Tx < adi.common.Tx & adi.AD3552R.Base & adi.common.DDS
+classdef Tx1 < adi.common.Tx & adi.AD3552R.Base & adi.common.DDS
     % adi.AD3552R.Tx Transmit data to the AD3552R high speed DAC
     %   The adi.AD3552R.Tx System object is a signal source that can send
     %   complex data from the AD3552R.
@@ -26,14 +26,15 @@ classdef Tx < adi.common.Tx & adi.AD3552R.Base & adi.common.DDS
     end
     
     properties (Nontunable, Hidden)
-        devName = 'ad3552r';
-        phyDevName = 'ad3552r';
+        devName = 'axi-ad3552r-1';
+        phyDevName = 'axi-ad3552r-1';
         channel_names = {'voltage0','voltage1'};
     end
+
     
     methods
         %% Constructor
-        function obj = Tx(varargin)
+        function obj = Tx1(varargin)
             % Returns the matlabshared.libiio.base object
             coder.allowpcode('plain');
             obj = obj@adi.AD3552R.Base(varargin{:});

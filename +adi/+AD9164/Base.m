@@ -7,7 +7,7 @@ classdef (Abstract) Base < adi.AD916x.Base
     methods (Hidden, Access = protected)
                 
         function icon = getIconImpl(obj)
-            icon = sprintf(['AD9162',obj.Type]);
+            icon = sprintf(['AD9164',obj.Type]);
         end
         
     end
@@ -15,7 +15,7 @@ classdef (Abstract) Base < adi.AD916x.Base
     %% External Dependency Methods
     methods (Hidden, Static)       
         function bName = getDescriptiveName(~)
-            bName = 'AD9162';
+            bName = 'AD9164';
         end
         
     end

@@ -1,4 +1,4 @@
-classdef Tx <  adi.AD916x.Tx & adi.AD9162.Base 
+classdef Tx <  adi.AD916x.Tx & adi.AD9164.Base 
     % adi.AD9162.Tx Transmit data to the AD9162 high speed DAC
     %
     %   tx = adi.AD9162.Tx;
@@ -9,7 +9,7 @@ classdef Tx <  adi.AD916x.Tx & adi.AD9162.Base
     %   See also adi.FMCOMMS11.Tx
 
     properties (Nontunable, Hidden)
-        devName = 'axi-ad9162-hpc';
+        devName = 'axi-ad9164-hpc';
         channel_names = {'voltage0_i','voltage0_q'};
     end
 

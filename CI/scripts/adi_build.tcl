@@ -79,7 +79,8 @@ close_project
 #    }
 #}
 
-set xsct_script "exec xsct ../../../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_make_boot_bin.tcl"
+set xsct_script "exec xsct $cdir/projects/scripts/adi_make_boot_bin.tcl"
+#set xsct_script "exec xsct ../../../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_make_boot_bin.tcl"
 if {$fpga_board eq "ZCU102"} {
   set uboot_elf $cdir/projects/common/boot/u-boot-zcu.elf
   set arm_tr_frm_elf $cdir/projects/common/boot/bl31.elf
@@ -90,7 +91,8 @@ set build_args "$sdk_loc/system_top.xsa $uboot_elf $cdir/boot $arm_tr_frm_elf"
 puts "Please wait, this may take a few minutes."
 eval $xsct_script $build_args
 
-../../../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_make_boot_bin.tcl
+$cdir/projects/scripts/adi_make_boot_bin.tcl
+#../../../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_make_boot_bin.tcl
 
 puts "------------------------------------"
 puts "Embedded system build completed."

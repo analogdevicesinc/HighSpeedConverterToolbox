@@ -45,8 +45,6 @@ set build_args "$sdk_loc/system_top.xsa $uboot_elf $cdir/boot $arm_tr_frm_elf"
 puts "Please wait, this may take a few minutes."
 eval $xsct_script $build_args
 
-$cdir/projects/scripts/adi_make_boot_bin.tcl
-
 puts "------------------------------------"
 puts "Embedded system build completed."
 puts "You may close this shell."

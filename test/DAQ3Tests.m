@@ -98,9 +98,9 @@ classdef DAQ3Tests < HardwareTests
 
             testCase.verifyTrue(valid);
             testCase.verifyGreaterThan(sum(abs(double(out))),0);
-            testCase.verifyEqual(freqEst1,toneFreq1,'RelTol',0.01,...
+            testCase.verifyEqual(double(freqEst1),toneFreq1,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
-            testCase.verifyEqual(freqEst2,toneFreq2,'RelTol',0.01,...
+            testCase.verifyEqual(double(freqEst2),toneFreq2,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
         end
         
@@ -146,7 +146,7 @@ classdef DAQ3Tests < HardwareTests
             swv1 = dsp.SineWave(amplitude, toneFreq2);
             swv1.ComplexOutput = false;
             swv1.SamplesPerFrame = 2^20;
-            swv1.SampleRate = 1e9;
+            swv1.SampleRate = 1233333333;
             y2 = swv1();
             
             tx = adi.DAQ3.Tx('uri',testCase.uri);
@@ -169,9 +169,9 @@ classdef DAQ3Tests < HardwareTests
             
             testCase.verifyTrue(valid);
             testCase.verifyGreaterThan(sum(abs(double(out))),0);
-            testCase.verifyEqual(freqEst1,toneFreq1,'RelTol',0.01,...
+            testCase.verifyEqual(double(freqEst1),toneFreq1,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
-            testCase.verifyEqual(freqEst2,toneFreq2,'RelTol',0.01,...
+            testCase.verifyEqual(double(freqEst2),toneFreq2,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
         end
         

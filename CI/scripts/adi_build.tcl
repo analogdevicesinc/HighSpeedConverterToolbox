@@ -33,10 +33,10 @@ write_hw_platform -fixed -force  -include_bit -file $sdk_loc/system_top.xsa
 close_project
 
 set xsct_script "exec xsct $cdir/projects/scripts/adi_make_boot_bin.tcl"
+set arm_tr_frm_elf $cdir/projects/common/boot/bl31.elf
 
 if {$fpga_board eq "ZCU102"} {
   set uboot_elf $cdir/projects/common/boot/u-boot-zcu.elf
-  set arm_tr_frm_elf $cdir/projects/common/boot/bl31.elf
 } else {
   set uboot_elf $cdir/projects/common/boot/u-boot.elf
 }

@@ -35,7 +35,7 @@ if [ -f "hdl/library/scripts/adi_ip.tcl" ]; then
 else
 	TARGET="hdl/library/scripts/adi_ip_xilinx.tcl"
 fi
-VER=$(awk '/set REQUIRED_VIVADO_VERSION/ {print $3}' $TARGET | sed 's/"//g')
+VER=$(awk '/set required_vivado_version/ {print $3}' $TARGET | sed 's/"//g')
 echo "Required Vivado version ${VER}"
 VIVADOFULL=${VER}
 if [ ${#VER} = 8 ]

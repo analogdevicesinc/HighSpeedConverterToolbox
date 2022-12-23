@@ -1,12 +1,12 @@
 @Library('tfc-lib') _
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
-dockerConfig.add("-e MLRELEASE=R2021b")
+dockerConfig.add("-e MLRELEASE=R2022a")
 dockerHost = 'docker'
 
 ////////////////////////////
 
-hdlBranches = ['hdl_2019_r2']
+hdlBranches = ['hdl_2021_r1']
 
 stage("Build Toolbox") {
     dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
@@ -19,14 +19,14 @@ stage("Build Toolbox") {
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
         } catch(Exception ex) {
-		if (branchName == 'hdl_2019_r2') {
+		if (branchName == 'hdl_2021_r1') {
 		    error('Production Toolbox Build Failed')
 		}
 		else {
 		    unstable('Development Build Failed')
 		}
         }
-        if (branchName == 'hdl_2019_r2') {
+        if (branchName == 'hdl_2021_r1') {
             stash includes: '**', name: 'builtSources', useDefaultExcludes: false
         }
     }
@@ -37,7 +37,7 @@ stage("Build Toolbox") {
 
 node("lab1") {
     stage("Synthesis Tests") {
-        withEnv(['HDLBRANCH=hdl_2019_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+        withEnv(['HDLBRANCH=hdl_2021_r1','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
                 stage("Synth") {
                     unstash "builtSources"

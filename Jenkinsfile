@@ -1,12 +1,12 @@
 @Library('tfc-lib') _
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
-dockerConfig.add("-e MLRELEASE=R2021b")
+dockerConfig.add("-e MLRELEASE=R2022a")
 dockerHost = 'docker'
 
 ////////////////////////////
 
-hdlBranches = ['master','hdl_2019_r2']
+hdlBranches = ['master','hdl_2021_r1']
 
 stage("Build Toolbox") {
     dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
@@ -19,14 +19,14 @@ stage("Build Toolbox") {
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
         } catch(Exception ex) {
-		if (branchName == 'hdl_2019_r2') {
+		if (branchName == 'hdl_2021_r1') {
 		    error('Production Toolbox Build Failed')
 		}
 		else {
 		    unstable('Development Build Failed')
 		}
         }
-        if (branchName == 'hdl_2019_r2') {
+        if (branchName == 'hdl_2021_r1') {
 	    archiveArtifacts artifacts: '*.mltbx'
             stash includes: '**', name: 'builtSources', useDefaultExcludes: false
         }
@@ -36,7 +36,7 @@ stage("Build Toolbox") {
 /////////////////////////////////////////////////////
 
 boardNames = ['daq2','ad9081']
-dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
+dockerConfig.add("-e HDLBRANCH=hdl_2021_r1")
 
 stage("HDL Tests") {
     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
@@ -60,8 +60,8 @@ stage("HDL Tests") {
 
 /////////////////////////////////////////////////////
 
-boardNames = ['NonHW']
-dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
+boardNames = ['daq2', 'NonHW']
+dockerConfig.add("-e HDLBRANCH=hdl_2021_r1")
 
 stage("Demo Tests") {
     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 

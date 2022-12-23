@@ -4,7 +4,7 @@ classdef Version
     properties(Constant)
         HDL = 'hdl_2021_r1';
         Vivado = '2021.1';
-        MATLAB = 'R2022a';
+        MATLAB = 'R2021b';
         Release = '22.1.1';
         AppName = 'Analog Devices, Inc. High-Speed Converter Toolbox';
         ToolboxName = 'HighSpeedConverterToolbox';

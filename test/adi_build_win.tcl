@@ -25,24 +25,15 @@ set sdk_loc vivado_prj.sdk
 # Export the hdf
 file delete -force $sdk_loc
 file mkdir $sdk_loc
-file copy -force vivado_prj.runs/impl_1/system_top.sysdef $sdk_loc/system_top.hdf
+write_hw_platform -fixed -force  -include_bit -file $sdk_loc/system_top.xsa
 
 # Close the Vivado project
 close_project
 
 # Create the BOOT.bin
 if {$fpga_board eq "ZCU102"} {
-    exec hsi -verbose -source $cdir/projects/scripts/pmufw_zynqmp_win.tcl
-
-    if {[file exist pmufw/executable.elf] eq 0} {
-        puts "ERROR: pmufw not built"
-        return -code error 10
-    } else {
-        puts "pmufw built correctly!"
-    }
-   
     set vversion [version -short]
-    exec xsdk -batch -source $cdir/projects/scripts/fsbl_build_zynqmp.tcl $vversion 
+    exec xsct $cdir/projects/scripts/fsbl_build_zynqmp.tcl $vversion
     if {[file exist boot/BOOT.BIN] eq 0} {
         puts "ERROR: BOOT.BIN not built"
         return -code error 11
@@ -51,7 +42,7 @@ if {$fpga_board eq "ZCU102"} {
     }
 
 } else {
-    exec xsdk -batch -source $cdir/projects/scripts/fsbl_build_zynq.tcl
+    exec xsct -batch $cdir/projects/scripts/fsbl_build_zynq.tcl
     if {[file exist boot/BOOT.BIN] eq 0} {
         puts "ERROR: BOOT.BIN not built"
         return -code error 11

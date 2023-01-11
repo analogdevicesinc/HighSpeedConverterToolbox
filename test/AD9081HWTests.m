@@ -37,7 +37,8 @@ classdef AD9081HWTests < HardwareTests
         
         function testAD9081Rx(testCase)    
             % Test Rx DMA data output
-            rx = adi.AD9081.Rx('uri',testCase.uri);
+            rx = adi.AD9081.Rx();
+            rx.uri = testCase.uri;
             rx.EnabledChannels = 1;
             [out, valid] = rx();
             rx.release();
@@ -47,13 +48,15 @@ classdef AD9081HWTests < HardwareTests
         
         function testAD9081RxWithTxDDS(testCase)
             % Test DDS output
-            tx = adi.AD9081.Tx('uri',testCase.uri);
+            tx = adi.AD9081.Tx();
+            tx.uri = testCase.uri;
             tx.DataSource = 'DDS';
             toneFreq = 45e6;
             tx.DDSFrequencies = repmat(toneFreq,2,2);
             tx();
             pause(1);
-            rx = adi.AD9081.Rx('uri',testCase.uri);
+            rx = adi.AD9081.Rx();
+            rx.uri = testCase.uri;
             rx.EnabledChannels = 1;
             valid = false;
             for k=1:10
@@ -73,7 +76,8 @@ classdef AD9081HWTests < HardwareTests
         
         function testAD9081RxWithTxDDSTwoChan(testCase)
             % Test DDS output
-            tx = adi.AD9081.Tx('uri',testCase.uri);
+            tx = adi.AD9081.Tx();
+            tx.uri = testCase.uri;
             tx.DataSource = 'DDS';
             toneFreq1 = 160e6;
             toneFreq2 = 300e6;
@@ -81,7 +85,8 @@ classdef AD9081HWTests < HardwareTests
             tx.DDSScales = [1,1;0,0].*0.029;
             tx();
             pause(1);
-            rx = adi.AD9081.Rx('uri',testCase.uri);
+            rx = adi.AD9081.Rx();
+            rx.uri = testCase.uri;
             rx.EnabledChannels = [1 2];
             valid = false;
             for k=1:10
@@ -113,11 +118,13 @@ classdef AD9081HWTests < HardwareTests
             swv1.SampleRate = 1e9;
             y = swv1();
             
-            tx = adi.AD9081.Tx('uri',testCase.uri);
+            tx = adi.AD9081.Tx();
+            tx.uri = testCase.uri;
             tx.DataSource = 'DMA';
             tx.EnableCyclicBuffers = true;
             tx(y);
-            rx = adi.AD9081.Rx('uri',testCase.uri);
+            rx = adi.AD9081.Rx();
+            rx.uri = testCase.uri;
             rx.EnabledChannels = 1;
             for k=1:10
                 [out, valid] = rx();
@@ -149,12 +156,14 @@ classdef AD9081HWTests < HardwareTests
             swv1.SampleRate = 1e9;
             y2 = swv1();
             
-            tx = adi.AD9081.Tx('uri',testCase.uri);
+            tx = adi.AD9081.Tx();
+            tx.uri = testCase.uri;
             tx.DataSource = 'DMA';
             tx.EnableCyclicBuffers = true;
             tx.EnabledChannels = [1,2];
             tx([y1,y2]);
-            rx = adi.AD9081.Rx('uri',testCase.uri);
+            rx = adi.AD9081.Rx();
+            rx.uri = testCase.uri;
             rx.EnabledChannels = [1,2];
             for k=1:10
                 [out, valid] = rx();

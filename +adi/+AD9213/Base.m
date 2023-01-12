@@ -1,7 +1,7 @@
 classdef (Abstract) Base < ...
         adi.common.RxTx & ...
-        matlabshared.libiio.base & ...
-        matlab.system.mixin.CustomIcon
+        adi.common.Attribute & ...
+        matlabshared.libiio.base
     %AD9213 Base Class
     
     properties (Nontunable)
@@ -16,6 +16,7 @@ classdef (Abstract) Base < ...
         Timeout = Inf;
         kernelBuffersCount = 2;
         dataTypeStr = 'int16';
+        phyDevName = 'axi-ad9213-rx-hpc';
     end
     
     properties (Abstract, Hidden, Constant)

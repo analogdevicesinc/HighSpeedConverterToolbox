@@ -107,7 +107,7 @@ proc preprocess_bd {project carrier rxtx} {
                 connect_bd_net [get_bd_pins tx_mxfe_tpl_core/link_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
 
                 # TX JESD
-		delete_bd_objs [get_bd_nets util_mxfe_xcvr_tx_out_clk_0]
+		        delete_bd_objs [get_bd_nets util_mxfe_xcvr_tx_out_clk_0]
                 connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/device_clk] [get_bd_ports rx_device_clk]
                 connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/link_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
 
@@ -138,25 +138,31 @@ proc preprocess_bd {project carrier rxtx} {
             }
         }
         lldk_fmc {
-            if {$rxtx == "rx"} {
+            if {$rxtx == "rx" || $rxtx == "rxtx"} {
 
-		# Disconnect the ADC PACK pins
-		delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_data]
-		delete_bd_objs [get_bd_nets axi_ltc2387_1_adc_data]
-		delete_bd_objs [get_bd_nets axi_ltc2387_2_adc_data]
-		delete_bd_objs [get_bd_nets axi_ltc2387_3_adc_data]
+		        # Disconnect the ADC PACK pins
+		        delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_data]
+		        delete_bd_objs [get_bd_nets axi_ltc2387_1_adc_data]
+		        delete_bd_objs [get_bd_nets axi_ltc2387_2_adc_data]
+		        delete_bd_objs [get_bd_nets axi_ltc2387_3_adc_data]
 
-		delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_valid]
+		        delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_valid]
 
-		# Reconnect the adc_valid in the system
-		connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ad3552r_0/valid_in_a]
-		connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_dma/fifo_wr_en]
+		        # Reconnect the adc_valid in the system
+		        connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_dma/fifo_wr_en]
             }
-            switch $carrier {
+	        if {$rxtx == "tx" || $rxtx == "rxtx"} {
+                delete_bd_objs [get_bd_nets axi_ltc2387_0_dac_valid]
+
+                # Connect dac valids together
+                connect_bd_net [get_bd_pins axi_ad3552r_0/valid_in_a] [get_bd_pins axi_ad3552r_0/valid_in_b]
+                connect_bd_net [get_bd_pins axi_ad3552r_0/valid_in_a] [get_bd_pins axi_ad3552r_1/valid_in_a]
+                connect_bd_net [get_bd_pins axi_ad3552r_0/valid_in_a] [get_bd_pins axi_ad3552r_1/valid_in_b]
+	        }
+	        switch $carrier {
                 zed {
-                    if {$rxtx == "rx"} {
-                        set_property -dict [list CONFIG.NUM_MI {21}] [get_bd_cells axi_cpu_interconnect]
-                       	connect_bd_net [get_bd_pins axi_cpu_interconnect/M20_ACLK] [get_bd_pins axi_clkgen/clk_0]
+                    set_property -dict [list CONFIG.NUM_MI {21}] [get_bd_cells axi_cpu_interconnect]
+                    connect_bd_net [get_bd_pins axi_cpu_interconnect/M20_ACLK] [get_bd_pins axi_clkgen/clk_0]
                     }
                 }
             }

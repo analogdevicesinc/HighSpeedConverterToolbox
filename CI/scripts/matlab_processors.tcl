@@ -151,8 +151,11 @@ proc preprocess_bd {project carrier rxtx} {
 		        # Reconnect the adc_valid in the system
 		        connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_dma/fifo_wr_en]
             }
-	        if {$rxtx == "tx" || $rxtx == "rxtx"} {
+	    if {$rxtx == "tx" || $rxtx == "rxtx"} {
                 delete_bd_objs [get_bd_nets axi_ltc2387_0_dac_valid]
+                delete_bd_objs [get_bd_nets axi_ltc2387_1_dac_valid]
+                delete_bd_objs [get_bd_nets axi_ltc2387_2_dac_valid]
+                delete_bd_objs [get_bd_nets axi_ltc2387_3_dac_valid]
 
                 # Connect dac valids together
                 connect_bd_net [get_bd_pins axi_ad3552r_0/valid_in_a] [get_bd_pins axi_ad3552r_0/valid_in_b]
@@ -160,10 +163,9 @@ proc preprocess_bd {project carrier rxtx} {
                 connect_bd_net [get_bd_pins axi_ad3552r_0/valid_in_a] [get_bd_pins axi_ad3552r_1/valid_in_b]
 	        }
 	        switch $carrier {
-                zed {
-                    set_property -dict [list CONFIG.NUM_MI {21}] [get_bd_cells axi_cpu_interconnect]
-                    connect_bd_net [get_bd_pins axi_cpu_interconnect/M20_ACLK] [get_bd_pins axi_clkgen/clk_0]
-                    }
+                    zed {
+                        set_property -dict [list CONFIG.NUM_MI {21}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M20_ACLK] [get_bd_pins axi_clkgen/clk_0]
                 }
             }
         }

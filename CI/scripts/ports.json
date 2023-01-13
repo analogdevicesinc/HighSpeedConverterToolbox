@@ -322,7 +322,9 @@
             "zed"
         ],
         "supported_rd": [
-            "rx"
+            "rx",
+            "tx",
+            "rx & tx"
         ],
         "ports": [
             {
@@ -362,7 +364,7 @@
                         "width": 1,
                         "name": "axi_ltc2387_0/adc_valid",
                         "type": "valid"
-		    },
+		            },
                     {
                         "input": "true",
                         "width": 16,
@@ -387,8 +389,70 @@
                         "name": "axi_ltc2387_3/adc_data",
                         "type": "data"
                     }
-                ]
-            }
+                ],
+                "tx": [
+		            {
+                        "input": "true",
+                        "width": 16,
+                        "name": "axi_ltc2387_0/adc_data",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "axi_ltc2387_1/adc_data",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "axi_ltc2387_2/adc_data",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "axi_ltc2387_3/adc_data",
+                        "type": "data"
+                    },
+		            {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ltc2387_0/dac_valid",
+                        "type": "valid"
+                    },
+		            {
+                        "input": "false",
+                        "width": 16,
+                        "name": "axi_ad3552r_0/data_in_a",
+                        "type": "data"
+                    },
+		            {   
+                        "input": "false",
+                        "width": 16,
+                        "name": "axi_ad3552r_0/data_in_b",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad3552r_0/valid_in_a",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "axi_ad3552r_1/data_in_a",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "axi_ad3552r_1/data_in_b",
+                        "type": "data"
+                    }
+	            ]
+	        }
         ]
     }
 }

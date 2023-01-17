@@ -314,5 +314,57 @@
                 ]
             }
         ]
+    },
+    "ad9695": {
+        "chip": "AD9695",
+        "complex": "true",
+        "fpga": [
+            "zcu102"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "util_ad9695_rx_cpack/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "rx_ad9695_tpl_core/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "util_ad9695_rx_cpack/fifo_wr_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "util_ad9695_rx_cpack/fifo_wr_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "rx_ad9695_tpl_core/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "rx_ad9695_tpl_core/adc_data_1",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
     }
 }

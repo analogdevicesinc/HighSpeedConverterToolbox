@@ -67,7 +67,6 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
         function obj = Tx(varargin)
             coder.allowpcode('plain');
             obj = obj@adi.AD9081.Base(varargin{:});
-            obj.uri = 'ip:analog';
             obj.channel_names = {};
             for k = 0:(obj.num_data_channels-1)
                 obj.channel_names = [obj.channel_names(:)', ...

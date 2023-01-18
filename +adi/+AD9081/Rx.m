@@ -100,7 +100,6 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             % Returns the matlabshared.libiio.base object
             coder.allowpcode('plain');
             obj = obj@adi.AD9081.Base(varargin{:});
-            obj.uri = 'ip:analog';
             obj.channel_names = {};
             for k = 0:(obj.num_data_channels-1)
                 obj.channel_names = [obj.channel_names(:)', ...

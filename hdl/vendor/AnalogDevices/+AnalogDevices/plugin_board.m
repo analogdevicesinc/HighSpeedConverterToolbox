@@ -96,8 +96,8 @@ switch lower(project)
         switch(upper(board))
             case 'VCU118'
                 hB.FPGADevice   = sprintf('xc%s', 'vu9p-flga2104-2L-e');
-                hB.FPGAPackage  = 'flga2104';
-                hB.FPGASpeed    = '-2L';
+                hB.FPGAPackage  = '';
+                hB.FPGASpeed    = '';
                 hB.FPGAFamily   = 'Virtex UltraScale+';
         end
         %     case 'adrv9361-z7035'

@@ -20,11 +20,11 @@ switch project
             otherwise
                 error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
         end
-            case 'ad9208'
+    case 'ad9208'
         switch fpga
             case {'VCU118'}
                 InterfaceConnection = 'axi_cpu_interconnect/M17_AXI';
-                BaseAddress = '0x80000000';
+                BaseAddress = '0xFF0000';
                 MasterAddressSpace = 'sys_mb/Data';
             otherwise
                 error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>

@@ -8,16 +8,21 @@ if contains(lower(ReferenceDesignName),'daq2')
     mdl = 'testModel_RxTx64';
     portWidthRX = 64;
     portWidthTX = 64;
+    ports = 16;
+    vports = 4;
 elseif contains(lower(ReferenceDesignName),'ad9081')
     dev = 'AD9081';
     mdl = 'testModel';
     portWidthRX = 16;
     portWidthTX = 16;
+    ports = 16;
+    vports = 4;
 elseif contains(lower(ReferenceDesignName),'ad9208')
     dev = 'AD9208';
     mdl = 'testModel_Rx128Tx128';
     portWidthRX = 128;
-    numChannels = 2;
+    ports = 8;
+    vports = 1;
 else
     error('Unknown device');
 end
@@ -25,14 +30,14 @@ end
 load_system(mdl);
 
 % First set all ports to NIS
-for k=1:16
+for k=1:ports
     hdlset_param([mdl,'/HDL_DUT/in',num2str(k)], 'IOInterface', 'No Interface Specified');
     hdlset_param([mdl,'/HDL_DUT/in',num2str(k)], 'IOInterfaceMapping', '');
     hdlset_param([mdl,'/HDL_DUT/out',num2str(k)], 'IOInterface', 'No Interface Specified');
     hdlset_param([mdl,'/HDL_DUT/out',num2str(k)], 'IOInterfaceMapping', '');
 end
 
-for k = 1:4
+for k = 1:vports
     hdlset_param([mdl,'/HDL_DUT/validIn',num2str(k)], 'IOInterface', 'No Interface Specified');
     hdlset_param([mdl,'/HDL_DUT/validIn',num2str(k)], 'IOInterfaceMapping', '');
     hdlset_param([mdl,'/HDL_DUT/validOut',num2str(k)], 'IOInterface', 'No Interface Specified');

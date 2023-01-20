@@ -2,7 +2,7 @@
 set -x
 
 if [ -z "${HDLBRANCH}" ]; then
-HDLBRANCH='hdl_2019_r2'
+HDLBRANCH='hdl_2021_r1'
 fi
 
 # Script is designed to run from specific location
@@ -35,7 +35,7 @@ if [ -f "hdl/library/scripts/adi_ip.tcl" ]; then
 else
 	TARGET="hdl/library/scripts/adi_ip_xilinx.tcl"
 fi
-VER=$(awk '/set REQUIRED_VIVADO_VERSION/ {print $3}' $TARGET | sed 's/"//g')
+VER=$(awk '/set required_vivado_version/ {print $3}' $TARGET | sed 's/"//g')
 echo "Required Vivado version ${VER}"
 VIVADOFULL=${VER}
 if [ ${#VER} = 8 ]

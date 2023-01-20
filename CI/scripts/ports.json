@@ -782,6 +782,342 @@
                         "type": "data"
                     },
                     {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_8",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_9",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_10",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_11",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_12",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_13",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_14",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_15",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_16",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_17",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_18",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_19",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_20",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_21",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_22",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_23",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_24",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_25",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_26",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_27",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_28",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_29",
+                        "type": "data"
+                    },                    
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_30",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_31",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_32",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_33",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_34",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_35",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_36",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_37",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_38",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_39",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_40",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_41",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_42",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_43",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_44",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_45",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_46",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_47",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_48",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_49",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_50",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_51",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_52",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_53",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_54",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_55",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_56",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_57",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_58",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_59",
+                        "type": "data"
+                    },                    
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_60",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_61",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_62",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "tx_mxfe_tpl_core/dac_data_63",
+                        "type": "data"
+                    },                    
+                    {
                         "input": "true",
                         "width": 16,
                         "name": "util_mxfe_upack/fifo_rd_data_0",

@@ -13,6 +13,7 @@ set ::env(ADI_SKIP_SYNTHESIS) 1
 set ::env(SKIP_SYNTHESIS) 1
 set ::env(ADI_MATLAB) 1
 set ::env(MATLAB) 1
+set ::env(ADI_USE_OOC_SYNTHESYS) 1
 
 source ./system_project.tcl
 

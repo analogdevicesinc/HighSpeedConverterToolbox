@@ -330,7 +330,7 @@
                     {
                         "input": "false",
                         "width": 1,
-                        "name": "axi_ad9265/fifo_wr_en",
+                        "name": "axi_ad9265_dma/fifo_wr_en",
                         "type": "valid"
                     },
                     {

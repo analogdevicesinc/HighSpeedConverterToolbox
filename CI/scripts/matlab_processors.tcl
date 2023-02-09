@@ -139,19 +139,21 @@ proc preprocess_bd {project carrier rxtx} {
         }
         lldk_fmc {
            
-		    # Disconnect the ADC PACK pins
-		    delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_data]
-		    delete_bd_objs [get_bd_nets axi_ltc2387_1_adc_data]
-		    delete_bd_objs [get_bd_nets axi_ltc2387_2_adc_data]
-		    delete_bd_objs [get_bd_nets axi_ltc2387_3_adc_data]
+	   # Disconnect the ADC PACK pins
+	   delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_data]
+	   delete_bd_objs [get_bd_nets axi_ltc2387_1_adc_data]
+	   delete_bd_objs [get_bd_nets axi_ltc2387_2_adc_data]
+	   delete_bd_objs [get_bd_nets axi_ltc2387_3_adc_data]
            
           if {$rxtx == "rx" || $rxtx == "rxtx"} {
-		      delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_valid]
+	      delete_bd_objs [get_bd_nets axi_ltc2387_0_adc_valid]
 
-		      # Reconnect the adc_valid in the system
-		      connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_dma/fifo_wr_en]
+	      # Reconnect the adc_valid in the system
+	      connect_bd_net [get_bd_pins axi_ltc2387_0/adc_valid] [get_bd_pins axi_ltc2387_dma/fifo_wr_en]
           }
 	      if {$rxtx == "tx" || $rxtx == "rxtx"} {
+                delete_bd_objs [get_bd_nets switch_gpios_1]
+                
                 delete_bd_objs [get_bd_nets axi_ltc2387_0_dac_valid]
                 delete_bd_objs [get_bd_nets axi_ltc2387_1_dac_valid]
                 delete_bd_objs [get_bd_nets axi_ltc2387_2_dac_valid]

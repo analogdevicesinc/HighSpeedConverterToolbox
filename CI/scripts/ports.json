@@ -415,19 +415,25 @@
                         "name": "axi_ltc2387_3/adc_data",
                         "type": "data"
                     },
-		            {
+                    {
+                        "input": "true",
+                        "width": 8,
+                        "name": "switch_gpios",
+                        "type": "data"
+                    },
+		    {
                         "input": "true",
                         "width": 1,
                         "name": "axi_ltc2387_0/dac_valid",
                         "type": "valid"
                     },
-		            {
+		    {
                         "input": "false",
                         "width": 16,
                         "name": "axi_ad3552r_0/data_in_a",
                         "type": "data"
                     },
-		            {   
+		    {   
                         "input": "false",
                         "width": 16,
                         "name": "axi_ad3552r_0/data_in_b",
@@ -449,6 +455,12 @@
                         "input": "false",
                         "width": 16,
                         "name": "axi_ad3552r_1/data_in_b",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 8,
+                        "name": "led_gpios",
                         "type": "data"
                     }
 	            ]

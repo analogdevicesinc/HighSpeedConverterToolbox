@@ -2,7 +2,7 @@ classdef Version
     %Version
     %   BSP Version information
     properties(Constant)
-        HDL = 'hdl_2021_r1';
+        HDL = 'master';
         Vivado = '2021.1';
         MATLAB = 'R2021b';
         Release = '21.2.2';

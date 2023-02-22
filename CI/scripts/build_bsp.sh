@@ -2,7 +2,7 @@
 set -x
 
 if [ -z "${HDLBRANCH}" ]; then
-HDLBRANCH='master'
+HDLBRANCH='adi_project_xilinx_matlab'
 fi
 
 # Script is designed to run from specific location

@@ -26,7 +26,7 @@ stage("Build Toolbox") {
 		    unstable('Development Build Failed')
 		}
         }
-        if (branchName == 'hdl_2021_r1') {
+        if (branchName == 'adi_project_xilinx_matlab') {
 	    archiveArtifacts artifacts: '*.mltbx'
             stash includes: '**', name: 'builtSources', useDefaultExcludes: false
         }

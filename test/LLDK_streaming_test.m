@@ -1,18 +1,27 @@
 % create a sinewave
 
-board_ip = 'ip:analog';
+board_ip = 'ip:10.48.65.144';
 
 %Connect and configure the AD3552R-0 device(Tx0)
 
 tx0 = adi.AD3552R.Tx0('uri',board_ip); 
 tx0.EnabledChannels = [1, 2];
 tx0.EnableCyclicBuffers = true;
-tx0.DataSource = 'DMA';
+
+%available options:'adc_input', 'dma_input', 'ramp_input'
+
+tx0.InputSource = 'dma_input';
+
+%available options: '0/2.5V', '0/5V', '0/10V', '-5/+5V', '-10/+10V'
+
+tx0.OutputRange = '-10/+10V';
 
 % Connect and configure the AD3552R-1 device  (Tx1)
 tx1 = adi.AD3552R.Tx1('uri',board_ip);
 tx1.EnabledChannels = [1, 2];
 tx1.EnableCyclicBuffers = true;
+tx1.InputSource = 'dma_input';
+tx1.OutputRange = '-10/+10V';
 
 % generate the sine wave signal 
 
@@ -54,3 +63,5 @@ ylabel('Channel D');
 xlabel('Number of samples') 
 % when we finish reading the data we release the device
 rx.release ();
+tx0.release ();
+tx1.release ();

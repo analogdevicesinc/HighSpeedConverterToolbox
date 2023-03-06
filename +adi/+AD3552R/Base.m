@@ -1,6 +1,6 @@
 classdef (Abstract) Base < ...
         adi.common.RxTx & ...
-        matlabshared.libiio.base 
+        matlabshared.libiio.base & adi.common.Attribute
     %AD3552R Base Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -25,6 +25,11 @@ classdef (Abstract) Base < ...
     properties (Hidden, Constant)
         ComplexData = false;
     end
+
+    properties
+        InputSource = 'adc_input';
+        OutputRange = '-10/+10V';
+    end
     
     methods
         %% Constructor
@@ -40,6 +45,20 @@ classdef (Abstract) Base < ...
                 '', 'SamplesPerFrame');
             obj.SamplesPerFrame = value;
         end
+        % Set/Get Input Source
+        function result = get.InputSource(obj)
+            result = obj.InputSource;
+        end
+        function set.InputSource(obj, value)
+            obj.InputSource = value;        
+        end
+        % Set/Get Output Range
+        function result = get.OutputRange(obj)
+            result = obj.OutputRange;
+        end
+        function set.OutputRange(obj, value)
+            obj.OutputRange = value;        
+        end
     end
     
     %% API Functions
@@ -48,11 +67,11 @@ classdef (Abstract) Base < ...
         function icon = getIconImpl(obj)
             icon = sprintf(['AD3552R',obj.Type]);
         end
-        
-        function setupInit(~)
-            % Unused
-        end
-        
+
+        function setupInit(obj)
+            obj.setDeviceAttributeRAW('input_source',obj.InputSource);
+            obj.setDeviceAttributeRAW('output_range',obj.OutputRange);
+        end    
     end
     
     %% External Dependency Methods

@@ -24,6 +24,9 @@ classdef (Abstract) Base < ...
     properties (Hidden, Constant)
         ComplexData = false;
     end
+    properties (Hidden)
+       iioOneBitADCDAC
+    end
     
     methods
         %% Constructor
@@ -47,11 +50,19 @@ classdef (Abstract) Base < ...
         function icon = getIconImpl(obj)
             icon = sprintf(['LTC2387 ',obj.Type]);
         end
-        
-        function setupInit(~)
-            % Unused
+        function setupInit(obj)
+           obj.iioOneBitADCDAC = getDev(obj, 'one-bit-adc-dac');
+           setAttributeBool(obj,'voltage0', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage1', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage2', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage3', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage4', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage5', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage6', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage7', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage8', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
+           setAttributeBool(obj,'voltage9', 'raw', boolean(1),true, obj.iioOneBitADCDAC);
         end
-        
     end
     
     %% External Dependency Methods

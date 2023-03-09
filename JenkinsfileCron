@@ -33,18 +33,20 @@ stage("Build Toolbox") {
 }
 
 /////////////////////////////////////////////////////
+def deployments = [:]
 
-
-node("lab1") {
+deployments['vm1'] = { node("vm1") {
     stage("Synthesis Tests") {
-        withEnv(['HDLBRANCH=hdl_2021_r1','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+        withEnv(['BOARD=daq2','MLRELEASE=R2022a','HDLBRANCH=hdl_2021_r1','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
                 stage("Synth") {
                     unstash "builtSources"
+                    sh 'sed -i "s/R2021b/R2022a/g" CI/scripts/synth_designs.sh'
+                    sh 'sed -i "s/synth_designs.sh/synth_designs.sh daq2/g" CI/scripts/Makefile'
                     sh 'make -C ./CI/scripts test_synth'
                     junit testResults: 'test/*.xml', allowEmptyResults: true
                     archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
-		    archiveArtifacts artifacts: '*BOOT.BIN*', followSymlinks: false, allowEmptyArchive: true
+		            archiveArtifacts artifacts: '*BOOT.BIN*', followSymlinks: false, allowEmptyArchive: true
                 }
             }
             finally {
@@ -52,4 +54,29 @@ node("lab1") {
             }
         }
     }
-}
+}}
+
+/////////////////////////////////////////////////////
+
+deployments['vm2'] = { node("vm2") {
+    stage("Synthesis Tests") {
+        withEnv(['BOARD=ad9081','MLRELEASE=R2022a','HDLBRANCH=hdl_2021_r1','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+            try {
+                stage("Synth") {
+                    unstash "builtSources"
+                    sh 'sed -i "s/R2021b/R2022a/g" CI/scripts/synth_designs.sh'
+                    sh 'sed -i "s/synth_designs.sh/synth_designs.sh daq2/g" CI/scripts/Makefile'
+                    sh 'make -C ./CI/scripts test_synth'
+                    junit testResults: 'test/*.xml', allowEmptyResults: true
+                    archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+		            archiveArtifacts artifacts: '*BOOT.BIN*', followSymlinks: false, allowEmptyArchive: true
+                }
+            }
+            finally {
+                cleanWs();
+            }
+        }
+    }
+}}
+
+parallel deployments

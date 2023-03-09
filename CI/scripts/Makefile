@@ -105,6 +105,8 @@ test_modem:
 
 test_synth:
 	bash synth_designs.sh $(BOARD)
+test_targeting_demos:
+	bash targeting_designs.sh
 
 gen_tlbx:
 	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "genTlbx($(INCLUDE_EXAMPLES));exit();"

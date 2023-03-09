@@ -41,6 +41,8 @@ deployments['vm1'] = { node("vm1") {
             try {
                 stage("Synth") {
                     unstash "builtSources"
+                    sh 'sed -i "s/R2021b/R2022a/g" CI/scripts/synth_designs.sh'
+                    sh 'sed -i "s/synth_designs.sh/synth_designs.sh daq2/g" CI/scripts/Makefile'
                     sh 'make -C ./CI/scripts test_synth'
                     junit testResults: 'test/*.xml', allowEmptyResults: true
                     archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
@@ -62,6 +64,8 @@ deployments['vm2'] = { node("vm2") {
             try {
                 stage("Synth") {
                     unstash "builtSources"
+                    sh 'sed -i "s/R2021b/R2022a/g" CI/scripts/synth_designs.sh'
+                    sh 'sed -i "s/synth_designs.sh/synth_designs.sh daq2/g" CI/scripts/Makefile'
                     sh 'make -C ./CI/scripts test_synth'
                     junit testResults: 'test/*.xml', allowEmptyResults: true
                     archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true

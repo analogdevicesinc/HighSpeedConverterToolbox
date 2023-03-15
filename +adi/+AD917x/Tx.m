@@ -1,6 +1,5 @@
 classdef Tx < adi.common.Tx & adi.AD917x.Base & adi.common.DDS
-    % adi.AD917x.Tx Transmit data to the AD9162 high speed DAC
-    %
+    % adi.AD917x.Tx 
     %
     %   <a href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/software/AD917x-API.html#software-overview">AD917x </a>
     %

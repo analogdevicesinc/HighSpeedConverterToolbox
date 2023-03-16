@@ -1,5 +1,4 @@
-    proc preprocess_bd {project carrier rxtx} {
-
+ proc preprocess_bd {project carrier rxtx} {
     puts "Preprocessing $project $carrier $rxtx"
 
     switch $project {
@@ -108,6 +107,48 @@
                         set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
                         connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9434/adc_clk]
                         connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M08_ARESETN]
+                    }
+                }
+            }
+        }
+        ad9739a_fmc {
+         
+            if {$rxtx == "tx"} {
+                # Disconnect the DAC PACK pins
+                # VALID PINS NOT CONNECTED TO INTERFACE CORE ON DAC SIDE
+                delete_bd_objs [get_bd_nets axi_ad9739a_dma_fifo_rd_dout]
+
+                # Create Slice blocks 
+                set i 15
+                while {$i >= 0} {
+                    create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_$i
+                    set_property -dict [list CONFIG.DIN_TO [expr $i * 16] CONFIG.DIN_FROM [expr ($i +1) * 16 -1] CONFIG.DIN_WIDTH {256} CONFIG.DOUT_WIDTH {16}] [get_bd_cells xlslice_$i]
+                    # Connect the fifo out to the slice blocks
+                    connect_bd_net [get_bd_pins xlslice_${i}/Din] [get_bd_pins axi_ad9739a_dma/fifo_rd_dout]
+                   
+                    set i [expr $i - 1]
+                }
+
+                #Create Concat block
+                create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
+                set_property -dict [list CONFIG.NUM_PORTS {16}] [get_bd_cells xlconcat_0]
+
+                set j 15
+                while {$j >= 0 } {
+                    set_property -dict [list CONFIG.IN${j}_WIDTH.VALUE_SRC USER] [get_bd_cells xlconcat_0]
+                    set_property -dict [list CONFIG.IN${j}_WIDTH {16}] [get_bd_cells xlconcat_0]
+
+                    set j [expr $j - 1]
+                }
+                # connect the concat block to the axi_ad9739a
+                connect_bd_net [get_bd_pins xlconcat_0/dout] [get_bd_pins axi_ad9739a/dac_ddata]
+                
+            }
+            switch $carrier {                
+                zc706 {                    
+                    if {$rxtx == "tx"} {
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
+                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins sys_ps7/FCLK_CLK0]
                     }
                 }
             }

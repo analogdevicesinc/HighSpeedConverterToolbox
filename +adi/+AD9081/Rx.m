@@ -45,10 +45,12 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         %   'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7'
         %   'pn15' 'pn31' 'ramp'
         TestMode = 'off';
-        %Sync Sync
+        %JESD204FSMControl JESD204 FSM Control
         %   JESD204 FSM CTRL. Options are:
         %   '0' '1'
-        Sync = '0'
+        %   When set to '0' the JESD links will be disabled. This property
+        %   should be toggled to reset the JESD204 links
+        JESD204FSMControl = '1';
     end
     
     properties (Nontunable, Logical)
@@ -92,6 +94,7 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             'off','midscale_short','pos_fullscale','neg_fullscale'...
             'checkerboard','pn9','pn32','one_zero_toggle','user','pn7'...
             'pn15','pn31','ramp'});
+        JESD204FSMControlSet = matlab.system.StringSet({'0','1'});
     end
     
     methods
@@ -100,7 +103,6 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             % Returns the matlabshared.libiio.base object
             coder.allowpcode('plain');
             obj = obj@adi.AD9081.Base(varargin{:});
-            obj.uri = 'ip:analog';
             obj.channel_names = {};
             for k = 0:(obj.num_data_channels-1)
                 obj.channel_names = [obj.channel_names(:)', ...
@@ -152,14 +154,23 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
         %%
         % Check TestMode
         function set.TestMode(obj, value)
-            obj.setAttributeRAW('voltage0_i','test_mode',value,false,...
-                obj.iioDev);
+            if obj.ConnectedToDevice
+                obj.setAttributeRAW('voltage0_i','test_mode',value,false,...
+                    obj.iioDev);
+            end
             obj.TestMode = value;
         end
-        %% Check Sync
-        function set.Sync(obj, value)
-            obj.setDeviceAttributeRAW('jesd204_fsm_ctrl',value);
-            obj.Sync = value;
+        %% Check JESD204FSMControl
+        function set.JESD204FSMControl(obj, value)
+            if obj.ConnectedToDevice
+                obj.setDeviceAttributeRAW('jesd204_fsm_ctrl',value);
+            else
+                if isequal(value,'0')
+                    error(['JESD204FSMControl cannot be set to 0 before initialization, ',...
+                        'This will disable the JESD links and prevent access to data']);
+                end
+            end
+            obj.JESD204FSMControl = value;
         end
         %%
         % Check EnablePFIRs
@@ -230,7 +241,10 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
                 obj.writeFilterFile();
             end
             %%
-            obj.setDeviceAttributeRAW('jesd204_fsm_ctrl',obj.Sync);
+            obj.setDeviceAttributeRAW('jesd204_fsm_ctrl',obj.JESD204FSMControl);
+            %%
+            obj.setAttributeRAW('voltage0_i','test_mode',obj.TestMode,...
+                false,obj.iioDev);
 
         end
 

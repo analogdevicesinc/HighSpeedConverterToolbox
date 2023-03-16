@@ -27,7 +27,7 @@ lock(label: 'adgt_test_harness_boards') {
   withCredentials([string(credentialsId: 'netbox_token', variable: 'TOKEN')]) {
     harness.set_env('netbox_token', TOKEN)
   }
-  harness.set_env('netbox_devices_tag','hsc')
+  harness.set_env('netbox_devices_tag','active')
   
   //Update agent with the required deps
   harness.set_required_agent(["sdg-nuc-01","sdg-nuc-02"])
@@ -42,6 +42,9 @@ lock(label: 'adgt_test_harness_boards') {
   harness.set_enable_resource_queuing(true)
   harness.set_lock_agent(true) // Required for MATLAB toolbox tests
   harness.set_elastic_server('192.168.10.1')
+  harness.set_required_hardware(["zynq-zc706-adv7511-fmcdaq2",
+                                 "zynqmp-zcu102-rev10-fmcdaq3",
+                                "zynqmp-zcu102-rev10-ad9081-vm8-l4"])
   harness.set_docker_args(['Vivado', 'MATLAB'])
   harness.set_nebula_local_fs_source_root("artifactory.analog.com")
 

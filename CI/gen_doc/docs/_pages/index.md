@@ -41,3 +41,13 @@ The following have device-specific implementations in MATLAB and Simulink. If a 
 | | VCU118	| Yes	| No	| ADI (2020a) |
 | QuadMxFE (AD9081 x4)	| VCU118	| Yes	| No	| ADI (2020a) |
 | AD9467	| Zedboard	| Yes	| No	| ADI (2018b) |
+| FMCJESDADC1	| ZC706	| Yes	| No	| ADI (2021b) |
+| FMComms11	| ZC706	| Yes	| No	| ADI (2021b) |
+| AD9265	| ZC706	| Yes	| No	| ADI (2021b) |
+| AD9434	| ZC706	| Yes	| No	| ADI (2021b) |
+| AD9656	| ZCU102	| Yes	| No	| ADI (2021b) |
+| AD9695	| ZCU102	| Yes	| No	| ADI (2021b) |
+| AD9739a	| ZC706	| Yes	| No	| ADI (2021b) |
+| AD9162	| ZC706	| Yes	| No	| ADI (2021b) |
+| AD9164	| ZC706	| Yes	| No	| ADI (2021b) |
+| AD9152	| ZC706	| Yes	| No	| ADI (2021b) |

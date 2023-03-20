@@ -11,18 +11,18 @@ High-Speed Converter Toolbox supports the IP Core generation flow from MathWorks
 
 ## Getting Started
 
-To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2019.1. Using other versions are not supported. To build the necessary BOOT.BIN files will require the Xilinx SDK as well.
+To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2021.1. Using other versions are not supported. To build the necessary BOOT.BIN files will require the Xilinx SDK as well.
 
 Once you have the installed the necessary 3rd party tools MATLAB needs to be told where they are installed by use of the [hdlsetuptoolpath](https://www.mathworks.com/help/hdlcoder/ref/hdlsetuptoolpath.html) command. For Windows the following MATLAB command can be used:
 
 ```matlab
-hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', 'C:\Xilinx\Vivado\2019.1\bin\vivado.bat');
+hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', 'C:\Xilinx\Vivado\2021.1\bin\vivado.bat');
 ```
 
 or Linux:
 
 ```matlab
-hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', '/opt/Xilinx/Vivado/2019.1/bin/vivado');
+hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', '/opt/Xilinx/Vivado/2021.1/bin/vivado');
 ```
 
 Please change the tool path if it is different on your system.

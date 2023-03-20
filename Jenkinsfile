@@ -60,6 +60,23 @@ stage("HDL Tests") {
 
 /////////////////////////////////////////////////////
 
+boardNames = ['NonHW']
+
+stage("NonHW Tests") {
+    dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+        branchName ->
+        withEnv(['BOARD='+branchName]) {
+            stage("NonHW") {
+                unstash "builtSources"
+                sh 'make -C ./CI/scripts run_NonHWTests'
+            }
+        }
+    }
+}
+
+
+/////////////////////////////////////////////////////
+
 classNames = ['DAQ2']
 
 stage("Hardware Streaming Tests") {

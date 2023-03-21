@@ -52,7 +52,6 @@ switch lower(project)
                 hB.FPGASpeed    = '';
                 hB.FPGAFamily   = 'Zynq UltraScale+';
         end
-
     case {'ad9434'}
         switch(upper(board))
             case 'ZC706'
@@ -61,7 +60,14 @@ switch lower(project)
                 hB.FPGASpeed    = '-2';
                 hB.FPGAFamily   = 'Zynq';
         end
-
+    case {'ad9265'}
+        switch(upper(board))
+            case 'ZC706'
+                hB.FPGADevice   = sprintf('xc7%s', 'z045');
+                hB.FPGAPackage  = 'ffg900';
+                hB.FPGASpeed    = '-2';
+                hB.FPGAFamily   = 'Zynq';
+        end
     case {'ad9739a'}
         switch(upper(board))
             case 'ZC706'
@@ -146,6 +152,7 @@ switch lower(project)
         %                 hB.FPGAPackage  = '';
         %                 hB.FPGASpeed    = '';
         %         end
+
 end
 
 % Tool Info

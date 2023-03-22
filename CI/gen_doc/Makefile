@@ -42,7 +42,6 @@ GITTAG := $(shell git describe --tags HEAD)
 .ONESHELL:
 
 doc_ml:
-	cd ../.. ; \
 	cd docs ; \
 	cp ../../scripts/ports.json . ; \
 	cp ../../scripts/read_ports_json.py . ; \

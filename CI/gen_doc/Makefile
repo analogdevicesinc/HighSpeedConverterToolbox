@@ -49,6 +49,7 @@ doc_ml:
 	MATLAB=ON python3 gen_all_doc.py ; \
 	cd .. ; \
 	mkdocs build -d doc
+	mv doc ../../
 
 doc:
 	cd docs ; \

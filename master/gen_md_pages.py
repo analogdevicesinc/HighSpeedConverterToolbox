@@ -33,6 +33,8 @@ def gen_toc(pages, devices, designs):
 
     template = env.get_template("toc.tmpl")
 
+    pages.remove('index')
+    pages.remove('ad9081')
     output = template.render(pages=pages, devices=devices, designs=designs)
 
     loc = os.path.dirname(__file__)

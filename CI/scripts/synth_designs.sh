@@ -5,10 +5,10 @@ MLFLAGS="-nodisplay -nodesktop -nosplash"
 
 if [ -z "$MLRELEASE" ]
 then
-	MLRELEASE=R2022a
+	MLRELEASE=R2021b
 fi
 
-MLPATH=/usr/local/MATLAB
+MLPATH=/emea/mediadata/opt/MATLAB
 
 cd ../.. 
 cp hdl/vendor/AnalogDevices/hdlcoder_board_customization.m test/hdlcoder_board_customization_local.m

@@ -8,7 +8,7 @@ then
 	MLRELEASE=R2021b
 fi
 
-MLPATH=/emea/mediadata/opt/MATLAB
+MLPATH=usr/local/MATLAB
 
 cd ../.. 
 cp hdl/vendor/AnalogDevices/hdlcoder_board_customization.m test/hdlcoder_board_customization_local.m

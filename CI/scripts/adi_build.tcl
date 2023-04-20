@@ -37,18 +37,40 @@ close_project
 
 # Create the BOOT.bin
 file mkdir $cdir/boot
-set xsct_script "exec xsct $cdir/projects/scripts/adi_make_boot_bin.tcl"
-set arm_tr_frm_elf $cdir/projects/common/boot/bl31.elf
-
 if {$fpga_board eq "ZCU102"} {
-  set uboot_elf $cdir/projects/common/boot/u-boot-zcu.elf
+    set vversion [version -short]
+    exec xsct $cdir/projects/scripts/fsbl_build_zynqmp.tcl $vversion
+    if {[file exist boot/BOOT.BIN] eq 0} {
+        puts "ERROR: BOOT.BIN not built"
+        return -code error 11
+    } else {
+        puts "BOOT.BIN built correctly!"
+    }
+
 } else {
-  set uboot_elf $cdir/projects/common/boot/u-boot.elf
+    exec xsct $cdir/projects/scripts/fsbl_build_zynq.tcl
+    if {[file exist boot/BOOT.BIN] eq 0} {
+        puts "ERROR: BOOT.BIN not built"
+        return -code error 11
+    } else {
+        puts "BOOT.BIN built correctly!"
+    }
 }
 
-set build_args "$sdk_loc/system_top.xsa $uboot_elf $cdir/boot $arm_tr_frm_elf"
-puts "Please wait, this may take a few minutes."
-eval $xsct_script $build_args
+# Create the BOOT.bin
+#file mkdir $cdir/boot
+#set xsct_script "exec xsct $cdir/projects/scripts/adi_make_boot_bin.tcl"
+#set arm_tr_frm_elf $cdir/projects/common/boot/bl31.elf
+
+#if {$fpga_board eq "ZCU102"} {
+#  set uboot_elf $cdir/projects/common/boot/u-boot-zcu.elf
+#} else {
+#  set uboot_elf $cdir/projects/common/boot/u-boot.elf
+#}
+
+#set build_args "$sdk_loc/system_top.xsa $uboot_elf $cdir/boot $arm_tr_frm_elf"
+#puts "Please wait, this may take a few minutes."
+#eval $xsct_script $build_args
 
 puts "------------------------------------"
 puts "Embedded system build completed."

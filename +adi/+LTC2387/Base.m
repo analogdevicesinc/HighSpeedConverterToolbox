@@ -1,8 +1,9 @@
 classdef (Abstract) Base < ...
         adi.common.RxTx & ...
+        adi.common.Attribute & ...
         matlabshared.libiio.base
     %LTC2387 Base Class
-    
+
     properties (Nontunable)
         %SamplesPerFrame Samples Per Frame
         %   Number of samples per frame, specified as an even positive
@@ -10,21 +11,22 @@ classdef (Abstract) Base < ...
         %   yield poor performance.
         SamplesPerFrame = 2^15;
     end
-    
+
     properties(Nontunable, Hidden)
         Timeout = Inf;
         kernelBuffersCount = 2;
         dataTypeStr = 'int64';
     end
-    
+
     properties (Abstract, Hidden, Constant)
-       Type 
+        Type
     end
-    
+
+
     properties (Hidden, Constant)
         ComplexData = false;
     end
-    
+
     methods
         %% Constructor
         function obj = Base(varargin)
@@ -40,36 +42,32 @@ classdef (Abstract) Base < ...
             obj.SamplesPerFrame = value;
         end
     end
-    
+
     %% API Functions
     methods (Hidden, Access = protected)
-                
+
         function icon = getIconImpl(obj)
             icon = sprintf(['LTC2387 ',obj.Type]);
         end
-        
-        function setupInit(~)
-            % Unused
-        end
-        
+
     end
-    
+
     %% External Dependency Methods
     methods (Hidden, Static)
-        
+
         function tf = isSupportedContext(bldCfg)
             tf = matlabshared.libiio.ExternalDependency.isSupportedContext(bldCfg);
         end
-        
+
         function updateBuildInfo(buildInfo, bldCfg)
             % Call the matlabshared.libiio.method first
             matlabshared.libiio.ExternalDependency.updateBuildInfo(buildInfo, bldCfg);
         end
-        
+
         function bName = getDescriptiveName(~)
             bName = 'LTC2387';
         end
-        
+
     end
 end
 

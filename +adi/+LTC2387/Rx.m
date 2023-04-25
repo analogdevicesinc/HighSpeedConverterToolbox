@@ -8,8 +8,8 @@ classdef Rx < adi.common.Rx & adi.LTC2387.Base & adi.common.Attribute
     %
     %   <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/LTC2387.pdf">LTC2387 Datasheet</a>
     %
-    %   See also adi.LLDK.Rx
-    
+    %   See also adi.CN0585.Rx
+
     properties (Dependent)
         %SamplingRate Sampling Rate
         %   Baseband sampling rate in Hz, specified as a scalar
@@ -19,17 +19,17 @@ classdef Rx < adi.common.Rx & adi.LTC2387.Base & adi.common.Attribute
     properties (Hidden, Nontunable, Access = protected)
         isOutput = false;
     end
-    
+
     properties(Nontunable, Hidden, Constant)
         Type = 'Rx';
     end
-    
+
     properties (Nontunable, Hidden)
         devName = 'ltc2387';
         phyDevName = 'ltc2387';
         channel_names = {'voltage0','voltage1','voltage2','voltage3'};
     end
-    
+
     methods
         %% Constructor
         function obj = Rx(varargin)
@@ -44,24 +44,31 @@ classdef Rx < adi.common.Rx & adi.LTC2387.Base & adi.common.Attribute
                 value = NaN;
             end
         end
-    end   
-    
+    end
+
+    %% API Functions
+    methods (Hidden, Access = protected)
+        function setupInit(~)
+            %unused
+        end
+    end
+
     %% External Dependency Methods
     methods (Hidden, Static)
-        
+
         function tf = isSupportedContext(bldCfg)
             tf = matlabshared.libiio.ExternalDependency.isSupportedContext(bldCfg);
         end
-        
+
         function updateBuildInfo(buildInfo, bldCfg)
             % Call the matlabshared.libiio.method first
             matlabshared.libiio.ExternalDependency.updateBuildInfo(buildInfo, bldCfg);
         end
-        
+
         function bName = getDescriptiveName(~)
             bName = 'LTC2387';
         end
-        
+
     end
 end
 

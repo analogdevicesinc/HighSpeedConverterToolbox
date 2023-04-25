@@ -18,8 +18,8 @@ elseif contains(lower(ReferenceDesignName),'ad9081')
     portWidthRX = 16;
     portWidthTX = 16;
     numChannels = 4;
-elseif contains(lower(ReferenceDesignName),'lldk')
-    dev = 'LLDK'
+elseif contains(lower(ReferenceDesignName),'cn0585')
+    dev = 'CN0585'
     mdl = 'testModel';
     portWidthRX = 16;
     portWidthTX = 16;

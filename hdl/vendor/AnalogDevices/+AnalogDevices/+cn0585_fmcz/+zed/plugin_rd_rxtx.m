@@ -4,4 +4,4 @@ function hRD = plugin_rd_rxtx
 %   Copyright 2014-2015 The MathWorks, Inc.
 
 % Call the common reference design definition function
-hRD = AnalogDevices.plugin_rd('lldk','ZED', 'Rx & Tx');
+hRD = AnalogDevices.plugin_rd('CN0585','ZED', 'Rx & Tx');

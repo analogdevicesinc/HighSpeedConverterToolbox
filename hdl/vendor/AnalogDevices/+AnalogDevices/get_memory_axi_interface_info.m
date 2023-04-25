@@ -20,7 +20,7 @@ switch project
             otherwise
                 error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
         end
-   case 'lldk'
+   case 'cn0585'
         switch fpga
             case{'ZED'}
                 InterfaceConnection = 'axi_cpu_interconnect/M20_AXI';

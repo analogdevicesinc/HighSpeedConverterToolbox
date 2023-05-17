@@ -72,6 +72,14 @@ try
     hdlcoder.runWorkflow([mdl,'/HDL_DUT'], hWC, 'Verbosity', 'On');
     close_system(mdl, false);
     bdclose('all');
+    bootbin = [folder,'/vivado_ip_prj/boot/BOOT.BIN'];
+    if exist(bootbin, 'file') == 2
+        target = [pwd,filesep,get_ref_name(ReferenceDesignName)];
+        fprintf('Copying BOOT.BIN to local folder \n %s \n %s \n',bootbin,target);
+        copyfile(bootbin, target);
+    else
+        fprintf('BOOT.BIN not found in %s \n',bootbin);
+    end
     out = [];
 catch ME
     if SynthesizeDesign && exist([folder,'/vivado_ip_prj/boot/BOOT.BIN'],'file')

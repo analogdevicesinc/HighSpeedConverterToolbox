@@ -8,10 +8,12 @@ set fpga_board_lc [string tolower $fpga_board]
 
 puts "FPGA Board: $fpga_board_lc"
 
-# Verify support files exist
-if {![file exists $cdir/projects/common/boot/$fpga_board_lc/u-boot.elf]} {
-    puts "ERROR: Missing u-boot.elf for $fpga_board_lc"
-    return
+if {$fpga_board_lc != "vcu118"} {
+    # Verify support files exist
+    if {![file exists $cdir/projects/common/boot/$fpga_board_lc/u-boot.elf]} {
+        puts "ERROR: Missing u-boot.elf for $fpga_board_lc"
+        return
+    }
 }
 
 # Build the project

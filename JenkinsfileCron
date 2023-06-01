@@ -34,9 +34,9 @@ stage("Build Toolbox") {
 
 /////////////////////////////////////////////////////
 
-boardNames = ['daq2_zcu102','ad9081_fmca_ebz_zcu102','ad9434_zc706',
-    'ad9739a_zc706','ad9265_zc706', 'fmcjesdadc1_zc706','ad9783_zcu102',
-    'ad9208_vcu118']
+boardNames = ['daq2_zcu102','ad9081_fmca_ebz_zcu102','ad9434_fmc_zc706',
+    'ad9739a_fmc_zc706','ad9265_fmc_zc706', 'fmcjesdadc1_zc706','ad9783_ebz_zcu102',
+    'ad9208_dual_ebz_vcu118']
 
 // Create unique closure for each board and run in parallel
 def deployments = [:]

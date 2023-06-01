@@ -34,14 +34,16 @@ stage("Build Toolbox") {
 
 /////////////////////////////////////////////////////
 
-boardNames = ['daq2_zcu102', 'ad9081_fmca_ebz_zcu102']
+boardNames = ['daq2_zcu102','ad9081_fmca_ebz_zcu102','ad9434_zc706',
+    'ad9739a_zc706','ad9265_zc706', 'fmcjesdadc1_zc706','ad9783_zcu102',
+    'ad9208_vcu118']
 
 // Create unique closure for each board and run in parallel
 def deployments = [:]
 for (int i=0; i < boardNames.size(); i++) {
     def board = boardNames[i];
     def nodeLabel = 'baremetal';
-    if (board.contains("zcu102"))
+    if (board.contains("zcu102") || board.contains("vcu118"))
         nodeLabel = 'baremetal && high_memory';
     deployments[board] = { node(nodeLabel) {
         stage("Synthesis Tests") {
@@ -56,7 +58,7 @@ for (int i=0; i < boardNames.size(); i++) {
                         junit testResults: 'test/*.xml', allowEmptyResults: true
                         archiveArtifacts artifacts: 'test/*', followSymlinks: false, allowEmptyArchive: true
                     }
-		    if (!board.contains("pluto")) {
+		    if (!board.contains("pluto") && !board.contains("vcu118")) {
 			    stage("Upload BOOT.BINs") {
 				sh 'mkdir bootbins'
 				sh 'mv test/*.BIN bootbins/'

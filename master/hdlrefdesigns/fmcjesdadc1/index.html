@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../../support/">
+        <link rel="prev" href="../ad9265/">
       
       
-        <link rel="next" href="../ad9081/">
+        <link rel="next" href="../ad9783/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
     
     
       
-        <title>daq2 - Analog Devices, Inc. High-Speed Converter Toolbox</title>
+        <title>fmcjesdadc1 - Analog Devices, Inc. High-Speed Converter Toolbox</title>
       
     
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#daq2-reference-design-integration" class="md-skip">
+        <a href="#fmcjesdadc1-reference-design-integration" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              daq2
+              fmcjesdadc1
             
           </span>
         </div>
@@ -616,59 +616,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          daq2
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../daq2/" class="md-nav__link">
         daq2
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#reference-design" class="md-nav__link">
-    Reference Design
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#hdl-worflow-advisor-port-mappings" class="md-nav__link">
-    HDL Worflow Advisor Port Mappings
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -734,11 +686,59 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../fmcjesdadc1/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          fmcjesdadc1
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         fmcjesdadc1
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#reference-design" class="md-nav__link">
+    Reference Design
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hdl-worflow-advisor-port-mappings" class="md-nav__link">
+    HDL Worflow Advisor Port Mappings
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1084,19 +1084,17 @@
                   
 
 
-<h1 id="daq2-reference-design-integration">daq2 Reference Design Integration</h1>
-<p>This page outlines the HDL reference design integration for the <em>daq2</em> reference design for the Analog Devices
-DAQ2 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants: </p>
+<h1 id="fmcjesdadc1-reference-design-integration">fmcjesdadc1 Reference Design Integration</h1>
+<p>This page outlines the HDL reference design integration for the <em>fmcjesdadc1</em> reference design for the Analog Devices
+FMCJESDADC1 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants: </p>
 <ul>
 <li><a href="">Base reference design documentation</a></li>
 <li>Supported FPGA carriers:<ul>
-<li>ZCU102</li>
+<li>ZC706</li>
 </ul>
 </li>
 <li>Supported design variants:<ul>
 <li>RX</li>
-<li>TX</li>
-<li>RX &amp; TX</li>
 </ul>
 </li>
 </ul>
@@ -1449,79 +1447,72 @@ DAQ2 component. The IP-Core Generation follow is available on the based on the f
 <tr>
 <td>VALID-OUT</td>
 <td>IP Data Valid OUT</td>
-<td>axi_ad9680_cpack/fifo_wr_en</td>
+<td>axi_ad9250_cpack/fifo_wr_en</td>
 <td>1</td>
 <td>RX</td>
 </tr>
 <tr>
 <td>VALID-IN</td>
 <td>IP Valid Rx Data IN</td>
-<td>axi_ad9680_tpl/adc_valid_0</td>
+<td>axi_ad9250_core/adc_valid_0</td>
 <td>1</td>
 <td>RX</td>
 </tr>
 <tr>
 <td>DATA-OUT</td>
 <td>IP Data 0 OUT</td>
-<td>axi_ad9680_cpack/fifo_wr_data_0</td>
-<td>64</td>
+<td>axi_ad9250_cpack/fifo_wr_data_0</td>
+<td>32</td>
 <td>RX</td>
 </tr>
 <tr>
 <td>DATA-OUT</td>
 <td>IP Data 1 OUT</td>
-<td>axi_ad9680_cpack/fifo_wr_data_1</td>
-<td>64</td>
+<td>axi_ad9250_cpack/fifo_wr_data_1</td>
+<td>32</td>
 <td>RX</td>
-</tr>
-<tr>
-<td>DATA-IN</td>
-<td>DAQ2 ADC Data 0 IN</td>
-<td>axi_ad9680_tpl/adc_data_0</td>
-<td>64</td>
-<td>RX</td>
-</tr>
-<tr>
-<td>DATA-IN</td>
-<td>DAQ2 ADC Data 1 IN</td>
-<td>axi_ad9680_tpl/adc_data_1</td>
-<td>64</td>
-<td>RX</td>
-</tr>
-<tr>
-<td>VALID-IN</td>
-<td>IP Valid Tx Data IN</td>
-<td>axi_ad9144_upack/fifo_rd_valid</td>
-<td>1</td>
-<td>TX</td>
 </tr>
 <tr>
 <td>DATA-OUT</td>
-<td>DAQ2 DAC Data 0 OUT</td>
-<td>axi_ad9144_tpl/dac_data_0</td>
-<td>64</td>
-<td>TX</td>
+<td>IP Data 2 OUT</td>
+<td>axi_ad9250_cpack/fifo_wr_data_2</td>
+<td>32</td>
+<td>RX</td>
 </tr>
 <tr>
 <td>DATA-OUT</td>
-<td>DAQ2 DAC Data 1 OUT</td>
-<td>axi_ad9144_tpl/dac_data_1</td>
-<td>64</td>
-<td>TX</td>
+<td>IP Data 3 OUT</td>
+<td>axi_ad9250_cpack/fifo_wr_data_3</td>
+<td>32</td>
+<td>RX</td>
 </tr>
 <tr>
 <td>DATA-IN</td>
-<td>IP Data 0 IN</td>
-<td>axi_ad9144_upack/fifo_rd_data_0</td>
-<td>64</td>
-<td>TX</td>
+<td>FMCJESDADC1 ADC Data 0 IN</td>
+<td>axi_ad9250_core/adc_data_0</td>
+<td>32</td>
+<td>RX</td>
 </tr>
 <tr>
 <td>DATA-IN</td>
-<td>IP Data 1 IN</td>
-<td>axi_ad9144_upack/fifo_rd_data_1</td>
-<td>64</td>
-<td>TX</td>
+<td>FMCJESDADC1 ADC Data 1 IN</td>
+<td>axi_ad9250_core/adc_data_1</td>
+<td>32</td>
+<td>RX</td>
+</tr>
+<tr>
+<td>DATA-IN</td>
+<td>FMCJESDADC1 ADC Data 2 IN</td>
+<td>axi_ad9250_core/adc_data_2</td>
+<td>32</td>
+<td>RX</td>
+</tr>
+<tr>
+<td>DATA-IN</td>
+<td>FMCJESDADC1 ADC Data 3 IN</td>
+<td>axi_ad9250_core/adc_data_3</td>
+<td>32</td>
+<td>RX</td>
 </tr>
 </tbody>
 </table>

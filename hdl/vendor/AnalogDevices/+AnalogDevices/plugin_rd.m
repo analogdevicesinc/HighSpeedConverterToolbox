@@ -8,7 +8,24 @@ ppath = project;
 if strcmpi(project, 'ad9081')
     ppath = 'ad9081_fmca_ebz';
 end
-
+if strcmpi(project, 'ad9434')
+    ppath = 'ad9434_fmc';
+end
+if strcmpi(project, 'ad9739a')
+    ppath = 'ad9739a_fmc';
+end
+if strcmpi(project, 'ad9265')
+    ppath = 'ad9265_fmc';
+end
+if strcmpi(project, 'fmcjesdadc1')
+    ppath = 'fmcjesdadc1';
+end
+if strcmpi(project, 'ad9783')
+    ppath = 'ad9783_ebz';
+end
+if strcmpi(project, 'ad9208')
+    ppath = 'ad9208_dual_ebz';
+end
 % Construct reference design object
 hRD = hdlcoder.ReferenceDesign('SynthesisTool', 'Xilinx Vivado');
 

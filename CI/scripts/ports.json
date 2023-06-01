@@ -314,5 +314,527 @@
                 ]
             }
         ]
+    },
+    "ad9434": {
+        "chip": "AD9434",
+        "complex": "false",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9434/adc_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9434_dma/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 12,
+                        "name": "xlslice_0/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 12,
+                        "name": "xlslice_1/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 12,
+                        "name": "xlslice_2/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 12,
+                        "name": "xlslice_3/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 12,
+                        "name": "xlconcat_0/In0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 12,
+                        "name": "xlconcat_0/In1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 12,
+                        "name": "xlconcat_0/In2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 12,
+                        "name": "xlconcat_0/In3",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    },
+    "ad9739a": {
+        "chip": "AD9739A",
+        "complex": "true",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "tx"
+        ],
+        "ports": [
+            {
+                "tx": [
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_0/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_1/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_2/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_3/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_4/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_5/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_6/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_7/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_8/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_9/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_10/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_11/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_12/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_13/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_14/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "xlslice_15/Dout",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In4",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In5",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In6",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In7",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In8",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In9",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In10",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In11",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In12",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In13",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In14",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "xlconcat_0/In15",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    },
+    "ad9265": {
+        "chip": "AD9265",
+        "complex": "false",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9265_dma/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9265/adc_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 16,
+                        "name": "axi_ad9265_dma/fifo_wr_din",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 16,
+                        "name": "axi_ad9265/adc_data",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    },
+    "fmcjesdadc1": {
+        "chip": "FMCJESDADC1",
+        "complex": "true",
+        "fpga": [
+            "zc706"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "axi_ad9250_cpack/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9250_core/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 32,
+                        "name": "axi_ad9250_cpack/fifo_wr_data_3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 32,
+                        "name": "axi_ad9250_core/adc_data_3",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    },
+    "ad9783": {
+        "chip": "AD9783",
+        "complex": "true",
+        "fpga": [
+            "zcu102"
+        ],
+        "supported_rd": [
+            "tx"
+        ],
+        "ports": [
+            {
+                "tx": [
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "axi_ad9783/dac_valid",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9783/dac_ddata_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 64,
+                        "name": "axi_ad9783/dac_ddata_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "util_ad9783_dac_upack/fifo_rd_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 64,
+                        "name": "util_ad9783_dac_upack/fifo_rd_data_1",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
+    },
+    "ad9208": {
+        "chip": "AD9208",
+        "complex": "true",
+        "fpga": [
+            "vcu118"
+        ],
+        "supported_rd": [
+            "rx"
+        ],
+        "ports": [
+            {
+                "rx": [
+                    {
+                        "input": "false",
+                        "width": 1,
+                        "name": "util_ad9208_cpack/fifo_wr_en",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "true",
+                        "width": 1,
+                        "name": "rx_ad9208_0_tpl_core/adc_valid_0",
+                        "type": "valid"
+                    },
+                    {
+                        "input": "false",
+                        "width": 128,
+                        "name": "util_ad9208_cpack/fifo_wr_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 128,
+                        "name": "util_ad9208_cpack/fifo_wr_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 128,
+                        "name": "util_ad9208_cpack/fifo_wr_data_2",
+                        "type": "data"
+                    },
+                    {
+                        "input": "false",
+                        "width": 128,
+                        "name": "util_ad9208_cpack/fifo_wr_data_3",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 128,
+                        "name": "rx_ad9208_0_tpl_core/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 128,
+                        "name": "rx_ad9208_0_tpl_core/adc_data_1",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 128,
+                        "name": "rx_ad9208_1_tpl_core/adc_data_0",
+                        "type": "data"
+                    },
+                    {
+                        "input": "true",
+                        "width": 128,
+                        "name": "rx_ad9208_1_tpl_core/adc_data_1",
+                        "type": "data"
+                    }
+                ]
+            }
+        ]
     }
 }

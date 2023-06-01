@@ -10,12 +10,17 @@ classdef Rx < adi.AD9213.Rx
     %
     %   See also adi.DAQ2.Rx
            
+    properties (Nontunable, Hidden)
+        phyDevNameChipB = 'ad9213_1';
+    end
+
     methods
         %% Constructor
         function obj = Rx(varargin)
             % Returns the matlabshared.libiio.base object
             coder.allowpcode('plain');
             obj = obj@adi.AD9213.Rx(varargin{:});
+            obj.phyDevName = 'ad9213_0';
             obj.channel_names = {'voltage0','voltage1'};
         end
     end   

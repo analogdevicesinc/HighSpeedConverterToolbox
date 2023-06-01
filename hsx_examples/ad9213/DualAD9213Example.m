@@ -14,11 +14,11 @@ plot(x);
 %% Perform register writes
 % Split out individual devices for register access
 adc1 = rx.getIIODevice('ad9213_0');
-adc2 = rx.getIIODevice('axi-ad9213-rx-hpc');
+adc2 = rx.getIIODevice('ad9213_1');
 pll1 = rx.getIIODevice('adf4377_0');
 pll2 = rx.getIIODevice('adf4377_1');
-vco = rx.gettIIODevice('ltc6946');
-clock_divs = rx.gettIIODevice('ltc6952');
+vco = rx.getIIODevice('ltc6946');
+clock_divs = rx.getIIODevice('ltc6952');
 
 % Update SPI_TRM_FINE_DLY of both ADCs
 % Reg Maps:
@@ -31,6 +31,12 @@ rx.setRegister(value2,register,adc2);
 % Check
 fprintf('ADC1 Register: %s | Value: %s\n',register,num2str(rx.getRegister(register,adc1)));
 fprintf('ADC2 Register: %s | Value: %s\n',register,num2str(rx.getRegister(register,adc2)));
-
+% Reset JESD204 links
+% Chip A
+rx.setDeviceAttributeRAW('jesd204_fsm_ctrl','0',adc1);
+rx.setDeviceAttributeRAW('jesd204_fsm_ctrl','1',adc1);
+% Chip B
+rx.setDeviceAttributeRAW('jesd204_fsm_ctrl','0',adc2);
+rx.setDeviceAttributeRAW('jesd204_fsm_ctrl','1',adc2);
 % Cleanup
 release(rx);

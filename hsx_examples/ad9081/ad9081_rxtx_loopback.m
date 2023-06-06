@@ -1,12 +1,25 @@
 clear all; close all;
 
 txSource = 'DMA'; % DMA or DDS
+uri = 'ip:analog-2.local';
 
-% Test Tx DDS output
-uri = 'ip:analog.local';
+% Get Device configuration automatically
+tx = adi.AD9081.Tx('uri',uri);
+[cdc, fdc, dc] = tx.GetDataPathConfiguration();
+tx = adi.AD9081.Tx(...
+    'uri',uri,...
+    'num_data_channels', dc, ...
+    'num_coarse_attr_channels', cdc, ...
+    'num_fine_attr_channels', fdc);
+rx = adi.AD9081.Rx('uri',uri);
+[cdc, fdc, dc] = rx.GetDataPathConfiguration();
+rx = adi.AD9081.Rx(...
+    'uri',uri,...
+    'num_data_channels', dc, ...
+    'num_coarse_attr_channels', cdc, ...
+    'num_fine_attr_channels', fdc);
 
 %% Tx set up
-tx = adi.AD9081.Tx('uri',uri);
 tx.DataSource = txSource;
 tx.NCOEnables = [1,1,1,1];
 tx.ChannelNCOGainScales = [0.5,0.5,0.5,0.5];
@@ -32,10 +45,7 @@ else
 end
 pause(1);
 
-%% Rx set up
-rx = adi.AD9081.Rx('uri',uri);
-
-%% Run
+%% Rx run
 for k=1:10
     valid = false;
     while ~valid

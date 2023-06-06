@@ -1,6 +1,7 @@
 classdef (Abstract) Base < ...
         adi.common.RxTx & ...
         adi.common.Attribute & ...
+        adi.common.Channel & ...
         matlabshared.libiio.base
     %AD9081 Base Class
     
@@ -39,6 +40,104 @@ classdef (Abstract) Base < ...
                 { 'real', 'positive','scalar', 'finite', 'nonnan', 'nonempty','integer','>',0,'<',2^20+1}, ...
                 '', 'SamplesPerFrame');
             obj.SamplesPerFrame = value;
+        end
+        %% Helpers
+        function [num_coarse, num_fine, num_data] = GetDataPathConfiguration(obj, isTx)
+            if nargin < 2
+                isTx = isa(obj,'adi.AD9081.Tx');
+            end
+            %% Connect to hardware if not yet
+            if obj.ConnectedToDevice
+                doNotCloseConnection = true;
+            else
+                % Setup LibIIO
+                setupLib(obj);
+                % Initialize the pointers
+                initPointers(obj);
+                getContext(obj);
+                setContextTimeout(obj);
+                % Get the device
+                obj.iioDev = getDev(obj, obj.devName);                
+                obj.needsTeardown = true;
+                % Pre-calculate values to be used faster in stepImpl()
+                obj.pIsInSimulink = coder.const(obj.isInSimulink);
+                obj.ConnectedToDevice = true;
+                if isTx
+                    obj.phyDev = getDev(obj, obj.phyDevName);
+                end
+                doNotCloseConnection = false;
+            end
+            if isTx
+                dev = obj.phyDev;
+            else
+                dev = obj.iioDev;
+            end
+
+            %% Parse data path configuration
+            numChannels = obj.iio_device_get_channels_count(dev);
+            map = {};
+            paths = {};
+            for chanIdx = 1:numChannels
+                chan = obj.iio_device_get_channel(dev,chanIdx-1);
+                isOutputChan = obj.iio_channel_is_output(chan);
+                if isOutputChan ~= isTx
+                    continue;
+                end
+                chanName = obj.iio_channel_get_id(chan);
+
+                numAttrs = obj.iio_channel_get_attrs_count(chan);
+                for attrIdx = 1:numAttrs
+                    attrName = obj.iio_channel_get_attr(chan,attrIdx-1);
+                    if strcmp(attrName,'label')
+                        [l,value] = obj.iio_channel_attr_read(chan,attrName,1024);
+                        if l>0
+                            map{end+1} = sprintf('%s:%s',chanName,value);
+                            paths{end+1} = value;
+                        end
+
+                    end
+                end
+            end
+            % Remove all q channels
+            idx = contains(map,'q');
+            map(idx) = [];
+            % Pick out only unique paths
+            paths = unique(paths);
+            % Pick out items in map that have the specific paths and have the lowest channel number
+            filteredMap = {};
+            for k=1:length(paths)
+                path = paths{k};
+                idx = find(contains(map,path));
+                [~,idx2] = min(idx);
+                idx = idx(idx2);
+                filteredMap{end+1} = map{idx};
+            end
+            % Count unique items with XDUCX 
+            if isTx
+                ss = 'U';
+            else
+                ss = 'D';
+            end
+            numFDUCX = 0; numCDUCX = 0;
+            for DC = 0:7
+                for k=1:length(filteredMap)
+                    if contains(filteredMap{k},sprintf('FD%sC%d',ss,DC))
+                        numFDUCX = numFDUCX + 1;
+                    end
+                    if contains(filteredMap{k},sprintf('CD%sC%d',ss,DC))
+                        numCDUCX = numCDUCX + 1;
+                    end
+                end
+            end
+            num_coarse = numCDUCX; num_fine = numFDUCX; num_data = numFDUCX*2;
+            if ~doNotCloseConnection
+                obj.releaseImpl();
+                if isTx
+                    obj.phyDev = [];
+                end
+                obj.iioDev = [];
+                obj.iioCtx = [];
+            end    
         end
     end
     
@@ -126,6 +225,15 @@ classdef (Abstract) Base < ...
                     id = sprintf('voltage%d_i',(k-1)*stride);
                     obj.setAttributeBool(id,attr,value(k),output, phy);
                 end
+            end
+        end
+
+        function attr = iio_channel_is_output(obj, chanPtr)
+            % iio_channel_is_output(const struct iio_channel *chn)
+            %
+            % Get the attr of the given channel by index
+            if useCalllib(obj)
+                attr = calllib(obj.libName, 'iio_channel_is_output', chanPtr);
             end
         end
         

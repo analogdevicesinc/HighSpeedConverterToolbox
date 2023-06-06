@@ -39,6 +39,14 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
         %   interpolators
         NCOEnables = [false,false,false,false];
     end
+
+    properties(Logical)
+        %DDROffloadEnable DDR Offload Enable
+        %   Enable use of BRAM in Tx datapath to offload from DDR. This is
+        %   necessary for highspeed configurations when DDR is not fast
+        %   enough for datapath
+        DDROffloadEnable = false;
+    end
        
     properties (Hidden, Nontunable, Access = protected)
         isOutput = true;
@@ -132,6 +140,14 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
                 'en', obj.phyDev, true);
             obj.NCOEnables = value;
         end
+        %%
+        % Check DDROffloadEnable
+        function set.DDROffloadEnable(obj, value)
+            obj.DDROffloadEnable = value;
+            if obj.ConnectedToDevice
+                obj.setDebugAttributeBool('pl_ddr_fifo_enable',value, true, obj.iioDev);
+            end
+        end
     end
     
     %% API Functions
@@ -178,6 +194,9 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             obj.ToggleDDS(strcmp(obj.DataSource,'DDS'));
             if strcmp(obj.DataSource,'DDS')
                 obj.DDSUpdate();
+            else
+                obj.setDebugAttributeBool('pl_ddr_fifo_enable',...
+                    obj.DDROffloadEnable, false, obj.iioDev);
             end
         end
 

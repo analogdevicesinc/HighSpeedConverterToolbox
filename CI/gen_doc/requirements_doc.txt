@@ -1,5 +1,5 @@
 numpy
-mkdocs<=1.5
+mkdocs<1.5
 mkdocs-material
 mkdocs-awesome-pages-plugin
 mkdocs-mermaid2-plugin

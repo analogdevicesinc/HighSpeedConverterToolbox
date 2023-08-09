@@ -1,5 +1,7 @@
 @Library('tfc-lib') _
 
+flags = gitParseFlags()
+
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
 dockerConfig.add("-e MLRELEASE=R2022a")
 dockerHost = 'docker'
@@ -40,17 +42,17 @@ stage("Build Toolbox") {
 boardNames = ['daq2','ad9081','ad9434','ad9739a','ad9265', 'fmcjesdadc1','ad9783','ad9208']
 dockerConfig.add("-e HDLBRANCH=hdl_2021_r1")
 
-stage("HDL Tests") {
+cstage("HDL Tests", "", flags) {
     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
         branchName ->
         withEnv(['BOARD='+branchName]) {
-            stage("Source") {
+            cstage("Source", branchName, flags) {
                 unstash "builtSources"
                 sh 'make -C ./CI/scripts test'
 		junit testResults: 'test/*.xml', allowEmptyResults: true
                 archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
             }
-            stage("Installer") {
+            cstage("Installer", branchName, flags) {
                 unstash "builtSources"
                 sh 'make -C ./CI/scripts test_installer'
 		junit testResults: 'test/*.xml', allowEmptyResults: true
@@ -64,11 +66,11 @@ stage("HDL Tests") {
 
 boardNames = ['NonHW']
 
-stage("NonHW Tests") {
+cstage("NonHW Tests", "", flags) {
     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
         branchName ->
         withEnv(['BOARD='+branchName]) {
-            stage("NonHW") {
+            cstage("NonHW", branchName, flags) {
                 unstash "builtSources"
                 sh 'make -C ./CI/scripts run_NonHWTests'
             }
@@ -81,7 +83,7 @@ stage("NonHW Tests") {
 
 classNames = ['DAQ2']
 
-stage("Hardware Streaming Tests") {
+cstage("Hardware Streaming Tests", "", flags) {
     dockerParallelBuild(classNames, dockerHost, dockerConfig) { 
         branchName ->
         withEnv(['HW='+branchName]) {
@@ -95,12 +97,12 @@ stage("Hardware Streaming Tests") {
 //////////////////////////////////////////////////////
 
 node {
-    stage('Deploy Development') {
+    cstage('Deploy Development', "", flags) {
         unstash "builtSources"
         uploadArtifactory('HighSpeedConverterToolbox','*.mltbx')
     }
     if (env.BRANCH_NAME == 'master') {
-        stage('Deploy Production') {
+        cstage('Deploy Production', "", flags) {
             unstash "builtSources"
             uploadFTP('HighSpeedConverterToolbox','*.mltbx')
         }

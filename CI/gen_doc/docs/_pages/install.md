@@ -35,21 +35,21 @@ The base dependencies for the toolbox requires libiio and the libiio MATLAB bind
 
 To leverage HDL-Coder and the reference designs with the toolbox requires the following components:
 
-- Xilinx Vivado 2019.1
-- Xilinx SDK 2019.1
+- Xilinx Vivado 2021.1
+- Xilinx SDK 2021.1
 - Simulink
 - [HDL-Coder™](https://www.mathworks.com/products/hdl-coder.html)
 - [HDL Coder™ Support Package for Xilinx Zynq Platform](https://www.mathworks.com/matlabcentral/fileexchange/40447-hdl-coder-support-package-for-xilinx-zynq-platform)
 
-## Transceiver Toolbox Install
+## High Speed Converter Toolbox Install
 
-The Transceiver Toolbox itself can be installed either from:
+The High Speed Converter Toolbox itself can be installed either from:
 
 - [MATLAB's Add-On Explorer](https://www.mathworks.com/products/matlab/add-on-explorer.html) 
-- [GitHub Releases page](https://github.com/analogdevicesinc/TransceiverToolbox/releases).
+- [GitHub Releases page](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases).
 
 !!! warning "MATLAB Versions"
-    Before installing Transceiver Toolbox check the [Release Page](https://github.com/analogdevicesinc/TransceiverToolbox/releases) to check for the lasted supported of MATLAB. The latest version is the one which is available in [Add-on Explorer](https://www.mathworks.com/products/matlab/add-on-explorer.html), since Add-On Explorer does not currently support hosting multiple versions. If you have an older release of MATLAB, download the MLTBX installer from matching release on the [Release Page](https://github.com/analogdevicesinc/TransceiverToolbox/releases).
+    Before installing High Speed Converter Toolbox check the [Release Page](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases) to check for the lasted supported of MATLAB. The latest version is the one which is available in [Add-on Explorer](https://www.mathworks.com/products/matlab/add-on-explorer.html), since Add-On Explorer does not currently support hosting multiple versions. If you have an older release of MATLAB, download the MLTBX installer from matching release on the [Release Page](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases).
 
 
 ### Add-On Explorer Walkthrough
@@ -63,7 +63,7 @@ Search for the toolbox:
 <!-- ![Add-On Explorer](assets/trx_search_wbox.png) -->
 <img class="screenshot" src="../assets/trx_search_wbox.png">
 
-Select Transceiver Toolbox from results:
+Select High Speed Converter Toolbox from results:
 
 <!-- ![Add-On Explorer](assets/trx_search_find_wbox.png) -->
 <img class="screenshot" src="../assets/trx_search_find_wbox.png">

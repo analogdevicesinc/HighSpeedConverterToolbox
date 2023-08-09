@@ -3,12 +3,12 @@
 flags = gitParseFlags()
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
-dockerConfig.add("-e MLRELEASE=R2022a")
+dockerConfig.add("-e MLRELEASE=R2022b")
 dockerHost = 'docker'
 
 ////////////////////////////
 
-hdlBranches = ['master','hdl_2021_r1']
+hdlBranches = ['master','hdl_2021_r2']
 
 stage("Build Toolbox") {
     dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
@@ -23,14 +23,14 @@ stage("Build Toolbox") {
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
         } catch(Exception ex) {
-		if (branchName == 'hdl_2021_r1') {
+		if (branchName == 'hdl_2021_r2') {
 		    error('Production Toolbox Build Failed')
 		}
 		else {
 		    unstable('Development Build Failed')
 		}
         }
-        if (branchName == 'hdl_2021_r1') {
+        if (branchName == 'hdl_2021_r2') {
 	    archiveArtifacts artifacts: '*.mltbx'
             stash includes: '**', name: 'builtSources', useDefaultExcludes: false
         }
@@ -40,7 +40,7 @@ stage("Build Toolbox") {
 /////////////////////////////////////////////////////
 
 boardNames = ['daq2','ad9081','ad9434','ad9739a','ad9265', 'fmcjesdadc1','ad9783','ad9208']
-dockerConfig.add("-e HDLBRANCH=hdl_2021_r1")
+dockerConfig.add("-e HDLBRANCH=hdl_2021_r2")
 
 cstage("HDL Tests", "", flags) {
     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 

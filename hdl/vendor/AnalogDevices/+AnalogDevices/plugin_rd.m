@@ -38,7 +38,7 @@ hRD.BoardName = sprintf('AnalogDevices %s %s', pname, upper(board));
 
 % Tool information
 %hRD.SupportedToolVersion = {adi.Version.Vivado}; % FIXME
-hRD.SupportedToolVersion = {'2021.1'};
+hRD.SupportedToolVersion = {'2021.2'};
 
 % Get the root directory
 rootDir = fileparts(strtok(mfilename('fullpath'), '+'));
@@ -75,8 +75,9 @@ hRD.CustomConstraints = {...
 
 % custom source files
 hRD.CustomFiles = {...
-    fullfile('projects')...,
-    fullfile('library')...,
+    fullfile('projects')...
+    fullfile('library')...
+    fullfile('scripts')...
     };
 
 hRD.addParameter( ...

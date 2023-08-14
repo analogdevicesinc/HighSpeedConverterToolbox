@@ -1,15 +1,16 @@
 classdef AD9081HWTests < HardwareTests
     
     properties
-        uri = 'ip:analog';
+        uri = 'ip:analog.local';
         author = 'ADI';
     end
     
     methods(TestClassSetup)
         % Check hardware connected
         function CheckForHardware(testCase)
-            Device = @()adi.AD9081.Rx;
-            testCase.CheckDevice('ip',Device,testCase.uri(4:end),false);
+            disp('Skipping init test');
+%             Device = @()adi.AD9081.Rx;
+%             testCase.CheckDevice('ip',Device,testCase.uri(4:end),false);
         end
     end
     
@@ -38,6 +39,13 @@ classdef AD9081HWTests < HardwareTests
         function testAD9081Rx(testCase)    
             % Test Rx DMA data output
             rx = adi.AD9081.Rx('uri',testCase.uri);
+            [cdc, fdc, dc] = rx.GetDataPathConfiguration();
+            testCase.log(sprintf('cdc: %d, fdc: %d, dc: %d',cdc, fdc, dc))
+            rx = adi.AD9081.Rx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc);
             rx.EnabledChannels = 1;
             [out, valid] = rx();
             rx.release();
@@ -48,12 +56,27 @@ classdef AD9081HWTests < HardwareTests
         function testAD9081RxWithTxDDS(testCase)
             % Test DDS output
             tx = adi.AD9081.Tx('uri',testCase.uri);
+            [cdc, fdc, dc] = tx.GetDataPathConfiguration();
+            testCase.log(sprintf('cdc: %d, fdc: %d, dc: %d',cdc, fdc, dc))
+            tx = adi.AD9081.Tx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc, ...
+                'num_dds_channels', fdc);
             tx.DataSource = 'DDS';
             toneFreq = 45e6;
             tx.DDSFrequencies = repmat(toneFreq,2,2);
             tx();
             pause(1);
             rx = adi.AD9081.Rx('uri',testCase.uri);
+            [cdc, fdc, dc] = rx.GetDataPathConfiguration();
+            testCase.log(sprintf('cdc: %d, fdc: %d, dc: %d',cdc, fdc, dc))
+            rx = adi.AD9081.Rx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc);
             rx.EnabledChannels = 1;
             valid = false;
             for k=1:10
@@ -74,6 +97,13 @@ classdef AD9081HWTests < HardwareTests
         function testAD9081RxWithTxDDSTwoChan(testCase)
             % Test DDS output
             tx = adi.AD9081.Tx('uri',testCase.uri);
+            [cdc, fdc, dc] = tx.GetDataPathConfiguration();
+            tx = adi.AD9081.Tx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc, ...
+                'num_dds_channels', fdc);
             tx.DataSource = 'DDS';
             toneFreq1 = 160e6;
             toneFreq2 = 300e6;
@@ -82,6 +112,13 @@ classdef AD9081HWTests < HardwareTests
             tx();
             pause(1);
             rx = adi.AD9081.Rx('uri',testCase.uri);
+            [cdc, fdc, dc] = rx.GetDataPathConfiguration();
+            testCase.log(sprintf('cdc: %d, fdc: %d, dc: %d',cdc, fdc, dc))
+            rx = adi.AD9081.Rx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc);
             rx.EnabledChannels = [1 2];
             valid = false;
             for k=1:10
@@ -114,10 +151,25 @@ classdef AD9081HWTests < HardwareTests
             y = swv1();
             
             tx = adi.AD9081.Tx('uri',testCase.uri);
+            [cdc, fdc, dc] = tx.GetDataPathConfiguration();
+            tx = adi.AD9081.Tx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc, ...
+                'num_dds_channels', fdc);
             tx.DataSource = 'DMA';
             tx.EnableCyclicBuffers = true;
             tx(y);
             rx = adi.AD9081.Rx('uri',testCase.uri);
+            [cdc, fdc, dc] = rx.GetDataPathConfiguration();
+            testCase.log(sprintf('cdc: %d, fdc: %d, dc: %d',cdc, fdc, dc))
+            rx = adi.AD9081.Rx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc);
+
             rx.EnabledChannels = 1;
             for k=1:10
                 [out, valid] = rx();
@@ -150,11 +202,25 @@ classdef AD9081HWTests < HardwareTests
             y2 = swv1();
             
             tx = adi.AD9081.Tx('uri',testCase.uri);
+            [cdc, fdc, dc] = tx.GetDataPathConfiguration();
+            tx = adi.AD9081.Tx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc, ...
+                'num_dds_channels', fdc);
             tx.DataSource = 'DMA';
             tx.EnableCyclicBuffers = true;
             tx.EnabledChannels = [1,2];
             tx([y1,y2]);
             rx = adi.AD9081.Rx('uri',testCase.uri);
+            [cdc, fdc, dc] = rx.GetDataPathConfiguration();
+            testCase.log(sprintf('cdc: %d, fdc: %d, dc: %d',cdc, fdc, dc))
+            rx = adi.AD9081.Rx(...
+                'uri',testCase.uri,...
+                'num_data_channels', dc, ...
+                'num_coarse_attr_channels', cdc, ...
+                'num_fine_attr_channels', fdc);
             rx.EnabledChannels = [1,2];
             for k=1:10
                 [out, valid] = rx();

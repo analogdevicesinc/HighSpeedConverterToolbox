@@ -111,8 +111,13 @@ classdef AD9081HWTests < HardwareTests
             tx.DataSource = 'DDS';
             toneFreq1 = sr/4;
             toneFreq2 = sr/5;
-            tx.DDSFrequencies = [toneFreq1,toneFreq2;toneFreq1,toneFreq2];
-            tx.DDSScales = [1,1;0,0].*0.029;
+%             tx.DDSFrequencies = [toneFreq1,toneFreq1,toneFreq2,toneFreq2;...
+%                 0,0,0,0];
+%             tx.DDSScales = [1,1,1,1;0,0,0,0].*0.029;
+            tx.DDSPhases = [90000,0,90000,0; 0,0,0,0];
+            tx.DDSFrequencies = repmat(horzcat([toneFreq1,toneFreq1], ...
+				            [toneFreq2,toneFreq2]),2,1);
+            tx.DDSScales = repmat([1,1;0,0].*0.029,1,2);
             tx();
             pause(1);
             rx = adi.AD9081.Rx('uri',testCase.uri);
@@ -206,7 +211,7 @@ classdef AD9081HWTests < HardwareTests
             swv1.SampleRate = sr;
             y1 = swv1();
             
-            amplitude = 2^15; toneFreq2 = 180e6;
+            amplitude = 2^15; toneFreq2 = sr/8;
             swv1 = dsp.SineWave(amplitude, toneFreq2);
             swv1.ComplexOutput = false;
             swv1.SamplesPerFrame = 2^20;

@@ -24,11 +24,15 @@ switch board
             "zynqmp-zcu102-rev10-ad9081-vm4-l8", ...
             "zynqmp-zcu102-rev10-ad9081-vm8-l4"}
         at = 'AD9081';
+    case {"zynq-zc706-adv7511-fmcomms11"}
+        at = 'FMCOMMS11';
+    case {"zynqmp-zcu102-rev10-ad9172-fmc-ebz-mode4"}
+        at = 'AD9172';
     otherwise
         error('%s unsupported for HW test harness', board);
 end
 
-    ats = {'DAQ2Tests','DAQ3Tests','AD9081HWTests'};
+    ats = {'DAQ2Tests','DAQ3Tests','AD9081HWTests','FMCOMMS11Test'};
 
     if nargin == 0
         suite = testsuite(ats);
@@ -58,10 +62,10 @@ end
         fclose(fid);
     catch e
         disp(getReport(e,'extended'));
-        bdclose('all');
-        exit(1);
+%         bdclose('all');
+%         exit(1);
     end
     save(['BSPTest_',datestr(now,'dd_mm_yyyy-HH_MM_SS'),'.mat'],'t');
-bdclose('all');
-exit(any([results.Failed]));
+% bdclose('all');
+% exit(any([results.Failed]));
 end

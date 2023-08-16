@@ -15,13 +15,26 @@ classdef AD9081HWTests < HardwareTests
     end
     
     methods (Static)
-        function estFrequency(data,fs)
+        function estFrequency(data,fs,saveNoShow,figname)
             nSamp = length(data);
             FFTRxData  = fftshift(10*log10(abs(fft(data))));
 %             df = fs/nSamp;  freqRangeRx = (-fs/2:df:fs/2-df).'/1000;
 %             plot(freqRangeRx, FFTRxData);
             df = fs/nSamp;  freqRangeRx = (0:df:fs/2-df).'/1000;
+            if nargin < 3
+                saveNoShow = false;
+            end
+            if nargin < 4
+                figname = 'freq_plot';
+            end
+            if saveNoShow
+                f = figure('visible','off');
+            end
             plot(freqRangeRx, FFTRxData(end-length(freqRangeRx)+1:end,:));
+            if saveNoShow
+                saveas(f,figname,'png')
+                saveas(f,figname,'fig')
+            end
         end
         
         function freq = estFrequencyMax(data,fs)
@@ -138,8 +151,8 @@ classdef AD9081HWTests < HardwareTests
             
 %             plot(real(out));
 %             testCase.estFrequency(out,sr);
-            freqEst1 = testCase.estFrequencyMax(out(:,1),sr);
-            freqEst2 = testCase.estFrequencyMax(out(:,2),sr);
+            freqEst1 = testCase.estFrequencyMax(out(:,1),sr,true,'TwoChanDDS_Chan1');
+            freqEst2 = testCase.estFrequencyMax(out(:,2),sr,true,'TwoChanDDS_Chan2');
 %             freqEst1 = meanfreq(double(real(out(:,1))),rx.SamplingRate);
 %             freqEst2 = meanfreq(double(real(out(:,2))),rx.SamplingRate);
 
@@ -190,7 +203,7 @@ classdef AD9081HWTests < HardwareTests
             rx.release();
             
 %             plot(real(out));
-            freqEst = meanfreq(double(real(out)),sr);
+            freqEst = meanfreq(double(real(out)),sr,true,'OneChanData_Chan1');
             
             testCase.verifyTrue(valid);
             testCase.verifyGreaterThan(sum(abs(double(out))),0);
@@ -245,8 +258,8 @@ classdef AD9081HWTests < HardwareTests
             
 %             plot(real(out));
 %             testCase.estFrequency(out,rx.SamplingRate);
-            freqEst1 = testCase.estFrequencyMax(out(:,1),sr);
-            freqEst2 = testCase.estFrequencyMax(out(:,2),sr);
+            freqEst1 = testCase.estFrequencyMax(out(:,1),sr,true,'TwoChanData_Chan1');
+            freqEst2 = testCase.estFrequencyMax(out(:,2),sr,true,'TwoChanData_Chan2');
 %             freqEst = meanfreq(double(real(out)),rx.SamplingRate);
             
             testCase.verifyTrue(valid);

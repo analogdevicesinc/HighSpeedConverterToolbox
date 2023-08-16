@@ -63,6 +63,13 @@ lock(label: 'adgt_test_harness_boards') {
                         "pyenv('Version','/usr/bin/python3')",
                         "runHWTests(getenv('board'))"])
   harness.add_stage(harness.stage_library("MATLABTests"),'continueWhenFail')
+  def saveFigures = {
+    stage('Save Figure') {
+      archiveArtifacts artifacts: '*.png', followSymlinks: false, allowEmptyArchive: true
+      archiveArtifacts artifacts: '*.fig', followSymlinks: false, allowEmptyArchive: true
+    }
+  }
+  harness.add_stage(saveFigures,'continueWhenFail')
   
   harness.add_stage(harness.stage_library('SendResults'),'continueWhenFail')
 

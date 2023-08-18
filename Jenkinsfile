@@ -39,7 +39,7 @@ stage("Build Toolbox") {
 
 /////////////////////////////////////////////////////
 
-boardNames = ['daq2','ad9081','ad9434','ad9739a','ad9265', 'fmcjesdadc1','ad9783','ad9208']
+boardNames = ['daq2','ad9081','ad9434','ad9739a','ad9265', 'fmcjesdadc1','ad9783']
 dockerConfig.add("-e HDLBRANCH=hdl_2021_r2")
 
 cstage("HDL Tests", "", flags) {
@@ -61,6 +61,32 @@ cstage("HDL Tests", "", flags) {
         }
     }
 }
+
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+
+def deployments = [:];
+def board = 'ad9208';
+def nodeLabel = 'baremetal && high_memory';
+deployments[board] = { node(nodeLabel) {
+    stage("Baremetal HDL Test") {
+        withEnv(['BOARD='+board,'MLRELEASE=R2022b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+            try {
+                stage("AD9208 HDL Test") {
+                    echo "Node: ${env.NODE_NAME}"
+                    unstash "builtSources"
+                    sh 'make -C ./CI/scripts test'
+                    junit testResults: 'test/*.xml', allowEmptyResults: true
+                    archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+                }
+            }
+            finally {
+                cleanWs();
+            }
+        }
+    }
+}}
 
 /////////////////////////////////////////////////////
 

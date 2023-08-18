@@ -64,10 +64,6 @@ cstage("HDL Tests", "", flags) {
 
 /////////////////////////////////////////////////////
 
-parallel deployments
-
-/////////////////////////////////////////////////////
-
 def deployments = [:];
 def board = 'ad9208';
 def nodeLabel = 'baremetal && high_memory';
@@ -75,7 +71,7 @@ deployments[board] = { node(nodeLabel) {
     cstage("Baremetal HDL Test", "", flags) {
         withEnv(['BOARD='+board,'MLRELEASE=R2022b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
-                stage("AD9208 HDL Test") {
+                cstage("AD9208 HDL Test", "", flags) {
                     echo "Node: ${env.NODE_NAME}"
                     unstash "builtSources"
                     sh 'make -C ./CI/scripts test'
@@ -89,6 +85,8 @@ deployments[board] = { node(nodeLabel) {
         }
     }
 }}
+
+parallel deployments
 
 /////////////////////////////////////////////////////
 

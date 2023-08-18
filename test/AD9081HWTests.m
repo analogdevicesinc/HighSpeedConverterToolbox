@@ -37,12 +37,26 @@ classdef AD9081HWTests < HardwareTests
             end
         end
         
-        function freq = estFrequencyMax(data,fs)
+        function freq = estFrequencyMax(data,fs,saveNoShow,figname)
             nSamp = length(data);
             FFTRxData  = fftshift(10*log10(abs(fft(data))));
             df = fs/nSamp;  freqRangeRx = (0:df:fs/2-df).';
             [~,ind] = max(FFTRxData(end-length(freqRangeRx)+1:end,:));
             freq = freqRangeRx(ind);
+            if nargin < 3
+                saveNoShow = false;
+            end
+            if nargin < 4
+                figname = 'freq_plot';
+            end
+            if saveNoShow
+                f = figure('visible','off');
+            end
+            plot(freqRangeRx, FFTRxData(end-length(freqRangeRx)+1:end,:));
+            if saveNoShow
+                saveas(f,figname,'png')
+                saveas(f,figname,'fig')
+            end
         end
         
     end
@@ -203,7 +217,7 @@ classdef AD9081HWTests < HardwareTests
             rx.release();
             
 %             plot(real(out));
-            freqEst = meanfreq(double(real(out)),sr,true,'OneChanData_Chan1');
+            freqEst = meanfreq(double(real(out)),sr);
             
             testCase.verifyTrue(valid);
             testCase.verifyGreaterThan(sum(abs(double(out))),0);

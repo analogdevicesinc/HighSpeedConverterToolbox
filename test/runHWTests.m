@@ -62,10 +62,10 @@ end
         fclose(fid);
     catch e
         disp(getReport(e,'extended'));
-%         bdclose('all');
-%         exit(1);
+        bdclose('all');
+        exit(1);
     end
     save(['BSPTest_',datestr(now,'dd_mm_yyyy-HH_MM_SS'),'.mat'],'t');
-% bdclose('all');
-% exit(any([results.Failed]));
+    bdclose('all');
+    exit(any([results.Failed]));
 end

@@ -3,20 +3,21 @@ lock(label: 'adgt_test_harness_boards') {
   @Library('sdgtt-lib@adgt-test-harness') _ // Not necessary when we turn on global libraries :)
   def hdlBranch = "NA"
   def linuxBranch = "NA"
-  def bootPartitionBranch = "release"
+  def bootPartitionBranch = "master"
   def firmwareVersion = 'v0.34'
   def bootfile_source = 'artifactory' // options: sftp, artifactory, http, local
   def harness = getGauntlet(hdlBranch, linuxBranch, bootPartitionBranch, firmwareVersion, bootfile_source)
 
-  //Udpate repos
+  //Update repos
   harness.set_env('nebula_repo', 'https://github.com/sdgtt/nebula.git')
   harness.set_env('nebula_branch', 'dev')
-  harness.set_env('nebula_config_branch','release')
-  harness.set_env('libiio_branch', 'v0.23')
-  harness.set_env('telemetry_repo', 'https://github.com/sdgtt/telemetry.git')
-  harness.set_env('telemetry_branch', 'master')
+  harness.set_env('nebula_config_branch','master')
+  // harness.set_env('libiio_branch', 'v0.23')
+  // harness.set_env('telemetry_repo', 'https://github.com/sdgtt/telemetry.git')
+  // harness.set_env('telemetry_branch', 'master')
   harness.set_env('matlab_repo', 'https://github.com/analogdevicesinc/HighSpeedConverterToolbox.git') // Not necessary when using checkout scm
-  harness.set_env('matlab_release','R2021b')
+  harness.set_env('matlab_release','R2022b')
+  harness.set_matlab_timeout('5m')
 
   //Update nebula config from netbox
   harness.set_update_nebula_config(true)

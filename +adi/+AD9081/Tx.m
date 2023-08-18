@@ -33,7 +33,7 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
         %   Frequency of NCO in fine decimators in transmit path. Property
         %   must be a [1,N] vector where each value is the frequency of an
         %   NCO in hertz.
-        ChannelNCOGainScales = [0,0,0,0];
+        ChannelNCOGainScales = [0.5,0.5,0.5,0.5];
         %NCOEnables NCO Enables 
         %   Vector of logicals which enabled individual NCOs in channel
         %   interpolators
@@ -96,8 +96,8 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             obj.MainNCOFrequencies = zeros(1,obj.num_coarse_attr_channels);
             obj.ChannelNCOPhases = zeros(1,obj.num_fine_attr_channels);
             obj.MainNCOPhases = zeros(1,obj.num_coarse_attr_channels);
-            obj.ChannelNCOGainScales = zeros(1,obj.num_fine_attr_channels);
-            obj.NCOEnables = zeros(1,obj.num_fine_attr_channels) > 0;
+            obj.ChannelNCOGainScales = 0.5.*ones(1,obj.num_fine_attr_channels);
+            obj.NCOEnables = ones(1,obj.num_fine_attr_channels) > 0;
         end
         % Check ChannelNCOFrequencies
         function set.ChannelNCOFrequencies(obj, value)

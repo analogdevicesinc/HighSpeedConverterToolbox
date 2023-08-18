@@ -64,13 +64,15 @@ cstage("HDL Tests", "", flags) {
 
 /////////////////////////////////////////////////////
 
+parallel deployments
+
 /////////////////////////////////////////////////////
 
 def deployments = [:];
 def board = 'ad9208';
 def nodeLabel = 'baremetal && high_memory';
 deployments[board] = { node(nodeLabel) {
-    stage("Baremetal HDL Test") {
+    cstage("Baremetal HDL Test", "", flags) {
         withEnv(['BOARD='+board,'MLRELEASE=R2022b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
                 stage("AD9208 HDL Test") {

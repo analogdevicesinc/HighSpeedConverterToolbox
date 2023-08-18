@@ -9,15 +9,7 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
     %   <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf">AD9081 Datasheet</a>
     %
     %   See also adi.DAQ2.Rx
-    
-    properties (Dependent)
-        %SamplingRate Sampling Rate
-        %   Baseband sampling rate in Hz, specified as a scalar
-        %   in samples per second. This value is only readable once
-        %   connected to hardware
-        SamplingRate
-    end
-    
+        
     properties
         %ChannelNCOFrequencies Channel NCO Frequencies 
         %   Frequency of NCO in fine decimators in receive path. Property
@@ -114,14 +106,6 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
             obj.MainNCOFrequencies = zeros(1,obj.num_coarse_attr_channels);
             obj.ChannelNCOPhases = zeros(1,obj.num_fine_attr_channels);
             obj.MainNCOPhases = zeros(1,obj.num_coarse_attr_channels);
-        end
-        
-        function value = get.SamplingRate(obj)
-            if obj.ConnectedToDevice
-                value= obj.getAttributeLongLong('voltage0_i','sampling_frequency',false);
-            else
-                value = NaN;
-            end
         end
         
         % Check ChannelNCOFrequencies

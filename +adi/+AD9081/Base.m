@@ -5,6 +5,14 @@ classdef (Abstract) Base < ...
         matlabshared.libiio.base
     %AD9081 Base Class
     
+    properties (Dependent)
+        %SamplingRate Sampling Rate
+        %   Baseband sampling rate in Hz, specified as a scalar
+        %   in samples per second. This value is only readable once
+        %   connected to hardware
+        SamplingRate
+    end
+
     properties (Nontunable)
         %SamplesPerFrame Samples Per Frame
         %   Number of samples per frame, specified as an even positive
@@ -41,8 +49,16 @@ classdef (Abstract) Base < ...
                 '', 'SamplesPerFrame');
             obj.SamplesPerFrame = value;
         end
+        % Dependent
+        function value = get.SamplingRate(obj)
+            if obj.ConnectedToDevice
+                value = double(obj.getAttributeLongLong('voltage0_i','sampling_frequency',obj.isOutput));
+            else
+                value = NaN;
+            end
+        end
         %% Helpers
-        function [num_coarse, num_fine, num_data] = GetDataPathConfiguration(obj, isTx)
+        function [num_coarse, num_fine, num_data, sr] = GetDataPathConfiguration(obj, isTx)
             if nargin < 2
                 isTx = isa(obj,'adi.AD9081.Tx');
             end
@@ -74,6 +90,7 @@ classdef (Abstract) Base < ...
             end
 
             %% Parse data path configuration
+            sr = obj.SamplingRate;
             numChannels = obj.iio_device_get_channels_count(dev);
             map = {};
             paths = {};

@@ -225,6 +225,9 @@ classdef Rx < adi.AD9081.Base & adi.common.Rx & adi.common.Attribute
                 obj.writeFilterFile();
             end
             %%
+            % Make sure device is powered up first otherwise JESD will be
+            % off
+            obj.setDeviceAttributeRAW('powerdown','0');
             obj.setDeviceAttributeRAW('jesd204_fsm_ctrl',obj.JESD204FSMControl);
             %%
             obj.setAttributeRAW('voltage0_i','test_mode',obj.TestMode,...

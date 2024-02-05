@@ -59,7 +59,7 @@ sed -i "s/Vivado = .*/Vivado = \'${VIVADO}\';/" +adi/Version.m
 sed -i "s/hRD\.SupportedToolVersion = .*/hRD\.SupportedToolVersion = {\'${VIVADO}\'};/" hdl/vendor/AnalogDevices/+AnalogDevices/plugin_rd.m
 
 # Demos
-cd trx_examples
+cd hsx_examples
 # Update all occurances of hWC.ReferenceDesignToolVersion = '20XX.X'; to use new version
 FILES=$(grep -lrn . -e 'hWC.ReferenceDesignToolVersion =')
 for f in $FILES; do

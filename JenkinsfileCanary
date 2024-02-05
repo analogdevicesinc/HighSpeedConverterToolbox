@@ -1,0 +1,93 @@
+// Canary build for High Speed Converter Toolbox with HDL main branch
+
+@Library('tfc-lib') _
+
+flags = gitParseFlags()
+
+dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
+dockerConfig.add("-e MLRELEASE=R2022b")
+// dockerConfig.add("-e VIVADORELEASE=2023.1")
+dockerHost = 'docker'
+
+////////////////////////////
+
+hdlBranches = ['main']
+
+stage("Build Toolbox") {
+    dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
+	branchName ->
+	try {
+		withEnv(['HDLBRANCH='+branchName]) {
+		    checkout scm
+	        sh 'git submodule update --init'
+		    sh 'pip3 install -r ./CI/gen_doc/requirements_doc.txt'
+		    sh 'rm -rf doc || true'
+            sh 'make -C ./CI/gen_doc doc_ml'
+		    sh 'make -C ./CI/scripts build'
+		    sh 'make -C ./CI/scripts gen_tlbx'
+		}
+        } catch(Exception ex) {
+		if (branchName == 'main') {
+		    error('Production Toolbox Build Failed')
+		}
+		else {
+		    unstable('Development Build Failed')
+		}
+        }
+        if (branchName == 'main') {
+	    archiveArtifacts artifacts: '*.mltbx'
+            stash includes: '**', name: 'builtSources', useDefaultExcludes: false
+        }
+    }
+}
+
+/////////////////////////////////////////////////////
+
+boardNames = ['daq2','ad9081','ad9434','ad9739a','ad9265', 'fmcjesdadc1','ad9783']
+dockerConfig.add("-e HDLBRANCH=main")
+
+cstage("HDL Tests", "", flags) {
+    dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+        branchName ->
+        withEnv(['BOARD='+branchName]) {
+            cstage("Source", branchName, flags) {
+                unstash "builtSources"
+                sh 'make -C ./CI/scripts test'
+		        junit testResults: 'test/*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            }
+            cstage("Installer", branchName, flags) {
+                unstash "builtSources"
+                sh 'make -C ./CI/scripts test_installer'
+		        junit testResults: 'test/*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            }
+        }
+    }
+}
+
+/////////////////////////////////////////////////////
+
+def deployments = [:];
+def board = 'ad9208';
+def nodeLabel = 'baremetal && high_memory';
+deployments[board] = { node(nodeLabel) {
+    cstage("Baremetal HDL Test", "", flags) {
+        withEnv(['BOARD='+board,'MLRELEASE=R2022b','VIVADORELEASE=2022.2','HDLBRANCH=main','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+            try {
+                cstage("AD9208 HDL Test", "", flags) {
+                    echo "Node: ${env.NODE_NAME}"
+                    unstash "builtSources"
+                    sh 'make -C ./CI/scripts test'
+                    junit testResults: 'test/*.xml', allowEmptyResults: true
+                    archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+                }
+            }
+            finally {
+                cleanWs();
+            }
+        }
+    }
+}}
+
+parallel deployments

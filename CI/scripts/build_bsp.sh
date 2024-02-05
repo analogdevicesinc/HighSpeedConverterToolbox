@@ -80,24 +80,15 @@ for f in $FILES; do
 done
 cd ..
 
-# Tests
-cd test
-# Update line 35 of DemoTests.m to use new version
-sed -i "35s/.*/            testCase.setupVivado('${VIVADO}');/" DemoTests.m
-sed -i "47s/.*/            testCase.setupVivado('${VIVADO}');/" DemoTests.m
-sed -i "59s/.*/            testCase.setupVivado('${VIVADO}');/" DemoTests.m
+# # Tests
+# cd test
+# # Update line 35 of DemoTests.m to use new version
+# # sed -i "35s/.*/            testCase.setupVivado('${VIVADO}');/" DemoTests.m
 
-cd ..
+# cd ..
 
 cd CI
 
-# Setup
-source /opt/Xilinx/Vivado/$VIVADO/settings64.sh
-
-# Pre-build IP library
-# cd hdl/library
-# make
-# cd ../..
 
 # Rename .prj files since MATLAB ignores then during packaging
 FILES=$(grep -lrn hdl/projects/common -e '.prj' | grep -v Makefile | grep -v .git)
@@ -120,8 +111,6 @@ TARGET="../hdl/vendor/AnalogDevices/vivado"
 if [ -d "$TARGET" ]; then
     rm -rf "$TARGET"
 fi
-# Increase rx_clk period to fix timing failures for Pluto designs in R2021b
-sed -i 's/16.27/30/' hdl/projects/pluto/system_constr.xdc
 mv hdl $TARGET
 
 # Post-process ports.json
@@ -144,5 +133,3 @@ cp scripts/fixmake.sh  ../hdl/vendor/AnalogDevices/vivado/projects/scripts/fixma
 # Copy boot files
 mkdir ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/
 cp -r scripts/boot/* ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/
-
-echo 'puts "Skipping"' > ../hdl/vendor/AnalogDevices/vivado/library/axi_ad9361/axi_ad9361_delay.tcl

@@ -83,7 +83,7 @@ classdef AD9081HWTests < HardwareTests
         function testAD9081RxWithTxDDS(testCase)
             % Test DDS output
             tx = adi.AD9081.Tx('uri',testCase.uri);
-            [cdc, fdc, dc] = tx.GetDataPathConfiguration();
+            [cdc, fdc, dc, sr] = tx.GetDataPathConfiguration();
             testCase.log(sprintf('cdc: %d, fdc: %d, dc: %d',cdc, fdc, dc))
             tx = adi.AD9081.Tx(...
                 'uri',testCase.uri,...
@@ -92,7 +92,7 @@ classdef AD9081HWTests < HardwareTests
                 'num_fine_attr_channels', fdc, ...
                 'num_dds_channels', fdc*2);
             tx.DataSource = 'DDS';
-            toneFreq = 45e6;
+            toneFreq = sr/3;
 %             tx.DDSFrequencies = repmat(toneFreq,2,2);
 %             tx.DDSScales = repmat(0.9,2,2);
             tx.DDSSingleTone(toneFreq, 0.1, 1);

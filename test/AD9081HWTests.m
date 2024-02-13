@@ -114,7 +114,8 @@ classdef AD9081HWTests < HardwareTests
             end
             sr = rx.SamplingRate;
             rx.release();
-            
+            tx.release();
+
 %             plot(real(out));
 %             testCase.estFrequency(out,rx.SamplingRate);
             freqEst = meanfreq(double(real(out)),sr);
@@ -162,7 +163,8 @@ classdef AD9081HWTests < HardwareTests
             end
             sr = rx.SamplingRate;
             rx.release();
-            
+            tx.release();
+
 %             plot(real(out));
 %             testCase.estFrequency(out,sr);
             freqEst1 = testCase.estFrequencyMax(out(:,1),sr,true,'TwoChanDDS_Chan1');
@@ -215,6 +217,7 @@ classdef AD9081HWTests < HardwareTests
             end
             sr = rx.SamplingRate;
             rx.release();
+            tx.release();
             
 %             plot(real(out));
             freqEst = meanfreq(double(real(out)),sr);
@@ -269,6 +272,7 @@ classdef AD9081HWTests < HardwareTests
             end
             sr = rx.SamplingRate;
             rx.release();
+            tx.release();
             
 %             plot(real(out));
 %             testCase.estFrequency(out,rx.SamplingRate);

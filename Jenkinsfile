@@ -4,11 +4,12 @@ flags = gitParseFlags()
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
 dockerConfig.add("-e MLRELEASE=R2022b")
+dockerConfig.add("-e VIVADORELEASE=2023.1")
 dockerHost = 'docker'
 
 ////////////////////////////
 
-hdlBranches = ['master','hdl_2021_r2']
+hdlBranches = ['main','hdl_2021_r2']
 
 stage("Build Toolbox") {
     dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
@@ -18,7 +19,8 @@ stage("Build Toolbox") {
 		    checkout scm
 	            sh 'git submodule update --init'
 		    sh 'pip3 install -r ./CI/gen_doc/requirements_doc.txt'
-		    sh 'make -C ./CI/gen_doc doc_ml'
+		    sh 'rm -rf doc || true'
+                    sh 'make -C ./CI/gen_doc doc_ml'
 		    sh 'make -C ./CI/scripts build'
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
@@ -69,7 +71,7 @@ def board = 'ad9208';
 def nodeLabel = 'baremetal && high_memory';
 deployments[board] = { node(nodeLabel) {
     cstage("Baremetal HDL Test", "", flags) {
-        withEnv(['BOARD='+board,'MLRELEASE=R2022b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+        withEnv(['BOARD='+board,'MLRELEASE=R2022b','VIVADORELEASE=2022.2','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
                 cstage("AD9208 HDL Test", "", flags) {
                     echo "Node: ${env.NODE_NAME}"
@@ -127,7 +129,7 @@ node {
         unstash "builtSources"
         uploadArtifactory('HighSpeedConverterToolbox','*.mltbx')
     }
-    if (env.BRANCH_NAME == 'master') {
+    if (env.BRANCH_NAME == 'main') {
         cstage('Deploy Production', "", flags) {
             unstash "builtSources"
             uploadFTP('HighSpeedConverterToolbox','*.mltbx')

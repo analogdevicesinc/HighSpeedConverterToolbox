@@ -2,6 +2,7 @@
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
 dockerConfig.add("-e MLRELEASE=R2022b")
+dockerConfig.add("-e VIVADORELEASE=2023.1")
 dockerHost = 'docker'
 
 ////////////////////////////
@@ -47,7 +48,7 @@ for (int i=0; i < boardNames.size(); i++) {
         nodeLabel = 'baremetal && high_memory';
     deployments[board] = { node(nodeLabel) {
         stage("Synthesis Tests") {
-            withEnv(['BOARD='+board,'MLRELEASE=R2022b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+            withEnv(['BOARD='+board,'MLRELEASE=R2022b','VIVADORELEASE=2022.2','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
                 try {
                     stage("Synth") {
                         echo "Node: ${env.NODE_NAME}"

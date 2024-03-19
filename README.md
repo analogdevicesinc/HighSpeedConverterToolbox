@@ -2,7 +2,7 @@
 
 Toolbox created by ADI to be used with MATLAB and Simulink with ADI high speed converters.
 
-License : [![License](https://img.shields.io/badge/license-LGPL2-blue.svg)](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/blob/master/LICENSE)
+License : [![License](https://img.shields.io/badge/license-ADI_BSD-blue.svg)](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/blob/master/LICENSE)
 Latest Release : [![GitHub release](https://img.shields.io/github/release/analogdevicesinc/HighSpeedConverterToolbox.svg)](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases/latest)
 Downloads :  [![Github All Releases](https://img.shields.io/github/downloads/analogdevicesinc/HighSpeedConverterToolbox/total.svg)](https://github.com/analogdevicesinc/HighSpeedConverterToolbox/releases/latest) Direct Installer: [![View Analog Devices, Inc. High Speed Converter Toolbox on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/73080-analog-devices-inc-high-speed-converter-toolbox)
 

@@ -2,7 +2,7 @@
 set -x
 
 if [ -z "${HDLBRANCH}" ]; then
-HDLBRANCH='hdl_2021_r2'
+HDLBRANCH='main'
 fi
 
 # Script is designed to run from specific location
@@ -29,28 +29,66 @@ if [ ! -d "hdl" ]; then
    exit 1
 fi
 
-# Get required vivado version needed for HDL
-if [ -f "hdl/library/scripts/adi_ip.tcl" ]; then
-	TARGET="hdl/library/scripts/adi_ip.tcl"
-else
-	TARGET="hdl/library/scripts/adi_ip_xilinx.tcl"
-fi
-VER=$(awk '/set required_vivado_version/ {print $3}' $TARGET | sed 's/"//g')
-echo "Required Vivado version ${VER}"
-VIVADOFULL=${VER}
-if [ ${#VER} = 8 ]
-then
-VER=${VER:0:6}
-fi
-VIVADO=${VER}
+if [ -z "${VIVADO}" ]; then
+   echo "VIVADO not set, will parse HDL"
 
-# Setup
-source /opt/Xilinx/Vivado/$VIVADO/settings64.sh
+   # Get required vivado version needed for HDL
+   TARGET="hdl/scripts/adi_env.tcl"
+   # Use grep to find the line containing "set required_vivado_version"
+   matched_line=$(grep 'set required_vivado_version' "$TARGET")
 
-# Pre-build IP library
-# cd hdl/library
-# make
-# cd ../..
+   # Use awk to extract the version number
+   VIVADO=$(echo "$matched_line" | awk -F'"' '{print $2}')
+
+   # Print the extracted version number
+   echo "Parsed Vivado Version: $VIVADO"
+fi
+
+# If not of the form 20xx.x, exit
+if [[ ! $VIVADO =~ ^20[0-9]{2}\.[0-9]$ ]]; then
+    echo "Vivado version not of the form 20xx.x"
+    exit 1
+fi
+
+# Update vivado version in MATLAB files
+echo "Updating toolbox files to use desired Vivado version"
+cd ..
+# Update Version.m
+sed -i "s/Vivado = .*/Vivado = \'${VIVADO}\';/" +adi/Version.m
+# Update plugin_rd
+sed -i "s/hRD\.SupportedToolVersion = .*/hRD\.SupportedToolVersion = {\'${VIVADO}\'};/" hdl/vendor/AnalogDevices/+AnalogDevices/plugin_rd.m
+
+# Demos
+cd hsx_examples
+# Update all occurances of hWC.ReferenceDesignToolVersion = '20XX.X'; to use new version
+FILES=$(grep -lrn . -e 'hWC.ReferenceDesignToolVersion =')
+for f in $FILES; do
+   echo "Updating: $f"
+   sed -i "s/hWC\.ReferenceDesignToolVersion = .*/hWC\.ReferenceDesignToolVersion = \'${VIVADO}\';/" "$f"
+done
+# Update all occurances of hRD.SupportedToolVersion = {'20XX.X'}; to use new version
+FILES=$(grep -lr . -e 'hRD.SupportedToolVersion =')
+for f in $FILES; do
+   echo "Updating: $f"
+   sed -i "s/hRD\.SupportedToolVersion = .*/hRD\.SupportedToolVersion = {\'${VIVADO}\'};/" "$f"
+done
+# Update all occurances of Vivado sourcing
+FILES=$(grep -lrn . -e 'source /opt/Xilinx/Vivado/20')
+for f in $FILES; do
+   echo "Updating: $f"
+   sed -i "s/source \/opt\/Xilinx\/Vivado\/20.*/source \/opt\/Xilinx\/Vivado\/${VIVADO}\/settings64.sh/" "$f"
+done
+cd ..
+
+# # Tests
+# cd test
+# # Update line 35 of DemoTests.m to use new version
+# # sed -i "35s/.*/            testCase.setupVivado('${VIVADO}');/" DemoTests.m
+
+# cd ..
+
+cd CI
+
 
 # Rename .prj files since MATLAB ignores then during packaging
 FILES=$(grep -lrn hdl/projects/common -e '.prj' | grep -v Makefile | grep -v .git)
@@ -73,8 +111,6 @@ TARGET="../hdl/vendor/AnalogDevices/vivado"
 if [ -d "$TARGET" ]; then
     rm -rf "$TARGET"
 fi
-# Increase rx_clk period to fix timing failures for Pluto designs in R2021b
-sed -i 's/16.27/30/' hdl/projects/pluto/system_constr.xdc
 mv hdl $TARGET
 
 # Post-process ports.json
@@ -84,7 +120,6 @@ cp ports.json ../hdl/vendor/AnalogDevices/+AnalogDevices/
 
 # Updates
 cp scripts/matlab_processors.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/matlab_processors.tcl
-cp scripts/adi_project_xilinx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx.tcl
 cp scripts/system_project_rxtx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/system_project_rxtx.tcl
 cp scripts/adi_build.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_build.tcl
 cp scripts/adi_build_win.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_build_win.tcl
@@ -98,5 +133,3 @@ cp scripts/fixmake.sh  ../hdl/vendor/AnalogDevices/vivado/projects/scripts/fixma
 # Copy boot files
 mkdir ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/
 cp -r scripts/boot/* ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/
-
-echo 'puts "Skipping"' > ../hdl/vendor/AnalogDevices/vivado/library/axi_ad9361/axi_ad9361_delay.tcl

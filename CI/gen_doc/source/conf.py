@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Transceiver Toolbox'
+project = 'High-Speed Converter Toolbox'
 copyright = '2021, Travis F. Collins'
 author = 'Travis F. Collins'
 

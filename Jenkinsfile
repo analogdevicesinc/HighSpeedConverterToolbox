@@ -3,12 +3,12 @@
 flags = gitParseFlags()
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
-dockerConfig.add("-e MLRELEASE=R2022b")
+dockerConfig.add("-e MLRELEASE=R2023b")
 dockerHost = 'docker'
 
 ////////////////////////////
 
-hdlBranches = ['master','hdl_2021_r2']
+hdlBranches = ['main','hdl_2021_r2']
 
 stage("Build Toolbox") {
     dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
@@ -69,7 +69,7 @@ def board = 'ad9208';
 def nodeLabel = 'baremetal && high_memory';
 deployments[board] = { node(nodeLabel) {
     cstage("Baremetal HDL Test", "", flags) {
-        withEnv(['BOARD='+board,'MLRELEASE=R2022b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+        withEnv(['BOARD='+board,'MLRELEASE=R2023b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
                 cstage("AD9208 HDL Test", "", flags) {
                     echo "Node: ${env.NODE_NAME}"

@@ -30,27 +30,24 @@ for leading12s = 0:L
     end
 end
 
-error = zeros(size(PossibleCasts,1),1);
+taps_fi = zeros(size(PossibleCasts,1), numel(taps));
+error = zeros(size(PossibleCasts,1),numel(taps));
 for leading12s = 1:size(PossibleCasts,1)
     for group = 1:length(tapGroups)
         config = PossibleCasts(leading12s,group);
         tg = tapGroups{group};
-        diff = abs( double(fi(tg,1,config,0)) - double(tg));
-        error(leading12s) = error(leading12s) + sum(diff);
+        taps_fi(leading12s, 4*(group-1)+(1:4)) = fi(tg,1,config,0);
     end
+    error(leading12s, :) = abs(double(taps_fi(leading12s, :)) - taps);
 end
 
-[tapError,bestCast] = min(error);
+[~,bestCast] = min(sum(error, 2));
 % plot(sort(error));
 
 mode = PossibleCasts(bestCast,:);
 
 %% Apply new types to taps
-quantizedTaps = length(taps);
-for group = 1:length(tapGroups)
-    config = PossibleCasts(bestCast,group);
-    tg = tapGroups{group};
-    quantizedTaps( (group-1)*4+1 : group*4) = int16((fi(tg,1,config,0)));
-end
+quantizedTaps = taps_fi(bestCast, :);
+tapError = error(bestCast, :);
 
 end

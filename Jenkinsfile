@@ -8,7 +8,7 @@ dockerHost = 'docker'
 
 ////////////////////////////
 
-hdlBranches = ['main','hdl_2021_r2']
+hdlBranches = ['main','hdl_2022_r2']
 
 stage("Build Toolbox") {
     dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
@@ -23,14 +23,14 @@ stage("Build Toolbox") {
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
         } catch(Exception ex) {
-		if (branchName == 'hdl_2021_r2') {
+		if (branchName == 'hdl_2022_r2') {
 		    error('Production Toolbox Build Failed')
 		}
 		else {
 		    unstable('Development Build Failed')
 		}
         }
-        if (branchName == 'hdl_2021_r2') {
+        if (branchName == 'hdl_2022_r2') {
 	    archiveArtifacts artifacts: '*.mltbx'
             stash includes: '**', name: 'builtSources', useDefaultExcludes: false
         }
@@ -40,7 +40,7 @@ stage("Build Toolbox") {
 /////////////////////////////////////////////////////
 
 boardNames = ['daq2','ad9081','ad9434','ad9739a','ad9265', 'fmcjesdadc1','ad9783']
-dockerConfig.add("-e HDLBRANCH=hdl_2021_r2")
+dockerConfig.add("-e HDLBRANCH=hdl_2022_r2")
 
 cstage("HDL Tests", "", flags) {
     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
@@ -69,7 +69,7 @@ def board = 'ad9208';
 def nodeLabel = 'baremetal && high_memory';
 deployments[board] = { node(nodeLabel) {
     cstage("Baremetal HDL Test", "", flags) {
-        withEnv(['BOARD='+board,'MLRELEASE=R2023b','HDLBRANCH=hdl_2021_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+        withEnv(['BOARD='+board,'MLRELEASE=R2023b','HDLBRANCH=hdl_2022_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
                 cstage("AD9208 HDL Test", "", flags) {
                     echo "Node: ${env.NODE_NAME}"

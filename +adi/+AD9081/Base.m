@@ -52,7 +52,7 @@ classdef (Abstract) Base < ...
         % Dependent
         function value = get.SamplingRate(obj)
             if obj.ConnectedToDevice
-                value = double(obj.getAttributeLongLong('voltage0_i','sampling_frequency',obj.isOutput));
+                value = double(obj.getAttributeLongLong('voltage0_i','sampling_frequency',obj.isOutput,obj.iioDev));
             else
                 value = NaN;
             end

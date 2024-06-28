@@ -153,6 +153,17 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
     %% API Functions
     methods (Hidden, Access = protected)
         
+        function setupImpl(obj, data)
+            if strcmp(obj.DataSource,'DMA')
+                setupImpl@adi.common.Tx(obj, data);
+            else
+                setupImpl@adi.common.Tx(obj, data);
+            end
+            if obj.SkipInit
+                obj.phyDev = getDev(obj, obj.phyDevName);
+            end
+        end
+
         function setupInit(obj)
             % Write all attributes to device once connected through set
             % methods

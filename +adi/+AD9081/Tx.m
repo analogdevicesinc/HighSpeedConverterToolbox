@@ -157,7 +157,7 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             if strcmp(obj.DataSource,'DMA')
                 setupImpl@adi.common.Tx(obj, data);
             else
-                setupImpl@adi.common.Tx(obj, data);
+                setupImpl@adi.common.Tx(obj);
             end
             if obj.SkipInit
                 obj.phyDev = getDev(obj, obj.phyDevName);

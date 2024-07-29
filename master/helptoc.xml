@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <toc>
    <tocitem target="index.html">Analog Devices, Inc High-Speed Converter Toolbox
+      <tocitem target="install/index.html">Install</tocitem>
+      <tocitem target="targeting/index.html">Targeting</tocitem>
       <tocitem target="examples/index.html">Examples</tocitem>
       <tocitem target="models/index.html">Models</tocitem>
-      <tocitem target="targeting/index.html">Targeting</tocitem>
-      <tocitem target="support/index.html">Support</tocitem>
       <tocitem target="streaming/index.html">Streaming</tocitem>
-      <tocitem target="install/index.html">Install</tocitem>
+      <tocitem target="support/index.html">Support</tocitem>
       <tocitem target="models/index.html">Behavioral Models
           <tocitem target="models/ad9081/top_level.tex/index.html">AD9081: MxFE
               <tocitem target="models/ad9081/adc.tex/index.html">ADC</tocitem>

@@ -44,14 +44,10 @@ lock(label: 'adgt_test_harness_boards', quantity: 1){
   harness.set_docker_host_mode(true) // Set to false if using machine-specific license
   harness.set_send_telemetry(false)
   harness.set_elastic_server('192.168.10.1')
-  harness.set_required_hardware(["zynq-zc706-adv7511-fmcdaq2",
-                                 "zynqmp-zcu102-rev10-fmcdaq3",
-                                 "zynqmp-zcu102-rev10-ad9081-vm8-l4",
+  harness.set_required_hardware(["zynqmp-zcu102-rev10-ad9081-vm8-l4",
                                  "zynqmp-zcu102-rev10-ad9081-vm4-l8",
                                  "zynqmp-zcu102-rev10-ad9081-v204b-txmode9-rxmode4",
-                                 "zynqmp-zcu102-rev10-ad9081-v204c-txmode0-rxmode1",
-                                 "zynq-zc706-adv7511-fmcomms11",
-                                 "zynqmp-zcu102-rev10-ad9172-fmc-ebz-mode4"])
+                                 "zynqmp-zcu102-rev10-ad9081-v204c-txmode0-rxmode1"])
 
   harness.set_docker_args(['Vivado', 'MATLAB', 'udev'])
   harness.set_nebula_local_fs_source_root("artifactory.analog.com")

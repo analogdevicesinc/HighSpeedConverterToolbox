@@ -3,6 +3,7 @@ classdef AD9081HWTests < HardwareTests
     properties
         uri = 'ip:analog.local';
         author = 'ADI';
+        board = 'zynqmp-zcu102-rev10-ad9081-vm8-l4';
     end
     
     methods(TestClassSetup)
@@ -174,8 +175,8 @@ classdef AD9081HWTests < HardwareTests
             
 %             plot(real(out));
 %             testCase.estFrequency(out,sr);
-            freqEst1 = testCase.estFrequencyMax(out(:,1),srRx,true,'TwoChanDDS_Chan1');
-            freqEst2 = testCase.estFrequencyMax(out(:,2),srRx,true,'TwoChanDDS_Chan2');
+            freqEst1 = testCase.estFrequencyMax(out(:,1),srRx,true,testCase.board+"_TwoChanDDS_Chan1");
+            freqEst2 = testCase.estFrequencyMax(out(:,2),srRx,true,testCase.board+"_TwoChanDDS_Chan2");
 %             freqEst1 = meanfreq(double(real(out(:,1))),rx.SamplingRate);
 %             freqEst2 = meanfreq(double(real(out(:,2))),rx.SamplingRate);
 
@@ -237,7 +238,7 @@ classdef AD9081HWTests < HardwareTests
         end
         
         function testAD9081RxWithTxDataTwoChan(testCase)
-
+            
             tx = adi.AD9081.Tx('uri',testCase.uri);
             [cdc, fdc, dc, srTx] = tx.GetDataPathConfiguration();
 
@@ -288,8 +289,8 @@ classdef AD9081HWTests < HardwareTests
             
 %             plot(real(out));
 %             testCase.estFrequency(out,rx.SamplingRate);
-            freqEst1 = testCase.estFrequencyMax(out(:,1),srRx,true,'TwoChanData_Chan1');
-            freqEst2 = testCase.estFrequencyMax(out(:,2),srRx,true,'TwoChanData_Chan2');
+            freqEst1 = testCase.estFrequencyMax(out(:,1),srRx,true,testCase.board+"_TwoChanData_Chan1");
+            freqEst2 = testCase.estFrequencyMax(out(:,2),srRx,true,testCase.board+"_TwoChanData_Chan2");
 %             freqEst = meanfreq(double(real(out)),rx.SamplingRate);
             
             testCase.verifyTrue(valid);

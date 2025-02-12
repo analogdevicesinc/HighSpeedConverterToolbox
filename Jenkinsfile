@@ -4,6 +4,7 @@ flags = gitParseFlags()
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
 dockerConfig.add("-e MLRELEASE=R2023b")
+dockerConfig.add("-e VIVADORELEASE=2023.1")
 dockerHost = 'docker'
 
 ////////////////////////////
@@ -18,7 +19,8 @@ stage("Build Toolbox") {
 		    checkout scm
 	            sh 'git submodule update --init'
 		    sh 'pip3 install -r ./CI/gen_doc/requirements_doc.txt'
-		    sh 'make -C ./CI/gen_doc doc_ml'
+		    sh 'rm -rf doc || true'
+                    sh 'make -C ./CI/gen_doc doc_ml'
 		    sh 'make -C ./CI/scripts build'
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
@@ -127,7 +129,7 @@ node {
         unstash "builtSources"
         uploadArtifactory('HighSpeedConverterToolbox','*.mltbx')
     }
-    if (env.BRANCH_NAME == 'master') {
+    if (env.BRANCH_NAME == 'main') {
         cstage('Deploy Production', "", flags) {
             unstash "builtSources"
             uploadFTP('HighSpeedConverterToolbox','*.mltbx')

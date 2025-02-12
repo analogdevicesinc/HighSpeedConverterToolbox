@@ -2,6 +2,7 @@
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
 dockerConfig.add("-e MLRELEASE=R2023b")
+dockerConfig.add("-e VIVADORELEASE=2023.1")
 dockerHost = 'docker'
 
 ////////////////////////////

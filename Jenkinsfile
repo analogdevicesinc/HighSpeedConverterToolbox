@@ -1,8 +1,8 @@
-@Library('tfc-lib') _
+@Library('tfc-lib@adef-ci') _
 
 flags = gitParseFlags()
 
-dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
+dockerConfig = getDockerConfig(['MATLAB','Vivado','Internal'], matlabHSPro=false)
 dockerConfig.add("-e MLRELEASE=R2023b")
 dockerHost = 'docker'
 
@@ -14,11 +14,9 @@ stage("Build Toolbox") {
     dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
 	branchName ->
 	try {
-		withEnv(['HDLBRANCH='+branchName]) {
+		withEnv(['HDLBRANCH='+branchName,'LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
 		    checkout scm
-	            sh 'git submodule update --init'
-		    sh 'pip3 install -r ./CI/gen_doc/requirements_doc.txt'
-		    sh 'make -C ./CI/gen_doc doc_ml'
+		    sh 'git submodule update --init' 
 		    sh 'make -C ./CI/scripts build'
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
@@ -31,8 +29,9 @@ stage("Build Toolbox") {
 		}
         }
         if (branchName == 'hdl_2022_r2') {
-	    archiveArtifacts artifacts: '*.mltbx'
-            stash includes: '**', name: 'builtSources', useDefaultExcludes: false
+            local_stash('builtSources')
+	    sh 'ls -lR'
+            archiveArtifacts artifacts: 'hdl/*', followSymlinks: false, allowEmptyArchive: true
         }
     }
 }
@@ -47,15 +46,24 @@ cstage("HDL Tests", "", flags) {
         branchName ->
         withEnv(['BOARD='+branchName]) {
             cstage("Source", branchName, flags) {
-                unstash "builtSources"
+                local_unstash('builtSources')
                 sh 'make -C ./CI/scripts test'
-		junit testResults: 'test/*.xml', allowEmptyResults: true
+                junit testResults: 'test/*.xml', allowEmptyResults: true
                 archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
             }
-            cstage("Installer", branchName, flags) {
+/*
+            stage("Synth") {
                 unstash "builtSources"
+                sh 'make -C ./CI/scripts test_synth'
+                junit testResults: 'test/*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            }
+*/
+            cstage("Installer", branchName, flags) {
+                local_unstash('builtSources')
+                sh 'rm -rf hdl'
                 sh 'make -C ./CI/scripts test_installer'
-		junit testResults: 'test/*.xml', allowEmptyResults: true
+                junit testResults: 'test/*.xml', allowEmptyResults: true
                 archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
             }
         }
@@ -73,7 +81,7 @@ deployments[board] = { node(nodeLabel) {
             try {
                 cstage("AD9208 HDL Test", "", flags) {
                     echo "Node: ${env.NODE_NAME}"
-                    unstash "builtSources"
+                    local_unstash('builtSources', '', false)
                     sh 'make -C ./CI/scripts test'
                     junit testResults: 'test/*.xml', allowEmptyResults: true
                     archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
@@ -97,7 +105,7 @@ cstage("NonHW Tests", "", flags) {
         branchName ->
         withEnv(['BOARD='+branchName]) {
             cstage("NonHW", branchName, flags) {
-                unstash "builtSources"
+                local_unstash('builtSources')
                 sh 'make -C ./CI/scripts run_NonHWTests'
             }
         }
@@ -113,7 +121,7 @@ cstage("Hardware Streaming Tests", "", flags) {
     dockerParallelBuild(classNames, dockerHost, dockerConfig) { 
         branchName ->
         withEnv(['HW='+branchName]) {
-            unstash "builtSources"
+            local_unstash("builtSources")
             sh 'echo ${HW}'
             // sh 'make -C ./CI/scripts test_streaming'
         }
@@ -122,14 +130,14 @@ cstage("Hardware Streaming Tests", "", flags) {
 
 //////////////////////////////////////////////////////
 
-node {
+node('docker') {
     cstage('Deploy Development', "", flags) {
-        unstash "builtSources"
+        local_unstash('builtSources', '', false)
         uploadArtifactory('HighSpeedConverterToolbox','*.mltbx')
     }
     if (env.BRANCH_NAME == 'master') {
         cstage('Deploy Production', "", flags) {
-            unstash "builtSources"
+            local_unstash('builtSources', '', false)
             uploadFTP('HighSpeedConverterToolbox','*.mltbx')
         }
     }

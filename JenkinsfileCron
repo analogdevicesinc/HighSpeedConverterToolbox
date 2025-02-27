@@ -62,13 +62,14 @@ for (int i=0; i < boardNames.size(); i++) {
                         junit testResults: 'test/*.xml', allowEmptyResults: true
                         archiveArtifacts artifacts: 'test/*', followSymlinks: false, allowEmptyArchive: true
                     }
-		    		if (!board.contains("pluto") && !board.contains("vcu118")) {
-			    		stage("Upload BOOT.BINs") {
-                		sh 'rm -rf ' + bbfolder + ' || true'
-                		sh 'mkdir ' + bbfolder
-						uploadArtifactory('HighSpeedConverterToolbox',bbfolder+'/*.BIN*')
-			    		}
-		    		}
+                    if (!board.contains("pluto") && !board.contains("vcu118")) {
+                        stage("Upload BOOT.BINs") {
+                        sh 'rm -rf ' + bbfolder + ' || true'
+                        sh 'mkdir ' + bbfolder
+                        sh 'mv test/*.BIN '+bbfolder+'/'
+                        uploadArtifactory('HighSpeedConverterToolbox', bbfolder+'/*.BIN*')
+                    }
+			    }
                 }
                 finally {
                     cleanWs();
@@ -84,9 +85,9 @@ parallel deployments
 
 /////////////////////////////////////////////////////
 // node {
-//    stage("Trigger Harness") {
-//        echo "Node: ${env.NODE_NAME}"
-//        unstash "builtSources"
-//        triggerHWHarness("HighSpeedConverterToolbox")
-//    }
+//     stage("Trigger Harness") {
+//         echo "Node: ${env.NODE_NAME}"
+//         unstash "builtSources"
+//         triggerHWHarness("HighSpeedConverterToolbox")
+//     }
 // }

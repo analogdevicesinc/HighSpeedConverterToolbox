@@ -1,6 +1,6 @@
-@Library('tfc-lib') _
+@Library('tfc-lib@adef-ci') _
 
-dockerConfig = getDockerConfig(['MATLAB','Vivado'], matlabHSPro=false)
+dockerConfig = getDockerConfig(['MATLAB','Vivado','Internal'], matlabHSPro=false)
 dockerConfig.add("-e MLRELEASE=R2023b")
 dockerHost = 'docker'
 
@@ -27,7 +27,8 @@ stage("Build Toolbox") {
 		}
         }
         if (branchName == 'hdl_2022_r2') {
-            stash includes: '**', name: 'builtSources', useDefaultExcludes: false
+            local_stash('builtSources')
+            archiveArtifacts artifacts: 'hdl/*', followSymlinks: false, allowEmptyArchive: true
         }
     }
 }
@@ -43,34 +44,39 @@ def deployments = [:]
 for (int i=0; i < boardNames.size(); i++) {
     def board = boardNames[i];
     def nodeLabel = 'baremetal';
+    def workspaceLabel = board + '_workspace'
+    def bbfolder = 'bootbin_' + board
     if (board.contains("zcu102") || board.contains("vcu118"))
         nodeLabel = 'baremetal && high_memory';
     deployments[board] = { node(nodeLabel) {
+        def cworkspace = env.WORKSPACE + '/' + workspaceLabel
+        ws(cworkspace) {
         stage("Synthesis Tests") {
             withEnv(['BOARD='+board,'MLRELEASE=R2023b','HDLBRANCH=hdl_2022_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
                 try {
                     stage("Synth") {
                         echo "Node: ${env.NODE_NAME}"
-                        unstash "builtSources"
-                        sh 'apt install -y xvfb'
+                        local_unstash('builtSources', '', false)
                         sh 'echo "BOARD:$BOARD"'
                         sh 'make -C ./CI/scripts test_synth'
                         junit testResults: 'test/*.xml', allowEmptyResults: true
                         archiveArtifacts artifacts: 'test/*', followSymlinks: false, allowEmptyArchive: true
                     }
-		    if (!board.contains("pluto") && !board.contains("vcu118")) {
-			    stage("Upload BOOT.BINs") {
-				sh 'mkdir bootbins'
-				sh 'mv test/*.BIN bootbins/'
-				uploadArtifactory('HighSpeedConverterToolbox','bootbins/*.BIN*')
+                    if (!board.contains("pluto") && !board.contains("vcu118")) {
+                        stage("Upload BOOT.BINs") {
+                        sh 'rm -rf ' + bbfolder + ' || true'
+                        sh 'mkdir ' + bbfolder
+                        sh 'mv test/*.BIN '+bbfolder+'/'
+                        uploadArtifactory('HighSpeedConverterToolbox', bbfolder+'/*.BIN*')
+                    }
 			    }
-		    }
                 }
                 finally {
                     cleanWs();
                 }
             }
-        }
+        } // stage
+        } // ws
     }}
 }
 
@@ -78,10 +84,10 @@ parallel deployments
 
 
 /////////////////////////////////////////////////////
-node {
-    stage("Trigger Harness") {
-        echo "Node: ${env.NODE_NAME}"
-        unstash "builtSources"
-        triggerHWHarness("HighSpeedConverterToolbox")
-    }
-}
+// node {
+//     stage("Trigger Harness") {
+//         echo "Node: ${env.NODE_NAME}"
+//         unstash "builtSources"
+//         triggerHWHarness("HighSpeedConverterToolbox")
+//     }
+// }

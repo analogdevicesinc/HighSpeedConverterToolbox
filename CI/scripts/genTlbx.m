@@ -66,36 +66,6 @@ else
 end
 matlab.addons.toolbox.packageToolbox(projectFile,outputFile)
 
-if ~usejava('desktop')
-    %% Update toolbox paths
-    mkdir other
-    movefile([outputFile,'.mltbx'], ['other/',outputFile,'.zip']);
-    cd other
-    unzip([outputFile,'.zip'],'out');
-    cd('out')
-    cd('metadata');
-    fid  = fopen('configuration.xml','r');
-    f=fread(fid,'*char')';
-    fclose(fid);
-    
-    s = '</matlabPaths>';
-    sections = strsplit(f,s);
-    s1 = sections{1};
-    s2 = sections{2};
-    newfile = [s1,paths,s,s2];
-    
-    fid  = fopen('configuration.xml','w');
-    fprintf(fid,'%s',newfile);
-    fclose(fid);
-    
-    %% Repack
-    cd('..');
-    zip([outputFile,'.zip'], '*');
-    movefile([outputFile,'.zip'],['../../',outputFile,'.mltbx']);
-    cd('../..');
-    rmdir('other','s');
-end
-
 delete bsp.prj
 
 

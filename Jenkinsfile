@@ -138,7 +138,7 @@ node('docker') {
     if (env.BRANCH_NAME == 'master') {
         cstage('Deploy Production', "", flags) {
             local_unstash('builtSources', '', false)
-            uploadFTP('HighSpeedConverterToolbox','*.mltbx')
+            uploadArtifactory('HighSpeedConverterToolbox','*.mltbx')
         }
     }
 }

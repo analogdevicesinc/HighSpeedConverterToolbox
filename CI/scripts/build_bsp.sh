@@ -14,6 +14,9 @@ cd ..
 if [ -d "hdl" ]; then
     rm -rf "hdl"
 fi
+if [ -d "ghdl" ]; then
+    rm -rf "ghdl"
+fi
 for i in {1..5}
 do
 	if git clone --single-branch -b $HDLBRANCH https://github.com/analogdevicesinc/hdl.git
@@ -47,6 +50,23 @@ VIVADO=${VER}
 # Setup
 source /opt/Xilinx/Vivado/$VIVADO/settings64.sh
 
+# Get ghdl dependencies
+git clone git@ghe.com:adi-innersource/ghdl.git -b dev_apollo
+mv ghdl/projects/apollo hdl/projects/
+mv hdl/projects/apollo/axi_hsci hdl/library/
+
+# Within the hdl/projects/apollo directory replace:
+# ../../../../hdl/ with $ad_hdl_dir/
+files_in_apollo_folder_recersive=$(find hdl/projects/apollo -type f)
+for file in $files_in_apollo_folder_recersive
+do
+  if [ -f "$file" ]; then
+   echo "Updating file: $file"
+   sed -i 's|../../../../hdl/|$ad_hdl_dir/|g' "$file"
+  fi
+done
+
+
 # Pre-build IP library
 # cd hdl/library
 # make
@@ -73,8 +93,6 @@ TARGET="../hdl/vendor/AnalogDevices/vivado"
 if [ -d "$TARGET" ]; then
     rm -rf "$TARGET"
 fi
-# Increase rx_clk period to fix timing failures for Pluto designs in R2021b
-sed -i 's/16.27/30/' hdl/projects/pluto/system_constr.xdc
 mv hdl $TARGET
 
 # Post-process ports.json
@@ -84,7 +102,7 @@ cp ports.json ../hdl/vendor/AnalogDevices/+AnalogDevices/
 
 # Updates
 cp scripts/matlab_processors.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/matlab_processors.tcl
-cp scripts/adi_project_xilinx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx.tcl
+#cp scripts/adi_project_xilinx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx.tcl
 cp scripts/system_project_rxtx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/system_project_rxtx.tcl
 cp scripts/adi_build.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_build.tcl
 cp scripts/adi_build_win.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_build_win.tcl

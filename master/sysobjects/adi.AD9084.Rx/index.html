@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../adi.AD9083.Rx/">
+      
+      
+        <link rel="next" href="../adi.AD9084.Tx/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.20">
@@ -185,9 +189,7 @@
           
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -551,14 +553,16 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
       
       
       
@@ -567,7 +571,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
           Reference API
@@ -724,14 +728,16 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2" checked>
       
       
       
@@ -740,7 +746,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_2_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_2_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_9_2">
           <span class="md-nav__icon md-icon"></span>
           Device Interfaces
@@ -783,6 +789,42 @@
     <li class="md-nav__item">
       <a href="../adi.AD9083.Rx/" class="md-nav__link">
         adi.AD9083.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        adi.AD9084.Rx
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adi.AD9084.Tx/" class="md-nav__link">
+        adi.AD9084.Tx
       </a>
     </li>
   
@@ -978,9 +1020,7 @@
             
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -1005,7 +1045,7 @@
 
   <h1>adi.AD9084.Rx</h1>
 
-<!-- <div class="sysobj_h1">adi.Ad9084.Rx</div> -->
+<!-- <div class="sysobj_h1">adi.AD9084.Rx</div> -->
 
 <!-- <div class="sysobj_top_desc">
 Receive data from Analog Devices AD9361 transceiver
@@ -1015,7 +1055,7 @@ Receive data from Analog Devices AD9361 transceiver
 
 <div class="sysobj_desc_txt">
 <span>
-    The adi.Ad9084.Rx System object is a signal source that can receive<br>    complex data from the Ad9084.<br> <br>    rx = adi.Ad9084.Rx;<br>    rx = adi.Ad9084.Rx('uri','ip:192.168.2.1');<br> <br>    <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/Ad9084.pdf">Ad9084 Datasheet</a><br> <br>
+    The adi.AD9084.Rx System object is a signal source that can receive<br>    complex data from the AD9084.<br> <br>    rx = adi.AD9084.Rx;<br>    rx = adi.AD9084.Rx('uri','ip:ip:192.168.2.1');<br> <br>    <a href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9084.pdf">AD9084 Datasheet</a><br> <br>
 </span>
 
 </div>
@@ -1023,8 +1063,8 @@ Receive data from Analog Devices AD9361 transceiver
 <div class="sysobj_desc_title">Creation</div>
 
 <p>The class can be instantiated in the following way with and without property name value pairs.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">Ad9084</span><span class="p">.</span><span class="n">Rx</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">Ad9084</span><span class="p">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9084</span><span class="p">.</span><span class="n">Rx</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9084</span><span class="p">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">)</span>
 </code></pre></div>
 <div class="sysobj_desc_title">Properties</div>
 
@@ -1074,6 +1114,12 @@ For more information on changing property values, see <a href="https://www.mathw
   </div>
   </div>
 <div class="property">
+  <button type="button" onclick="collapse('JESD204FSMControl')" class="collapsible-property collapsible-property-JESD204FSMControl">JESD204FSMControl <span style="text-align:right" class="plus-JESD204FSMControl">+</span></button>
+  <div class="content content-JESD204FSMControl" style="display: none;">
+    <p style="padding: 0px;">JESD204 FSM CTRL. Options are: '0' '1' When set to '0' the JESD links will be disabled. This property should be toggled to reset the JESD204 links</p>
+  </div>
+  </div>
+<div class="property">
   <button type="button" onclick="collapse('EnablePFIRs')" class="collapsible-property collapsible-property-EnablePFIRs">EnablePFIRs <span style="text-align:right" class="plus-EnablePFIRs">+</span></button>
   <div class="content content-EnablePFIRs" style="display: none;">
     <p style="padding: 0px;">Enable use of PFIR/PFILT filters</p>
@@ -1088,7 +1134,7 @@ For more information on changing property values, see <a href="https://www.mathw
 <div class="property">
   <button type="button" onclick="collapse('SamplesPerFrame')" class="collapsible-property collapsible-property-SamplesPerFrame">SamplesPerFrame <span style="text-align:right" class="plus-SamplesPerFrame">+</span></button>
   <div class="content content-SamplesPerFrame" style="display: none;">
-    <p style="padding: 0px;">Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.Ad9084.Rx/SamplesPerFrame is inherited from superclass ADI.Ad9084.BASE</p>
+    <p style="padding: 0px;">Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9084.Rx/SamplesPerFrame is inherited from superclass adi.AD9084.Base</p>
   </div>
   </div>
 <div class="property">
@@ -1100,28 +1146,30 @@ For more information on changing property values, see <a href="https://www.mathw
 <div class="property">
   <button type="button" onclick="collapse('uri')" class="collapsible-property collapsible-property-uri">uri <span style="text-align:right" class="plus-uri">+</span></button>
   <div class="content content-uri" style="display: none;">
-    <p style="padding: 0px;">Hostname or IP address of remote libIIO deviceHelp for adi.Ad9084.Rx/uri is inherited from superclass MATLABSHARED.LIBIIO.BASE</p>
+    <p style="padding: 0px;">Hostname or IP address of remote libIIO deviceHelp for adi.AD9084.Rx/uri is inherited from superclass matlabshared.libiio.base</p>
   </div>
   </div>
 
 <div class="sysobj_desc_title">Example Usage</div>
 
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>%% Rx set up
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>rx = adi.adi.Ad9084.Rx.Rx(&#39;uri&#39;,&#39;ip:analog.local&#39;);
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>rx.CenterFrequency = 1e9;
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>rx = adi.AD9084.Rx(&#39;uri&#39;,&#39;ip:analog.local&#39;);
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>rx.SamplesPerFrame = 2^14;
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>rx.EnabledChannels = 1;
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>%% Run
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>for k=1:10
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    valid = false;
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    while ~valid
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        [out, valid] = rx();
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    end
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>end
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>%% Run
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>for k=1:10
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    valid = false;
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    while ~valid
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        [out, valid] = rx();
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    end
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>end
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>%% Cleanup
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>release(rx)
 </code></pre></div>
 
 
-
-  
 
 
 

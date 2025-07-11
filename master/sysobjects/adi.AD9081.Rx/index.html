@@ -809,6 +809,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../adi.AD9084.Rx/" class="md-nav__link">
+        adi.AD9084.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adi.AD9084.Tx/" class="md-nav__link">
+        adi.AD9084.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../adi.AD9144.Tx/" class="md-nav__link">
         adi.AD9144.Tx
       </a>
@@ -1050,12 +1078,6 @@ For more information on changing property values, see <a href="https://www.mathw
 </span>
 </div>
 <div class="property">
-  <button type="button" onclick="collapse('SamplingRate')" class="collapsible-property collapsible-property-SamplingRate">SamplingRate <span style="text-align:right" class="plus-SamplingRate">+</span></button>
-  <div class="content content-SamplingRate" style="display: none;">
-    <p style="padding: 0px;">Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is only readable once connected to hardware</p>
-  </div>
-  </div>
-<div class="property">
   <button type="button" onclick="collapse('ChannelNCOFrequencies')" class="collapsible-property collapsible-property-ChannelNCOFrequencies">ChannelNCOFrequencies <span style="text-align:right" class="plus-ChannelNCOFrequencies">+</span></button>
   <div class="content content-ChannelNCOFrequencies" style="display: none;">
     <p style="padding: 0px;">Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
@@ -1086,6 +1108,12 @@ For more information on changing property values, see <a href="https://www.mathw
   </div>
   </div>
 <div class="property">
+  <button type="button" onclick="collapse('JESD204FSMControl')" class="collapsible-property collapsible-property-JESD204FSMControl">JESD204FSMControl <span style="text-align:right" class="plus-JESD204FSMControl">+</span></button>
+  <div class="content content-JESD204FSMControl" style="display: none;">
+    <p style="padding: 0px;">JESD204 FSM CTRL. Options are: '0' '1' When set to '0' the JESD links will be disabled. This property should be toggled to reset the JESD204 links</p>
+  </div>
+  </div>
+<div class="property">
   <button type="button" onclick="collapse('EnablePFIRs')" class="collapsible-property collapsible-property-EnablePFIRs">EnablePFIRs <span style="text-align:right" class="plus-EnablePFIRs">+</span></button>
   <div class="content content-EnablePFIRs" style="display: none;">
     <p style="padding: 0px;">Enable use of PFIR/PFILT filters</p>
@@ -1095,6 +1123,12 @@ For more information on changing property values, see <a href="https://www.mathw
   <button type="button" onclick="collapse('PFIRFilenames')" class="collapsible-property collapsible-property-PFIRFilenames">PFIRFilenames <span style="text-align:right" class="plus-PFIRFilenames">+</span></button>
   <div class="content content-PFIRFilenames" style="display: none;">
     <p style="padding: 0px;">Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order</p>
+  </div>
+  </div>
+<div class="property">
+  <button type="button" onclick="collapse('SamplingRate')" class="collapsible-property collapsible-property-SamplingRate">SamplingRate <span style="text-align:right" class="plus-SamplingRate">+</span></button>
+  <div class="content content-SamplingRate" style="display: none;">
+    <p style="padding: 0px;">Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is only readable once connected to hardwareHelp for adi.AD9081.Rx/SamplingRate is inherited from superclass adi.AD9081.Base</p>
   </div>
   </div>
 <div class="property">

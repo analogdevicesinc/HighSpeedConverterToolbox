@@ -35,6 +35,10 @@ The following have device-specific implementations in MATLAB and Simulink. If a 
 | AD9081/AD9082	| ZCU102	| Yes	| Yes	| ADI (2020a) |
 | | VCU118	| Yes	| No	| ADI (2020a) |
 | AD9083	| ZCU102	| Yes	| No	| ADI (2021b) |
+| AD9084	| VCU118	| Yes	| No	| ADI (2023b) |
+| | VPK180	| Yes	| No	| ADI (2023b) |
+| | VCK190	| Yes	| No	| ADI (2023b) |
+| | FM87	| Yes	| No	| ADI (2023b) |
 | AD9988/AD9986	| ZCU102	| Yes	| Yes	| ADI (2020a) |
 | | VCU118	| Yes	| No	| ADI (2020a) |
 | AD9209/AD9177	| ZCU102	| Yes	| Yes	| ADI (2020a) |

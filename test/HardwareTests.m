@@ -8,9 +8,14 @@ classdef HardwareTests < matlab.unittest.TestCase
     methods(TestClassSetup)
         function UpdateURIFromEnv(testCase)
             urienv = getenv('IIO_URI');
+            boardenv = getenv('board');
             if ~isempty(urienv)
                 fprintf('Overriding default URI with: %s\n',urienv);
                 testCase.uri = urienv;
+            end
+            if isprop(testCase, 'board') && ~isempty(boardenv)
+                fprintf('Overriding default board name with: %s\n',boardenv);
+                testCase.board = boardenv;
             end
         end
     end

@@ -17,8 +17,8 @@
 
 % Gain Access to the Analog Devices, Inc. High Speed Converter Toolbox at:
 % https://github.com/analogdevicesinc/HighSpeedConverterToolbox
-
-instrreset;
+% 
+% instrreset;
 %% Reload FPGA Code
 % LoadVcu118Code('C:\Xilinx\Vivado_Lab\2019.2\bin\xsdb.bat',...
 %     'C:\SDG Builds\Quad MxFE for VCU118 2020-09-25\run.vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc.tcl')
@@ -27,6 +27,11 @@ instrreset;
 close all;
 clearvars;
 graphicsInfo = groot;
+
+% Select board varianFit number here
+% 1 = ADQUADMXFE1EBZ, 2 = ADQUADMXFE2EBZ, 3 = ADQUADMXFE3EBZ
+boardVariantNumber = 3;
+
 
 uri = 'ip:192.168.2.1';
 fs_Rx = 4000e6; %ADC Sample Rate [Hz]
@@ -39,20 +44,64 @@ Align_ADF4371s = 1; %0: Do not align the ADF4371s, 1: Do align the ADF4371s
 Align_PLL_Using_Rx = 0; %0: Use Tx alignment for PLL alignment, 1: Use Rx alignment for PLL alignment
 minCodeValue = 500; %Lowest Acceptaple ADC Code Value. Anything Lower Is Regarded As a 'Bad' Capture [arb]
 useCalibrationBoard = 1; %0: Not using calibration board, 1: Using calibration board
+if (useCalibrationBoard)
+    minCodeValue = 100; %Cal board combined loopback has unequal loss per channel
+end
 
-%% Setup Tx Information
+switch(boardVariantNumber)
+    case 1
+        amplitude = 2^15*db2mag(-20); %Tx Baseband Amplitude [dBFS]
+        fs_Rx = 4000e6; %ADC Sample Rate [Hz]
+        carrierFreq = 3.2e9; %Tx NCO Frequency & Unfolded Rx NCO Frequency [Hz]
+    case 2
+        amplitude = 2^15*db2mag(-20); %Tx Baseband Amplitude [dBFS]
+        fs_Rx = 4000e6; %ADC Sample Rate [Hz]
+        carrierFreq = 1.8e9; %Tx NCO Frequency & Rx NCO Frequency [Hz]
+    case 3
+        amplitude = 2^15*db2mag(-6); %Tx Baseband Amplitude [dBFS]
+        fs_Rx = 6000e6; %ADC Sample Rate [Hz]
+        carrierFreq = 3.2e9; %Tx NCO Frequency & Unfolded Rx NCO Frequency [Hz]
+end
+
+
+%% Setup Tx Configuration
 tx = adi.QuadMxFE.Tx;
 tx.UpdateDACFullScaleCurrent = true;
 tx.DACFullScaleCurrentuA = 40000;
 
 tx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
 tx.uri = uri;
-tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
-tx.num_fine_attr_channels = 8; %Number of Fine DUCs Used Per MxFE
-tx.num_data_channels = 4*tx.num_fine_attr_channels; %Total Number of Fine DUCs Used In System        
-tx.num_dds_channels = tx.num_data_channels*4; %Total Number of DDSs Used In System (Not Used For 'DMA' Mode)
-tx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,...
-    17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]; %Enabled Tx Channels, Only Needed for DMA
+
+switch(boardVariantNumber)
+    case {1,2}
+        tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
+        tx.num_fine_attr_channels = 8; %Number of Fine DUCs Used Per MxFE
+        tx.num_data_channels = 4*tx.num_fine_attr_channels; %Total Number of Fine DUCs Used In System
+        tx.num_dds_channels = tx.num_data_channels*4; %Total Number of DDSs Used In System (Not Used For 'DMA' Mode)
+        tx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,...
+            17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]; %Enabled Tx Channels, Only Needed for DMA
+        % 12-Bit Normalized Digital Gain Code (Valid Values 0 to 1)
+        % 0<=Gain<=(2^12-1)/2^11=1.9995; Gain=GainCode/2048
+        % Normalized Gain Code = GainCode/2
+        tx.ChannelNCOGainScalesChipA  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE0 Digital Gain Code
+        tx.ChannelNCOGainScalesChipB  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE1 Digital Gain Code
+        tx.ChannelNCOGainScalesChipC  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE2 Digital Gain Code
+        tx.ChannelNCOGainScalesChipD  = ones(1,tx.num_fine_attr_channels).*0.5; %MxFE3 Digital Gain Code
+    case 3
+        tx.num_coarse_attr_channels = 4; %Number of Coarse DUCs Used Per MxFE
+        tx.num_fine_attr_channels = 4; %Number of Fine DUCs Used Per MxFE
+        tx.num_data_channels = 4*tx.num_fine_attr_channels; %Total Number of Fine DUCs Used In System
+        tx.num_dds_channels = tx.num_data_channels*4; %Total Number of DDSs Used In System (Not Used For 'DMA' Mode)
+        tx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Tx Channels, Only Needed for DMA
+        % 12-Bit Normalized Digital Gain Code (Valid Values 0 to 1)
+        % 0<=Gain<=(2^12-1)/2^11=1.9995; Gain=GainCode/2048
+        % Normalized Gain Code = GainCode/2
+        tx.ChannelNCOGainScalesChipA  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE0 Digital Gain Code
+        tx.ChannelNCOGainScalesChipB  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE1 Digital Gain Code
+        tx.ChannelNCOGainScalesChipC  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE2 Digital Gain Code
+        tx.ChannelNCOGainScalesChipD  = ones(1,tx.num_fine_attr_channels).*0.7; %MxFE3 Digital Gain Code
+end
+
 tx.EnableResampleFilters = 0; %Enable A Divide-By-Two Resampling
 tx.DataSource = 'DMA'; %'DMA' or 'DDS'
 tx.EnableCyclicBuffers = 1; %0: Don't Cycle Tx Waveform, 1: Cycle Tx Waveform
@@ -202,16 +251,44 @@ tx.setRegister(hex2dec('80'),'800',tx.iioDev3); %Phase Coherent Switch to FTW0
 rx = adi.QuadMxFE.Rx;
 rx.CalibrationBoardAttached = useCalibrationBoard; %0: Not Using Calibration Board, 1: Using Calibration Board
 rx.uri = uri;
-rx.num_coarse_attr_channels = 4; %Number of Coarse DDCs Used Per MxFE
-rx.num_fine_attr_channels = 4; %Number of Fine DDCs Used Per MxFE
-rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
-rx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Rx Channels
+switch(boardVariantNumber)
+    case 1
+        rx.num_coarse_attr_channels = 4; %Number of Coarse DDCs Used Per MxFE
+        rx.num_fine_attr_channels = 4; %Number of Fine DDCs Used Per MxFE
+        rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
+        rx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Rx Channels
+        % Keep In Mind That NCO Frequencies Range From -fs_RxIQ/2 to +fs_RxIQ/2
+        % If In 2nd Nyquist Enter The Folded NCO Frequency
+        rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
+        rx.ExternalAttenuation = -15; %On-Platform Digital Step Attenuator Gain Within RF Front-End [dB]. Max -15dB
+    case 2
+        rx.num_coarse_attr_channels = 4; %Number of Coarse DDCs Used Per MxFE
+        rx.num_fine_attr_channels = 4; %Number of Fine DDCs Used Per MxFE
+        rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
+        rx.EnabledChannels = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; %Enabled Rx Channels
+        rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
+        rx.ExternalAttenuation = -15; %On-Platform Digital Step Attenuator Gain Within RF Front-End [dB]. Max -15dB
+    case 3
+        rx.num_coarse_attr_channels = 2; %Number of Coarse DDCs Used Per MxFE
+        rx.num_fine_attr_channels = 2; %Number of Fine DDCs Used Per MxFE
+        rx.num_data_channels = 4*rx.num_fine_attr_channels; %Total Number of Fine DDCs Used In System
+        rx.EnabledChannels = 1:8;
+        % Keep In Mind That NCO Frequencies Range From -fs_RxIQ/2 to +fs_RxIQ/2
+        % In 2nd Nyquist so Enter The Folded NCO Frequency
+        rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
+        rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(6e9-carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
+        rx.ExternalAttenuation = 0; %On-Platform Digital Step Attenuator Gain Within RF Front-End [dB]. Max -15dB
+end
 % Keep In Mind That NCO Frequencies Range From -fs_RxIQ/2 to +rx_RxIQ/2
 % If In 2nd Nyquist Enter The Folded NCO Frequency
-rx.MainNCOFrequenciesChipA = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE0 Coarse DDC NCO Frequencies [Hz]
-rx.MainNCOFrequenciesChipB = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE1 Coarse DDC NCO Frequencies [Hz]
-rx.MainNCOFrequenciesChipC = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE2 Coarse DDC NCO Frequencies [Hz]
-rx.MainNCOFrequenciesChipD = ones(1,rx.num_coarse_attr_channels).*(4e9-carrierFreq); %MxFE3 Coarse DDC NCO Frequencies [Hz]
 rx.ChannelNCOFrequenciesChipA = zeros(1,rx.num_fine_attr_channels); %MxFE0 Fine DDC NCO Frequencies [Hz]
 rx.ChannelNCOFrequenciesChipB = zeros(1,rx.num_fine_attr_channels); %MxFE1 Fine DDC NCO Frequencies [Hz]
 rx.ChannelNCOFrequenciesChipC = zeros(1,rx.num_fine_attr_channels); %MxFE2 Fine DDC NCO Frequencies [Hz]
@@ -334,6 +411,11 @@ end
 
 tstart = tic;        
 
+%% Re-send Tx Data After MCS (MCS can disrupt cyclic DMA buffer)
+release(tx);
+tx(channelArray');
+pause(2);
+
 %% Grab Initial Rx Data
 pause(1);
 data = rx(); %Grab the Rx data & save to 'data' matrix
@@ -352,15 +434,29 @@ sysref_Phase3 = tx.getRegister('B6',tx.iioDev3);
 sysref_Phase3 = sysref_Phase3 + 2^9*tx.getRegister('B5',tx.iioDev3); %Monitor SYSREF Phase   
 sysrefPhasesAfterBaselineCapture = [sysref_Phase0, sysref_Phase1, sysref_Phase2, sysref_Phase3]
 
+% Print diagnostic info about captured signal levels
+maxPerChannel = max(real(data));
+fprintf('Max real ADC code per channel: ');
+fprintf('%d ', maxPerChannel);
+fprintf('\n');
+fprintf('Channels above minCodeValue (%d): %d / %d\n', ...
+    minCodeValue, sum(maxPerChannel > minCodeValue), rx.num_data_channels);
+
 badCaptures = 0;
+maxRetries = 10; %Allow more retries with calibration board
 while (sum(max(real(data))>minCodeValue)~=rx.num_data_channels)
     badCaptures = badCaptures + 1;
-    fprintf('Bad Capture During ADF4371 Phase Alignment!\n');
-    if (badCaptures>4)
-        error('Bad Capture During ADF4371 Phase Alignment!\n');
+    maxPerChannel = max(real(data));
+    fprintf('Bad Capture #%d - Max codes per ch: ', badCaptures);
+    fprintf('%d ', maxPerChannel);
+    fprintf('\n');
+    if (badCaptures>maxRetries)
+        error('Bad Capture During ADF4371 Phase Alignment! Max codes: %s', num2str(maxPerChannel));
     end
     tx.setDeviceAttributeRAW('multichip_sync', '10', tx.iioDev3);
-    pause(1);
+    release(tx);
+    tx(channelArray'); %Re-send Tx waveform (MCS can stop cyclic DMA)
+    pause(2);
     data = rx(); %Grab the Rx data
 end        
 
@@ -873,7 +969,8 @@ errorResponse = spectrumUnequalizedOut./spectrumUnequalizedOut(:,1); %Error Resp
 errorResponse = abs(1./scaleForFlat).*exp(1j.*unwrap(angle(errorResponse),2)); %Invert Amplitude
 frequenciesForEqualizerF1 = linspace(0,StartBand*0.95,size(errorResponse,1)); %Outside Decimation Frequencies
 frequenciesForEqualizerF2 = linspace(StartBand,StopBand,size(errorResponse,1)); %Inside Decimation Frequencies
-frequenciesForEqualizerF3 = linspace(StopBand*1.05,1,size(errorResponse,1)); %Outside Decimation Frequencies
+f3Start = min(StopBand*1.05, StopBand + (1 - StopBand)*0.5); %Clamp to ensure F3 is monotonically increasing
+frequenciesForEqualizerF3 = linspace(f3Start,1,size(errorResponse,1)); %Outside Decimation Frequencies
 errorResponseF1 = ones(NumChannels,length(frequenciesForEqualizerF1)).*exp(-1j*pi*numTaps/2*frequenciesForEqualizerF1);
 errorResponseF1(:,1) = 0;
 errorResponseF2 = errorResponse'.*exp(-1j*pi*numTaps/2*frequenciesForEqualizerF2); %Force Group Delay To Middle Of FIR Design
@@ -944,16 +1041,28 @@ for currentChannel=1:2:NumChannels
     [config1,tapsInt16_1,qt1,error1] = adi.AD9081.utils.DesignPFilt(designedEqualizersTapsExtended(currentChannel,:),pfir.Mode,96);
     [config2,tapsInt16_2,qt2,error2] = adi.AD9081.utils.DesignPFilt(designedEqualizersTapsExtended(currentChannel+1,:),pfir.Mode,96);
 
-    % Update Model
+    % % Update Model
     pfir.Gains = [0 0 0 0];
     pfir.Taps = [qt1; qt2];
     pfir.TapsWidthsPerQuad = [config1; config2];
-    if any(currentChannel==[1,5,9,13])
-        pfir.ADCTarget = 'adc_pair_0';
-    else
-        pfir.ADCTarget = 'adc_pair_1';
-    end
 
+
+
+    % if any(currentChannel==[1,5,9,13])
+    %     pfir.ADCTarget = 'adc_pair_0';
+    % else
+    %     pfir.ADCTarget = 'adc_pair_1';
+    % end
+    switch(boardVariantNumber)
+        case {1,2}
+            if any(currentChannel==[1,5,9,13])
+                pfir.ADCTarget = 'adc_pair_0';
+            else
+                pfir.ADCTarget = 'adc_pair_1';
+            end
+        case 3
+                pfir.ADCTarget = 'adc_pair_1';
+    end
     % Create Filter File
     pfir.ToFile();
     
@@ -990,17 +1099,33 @@ if (useCalibrationBoard)
 end
 
 %% Load New pFIR Files Into Quad-MxFE Platform
-for chanNum=1:4:NumChannels
-    mxFENum = floor((chanNum-1)/4);
-    if (mxFENum==0)
-        rx.PFIRFilenamesChipA = {filename{1,:}, filename{3,:}};
-    elseif (mxFENum==1)
-        rx.PFIRFilenamesChipB = {filename{5,:}, filename{7,:}};
-    elseif (mxFENum==2)
-        rx.PFIRFilenamesChipC = {filename{9,:}, filename{11,:}};
-    elseif (mxFENum==3)
-        rx.PFIRFilenamesChipD = {filename{13,:}, filename{15,:}};
-    end
+switch(boardVariantNumber)
+    case{1,2}
+        for chanNum=1:4:NumChannels
+            mxFENum = floor((chanNum-1)/4);
+            if (mxFENum==0)
+                rx.PFIRFilenamesChipA = {filename{1,:}, filename{3,:}};
+            elseif (mxFENum==1)
+                rx.PFIRFilenamesChipB = {filename{5,:}, filename{7,:}};
+            elseif (mxFENum==2)
+                rx.PFIRFilenamesChipC = {filename{9,:}, filename{11,:}};
+            elseif (mxFENum==3)
+                rx.PFIRFilenamesChipD = {filename{13,:}, filename{15,:}};
+            end
+        end
+    case 3
+        for chanNum=1:1:NumChannels
+            mxFENum = floor((chanNum-1)/4);
+            if (mxFENum==0)
+                rx.PFIRFilenamesChipA = {filename{1,:}, filename{2,:}};
+            elseif (mxFENum==1)
+                rx.PFIRFilenamesChipB = {filename{3,:}, filename{4,:}};
+            elseif (mxFENum==2)
+                rx.PFIRFilenamesChipC = {filename{5,:}, filename{6,:}};
+            elseif (mxFENum==3)
+                rx.PFIRFilenamesChipD = {filename{7,:}, filename{8,:}};
+            end
+        end
 end
 pause(1);
 
@@ -1168,3 +1293,22 @@ if (rx.EnableResampleFilters)
 else
     axis([-fs_RxIQ/1e6/2, fs_RxIQ/1e6/2, -100, 0]);
 end
+
+%% Save All Figures
+figSaveDir = fullfile(getenv('USERPROFILE'), 'Desktop', 'Quad MxFE 3EBZ Variant System Alignment FIR Figs');
+if ~exist(figSaveDir, 'dir')
+    mkdir(figSaveDir);
+end
+allFigs = findobj('Type', 'figure');
+for k = 1:length(allFigs)
+    fig = allFigs(k);
+    figName = get(fig, 'Name');
+    if isempty(figName)
+        figName = sprintf('Figure_%d', fig.Number);
+    else
+        figName = regexprep(figName, '[\\/:*?"<>|]', '_'); % Sanitize for Windows filenames
+    end
+    savefig(fig, fullfile(figSaveDir, [figName '.fig']));
+    exportgraphics(fig, fullfile(figSaveDir, [figName '.png']), 'Resolution', 300);
+end
+fprintf('All figures saved to: %s\n', figSaveDir);

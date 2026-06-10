@@ -26,4 +26,25 @@ We provide support for certain releases of MATLAB. This does not mean older rele
 
 All support questions should be posted in our [EngineerZone](https://ez.analog.com/linux-device-drivers/linux-software-drivers) forums. Documentation is included within the toolbox but additional documentation is avaible on the [ADI Wiki](https://wiki.analog.com/resources/tools-software/hsx-toolbox).
 
+## Hardware Testing (CI)
+
+Hardware tests run on real lab boards via [labgrid](https://github.com/labgrid-project/labgrid), using the reusable [`matlab-hw-request.yml@v3`](https://github.com/tfcollins/labgrid-plugins/blob/main/.github/workflows/matlab-hw-request.yml) workflow from [tfcollins/labgrid-plugins](https://github.com/tfcollins/labgrid-plugins).
+
+**Triggers** — the `hw-matlab` job runs on:
+- Pull requests labeled `hw-test`
+- Pushes to `master`
+- Manual `workflow_dispatch`
+- Nightly schedule (05:30 UTC)
+
+**Board map** — `test/hw_ci/board_map.yaml` maps coordinator place tags (`carrier`, `daughter-board`, `hdl-config`) to the board name `runHWTests(<board>)` expects. The most-specific matching row wins. Keep this file in sync with the `switch` statement in `test/runHWTests.m`.
+
+**IIO URI** — `HardwareTests.m` picks up the booted board's URI from the `$IIO_URI` environment variable, which the workflow sets after iiod is verified reachable.
+
+**Local reproduction** — to request a board and run the tests manually:
+
+```bash
+adi-lg request --part ad9081 --carrier zcu102 --wait 300 \
+  --run "matlab -batch \"addpath(genpath('hdl')); addpath(genpath('test')); runHWTests('zynqmp-zcu102-rev10-ad9081-vm8-l4')\""
+```
+
 

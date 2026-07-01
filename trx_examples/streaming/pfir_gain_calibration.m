@@ -41,10 +41,6 @@
 %   Edit the Configuration section below, then run the script.
 
 clear; clc;
-repoRoot = fullfile(fileparts(mfilename('fullpath')), '..', '..');
-addpath(genpath(repoRoot));
-clear classes
-rehash toolboxcache
 
 %% =========================================================
 %  Configuration  

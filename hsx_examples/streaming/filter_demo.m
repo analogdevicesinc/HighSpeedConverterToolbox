@@ -7,10 +7,6 @@
 % added to turn off/on the filter analysis tool (fvtool).
 
 clear; clc;
-repoRoot = fullfile(fileparts(mfilename('fullpath')), '..', '..');
-addpath(genpath(repoRoot));
-clear classes
-rehash toolboxcache
 
 %% Configuration
 uri = 'ip:192.168.2.1';
@@ -71,7 +67,7 @@ pf.write('pfir_auto.txt');
 % CFIR
 if cfirAllPass
     ap_taps = zeros(16, 1); ap_taps(ceil(16/2)) = 1.0;
-    cf = adi.AD9084.CFIR(ap_taps, 'gain', "0", 'complex_scalar', [32767 0]);
+    cf = adi.AD9084.CFIR(ap_taps, 'gain', "0", 'complex_scalar', 32767+0i);
 else
     cf = adi.AD9084.CFIR(BPFtaps, "gain", "12");
 end

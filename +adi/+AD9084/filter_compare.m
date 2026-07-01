@@ -37,7 +37,7 @@ if filterType == "pfir"
     refLabel = 'Disabled';
 else
     ap_taps_ref = zeros(16, 1); ap_taps_ref(ceil(16/2)) = 1.0;
-    cf_ap = adi.AD9084.CFIR(ap_taps_ref, 'gain', "0", 'complex_scalar', [32767 0]);
+    cf_ap = adi.AD9084.CFIR(ap_taps_ref, 'gain', "0", 'complex_scalar', 32767+0i);
     cf_ap.write('cfir_allpass_ref.txt');
     release(rx);
     rx.CFIRFilenames = 'cfir_allpass_ref.txt';

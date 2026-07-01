@@ -1,11 +1,7 @@
 %% pfir_gain_lut_study.m — Characterize PFIR gain stages and save gain LUT
-% Previously: gain_study.m (renamed for PR clarity)
+
 
 clear; clc;
-repoRoot = fullfile(fileparts(mfilename('fullpath')), '..', '..');
-addpath(genpath(repoRoot));
-clear classes
-rehash toolboxcache
 
 %% Configuration
 uri          = 'ip:192.168.2.1';
@@ -61,6 +57,11 @@ end
 %% Write filter files
 adi.AD9084.writeDisabledFilter(fullfile(RUN_DIR, 'gain_study_pfir_off.txt'), 'pfir');
 
+% Write CFIR all-pass to ensure no residual CFIR filter colors the measurement
+cfir_ap_taps = zeros(16, 1); cfir_ap_taps(ceil(16/2)) = 1.0;
+cf_ap = adi.AD9084.CFIR(cfir_ap_taps, 'gain', "0", 'complex_scalar', 32767+0i);
+cf_ap.write(fullfile(RUN_DIR, 'gain_study_cfir_allpass.txt'));
+
 taps = zeros(N_TAPS, 1);
 taps(TAP_POS) = TAP_FLOAT_FIXED;
 pf = adi.AD9084.PFilt(taps, 'mode', 'real_n2', 'gain', "0", 'scalar_gain', "63");
@@ -79,7 +80,7 @@ tx.MainNCOPhases         = [0 0 0 0];
 tx.ChannelNCOPhases      = [0 0 0 0];
 tx.NCOEnables            = [true false false false];
 tx.DDSFrequencies        = [TONE_FREQ_HZ, TONE_FREQ_HZ; 0, 0];
-tx.DDSScales             = [.8, .8; 0, 0];
+tx.DDSScales             = [.9, .9; 0, 0];
 tx.DDSPhases             = [90000, 0; 0, 0];
 tx();
 
@@ -90,7 +91,8 @@ rx.EnabledChannels       = 1;
 rx.SamplesPerFrame       = 16384;
 rx.EnablePFIRs           = true;
 rx.PFIRFilenames         = fullfile(RUN_DIR, 'gain_study_pfir_off.txt');
-rx.EnableCFIRs           = false;
+rx.EnableCFIRs           = true;
+rx.CFIRFilenames         = fullfile(RUN_DIR, 'gain_study_cfir_allpass.txt');
 rx.MainNCOFrequencies    = [1e9 0 0 0];
 rx.ChannelNCOFrequencies = [100e6 0 0 0];
 rx.TestMode              = 'off';

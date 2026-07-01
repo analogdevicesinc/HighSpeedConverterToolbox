@@ -1,11 +1,6 @@
 %% cfir_gain_lut_study.m — Characterize CFIR gain stages and save gain LUT
-% Previously: cfir_gain_study.m (renamed for PR clarity)
 
 clear; clc;
-repoRoot = fullfile(fileparts(mfilename('fullpath')), '..', '..');
-addpath(genpath(repoRoot));
-clear classes
-rehash toolboxcache
 
 %% Configuration
 uri          = 'ip:192.168.2.1';
@@ -49,10 +44,10 @@ if SAVE_RESULTS
 end
 
 %% Write reference CFIR all-pass filter file
-% All-pass = unity center tap, gain=0, complex_scalar=[32767 0]
+% All-pass = unity center tap, gain=0, complex_scalar=32767+0i
 allpass_taps = zeros(N_TAPS, 1);
 allpass_taps(TAP_POS) = 1.0;
-cf_ref = adi.AD9084.CFIR(allpass_taps, 'gain', "0", 'complex_scalar', [32767 0]);
+cf_ref = adi.AD9084.CFIR(allpass_taps, 'gain', "0", 'complex_scalar', 32767+0i);
 cf_ref.write(fullfile(RUN_DIR, 'cfir_gain_study_allpass.txt'));
 
 % Disable PFIR so it doesn't color the measurement
@@ -112,7 +107,7 @@ if DO_TAP_SWEEP
     for si = 1:SWEEP_N_PTS
         tv = SWEEP_TAP_VALS(si);
         t  = zeros(N_TAPS, 1);  t(TAP_POS) = tv;
-        cf_sw = adi.AD9084.CFIR(t, 'gain', "0", 'complex_scalar', [32767 0]);
+        cf_sw = adi.AD9084.CFIR(t, 'gain', "0", 'complex_scalar', 32767+0i);
         cf_sw.write(fullfile(RUN_DIR, 'cfir_gain_study_sweep_tmp.txt'));
 
         release(rx);
@@ -173,7 +168,7 @@ if DO_TAP_SWEEP_FINE
     for si = 1:SWEEP_FINE_N_PTS
         tv = fine_tap_vals(si);
         t  = zeros(N_TAPS, 1);  t(TAP_POS) = tv;
-        cf_fn = adi.AD9084.CFIR(t, 'gain', "0", 'complex_scalar', [32767 0]);
+        cf_fn = adi.AD9084.CFIR(t, 'gain', "0", 'complex_scalar', 32767+0i);
         cf_fn.write(fullfile(RUN_DIR, 'cfir_gain_study_fine_tmp.txt'));
 
         release(rx);
@@ -222,7 +217,7 @@ if DO_SHIFT_GAIN_SWEEP
 
     for si = 1:n_shift
         sg_dB = shift_gain_vals(si);
-        cf_shg = adi.AD9084.CFIR(taps_shg, 'gain', string(sg_dB), 'complex_scalar', [32767 0]);
+        cf_shg = adi.AD9084.CFIR(taps_shg, 'gain', string(sg_dB), 'complex_scalar', 32767+0i);
         cf_shg.write(fullfile(RUN_DIR, 'cfir_gain_study_shift_tmp.txt'));
 
         release(rx);

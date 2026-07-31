@@ -12,15 +12,16 @@ As with many open source packages, we use [GitHub](https://github.com/analogdevi
 
 | HDL Branch         | MATLAB Release |  Installer Package  |
 |:------------------:|:--------------:|:-------------------:|
-| 2022_R2            | R2023b         | <a href="http://swdownloads.analog.com/cse/toolboxes/hsx/master/AnalogDevicesHighSpeedConverterToolbox_v23.2.1.mltbx"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" height="40" /></a>|
+| 2026_R1            | R2025b         | Development build from the `master` branch |
 
 If you use it, and like it - please let us know. If you use it, and hate it - please let us know that too.
 
 ## Supported Tools and Releases
 
 We provide support for certain releases of MATLAB. This does not mean older releases will not work but they are not maintained. Currently supported tools are:
-- Bug fixes: MATLAB R2023b with Vivado 2021.2
-- Bug fixes and new features: MATLAB R2023b with Vivado 2022.2
+- MATLAB R2025b
+- Analog Devices HDL branch `hdl_2026_r1`
+- AMD Vivado 2025.1
 
 ## Support and Documentation
 

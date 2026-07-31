@@ -218,14 +218,19 @@
             }
             switch $carrier {
                 zcu102 {
-                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
-	            if {$rxtx == "rx" || $rxtx == "rxtx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                    set cpu_interconnect axi_hpm0_lpd_interconnect
+                    set_property -dict [list \
+                        CONFIG.NUM_CLKS {2} \
+                        CONFIG.NUM_MI {12}] [get_bd_cells $cpu_interconnect]
+                    if {$rxtx == "rx" || $rxtx == "rxtx"} {
+                        connect_bd_net \
+                            [get_bd_pins $cpu_interconnect/aclk1] \
+                            [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
                     }
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
+                        connect_bd_net \
+                            [get_bd_pins $cpu_interconnect/aclk1] \
+                            [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
                     }
                 }
             }

@@ -8,11 +8,11 @@ SHELL := /bin/bash
 MLFLAGS := -nodisplay -nodesktop -nosplash
 
 ifeq ($(MLRELEASE),)
-MLRELEASE := R2023b
+MLRELEASE := R2025b
 endif
 
 ifeq ($(HDLBRANCH),)
-HDLBRANCH := hdl_2022_r2
+HDLBRANCH := hdl_2026_r1
 endif
 
 ifeq ($(OS),Windows_NT)

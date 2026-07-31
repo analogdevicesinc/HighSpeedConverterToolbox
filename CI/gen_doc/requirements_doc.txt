@@ -4,3 +4,5 @@ mkdocs-material
 mkdocs-awesome-pages-plugin
 mkdocs-mermaid2-plugin
 mkdocs-plugin-inline-svg
+# pymdown-extensions 10.4 passes filename=None; Pygments 2.20 rejects it.
+Pygments<2.20

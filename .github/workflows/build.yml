@@ -27,6 +27,7 @@ jobs:
         uses: matlab-actions/setup-matlab@v2
         with:
             release: R2025b
+            products: DSP_System_Toolbox Fixed-Point_Designer
       - name: Test MATLAB R2025b compatibility
         uses: matlab-actions/run-command@v2
         with:

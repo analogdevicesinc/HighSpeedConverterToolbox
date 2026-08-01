@@ -293,12 +293,8 @@ classdef (Abstract) Base < ...
     
     methods (Static, Hidden)
         function ids = selectReadableAttributeChannelIDs(candidateIDs, readLengths, N)
-            assert(numel(candidateIDs) == numel(readLengths), ...
-                'Candidate IDs and read lengths must have equal size');
-            ids = candidateIDs(readLengths > 0);
-            assert(numel(ids) >= N, ...
-                'Not enough channels expose the requested AD9081 attribute');
-            ids = ids(1:N);
+            ids = adi.AD9081.selectReadableAttributeChannelIDs( ...
+                candidateIDs, readLengths, N);
         end
     end
 

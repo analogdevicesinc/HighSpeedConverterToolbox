@@ -100,12 +100,36 @@ print(f'Updated {replacements} SupportedToolVersion declarations to {version}')
 PY
 
 # Toolbox-specific HDL Coder integration scripts.
+#
+# NOTE: adi_project_xilinx.tcl is intentionally NOT overwritten. It ships with
+# the HDL branch and, since hdl_2026_r1, defines procs the reference-design
+# system_project.tcl files depend on (e.g. adi_xcvr_project, used by the
+# transceiver-based designs like daq2/ad9434/ad9265/ad9783/ad9208). The older
+# toolbox fork lacked that proc and broke "Create Project" for every non-AD9081
+# design. The HDL branch version already supports the MATLAB HDL Coder flow
+# natively via the ADI_MATLAB env var (see system_project_rxtx.tcl), so we keep
+# the branch copy and only layer the genuinely toolbox-only scripts on top.
 for script in \
-    matlab_processors.tcl adi_project_xilinx.tcl system_project_rxtx.tcl \
+    matlab_processors.tcl system_project_rxtx.tcl \
     adi_build.tcl adi_build_win.tcl fsbl_build_zynq.tcl \
     fsbl_build_zynqmp.tcl pmufw_zynqmp.tcl fixmake.sh; do
     cp "scripts/$script" "../hdl/vendor/AnalogDevices/vivado/projects/scripts/$script"
 done
+
+# Guard: the HDL branch must provide adi_xcvr_project. If a future branch drops
+# or renames it, fail loudly here rather than deep inside a Vivado create-project
+# run that only surfaces after ~15 minutes of IP packaging.
+XCVR_TCL="../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx.tcl"
+if ! grep -q 'proc adi_xcvr_project' "$XCVR_TCL"; then
+    echo "adi_project_xilinx.tcl is missing 'proc adi_xcvr_project' (HDL branch $HDLBRANCH)" >&2
+    exit 1
+fi
+
+# adi_xcvr_project shells out to build a standalone xcvr_wizard Vivado project.
+# The toolbox runs the top-level design in HDL Coder in-memory mode (ADI_MATLAB),
+# but that mode must NOT leak into the nested build or it skips create_project.
+# Patch the sub-make to run with ADI_MATLAB/MATLAB unset. Idempotent.
+python3 scripts/patch_xcvr_matlab_env.py "$XCVR_TCL"
 
 mkdir -p ../hdl/vendor/AnalogDevices/vivado/projects/common/boot
 cp -r scripts/boot/. ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/

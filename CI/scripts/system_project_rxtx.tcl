@@ -17,6 +17,11 @@ adi_make::lib all
 
 set ::env(SKIP_SYNTHESIS) 1
 set ::env(MATLAB) 1
+# hdl_2026_r1 renamed the HDL Coder in-memory-project contract from the legacy
+# MATLAB env var to ADI_MATLAB inside adi_project_xilinx.tcl. Set both so the
+# reference design reuses HDL Coder's project (instead of calling create_project)
+# regardless of which HDL branch supplies adi_project_xilinx.tcl.
+set ::env(ADI_MATLAB) 1
 set ::env(ADI_USE_OOC_SYNTHESYS) 1
 
 source ./system_project.tcl

@@ -29,6 +29,39 @@ classdef R2025bCompatibilityTests < matlab.unittest.TestCase
             testCase.verifyEqual(delay(input), zeros(size(input), 'like', input));
         end
 
+        function ad9081MainNCOUsesReadablePhysicalChannels(testCase)
+            % Physical AD9081 m8_l4 datapath exposes main_* attributes on
+            % only two of the four fine channels; the coarse-capable
+            % channels are non-contiguous. Selection must pick exactly the
+            % readable channels, preserving their physical order.
+            candidateIDs = {'voltage0_i', 'voltage1_i', ...
+                'voltage2_i', 'voltage3_i'};
+            readLengths = [2, -22, -22, 2];
+            ids = adi.AD9081.Base.selectReadableAttributeChannelIDs( ...
+                candidateIDs, readLengths, 2);
+            testCase.verifyEqual(ids, {'voltage0_i', 'voltage3_i'});
+        end
+
+        function ad9081CoarseSelectionErrorsWhenTooFewReadable(testCase)
+            candidateIDs = {'voltage0_i', 'voltage1_i', ...
+                'voltage2_i', 'voltage3_i'};
+            readLengths = [2, -22, -22, -22];
+            testCase.verifyError(@() ...
+                adi.AD9081.Base.selectReadableAttributeChannelIDs( ...
+                    candidateIDs, readLengths, 2), ?MException);
+        end
+
+        function ad9081FineSelectionUsesAllContiguousChannels(testCase)
+            % When every channel is readable (e.g. RX or a fully populated
+            % datapath) selection returns the first N in order.
+            candidateIDs = {'voltage0_i', 'voltage1_i', ...
+                'voltage2_i', 'voltage3_i'};
+            readLengths = [2, 2, 2, 2];
+            ids = adi.AD9081.Base.selectReadableAttributeChannelIDs( ...
+                candidateIDs, readLengths, 4);
+            testCase.verifyEqual(ids, candidateIDs);
+        end
+
         function pFilterHalfComplexUsesStreamingDelay(testCase)
             taps = zeros(2, 96);
             widths = 16 .* ones(2, 24);

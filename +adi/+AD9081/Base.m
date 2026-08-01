@@ -129,23 +129,29 @@ classdef (Abstract) Base < ...
                 idx = idx(idx2);
                 filteredMap{end+1} = map{idx};
             end
-            % Count unique items with XDUCX 
+            % Count unique coarse (CDUC/CDDC) and fine (FDUC/FDDC) data
+            % converters. filteredMap holds one entry per unique fine
+            % path, so several fine paths can share a single coarse
+            % converter (e.g. FDUC1/2/3 all feeding CDUC0). Counting
+            % raw occurrences therefore overestimates the coarse count;
+            % track which converter indices are present instead.
             if isTx
                 ss = 'U';
             else
                 ss = 'D';
             end
-            numFDUCX = 0; numCDUCX = 0;
+            finePresent = false(1,8); coarsePresent = false(1,8);
             for DC = 0:7
                 for k=1:length(filteredMap)
                     if contains(filteredMap{k},sprintf('FD%sC%d',ss,DC))
-                        numFDUCX = numFDUCX + 1;
+                        finePresent(DC+1) = true;
                     end
                     if contains(filteredMap{k},sprintf('CD%sC%d',ss,DC))
-                        numCDUCX = numCDUCX + 1;
+                        coarsePresent(DC+1) = true;
                     end
                 end
             end
+            numFDUCX = sum(finePresent); numCDUCX = sum(coarsePresent);
             num_coarse = numCDUCX; num_fine = numFDUCX; num_data = numFDUCX*2;
             if ~doNotCloseConnection
                 obj.releaseImpl();
@@ -171,10 +177,8 @@ classdef (Abstract) Base < ...
             end
             if contains(attr,'channel_')
                 N = obj.num_fine_attr_channels;
-                stride = 1;
             elseif contains(attr,'main_')
                 N = obj.num_coarse_attr_channels;
-                stride = obj.num_fine_attr_channels/N;
             else
                 error('Unknown attribute name');
             end
@@ -185,9 +189,9 @@ classdef (Abstract) Base < ...
             assert(c1 && c2,...
                 sprintf('%s expected to be at most size [1x%d]',name,N));
             if obj.ConnectedToDevice
+                ids = obj.getAttributeChannelIDs(attr, phy, output, N);
                 for k=1:N
-                    id = sprintf('voltage%d_i',(k-1)*stride);
-                    obj.setAttributeLongLong(id,attr,value(k),output, tol, phy);
+                    obj.setAttributeLongLong(ids{k},attr,value(k),output, tol, phy);
                 end
             end
         end
@@ -198,10 +202,8 @@ classdef (Abstract) Base < ...
             end
             if contains(attr,'channel_')
                 N = obj.num_fine_attr_channels;
-                stride = 1;
             elseif contains(attr,'main_')
                 N = obj.num_coarse_attr_channels;
-                stride = obj.num_fine_attr_channels/N;
             else
                 error('Unknown attribute name');
             end
@@ -212,9 +214,9 @@ classdef (Abstract) Base < ...
             assert(c1 && c2,...
                 sprintf('%s expected to be at most size [1x%d]',name,N));
             if obj.ConnectedToDevice
+                ids = obj.getAttributeChannelIDs(attr, phy, output, N);
                 for k=1:N
-                    id = sprintf('voltage%d_i',(k-1)*stride);
-                    obj.setAttributeDouble(id,attr,value(k),output, tol, phy);
+                    obj.setAttributeDouble(ids{k},attr,value(k),output, tol, phy);
                 end
             end
         end
@@ -225,10 +227,8 @@ classdef (Abstract) Base < ...
             end
             if contains(attr,'channel_') || strcmpi(attr,'en')
                 N = obj.num_fine_attr_channels;
-                stride = 1;
             elseif contains(attr,'main_')
                 N = obj.num_coarse_attr_channels;
-                stride = obj.num_fine_attr_channels/N;
             else
                 error('Unknown attribute name');
             end
@@ -238,11 +238,46 @@ classdef (Abstract) Base < ...
             assert(c1 && c2,...
                 sprintf('%s expected to be at most size [1x%d]',name,N));
             if obj.ConnectedToDevice
+                ids = obj.getAttributeChannelIDs(attr, phy, output, N);
                 for k=1:N
-                    id = sprintf('voltage%d_i',(k-1)*stride);
-                    obj.setAttributeBool(id,attr,value(k),output, phy);
+                    obj.setAttributeBool(ids{k},attr,value(k),output, phy);
                 end
             end
+        end
+
+        function ids = getAttributeChannelIDs(obj, attr, phy, output, N)
+            % Resolve the physical voltage channel IDs used to write an
+            % attribute. Fine (channel_*) attributes map directly to
+            % voltage0_i..voltage(N-1)_i. Coarse (main_*) attributes are
+            % only exposed on the subset of physical channels that own a
+            % coarse data converter; on some HDL datapaths several fine
+            % channels share a coarse converter, so the coarse-capable
+            % channels are not contiguous. Probe readability to select
+            % them robustly instead of assuming a fixed stride.
+            if contains(attr,'main_')
+                ids = obj.getReadableAttributeChannelIDs(attr, phy, output, N);
+            else
+                ids = obj.getFineAttributeChannelIDs(N);
+            end
+        end
+
+        function ids = getFineAttributeChannelIDs(~, N)
+            ids = cell(1, N);
+            for k = 1:N
+                ids{k} = sprintf('voltage%d_i', k-1);
+            end
+        end
+
+        function ids = getReadableAttributeChannelIDs(obj, attr, phy, output, N)
+            candidateIDs = obj.getFineAttributeChannelIDs(obj.max_num_fine_attr_channels);
+            readLengths = -ones(1, numel(candidateIDs));
+            for k = 1:numel(candidateIDs)
+                chanPtr = iio_device_find_channel(obj, phy, candidateIDs{k}, output);
+                if cPtrCheck(obj, chanPtr) == 0
+                    [readLengths(k), ~] = iio_channel_attr_read(obj, chanPtr, attr, 1024);
+                end
+            end
+            ids = obj.selectReadableAttributeChannelIDs(candidateIDs, readLengths, N);
         end
 
         function attr = iio_channel_is_output(obj, chanPtr)
@@ -256,6 +291,17 @@ classdef (Abstract) Base < ...
         
     end
     
+    methods (Static, Hidden)
+        function ids = selectReadableAttributeChannelIDs(candidateIDs, readLengths, N)
+            assert(numel(candidateIDs) == numel(readLengths), ...
+                'Candidate IDs and read lengths must have equal size');
+            ids = candidateIDs(readLengths > 0);
+            assert(numel(ids) >= N, ...
+                'Not enough channels expose the requested AD9081 attribute');
+            ids = ids(1:N);
+        end
+    end
+
     %% External Dependency Methods
     methods (Hidden, Static)
         

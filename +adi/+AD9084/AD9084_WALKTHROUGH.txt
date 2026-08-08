@@ -1,0 +1,291 @@
+================================================================================
+AD9084 Filter Support — Walkthrough & Findings
+================================================================================
+
+OVERVIEW
+--------
+This contribution adds PFIR and CFIR filter class support to the AD9084 driver,
+along with gain calibration tools, real-time spectrum analysis, and hardware
+tests. It enables users to design, load, compare, and characterize digital
+filters on the AD9084 MxFE platform.
+
+New files added to +adi/+AD9084/:
+  - PFilt.m              PFIR filter class (design, quantize, write, response)
+  - CFIR.m               CFIR filter class (design, quantize, write, response)
+  - FIRcoeff.m           Tap quantization to Q15 hex (used by both classes)
+  - writeDisabledFilter.m  Generates disabled/all-pass reference filter files
+  - filter_demo.m        End-to-end walkthrough script
+  - filter_compare.m     Before/after comparison with theoretical overlay
+  - plotting_fft.m       Real-time FFT plotting function
+  - pfir_gain_lut_study.m  PFIR gain characterization → saves gain_lut.m
+  - cfir_gain_lut_study.m  CFIR gain characterization → saves cfir_gain_lut.m
+  - pfir_gain_calibration.m  Find normalization anchor (max tap output)
+  - pfir_sweep_study.m   Tap value sweep and linearity analysis
+
+
+Modified files:
+  - Base.m, Rx.m, Tx.m  Added EnablePFIRs/EnableCFIRs properties, NCO bugfix
+  - test/AD9084HWTests.m Added filter loading and attenuation tests
+
+
+PREREQUISITES
+-------------
+  - MATLAB R2023b or later (Signal Processing Toolbox for fdesign)
+  - AD9084 evaluation board with IIO firmware
+  - Network connectivity to the board (default IP: 192.168.2.1)
+  - libiio MATLAB bindings (included in ToolboxCommon submodule)
+
+
+SETUP
+-----
+1. Open MATLAB
+2. Navigate to the repo root:
+     cd('C:\Dev\HSCT_Fork')
+3. Add the repo to the MATLAB path:
+     addpath(genpath(pwd))
+4. Set your board IP in whichever script you run (see Configuration sections)
+
+
+SIGNAL CHAIN (critical for understanding filter behavior)
+---------------------------------------------------------
+The AD9084 Rx digital signal chain order is:
+
+  ADC (full rate 20 GHz)
+    → PFIR (operates at full ADC rate)
+      → CDDC (MainNCO mixing + coarse decimation)
+        → FDDC (ChannelNCO mixing + fine decimation)
+          → CFIR (operates at decimated rate 2.5 GHz)
+            → Output to DMA
+
+Key implications:
+  - PFIR sees the signal at its absolute RF frequency in the ADC's Nyquist zone.
+    A tone at RF = MainNCO + ChannelNCO + DDS offset appears at that absolute
+    frequency in the PFIR domain.
+  - CFIR sees the signal at baseband AFTER all NCO mixing.  
+  - If you do not set the channel NCO to something other than 0Hz there will be a
+    offset of 100 MHz.
+  - The "observable window" in the PFIR's 20 GHz domain is centered at
+    (MainNCO + ChannelNCO), spanning ±Fs_decimated/2 around that center.
+
+
+SCRIPT-BY-SCRIPT GUIDE
+=======================
+
+filter_demo.m
+-------------
+Purpose: Complete walkthrough — design filters, load them to hardware, capture
+         spectra, and compare measured vs theoretical response.
+
+Configuration (top of file):
+  uri         = 'ip:192.168.2.1';   % Board IP
+  pfirCompare = 0/1;                % Enable PFIR before/after comparison
+  cfirCompare = 0/1;                % Enable CFIR before/after comparison
+  pfirAllPass = 0/1;                % 1=load all-pass PFIR, 0=load designed filter
+  cfirAllPass = 0/1;                % 1=load all-pass CFIR, 0=load designed filter
+  txMode      = 'dds'/'noise'/etc.  % TX excitation mode
+
+How to run:
+  1. Set uri to your board IP
+  2. Set switches (e.g., cfirCompare=1 to see CFIR comparison)
+  3. Run the script section-by-section (Ctrl+Enter per section)
+
+Expected output:
+  - Filter design creates LPF, BPF, HPF taps using fdesign.arbmag
+  - Theoretical response plotted via .response() method
+  - Live FFT via plotting_fft(rx) at the end
+  - If pfirCompare/cfirCompare=1: comparison figure with before/after spectra
+    and measured vs theoretical delta overlay
+
+filter_compare.m
+----------------
+Purpose: Called by filter_demo.m (or standalone). Captures spectrum with filter
+         active, swaps to all-pass/disabled reference, captures again, overlays
+         theoretical response.
+
+Usage:
+  adi.AD9084.filter_compare(rx, filterObj, 'pfir', 'pfir_auto.txt')
+  adi.AD9084.filter_compare(rx, filterObj, 'cfir', 'cfir_auto.txt')
+
+Output: 2-subplot figure
+  - Top: before (reference) vs after (filter active) spectra
+  - Bottom: measured delta vs theoretical .response() shape
+
+The theoretical response for PFIR accounts for NCO offset — it crops the full
+20 GHz response to the observable window and shifts to baseband for overlay.
+
+PFilt.m
+-------
+Purpose: PFIR filter class. Encapsulates tap storage, mode inference, gain
+         settings, file output, and frequency response computation.
+
+Key methods:
+  pf = adi.AD9084.PFilt(taps, 'mode','real_n2', 'gain',"18", 'scalar_gain',"63")
+  pf.write('pfir_auto.txt')         % Write filter file for hardware
+  pf.response(20e9)                 % Plot theoretical response (no output args)
+  [H, f] = pf.response(20e9)       % Return complex response vector
+  [H, f] = pf.response(20e9, useLUT=true)  % Apply gain LUT correction
+
+Parameters written to filter file (affect hardware behavior):
+  - mode: real_n2, real_n4, half_complex, matrix, disabled
+  - gain: 0 to 24 dB in 6 dB steps (shift gain)
+  - scalar_gain: 0-63 (multiplier = N/64)
+
+CFIR.m
+------
+Purpose: CFIR filter class. Same pattern as PFilt but for the channelizer FIR.
+
+Key methods:
+  cf = adi.AD9084.CFIR(taps, 'gain',"12", 'complex_scalar',[32767 0])
+  cf.write('cfir_auto.txt')
+  cf.response(2.5e9, useLUT=true)
+
+Parameters:
+  - gain: -18 to +12 dB in 6 dB steps
+  - complex_scalar: [real, imag] pair (normalized by 32767)
+  - sparse_mode: 0=normal (16 taps), 1=sparse (16 non-zero in 128 positions)
+
+FIRcoeff.m
+----------
+Purpose: Quantizes floating-point taps to Q15 hex for hardware register loading.
+  - Scales by 2^15 (full scale = 32767)
+  - Clamps to int16 range [-32768, 32767]
+  - Returns hex_I and hex_Q columns (duplicated for real taps)
+
+pfir_gain_lut_study.m  (previously: gain_study.m)
+--------------------------------------------------
+Purpose: Characterize PFIR shift gain and scalar gain stages. Sweeps each gain
+         setting, measures actual hardware output, and saves a lookup table.
+
+Configuration:
+  uri = 'ip:192.168.2.1';
+  SAVE_RESULTS = true;
+
+Output: Saves to +adi/+AD9084/gain_study_results/run_NNN/
+  - gain_lut.m          MATLAB function returning LUT struct
+  - Figures (shift gain sweep, scalar sweep, fine sweep)
+
+The LUT is consumed by PFilt.response(Fs, useLUT=true) to correct the
+theoretical response for actual hardware gain behavior.
+
+cfir_gain_lut_study.m  (previously: cfir_gain_study.m)
+------------------------------------------------------
+Purpose: Same as above but for CFIR gain stages.
+
+Output: Saves to +adi/+AD9084/cfir_gain_study_results/run_NNN/
+  - cfir_gain_lut.m     MATLAB function returning LUT struct
+
+pfir_gain_calibration.m
+-----------------------
+Purpose: Find the normalization anchor — the tap value that produces maximum
+         hardware output. Used to understand the relationship between tap
+         coefficient and actual gain.
+
+Phases:
+  Phase 0: Reference level with PFIR disabled
+  Phase 1: Sweep tap positions (which position is loudest?)
+  Phase 2: Sweep tap values at best position (what value saturates?)
+  Phase 3: Statistical validation (repeated measurements for confidence)
+
+Configuration:
+  URI = 'ip:192.168.2.1';
+  DIAG_ONLY = 0;     % 0=full calibration, 1=spectrum check only
+  RUN_SWEEP = 0;     % 0=skip Phase 2 sweep, 1=run it
+  DIAG_TAP_POS = 8;  % Middle tap position for diagnostics
+
+pfir_sweep_study.m
+------------------
+Purpose: Detailed tap value sweep — tests linearity, finds clipping point,
+         checks register overflow behavior.
+
+
+plotting_fft.m
+--------------
+Purpose: Real-time FFT plotting function. Takes an rx object and continuously
+         captures + plots the spectrum until the figure is closed.
+
+Usage:
+  plotting_fft(rx)   % rx must already be primed (rx() called once)
+
+
+AD9084HWTests.m (in test/)
+--------------------------
+Purpose: Hardware test suite verifying:
+  - Basic RX streaming
+  - DDS tone transmission and reception
+  - Two-channel operation
+  - PFIR filter loading (all-pass)
+  - CFIR filter loading (all-pass)
+  - PFIR attenuation of stopband tones (≥6 dB threshold)
+  - CFIR attenuation of stopband tones (≥6 dB threshold)
+
+Running tests:
+  results = runtests('test/AD9084HWTests')
+
+Configuration:
+  Edit line 4: uri = 'ip:192.168.2.1';
+
+
+KEY FINDINGS
+============
+
+1. CFIR bypass mode is unreliable on hardware - no output produced
+   Setting bypass=1 in the CFIR header does not reliably bypass the filter.
+   Workaround: use an all-pass filter (center tap = 1.0, all others = 0) to
+   achieve effective bypass.
+
+3. FIRcoeff quantization is Q15 (2^15 scaling)
+   A tap value of 1.0 maps to hardware value 32767 (int16 max). This was
+   previously documented as 2^14 in some comments.
+
+4. Gain LUT corrects flat gain only, not filter shape
+   The LUT maps programmed gain settings to actual measured gain (vertical
+   offset). The filter SHAPE comes from freqz(taps) and is not affected by
+   the LUT. The LUT matters for absolute level accuracy, not passband ripple.
+
+5. DDS phase convention
+   [90000, 0] = positive frequency (I leads Q by 90 degrees)
+   [0, 90000] = negative frequency (Q leads I by 90 degrees)
+   Phases are in milli-degrees.
+
+6. rx.SamplingRate returns post-decimation rate only
+   There is no IIO property exposing the full ADC clock rate. The PFIR scripts
+   hardcode 20e9 for the full-rate computation.
+
+7. Scalar gain behavior
+   The scalar_gain parameter (0-63) acts as a fractional multiplier of N/64.
+   scalar_gain=63 is near-unity. scalar_gain=0 is silence. The UG says that 
+   scalar_gain=64 is possible, this is false.
+
+
+KNOWN ISSUES
+============
+
+1. CFIR bypass mode switch in filter text file doesn't work reliably 
+(I have not gotten it to work) — use all-pass instead.
+
+2. You need to set ChannelNCOFrequencies to something other than 0Hz, if not
+   there will be a 100 MHz offset in the tone.
+
+
+WORKFLOW: Running a Full Filter Characterization
+================================================
+
+Step 1: Generate gain LUTs (one-time per board)
+  >> pfir_gain_lut_study    % takes ~5-10 minutes
+  >> cfir_gain_lut_study    % takes ~5-10 minutes
+
+Step 2: Design and load filters
+  >> filter_demo            % with pfirAllPass=0, cfirAllPass=0
+
+Step 3: Compare measured vs theoretical
+  >> Set pfirCompare=1 or cfirCompare=1 in filter_demo
+  >> Run the comparison section
+
+Step 4: Use .response() with LUT for accurate predictions
+  >> [H, f] = pf.response(20e9, useLUT=true);
+  >> [H, f] = cf.response(2.5e9, useLUT=true);
+
+
+================================================================================
+End of walkthrough
+================================================================================

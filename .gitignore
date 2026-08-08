@@ -3,3 +3,22 @@
 **/slprj/**
 AD9361_Filter_Wizard/*TestFiltWiz*.m
 AD9361_Filter_Wizard/.previous_ip_addr
+
+# MATLAB auto-save and generated artifacts
+*.asv
+*.mat
+
+# AD9084 generated filter/calibration files
++adi/+AD9084/pfir_auto.txt
++adi/+AD9084/cfir_auto.txt
++adi/+AD9084/gain_study_*.txt
++adi/+AD9084/pfir_cal_*.txt
++adi/+AD9084/FIRcoeff.txt
++adi/+AD9084/pfilt_taps.txt
++adi/+AD9084/Rx.txt
+
+# Gain study results (generated measurement data)
++adi/+AD9084/gain_study_results/
++adi/+AD9084/cfir_gain_study_results/
+hsx_examples/streaming/gain_study_results/
+hsx_examples/streaming/cfir_gain_study_results/

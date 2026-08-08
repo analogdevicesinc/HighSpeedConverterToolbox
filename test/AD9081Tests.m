@@ -15,6 +15,19 @@ classdef AD9081Tests < matlab.unittest.TestCase
             freq = freqRangeRx(ind);
         end
         
+        function nsd = measureADCNSD(data, sampleRate, outputBits)
+            fullScale = 2^(outputBits-1);
+            nsd = 20*log10(rms(double(data(:)))/fullScale) ...
+                - 10*log10(sampleRate/2);
+        end
+
+        function nsd = measureDACNSD(data, outputBits)
+            % DACGeneric defines RMS noise as ConverterNSD + 30 dBFS.
+            fullScale = 2^(outputBits-1);
+            noise = double(data(:)) - mean(double(data(:)));
+            nsd = 20*log10(rms(noise)/fullScale) - 30;
+        end
+
         function [IRR, out_level] = measureIIR(input_data, Freq_bin, plot_enable )
             % Assume a complex data input that is coherent.  Measure the fund_level,
             % image_level, and IRR
@@ -46,149 +59,75 @@ classdef AD9081Tests < matlab.unittest.TestCase
         
     end
     
+    methods (TestMethodSetup)
+        function seedRandomStream(testCase)
+            previousState = rng;
+            testCase.addTeardown(@() rng(previousState));
+            rng(0, "twister");
+        end
+    end
+
     methods (Test)
         
         function testAD9081Converter(testCase)
-            
             adc = adi.sim.common.ADC9081;
-            
-            %% Measurement
-            sa = dsp.SpectrumAnalyzer;
-            sa.SampleRate = adc.SampleRate;
-            sa.YLimits = [-180 10];
-            sa.SpectralAverages = 100;
-            sa.SpectrumType = 'Power density';
-            sa.SpectrumUnits = 'dBFS';
-            sa.NumInputPorts = 1;
-            sa.FullScaleSource = 'Property';
-            sa.FullScale = 2^(adc.Bits-1);
-            sa.CursorMeasurements.Enable = true;
-            
-            %% Test ADC
-            logs = [];
-            for k=1:10
-                data = zeros(1e5,1);
-                o = adc(data);
-                sa(o);
-                if sa.isNewDataReady
-                    m = getMeasurementsData(sa);
-                    logs = [logs;m.CursorMeasurements.Power]; %#ok<AGROW>
-                end
+            logs = zeros(1, 10);
+            for k = 1:numel(logs)
+                output = adc(zeros(1e5, 1));
+                logs(k) = testCase.measureADCNSD( ...
+                    output, adc.SampleRate, adc.Bits);
             end
-            
-            %% Verify
-            % Reduce target by 3dB since we are measuring complex spectrum
-            testCase.verifyEqual(mean(logs),adc.ConverterNSD-3,'AbsTol',1,...
-                'Incorrect noise floor')
+            testCase.verifyEqual(mean(logs), adc.ConverterNSD, ...
+                'AbsTol', 1, 'Incorrect noise floor')
         end
         
         function testAD9081NyquistMode(testCase)
-            
             rx = adi.sim.AD9081.Rx;
-            ConverterNSD = -150;
-            ADCOutputBits = 12;
-            
-            %% Measurement
-            sa = dsp.SpectrumAnalyzer;
-            sa.SampleRate = rx.SampleRate;
-            sa.YLimits = [-180 10];
-            sa.SpectralAverages = 100;
-            sa.SpectrumType = 'Power density';
-            sa.SpectrumUnits = 'dBFS';
-            sa.NumInputPorts = 1;
-            sa.FullScaleSource = 'Property';
-            sa.FullScale = 2^(ADCOutputBits-1);
-            sa.CursorMeasurements.Enable = true;
-            
-            %% Test MxFE
-            logs = [];
-            for k=1:10
-                data = zeros(1e5,1);
-                o = rx(data,data,data,data);
-                sa(o);
-                if sa.isNewDataReady
-                    m = getMeasurementsData(sa);
-                    logs = [logs;m.CursorMeasurements.Power]; %#ok<AGROW>
-                end
+            converterNSD = -150;
+            outputBits = 12;
+            logs = zeros(1, 10);
+            for k = 1:numel(logs)
+                data = zeros(1e5, 1);
+                output = rx(data, data, data, data);
+                logs(k) = testCase.measureADCNSD( ...
+                    output, rx.SampleRate, outputBits);
             end
-            
-            %% Verify
-            % Reduce target by 3dB since we are measuring complex spectrum
-            testCase.verifyEqual(mean(logs),ConverterNSD-3,'AbsTol',1,...
-                'Incorrect noise floor')
+            testCase.verifyEqual(mean(logs), converterNSD, ...
+                'AbsTol', 1, 'Incorrect noise floor')
         end
         
         function testAD9081CDDCDec(testCase)
-            
             rx = adi.sim.AD9081.Rx;
             rx.MainDataPathDecimation = 4;
-            ConverterNSD = -150;
-            ADCOutputBits = 12;
-            
-            %% Measurement
-            sa = dsp.SpectrumAnalyzer;
-            sa.SampleRate = rx.SampleRate/rx.MainDataPathDecimation;
-            sa.YLimits = [-180 10];
-            sa.SpectralAverages = 100;
-            sa.SpectrumType = 'Power density';
-            sa.SpectrumUnits = 'dBFS';
-            sa.NumInputPorts = 1;
-            sa.FullScaleSource = 'Property';
-            sa.FullScale = 2^(ADCOutputBits-1);
-            sa.CursorMeasurements.Enable = true;
-            
-            %% Test MxFE
-            logs = [];
-            for k=1:10
-                data = zeros(1e5,1);
-                o = rx(data,data,data,data);
-                sa(o);
-                if sa.isNewDataReady
-                    m = getMeasurementsData(sa);
-                    logs = [logs;m.CursorMeasurements.Power]; %#ok<AGROW>
-                end
+            converterNSD = -150;
+            outputBits = 12;
+            outputRate = rx.SampleRate/rx.MainDataPathDecimation;
+            logs = zeros(1, 10);
+            for k = 1:numel(logs)
+                data = zeros(1e5, 1);
+                output = rx(data, data, data, data);
+                logs(k) = testCase.measureADCNSD( ...
+                    output, outputRate, outputBits);
             end
-            
-            %% Verify
-            % Reduce target by 3dB since we are measuring complex spectrum
-            testCase.verifyEqual(mean(logs),ConverterNSD-3,'AbsTol',1,...
-                'Incorrect noise floor')
+            testCase.verifyEqual(mean(logs), converterNSD, ...
+                'AbsTol', 1, 'Incorrect noise floor')
         end
         
         function testAD9081FDDCDec(testCase)
-            
             rx = adi.sim.AD9081.Rx;
             rx.ChannelizerPathDecimation = 4;
-            ConverterNSD = -150;
-            ADCOutputBits = 12;
-            
-            %% Measurement
-            sa = dsp.SpectrumAnalyzer;
-            sa.SampleRate = rx.SampleRate/rx.ChannelizerPathDecimation;
-            sa.YLimits = [-180 10];
-            sa.SpectralAverages = 100;
-            sa.SpectrumType = 'Power density';
-            sa.SpectrumUnits = 'dBFS';
-            sa.NumInputPorts = 1;
-            sa.FullScaleSource = 'Property';
-            sa.FullScale = 2^(ADCOutputBits-1);
-            sa.CursorMeasurements.Enable = true;
-            
-            %% Test MxFE
-            logs = [];
-            for k=1:10
-                data = zeros(1e4,1);
-                o = rx(data,data,data,data);
-                sa(o);
-                if sa.isNewDataReady
-                    m = getMeasurementsData(sa);
-                    logs = [logs;m.CursorMeasurements.Power]; %#ok<AGROW>
-                end
+            converterNSD = -150;
+            outputBits = 12;
+            outputRate = rx.SampleRate/rx.ChannelizerPathDecimation;
+            logs = zeros(1, 10);
+            for k = 1:numel(logs)
+                data = zeros(1e4, 1);
+                output = rx(data, data, data, data);
+                logs(k) = testCase.measureADCNSD( ...
+                    output, outputRate, outputBits);
             end
-            
-            %% Verify
-            testCase.verifyEqual(mean(logs),ConverterNSD-6,'AbsTol',3,...
-                'Incorrect noise floor')
+            testCase.verifyEqual(mean(logs), converterNSD, ...
+                'AbsTol', 3, 'Incorrect noise floor')
         end
         
         function testAD9081RxTonesWithCDDCNCO(testCase)
@@ -204,7 +143,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             sw.SamplesPerFrame = 1e4;
             
             if testCase.EnableVisuals
-                sa = dsp.SpectrumAnalyzer;
+                sa = spectrumAnalyzer;
                 sa.SampleRate = sw.SampleRate;
                 sa.YLimits = [-150 10];
                 sa.SpectralAverages = 100;
@@ -225,7 +164,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             
             freqEst = testCase.estFrequency(double(o1),rx.SampleRate);
             truePos = rx.CDDCNCOFrequencies(1) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);
             
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
@@ -246,7 +185,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             sw.SamplesPerFrame = 1e4;
             
             if testCase.EnableVisuals
-                sa = dsp.SpectrumAnalyzer;
+                sa = spectrumAnalyzer;
                 sa.SampleRate = sw.SampleRate;
                 sa.YLimits = [-150 10];
                 sa.SpectralAverages = 100;
@@ -265,7 +204,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             
             freqEst = testCase.estFrequency(double(o1),rx.SampleRate);
             truePos = rx.FDDCNCOFrequencies(1) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);
             
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
@@ -321,7 +260,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             rx.Gains = [12,12,12,12];
             
             %% Measurement
-            sa = dsp.SpectrumAnalyzer;
+            sa = spectrumAnalyzer;
             sa.SampleRate = fs;
             sa.SpectralAverages = 100;
             sa.YLimits = [-150 10];
@@ -459,7 +398,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             fs = rx.SampleRate;
             
             %% Measurement
-            sa = dsp.SpectrumAnalyzer;
+            sa = spectrumAnalyzer;
             sa.SampleRate = fs;
             sa.SpectralAverages = 100;
             sa.YLimits = [-150 10];
@@ -600,7 +539,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             fs = rx.SampleRate;
             
             %% Measurement
-            sa = dsp.SpectrumAnalyzer;
+            sa = spectrumAnalyzer;
             sa.SampleRate = fs;
             sa.SpectralAverages = 100;
             sa.YLimits = [-150 10];
@@ -739,7 +678,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             fs = rx.SampleRate;
             
             %% Measurement
-            sa = dsp.SpectrumAnalyzer;
+            sa = spectrumAnalyzer;
             sa.SampleRate = fs;
             sa.SpectralAverages = 100;
             sa.YLimits = [-150 10];
@@ -827,111 +766,45 @@ classdef AD9081Tests < matlab.unittest.TestCase
         %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
         
         function testAD9081NyquistDAC(testCase)
-            
             dac = adi.sim.common.DAC9081;
-            
-            %% Measurement
-            sa = dsp.SpectrumAnalyzer;
-            sa.SampleRate = dac.SampleRate;
-            sa.YLimits = [-180 10];
-            sa.SpectralAverages = 100;
-            sa.SpectrumType = 'Power';
-            sa.SpectrumUnits = 'dBFS';
-            sa.NumInputPorts = 1;
-            sa.FullScaleSource = 'Property';
-            sa.FullScale = 2^(dac.Bits-1);
-            sa.CursorMeasurements.Enable = true;
-            
-            %% Test MxFE
-            logs = [];
-            data = fi(2^15.*ones(1e4,1),1,16,0); % Full scale
-            for k=1:100
-                o = dac(data);
-                sa(o);
-                if sa.isNewDataReady
-                    sa.CursorMeasurements.XLocation = [0 2e9];
-                    m = getMeasurementsData(sa);
-                    logs = [logs;diff(m.CursorMeasurements.Power)]; %#ok<AGROW>
-                end
+            logs = zeros(1, 20);
+            data = fi(2^15.*ones(1e4, 1), 1, 16, 0);
+            for k = 1:numel(logs)
+                output = dac(data);
+                logs(k) = testCase.measureDACNSD(output, dac.Bits);
             end
-            logs(1) = [];
-            %% Verify
-            testCase.verifyEqual(mean(logs),dac.ConverterNSD,'AbsTol',2,...
-                'Incorrect noise floor')
+            testCase.verifyEqual(mean(logs), dac.ConverterNSD, ...
+                'AbsTol', 2, 'Incorrect noise floor')
         end
         
-        
          function testAD9081NyquistTX(testCase)
-            
             tx = adi.sim.AD9081.Tx;
             dac = adi.sim.common.DAC9081;
-            
-            %% Measurement
-            sa = dsp.SpectrumAnalyzer;
-            sa.SampleRate = tx.SampleRate;
-            sa.YLimits = [-180 10];
-            sa.SpectralAverages = 100;
-            sa.SpectrumType = 'Power';
-            sa.SpectrumUnits = 'dBFS';
-            sa.NumInputPorts = 1;
-            sa.FullScaleSource = 'Property';
-            sa.FullScale = 2^(dac.Bits-1);
-            sa.CursorMeasurements.Enable = true;
-            
-            %% Test MxFE
-            logs = [];
-            data = fi(2^15.*ones(1e4,1),1,16,0);% Full scale
-            for k=1:100
-                o = tx(data,data,data,data,data,data,data,data);
-                sa(o);
-                if sa.isNewDataReady
-                    sa.CursorMeasurements.XLocation = [0 2e9];
-                    m = getMeasurementsData(sa);
-                    logs = [logs;diff(m.CursorMeasurements.Power)]; %#ok<AGROW>
-                end
+            logs = zeros(1, 20);
+            data = fi(2^15.*ones(1e4, 1), 1, 16, 0);
+            for k = 1:numel(logs)
+                output = tx(data, data, data, data, data, data, data, data);
+                logs(k) = testCase.measureDACNSD(output, dac.Bits);
             end
-            logs(1) = [];
-            %% Verify
-            testCase.verifyEqual(mean(logs),dac.ConverterNSD,'AbsTol',2,...
-                'Incorrect noise floor')
-         end
+            testCase.verifyEqual(mean(logs), dac.ConverterNSD, ...
+                'AbsTol', 2, 'Incorrect noise floor')
+        end
         
          function testAD9081TXFDUCInt(testCase)
-            
             tx = adi.sim.AD9081.Tx;
             tx.ChannelizerPathInterpolation = 2;
             dac = adi.sim.common.DAC9081;
-            
-            %% Measurement
-            sa = dsp.SpectrumAnalyzer;
-            sa.SampleRate = tx.SampleRate;
-            sa.YLimits = [-180 10];
-            sa.SpectralAverages = 100;
-            sa.SpectrumType = 'Power';
-            sa.SpectrumUnits = 'dBFS';
-            sa.NumInputPorts = 1;
-            sa.FullScaleSource = 'Property';
-            sa.FullScale = 2^(dac.Bits-1);
-            sa.CursorMeasurements.Enable = true;
-            
-            %% Test MxFE
-            logs = [];
-            for k=1:30
-                data = complex(fi(2^15.*ones(1e4,1),1,16,0));
-                o = tx(data,data,data,data,data,data,data,data);
-                sa(o);
-                if sa.isNewDataReady
-                    sa.CursorMeasurements.XLocation = [0 2e9];
-                    m = getMeasurementsData(sa);
-                    logs = [logs;diff(m.CursorMeasurements.Power)]; %#ok<AGROW>
-                end
+            logs = zeros(1, 20);
+            data = complex(fi(2^15.*ones(1e4, 1), 1, 16, 0));
+            for k = 1:numel(logs)
+                output = tx(data, data, data, data, data, data, data, data);
+                logs(k) = testCase.measureDACNSD(output, dac.Bits);
             end
-            logs(1:10) = [];
-            %% Verify
-            testCase.verifyEqual(mean(logs),dac.ConverterNSD,'AbsTol',2,...
-                'Incorrect noise floor')
-         end
-        
+            expectedNSD = dac.ConverterNSD + ...
+                20*log10(tx.ChannelizerPathInterpolation);
+            testCase.verifyEqual(mean(logs), expectedNSD, ...
+                'AbsTol', 2, 'Incorrect noise floor')
+        end
         
          function testAD9081TXCDUCNCO(testCase)
             
@@ -948,7 +821,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             sw.SamplesPerFrame = 1e4;
             
             if testCase.EnableVisuals
-                sa = dsp.SpectrumAnalyzer;
+                sa = spectrumAnalyzer;
                 sa.SampleRate = tx.SampleRate;
                 sa.YLimits = [-180 10];
                 sa.SpectralAverages = 100;
@@ -960,7 +833,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
                 sa.CursorMeasurements.Enable = true;
             end
             
-                sa2 = dsp.SpectrumAnalyzer;
+                sa2 = spectrumAnalyzer;
                 sa2.SampleRate = tx.SampleRate;
                 sa2.YLimits = [-180 10];
                 sa2.SpectralAverages = 100;
@@ -985,14 +858,14 @@ classdef AD9081Tests < matlab.unittest.TestCase
             
             freqEst = testCase.estFrequency(double(o1),tx.SampleRate);
             truePos = tx.CDUCNCOFrequencies(1) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);            
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
 
             freqEst = testCase.estFrequency(double(o2),tx.SampleRate);
             truePos = tx.CDUCNCOFrequencies(2) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);            
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
@@ -1014,7 +887,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             sw.SamplesPerFrame = 1e4;
             
             if testCase.EnableVisuals
-                sa = dsp.SpectrumAnalyzer;
+                sa = spectrumAnalyzer;
                 sa.SampleRate = tx.SampleRate;
                 sa.YLimits = [-180 10];
                 sa.SpectralAverages = 100;
@@ -1026,7 +899,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
                 sa.CursorMeasurements.Enable = true;
             end
             
-                sa2 = dsp.SpectrumAnalyzer;
+                sa2 = spectrumAnalyzer;
                 sa2.SampleRate = tx.SampleRate;
                 sa2.YLimits = [-180 10];
                 sa2.SpectralAverages = 100;
@@ -1051,14 +924,14 @@ classdef AD9081Tests < matlab.unittest.TestCase
             
             freqEst = testCase.estFrequency(double(o1),tx.SampleRate);
             truePos = tx.FDUCNCOFrequencies(1) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);            
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
 
             freqEst = testCase.estFrequency(double(o2),tx.SampleRate);
             truePos = tx.FDUCNCOFrequencies(2) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);            
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
@@ -1086,7 +959,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             sw.ComplexOutput = true;
             
             if testCase.EnableVisuals
-                sa = dsp.SpectrumAnalyzer;
+                sa = spectrumAnalyzer;
                 sa.SampleRate = tx.SampleRate;
                 sa.YLimits = [-180 10];
                 sa.SpectralAverages = 100;
@@ -1098,7 +971,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
                 sa.CursorMeasurements.Enable = true;
             end
             
-            sa2 = dsp.SpectrumAnalyzer;
+            sa2 = spectrumAnalyzer;
             sa2.SampleRate = tx.SampleRate;
             sa2.YLimits = [-180 10];
             sa2.SpectralAverages = 100;
@@ -1123,14 +996,14 @@ classdef AD9081Tests < matlab.unittest.TestCase
             
             freqEst = testCase.estFrequency(double(o1),tx.SampleRate);
             truePos = tx.CDUCNCOFrequencies(1) + tx.FDUCNCOFrequencies(1) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);            
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
 
             freqEst = testCase.estFrequency(double(o2),tx.SampleRate);
             truePos = tx.CDUCNCOFrequencies(2) + tx.FDUCNCOFrequencies(2) + sw.Frequency;
-            [~,loc] = min(truePos - freqEst);
+            [~,loc] = min(abs(truePos - freqEst));
             freqEst = freqEst(loc);            
             testCase.verifyEqual(freqEst,truePos,'RelTol',0.01,...
                 'Frequency of DDS tone unexpected')
@@ -1172,7 +1045,7 @@ classdef AD9081Tests < matlab.unittest.TestCase
             sw.ComplexOutput = true;
             
             if testCase.EnableVisuals
-                scope = dsp.TimeScope;
+                scope = timescope;
                 scope.NumInputPorts = 4;
                 scope.SampleRate = tx.SampleRate*[1, 1, 1, 1];
                 scope.TimeSpan = sw.SamplesPerFrame/sw.SampleRate;

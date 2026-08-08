@@ -174,7 +174,7 @@ classdef PFilter < matlab.System
                 end
             end
             
-            obj.DelayLine = dsp.DelayLine('Length',tapGroups*4);
+            obj.DelayLine = adi.sim.common.DelayLine('Length',tapGroups*4);
         end
         
         function [z1,z2] = stepImpl(obj,u1,u2)
@@ -268,7 +268,10 @@ classdef PFilter < matlab.System
         end
         
         function resetImpl(obj)
-            % Initialize / reset discrete-state properties
+            for filter = 1:numel(obj.Filters)
+                reset(obj.Filters{filter});
+            end
+            reset(obj.DelayLine);
         end
     end
 end

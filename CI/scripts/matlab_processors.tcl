@@ -1,5 +1,44 @@
- proc preprocess_bd {project carrier rxtx} {
+ proc adi_cpu_interconnect_cell {} {
+    # hdl_2026_r1 renamed the control/CPU AXI interconnect from the fixed
+    # "axi_cpu_interconnect" to a carrier-specific SmartConnect created by
+    # ad_hpmx_interconnect (e.g. axi_hpm0_lpd_interconnect on ZynqMP/zcu102,
+    # axi_gp0_interconnect on Zynq-7000, axi_fpd_interconnect on Versal).
+    # Resolve the actual cell so the MATLAB post-build preprocessing keeps
+    # working across HDL branches instead of matching zero cells and failing
+    # "'set_property' expects at least one object".
+    set candidates [list \
+        axi_hpm0_lpd_interconnect \
+        axi_gp0_interconnect \
+        axi_fpd_interconnect \
+        axi_dp_interconnect \
+        axi_axi_interconnect \
+        axi_cpu_interconnect]
+    foreach name $candidates {
+        if {[llength [get_bd_cells -quiet $name]] == 1} {
+            return $name
+        }
+    }
+    # Last resort: any single *_interconnect whose S00_AXI is driven by the
+    # processing system's control master.
+    foreach cell [get_bd_cells -quiet *_interconnect] {
+        if {[llength [get_bd_intf_pins -quiet $cell/S00_AXI]] == 1} {
+            set src [get_bd_intf_nets -quiet -of_objects [get_bd_intf_pins $cell/S00_AXI]]
+            if {[string match *M_AXI_HPM0_LPD* $src] || \
+                [string match *M_AXI_FPD* $src] || \
+                [string match *M_AXI_GP0* $src] || \
+                [string match *M_AXI_HPM0_FPD* $src]} {
+                return $cell
+            }
+        }
+    }
+    error "adi_cpu_interconnect_cell: could not resolve CPU AXI interconnect cell"
+}
+
+proc preprocess_bd {project carrier rxtx} {
     puts "Preprocessing $project $carrier $rxtx"
+
+    set cpu_ic [adi_cpu_interconnect_cell]
+    puts "Using CPU interconnect cell: $cpu_ic"
 
     switch $project {
         daq2 {
@@ -46,14 +85,14 @@
             }
             switch $carrier {
                 zcu102 {
-    		    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
+    		    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells $cpu_ic]
                     if {$rxtx == "rx" || $rxtx == "rxtx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/aclk1] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
                     }
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/aclk1] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
                     }
                 }
             }
@@ -104,9 +143,9 @@
             switch $carrier {                
                 zc706 {                    
                     if {$rxtx == "rx"} {
-                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9434/adc_clk]
-                        connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M08_ARESETN]
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/M08_ACLK] [get_bd_pins axi_ad9434/adc_clk]
+                        connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins ${cpu_ic}/M08_ARESETN]
                     }
                 }
             }
@@ -147,8 +186,8 @@
             switch $carrier {                
                 zc706 {                    
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins sys_ps7/FCLK_CLK0]
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/M08_ACLK] [get_bd_pins sys_ps7/FCLK_CLK0]
                     }
                 }
             }
@@ -218,14 +257,19 @@
             }
             switch $carrier {
                 zcu102 {
-                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
-	            if {$rxtx == "rx" || $rxtx == "rxtx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                    set cpu_interconnect axi_hpm0_lpd_interconnect
+                    set_property -dict [list \
+                        CONFIG.NUM_CLKS {2} \
+                        CONFIG.NUM_MI {12}] [get_bd_cells $cpu_interconnect]
+                    if {$rxtx == "rx" || $rxtx == "rxtx"} {
+                        connect_bd_net \
+                            [get_bd_pins $cpu_interconnect/aclk1] \
+                            [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
                     }
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
+                        connect_bd_net \
+                            [get_bd_pins $cpu_interconnect/aclk1] \
+                            [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
                     }
                 }
             }
@@ -241,8 +285,8 @@
             switch $carrier {
                 zc706 {
     		    if {$rxtx == "rx" } {
-                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9265/adc_clk]
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/M08_ACLK] [get_bd_pins axi_ad9265/adc_clk]
                     }
                 }
             }
@@ -266,8 +310,8 @@
             switch $carrier {                
                 zc706 {                    
                     if {$rxtx == "rx" } {
-                        set_property -dict [list CONFIG.NUM_MI {11}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ACLK] [get_bd_pins util_fmcjesdadc1_xcvr/rx_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {11}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/M10_ACLK] [get_bd_pins util_fmcjesdadc1_xcvr/rx_clk_0]
                     }
                 }
             }
@@ -281,11 +325,11 @@
             }
             switch $carrier {                
                 zcu102 {                    
-                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
+                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells $cpu_ic]
                         
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {4}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins axi_ad9783/dac_div_clk]
+                        set_property -dict [list CONFIG.NUM_MI {4}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/aclk1] [get_bd_pins axi_ad9783/dac_div_clk]
                     }
                 }
             }
@@ -304,10 +348,10 @@
             }
             switch $carrier {                
                 vcu118 {     
-                    set_property -dict [list  CONFIG.NUM_CLKS {3}] [get_bd_cells axi_cpu_interconnect]             
+                    set_property -dict [list  CONFIG.NUM_CLKS {3}] [get_bd_cells $cpu_ic]             
                     if {$rxtx == "rx"} {
-                        set_property -dict [list CONFIG.NUM_MI {18}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk2] [get_bd_pins glbl_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {18}] [get_bd_cells $cpu_ic]
+                        connect_bd_net [get_bd_pins ${cpu_ic}/aclk2] [get_bd_pins glbl_clk_0]
                     }
                 }
             }

@@ -1,0 +1,18 @@
+/* Overrides applied only when the documentation is built for MATLAB's help
+   browser (make doc_ml).  MATLAB supplies its own navigation and search from
+   helptoc.xml, so the theme chrome is redundant there. */
+header,
+footer,
+.sphinxsidebar,
+.localtoc,
+.repotoc-tree,
+.search-area,
+.related,
+.breadcrumb,
+.domain-popups {
+    display: none !important;
+}
+
+.documentwrapper {
+    margin: 0;
+}

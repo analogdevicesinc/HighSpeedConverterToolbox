@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toc>
+   <tocitem target="index.html">Analog Devices, Inc High-Speed Converter Toolbox
+{%- for page in pages %}
+      <tocitem target="{{ page.target }}">{{ page.title }}</tocitem>
+{%- endfor %}
+      <tocitem target="models.html">Behavioral Models
+          <tocitem target="models/ad9081/top_level.tex.html">AD9081: MxFE
+              <tocitem target="models/ad9081/adc.tex.html">ADC</tocitem>
+              <tocitem target="models/ad9081/dac.tex.html">DAC</tocitem>
+              <tocitem target="models/ad9081/ddc2.tex.html">DDC</tocitem>
+              <tocitem target="models/ad9081/duc.tex.html">DUC</tocitem>
+              <tocitem target="models/ad9081/pfilt.tex.html">PFILT</tocitem>
+         </tocitem>
+     </tocitem>
+      <tocitem target="sysobjects/index.html">Device Interfaces
+{%- for obj in devices %}
+          <tocitem target="sysobjects/{{ obj }}.html">{{ obj }}</tocitem>
+{%- endfor %}
+       </tocitem>
+      <tocitem target="hdlrefdesigns/index.html">HDL Reference Designs
+{%- for design in designs %}
+          <tocitem target="hdlrefdesigns/{{ design }}.html">{{ design }}</tocitem>
+{%- endfor %}
+       </tocitem>
+   </tocitem>
+</toc>

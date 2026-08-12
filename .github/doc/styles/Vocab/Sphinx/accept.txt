@@ -22,7 +22,8 @@ upack
 cpack
 tpl
 uri
-ip usb
+ip
+usb
 dout
 Pluto
 pluto
@@ -82,3 +83,10 @@ PLL
 [mM]ultiblock
 codecov
 
+Stratix
+[tT]cl
+[bB]itstreams?
+devicetree
+hdlsetuptoolpath
+num
+attr

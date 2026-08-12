@@ -24,5 +24,8 @@ jobs:
     - name: Lint doc
       run: |
         export PATH="./bin:$PATH"
-        vale CI/gen_doc/docs
+        # Only the hand written pages. docs/_tmpl holds Jinja templates and
+        # docs/models holds MATLAB live script exports, neither of which is
+        # prose that can be meaningfully edited.
+        vale CI/gen_doc/docs/*.md
 

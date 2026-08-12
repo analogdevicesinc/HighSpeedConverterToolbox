@@ -1,6 +1,6 @@
 Simulink
 Zedboard
-iio
+[iI][iI][oO]
 Loopback
 Verilog
 datapaths
@@ -22,8 +22,8 @@ upack
 cpack
 tpl
 uri
-ip
-usb
+[iI][pP]
+[uU][sS][bB]
 dout
 Pluto
 pluto

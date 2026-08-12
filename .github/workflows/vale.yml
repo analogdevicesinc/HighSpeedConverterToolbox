@@ -24,5 +24,5 @@ jobs:
     - name: Lint doc
       run: |
         export PATH="./bin:$PATH"
-        vale docs
+        vale CI/gen_doc/docs
 

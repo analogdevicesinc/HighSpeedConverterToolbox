@@ -32,11 +32,11 @@ The device model is split into two components, one modeling the transmit path an
 
 
 
-   -  [ADC and ADC Mux](../adc.tex) 
-   -  [DAC](../dac.tex) 
-   -  [Programmable FIR Filters (PFILT)](../pfilt.tex) 
-   -  [Digital Down Converters](../ddc2.tex) 
-   -  [Digital Up Converters](../duc.tex) 
+   -  [ADC and ADC Mux](adc.tex.md) 
+   -  [DAC](dac.tex.md) 
+   -  [Programmable FIR Filters (PFILT)](pfilt.tex.md) 
+   -  [Digital Down Converters](ddc2.tex.md) 
+   -  [Digital Up Converters](duc.tex.md) 
 
 # Model Limitations
 

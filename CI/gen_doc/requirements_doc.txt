@@ -1,6 +1,7 @@
 numpy
-mkdocs<1.5
-mkdocs-material
-mkdocs-awesome-pages-plugin
-mkdocs-mermaid2-plugin
-mkdocs-plugin-inline-svg
+jinja2
+sphinx>=5.0
+myst-parser
+https://github.com/analogdevicesinc/doctools/releases/download/latest/adi-doctools.tar.gz
+sphinxcontrib-mermaid
+pillow

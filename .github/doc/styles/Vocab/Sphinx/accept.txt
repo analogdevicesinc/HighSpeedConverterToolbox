@@ -41,11 +41,11 @@ fullscale
 lookup
 Datasheet
 baseband
-decimator
+[dD]ecimator
 midscale
 Hostname
 logical
-interpolator
+[iI]nterpolator
 datarate
 decimation
 adijif

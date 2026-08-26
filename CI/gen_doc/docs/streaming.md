@@ -12,7 +12,7 @@ Since libiio is cross-platform it can be used from Windows, Linux, or macOS base
 
 ## Connecting and Configuration
 
-Connecting to hardware is done by setting the **uri** property of the system object interface. The **uri** for libiio always has the convention "*< backend >:< address >*", where *backend* can be ip,usb, or serial. *address* will be specific to the backend. This is documented in the [libiio API](https://analogdevicesinc.github.io/libiio/master/libiio/group__Context.html#gafdcee40508700fa395370b6c636e16fe).
+Connecting to hardware is done by setting the **uri** property of the system object interface. The **uri** for libiio always has the convention "*< backend >:< address >*," where *backend* can be ip,usb, or serial. *address* will be specific to the backend. This is documented in the [libiio API](https://analogdevicesinc.github.io/libiio/master/libiio/group__Context.html#gafdcee40508700fa395370b6c636e16fe).
 
 Below is a basic example of setting up an AD9361 receiver using an Ethernet/IP backend where the address of the target system is 192.168.2.1:
 ```{code-block} matlab

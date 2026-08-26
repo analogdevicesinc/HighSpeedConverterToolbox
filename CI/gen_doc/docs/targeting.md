@@ -1,6 +1,6 @@
 # HDL Targeting with HDL-Coder
 
-High-Speed Converter Toolbox supports the IP Core generation flow from MathWorks which allows for automated integration of DSP into HDL reference designs from Analog Devices. This workflow will take Simulink subsystems, run HDL-Coder to generate source Verilog, and then integrate that into a larger reference design. The figure below is a simplified block diagram of a SoC (Fabric+ARM) device, where specialized IP are inserted into the receive and transmit datapaths. This is supported on specific FPGA families and high-speed based reference designs. This support is based on the Zynq HDL-Coder and support
+High-Speed Converter Toolbox supports the IP Core generation flow from MathWorks which allows for automated integration of DSP into HDL reference designs from Analog Devices. This Workflow will take Simulink subsystems, run HDL-Coder to generate source Verilog, and then integrate that into a larger reference design. The figure below is a simplified block diagram of a SoC (Fabric+ARM) device, where specialized IP are inserted into the receive and transmit datapaths. This is supported on specific FPGA families and high-speed based reference designs. This support is based on the Zynq HDL-Coder and support
 
 ```{image} assets/MATLAB_HDL_Ref_Design.png
 :class: screenshot
@@ -14,7 +14,7 @@ High-Speed Converter Toolbox supports the IP Core generation flow from MathWorks
 
 To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2022.2. Using other versions are not supported. To build the necessary BOOT.BIN files will require the Xilinx SDK as well.
 
-Once you have the installed the necessary 3rd party tools MATLAB needs to be told where they are installed by use of the [hdlsetuptoolpath](https://www.mathworks.com/help/hdlcoder/ref/hdlsetuptoolpath.html) command. For Windows the following MATLAB command can be used:
+Once you have the installed the necessary third-party tools MATLAB needs to be told where they are installed by use of the [hdlsetuptoolpath](https://www.mathworks.com/help/hdlcoder/ref/hdlsetuptoolpath.html) command. For Windows the following MATLAB command can be used:
 
 ```matlab
 hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', 'C:\Xilinx\Vivado\2022.2\bin\vivado.bat');
@@ -55,7 +55,7 @@ This will open the HDL-Coder menu, from here the Workflow Advisor is selectable.
 :class: screenshot
 ```
 
-Once launch go to Step 1.1 on the left side column. Then on the right side of the window select "IP Core Generation" for "Target workflow". Then the ADI reference designs should be available in the "Target platform" menu as so:
+Once launch go to Step 1.1 on the left side column. Then on the right side of the window select "IP Core Generation" for "Target Workflow." Then the ADI reference designs should be available in the "Target platform" menu as so:
 
 ```{image} assets/hwa_11_crop.png
 :class: screenshot

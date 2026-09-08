@@ -12,18 +12,30 @@ As with many open source packages, we use [GitHub](https://github.com/analogdevi
 
 | HDL Branch         | MATLAB Release |  Installer Package  |
 |:------------------:|:--------------:|:-------------------:|
-| 2022_R2            | R2023b         | <a href="http://swdownloads.analog.com/cse/toolboxes/hsx/master/AnalogDevicesHighSpeedConverterToolbox_v23.2.1.mltbx"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" height="40" /></a>|
+| 2026_R1            | R2025b         | Development build from the `master` branch |
 
 If you use it, and like it - please let us know. If you use it, and hate it - please let us know that too.
 
 ## Supported Tools and Releases
 
 We provide support for certain releases of MATLAB. This does not mean older releases will not work but they are not maintained. Currently supported tools are:
-- Bug fixes: MATLAB R2023b with Vivado 2021.2
-- Bug fixes and new features: MATLAB R2023b with Vivado 2022.2
+- MATLAB R2025b
+- Analog Devices HDL branch `hdl_2026_r1`
+- AMD Vivado 2025.1
+
+## Hardware Validation
+
+The `MATLAB Hardware Tests` workflow reserves compatible hardware through the
+labgrid coordinator at `10.0.0.41:20408`, provisions it, exports `IIO_URI`, and
+runs `runHWTests` with MATLAB R2025b. Set the `MATLAB_BIN` repository variable
+to the discovered R2025b executable on the selected hardware runner. Hardware
+validation requires at least five tests with no failures, errors, or skipped
+tests before the workflow passes.
+
+The current board map supports DAQ3 on VCU118. AD9081 `m8_l4` support is also
+defined and becomes active when a matching ZCU102 place is available.
 
 ## Support and Documentation
 
 All support questions should be posted in our [EngineerZone](https://ez.analog.com/linux-device-drivers/linux-software-drivers) forums. Documentation is included within the toolbox but additional documentation is avaible on the [ADI Wiki](https://wiki.analog.com/resources/tools-software/hsx-toolbox).
-
 

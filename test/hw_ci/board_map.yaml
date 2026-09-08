@@ -1,0 +1,10 @@
+# Maps live labgrid places to identifiers accepted by runHWTests.
+boards:
+  - carrier: vcu118
+    daughter-board: daq3
+    matlab_board: xilinx-vcu118-fmcdaq3
+  # This leg becomes active after an AD9081 m8_l4 rig is restored and tagged.
+  - carrier: zcu102
+    daughter-board: ad9081
+    hdl-config: m8_l4
+    matlab_board: zynqmp-zcu102-rev10-ad9081-vm8-l4

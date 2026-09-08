@@ -1,5 +1,12 @@
 function runHWTests(board)
 
+if nargin == 0
+    board = getenv('board');
+end
+if isempty(board)
+    error('A hardware board identifier is required.');
+end
+
 import matlab.unittest.TestRunner;
 import matlab.unittest.TestSuite;
 import matlab.unittest.plugins.TestReportPlugin;
@@ -17,7 +24,8 @@ switch board
             "zynqmp-zcu102-rev10-fmcdaq2"}
         at = 'DAQ2';
     case {"zynq-zc706-adv7511-fmcdaq3-revC", ...
-            "zynqmp-zcu102-rev10-fmcdaq3"}
+            "zynqmp-zcu102-rev10-fmcdaq3", ...
+            "xilinx-vcu118-fmcdaq3"}
         at = 'DAQ3';
     case {"zynqmp-zcu102-rev10-ad9081-v204b-txmode9-rxmode4", ...
             "zynqmp-zcu102-rev10-ad9081-v204c-txmode0-rxmode1", ...
@@ -34,12 +42,8 @@ end
 
     ats = {'DAQ2Tests','DAQ3Tests','AD9081HWTests','FMCOMMS11Test'};
 
-    if nargin == 0
-        suite = testsuite(ats);
-    else
-        suite = testsuite(ats);
-        suite = selectIf(suite,HasProcedureName(ContainsSubstring(at,'IgnoringCase',true)));
-    end
+    suite = testsuite(ats);
+    suite = selectIf(suite,HasProcedureName(ContainsSubstring(at,'IgnoringCase',true)));
     try
         runner = matlab.unittest.TestRunner.withTextOutput('OutputDetail',1);
         runner.addPlugin(DiagnosticsValidationPlugin)

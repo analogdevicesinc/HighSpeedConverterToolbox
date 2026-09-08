@@ -3,32 +3,32 @@
 flags = gitParseFlags()
 
 dockerConfig = getDockerConfig(['MATLAB','Vivado','Internal'], matlabHSPro=false)
-dockerConfig.add("-e MLRELEASE=R2023b")
+dockerConfig.add("-e MLRELEASE=R2025b")
 dockerHost = 'docker'
 
 ////////////////////////////
 
-hdlBranches = ['main','hdl_2022_r2']
+hdlBranches = ['main','hdl_2026_r1']
 
 stage("Build Toolbox") {
-    dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) { 
+    dockerParallelBuild(hdlBranches, dockerHost, dockerConfig) {
 	branchName ->
 	try {
 		withEnv(['HDLBRANCH='+branchName,'LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
 		    checkout scm
-		    sh 'git submodule update --init' 
+		    sh 'git submodule update --init'
 		    sh 'make -C ./CI/scripts build'
 		    sh 'make -C ./CI/scripts gen_tlbx'
 		}
         } catch(Exception ex) {
-		if (branchName == 'hdl_2022_r2') {
+		if (branchName == 'hdl_2026_r1') {
 		    error('Production Toolbox Build Failed')
 		}
 		else {
 		    unstable('Development Build Failed')
 		}
         }
-        if (branchName == 'hdl_2022_r2') {
+        if (branchName == 'hdl_2026_r1') {
             local_stash('builtSources')
 	    sh 'ls -lR'
             archiveArtifacts artifacts: 'hdl/*', followSymlinks: false, allowEmptyArchive: true
@@ -38,11 +38,11 @@ stage("Build Toolbox") {
 
 /////////////////////////////////////////////////////
 
-boardNames = ['daq2','ad9081','ad9434','ad9739a','ad9265', 'fmcjesdadc1','ad9783']
-dockerConfig.add("-e HDLBRANCH=hdl_2022_r2")
+boardNames = ['daq2','ad9081','ad9434','ad9265','ad9783']
+dockerConfig.add("-e HDLBRANCH=hdl_2026_r1")
 
 cstage("HDL Tests", "", flags) {
-    dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+    dockerParallelBuild(boardNames, dockerHost, dockerConfig) {
         branchName ->
         withEnv(['BOARD='+branchName]) {
             cstage("Source", branchName, flags) {
@@ -77,7 +77,7 @@ def board = 'ad9208';
 def nodeLabel = 'baremetal && high_memory';
 deployments[board] = { node(nodeLabel) {
     cstage("Baremetal HDL Test", "", flags) {
-        withEnv(['BOARD='+board,'MLRELEASE=R2023b','HDLBRANCH=hdl_2022_r2','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
+        withEnv(['BOARD='+board,'MLRELEASE=R2025b','HDLBRANCH=hdl_2026_r1','LC_ALL=C.UTF-8','LANG=C.UTF-8']) {
             try {
                 cstage("AD9208 HDL Test", "", flags) {
                     echo "Node: ${env.NODE_NAME}"
@@ -101,7 +101,7 @@ parallel deployments
 boardNames = ['NonHW']
 
 cstage("NonHW Tests", "", flags) {
-    dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+    dockerParallelBuild(boardNames, dockerHost, dockerConfig) {
         branchName ->
         withEnv(['BOARD='+branchName]) {
             cstage("NonHW", branchName, flags) {
@@ -118,7 +118,7 @@ cstage("NonHW Tests", "", flags) {
 classNames = ['DAQ2']
 
 cstage("Hardware Streaming Tests", "", flags) {
-    dockerParallelBuild(classNames, dockerHost, dockerConfig) { 
+    dockerParallelBuild(classNames, dockerHost, dockerConfig) {
         branchName ->
         withEnv(['HW='+branchName]) {
             local_unstash("builtSources")
@@ -148,7 +148,7 @@ node('docker') {
 // dockerConfig.add("-e HDLBRANCH=hdl_2019_r2")
 
 // stage("HDL Tests") {
-//     dockerParallelBuild(boardNames, dockerHost, dockerConfig) { 
+//     dockerParallelBuild(boardNames, dockerHost, dockerConfig) {
 //         branchName ->
 //         withEnv(['BOARD='+branchName]) {
 //             stage("Synth") {

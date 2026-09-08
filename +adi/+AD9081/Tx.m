@@ -145,13 +145,31 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
         function set.DDROffloadEnable(obj, value)
             obj.DDROffloadEnable = value;
             if obj.ConnectedToDevice
-                obj.setDebugAttributeBool('pl_ddr_fifo_enable',value, true, obj.iioDev);
+                obj.setDDROffloadEnableIfSupported(value);
             end
         end
     end
     
     %% API Functions
     methods (Hidden, Access = protected)
+
+        function setDDROffloadEnableIfSupported(obj, value)
+            % The pl_ddr_fifo_enable debug attribute controls the PL DDR
+            % transmit FIFO offload. It is only present on HDL datapaths
+            % that instantiate the DDR offload block; newer AD9081
+            % reference designs (e.g. hdl_2026_r1 m8_l4) omit it. Probe
+            % for the attribute and skip the write when it is absent so
+            % streaming still works on both datapath variants.
+            if obj.hasDebugAttribute('pl_ddr_fifo_enable', obj.iioDev)
+                obj.setDebugAttributeBool('pl_ddr_fifo_enable', value, ...
+                    true, obj.iioDev);
+            end
+        end
+
+        function tf = hasDebugAttribute(obj, attr, dev)
+            [nBytes, ~] = obj.iio_device_debug_attr_read(dev, attr, 1024);
+            tf = nBytes >= 0;
+        end
         
         function setupImpl(obj, data)
             if strcmp(obj.DataSource,'DMA')
@@ -206,8 +224,7 @@ classdef Tx < adi.AD9081.Base & adi.common.Tx
             if strcmp(obj.DataSource,'DDS')
                 obj.DDSUpdate();
             else
-                obj.setDebugAttributeBool('pl_ddr_fifo_enable',...
-                    obj.DDROffloadEnable, false, obj.iioDev);
+                obj.setDDROffloadEnableIfSupported(obj.DDROffloadEnable);
             end
         end
 

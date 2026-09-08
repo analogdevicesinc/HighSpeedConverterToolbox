@@ -22,7 +22,7 @@ copyright = '2021, Travis F. Collins'
 author = 'Travis F. Collins'
 
 # The full version, including alpha/beta/rc tags
-release = '21.1.1'
+release = '25.2.1'
 
 
 # -- General configuration ---------------------------------------------------

@@ -1,0 +1,38 @@
+name: MATLAB Hardware Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  hw-matlab:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.pull_request.labels.*.name, 'hw-request')
+    uses: tfcollins/labgrid-plugins/.github/workflows/matlab-hw-request.yml@v3.5
+    with:
+      coordinator: 10.0.0.41:20408
+      board-map: test/hw_ci/board_map.yaml
+      runner-label: ${{ vars.HW_REQUEST_RUNNER || 'hw-lab' }}
+      preflight-runner-label: ${{ vars.HW_PREFLIGHT_RUNNER || 'hw-coordinator' }}
+      matlab-bin: ${{ vars.MATLAB_BIN }}
+
+  verify-hardware-results:
+    needs: hw-matlab
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require successful hardware workflow
+        if: needs.hw-matlab.result != 'success'
+        run: |
+          echo "Hardware workflow result: ${{ needs.hw-matlab.result }}" >&2
+          exit 1
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: matlab-junit-*
+          path: hw-results
+          merge-multiple: true
+      - name: Require complete passing hardware tests
+        run: python CI/scripts/check_hw_junit.py --minimum-tests 5 hw-results/*_HWTestResults.xml

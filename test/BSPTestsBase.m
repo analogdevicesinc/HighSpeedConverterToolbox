@@ -161,12 +161,27 @@ classdef BSPTestsBase < matlab.unittest.TestCase
         end
         
         function setVivadoPath(~,vivado)
-            if ispc
-                pathname = ['C:\Xilinx\Vivado\',vivado,'\bin\vivado.bat'];
-            elseif isunix
-                pathname = ['/opt/Xilinx/Vivado/',vivado,'/bin/vivado'];
+            pathname = getenv('VIVADO_BIN');
+            if isempty(pathname)
+                if ispc
+                    command = 'where vivado.bat';
+                else
+                    command = 'command -v vivado';
+                end
+                [status, pathname] = system(command);
+                if status == 0
+                    pathname = strtrim(strtok(pathname, newline));
+                else
+                    pathname = '';
+                end
             end
-            assert(exist(pathname,'file')>0,'Correct version of Vivado is unavailable or in a non-standard location');
+            assert(~isempty(pathname) && exist(pathname,'file')>0, ...
+                ['Vivado ', vivado, ' is unavailable; set VIVADO_BIN or ', ...
+                 'add the correct vivado executable to PATH']);
+            [status, output] = system(['"', pathname, '" -version']);
+            assert(status == 0 && contains(lower(output), ...
+                lower(['Vivado v', vivado])), ...
+                'Expected Vivado %s at %s', vivado, pathname);
             hdlsetuptoolpath('ToolName', 'Xilinx Vivado', ...
                 'ToolPath', pathname);
             pause(4);

@@ -48,6 +48,7 @@ classdef DAQ3Tests < HardwareTests
         function testDAQ3RxWithTxDDS(testCase)
             % Test DDS output
             tx = adi.DAQ3.Tx('uri',testCase.uri);
+            testCase.addTeardown(@() release(tx));
             tx.DataSource = 'DDS';
             toneFreq = 45e6;
             tx.DDSFrequencies = repmat(toneFreq,2,2);
@@ -74,6 +75,7 @@ classdef DAQ3Tests < HardwareTests
         function testDAQ3RxWithTxDDSTwoChan(testCase)
             % Test DDS output
             tx = adi.DAQ3.Tx('uri',testCase.uri);
+            testCase.addTeardown(@() release(tx));
             tx.DataSource = 'DDS';
             toneFreq1 = 160e6;
             toneFreq2 = 300e6;
@@ -114,6 +116,7 @@ classdef DAQ3Tests < HardwareTests
             y = swv1();
             
             tx = adi.DAQ3.Tx('uri',testCase.uri);
+            testCase.addTeardown(@() release(tx));
             tx.DataSource = 'DMA';
             tx.EnableCyclicBuffers = true;
             tx(y);
@@ -150,6 +153,7 @@ classdef DAQ3Tests < HardwareTests
             y2 = swv1();
             
             tx = adi.DAQ3.Tx('uri',testCase.uri);
+            testCase.addTeardown(@() release(tx));
             tx.DataSource = 'DMA';
             tx.EnableCyclicBuffers = true;
             tx.EnabledChannels = [1,2];
@@ -178,4 +182,3 @@ classdef DAQ3Tests < HardwareTests
     end
     
 end
-

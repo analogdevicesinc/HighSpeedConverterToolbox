@@ -6,27 +6,19 @@
 SHELL := /bin/bash
 
 MLFLAGS := -nodisplay -nodesktop -nosplash
+MATLAB_BIN ?= matlab
+MATLAB_RELEASE_ASSERT = actual=regexprep(version('-release'),'^R',''); expected=regexprep('$(MLRELEASE)','^R',''); assert(strcmpi(actual,expected),'Expected MATLAB %s, found %s',expected,actual);
 
 ifeq ($(MLRELEASE),)
-MLRELEASE := R2023b
+MLRELEASE := R2025b
 endif
 
 ifeq ($(HDLBRANCH),)
-HDLBRANCH := hdl_2022_r2
+HDLBRANCH := hdl_2026_r1
 endif
 
 ifeq ($(OS),Windows_NT)
-MLPATH := /cygdrive/c/Program\ Files/MATLAB
 MLFLAGS := $(MLFLAGS) -wait
-else
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-MLPATH := /opt/MATLAB
-endif
-ifeq ($(UNAME_S),Darwin)
-MLPATH := /Applications
-MLRELEASE := MATLAB_${MLRELEASE}.app
-endif
 endif
 
 ifeq ($(BOARD),)
@@ -37,7 +29,7 @@ ifeq ($(INCLUDE_EXAMPLES),)
 INCLUDE_EXAMPLES := 1
 endif
 
-GITTAG := $(shell git describe --tags HEAD)
+GITTAG := $(shell git describe --tags HEAD 2>/dev/null || printf 'untagged')
 
 .ONESHELL:
 build:
@@ -81,38 +73,38 @@ test_installer:
 	cp *.mltbx test/ ; \
 	cp hdl/vendor/AnalogDevices/hdlcoder_board_customization.m test/hdlcoder_board_customization_local.m ; \
 	sed -i "s/hdlcoder_board_customization/hdlcoder_board_customization_local/g" test/hdlcoder_board_customization_local.m ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('test');runInstallerTests('$(BOARD)');"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) cd('test');runInstallerTests('$(BOARD)');"
 
 test:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('test');runTests('$(BOARD)');"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) cd('test');runTests('$(BOARD)');"
 
 test_streaming:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));addpath(genpath('deps'));runHWTests;"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) addpath(genpath('test'));addpath(genpath('deps'));runHWTests;"
 
 run_NonHWTests:
 	cd ../.. ; \
-        ${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));runNonHWTest;"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) addpath(genpath('test'));runNonHWTest;"
 
 test_evm:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));addpath(genpath('deps'));hwTestRunner;"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) addpath(genpath('test'));addpath(genpath('deps'));hwTestRunner;"
 
 test_modem:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('hdl'));cd('targeting');addpath(genpath('modem-qpsk'))"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) addpath(genpath('hdl'));cd('targeting');addpath(genpath('modem-qpsk'))"
 
 test_synth:
 	bash synth_designs.sh $(BOARD)
 gen_tlbx:
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "genTlbx($(INCLUDE_EXAMPLES));exit();"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) genTlbx($(INCLUDE_EXAMPLES));exit();"
 
 linter:
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "linter;exit();"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) linter;exit();"
 
 doc:
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('../doc');genhtml();exit();"
+	$(MATLAB_BIN) $(MLFLAGS) -batch "$(MATLAB_RELEASE_ASSERT) cd('../doc');genhtml();exit();"
 
 zip:
 	cd ../.. ; \

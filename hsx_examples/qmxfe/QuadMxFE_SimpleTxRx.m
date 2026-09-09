@@ -5,7 +5,7 @@
 % transmit waveforms and capture receive data for all channels on the
 % system. This script requires the use of the Analog Devices, Inc. High
 % Speed Converter Toolbox.
-%
+% THis is a test
 % Author: Chas Frick
 % Date: 6/15/2021
 

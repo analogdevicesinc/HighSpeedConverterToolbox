@@ -30,7 +30,14 @@ hWC = hdlcoder.WorkflowConfig('SynthesisTool','Xilinx Vivado','TargetWorkflow','
 % Specify the top level project directory
 hWC.ProjectFolder = folder;
 hWC.ReferenceDesignToolVersion = vivado_version;
-hWC.IgnoreToolVersionMismatch = true;
+hWC.IgnoreToolVersionMismatch = false;
+% hdl_2026_r1 requires 2025.1; MathWorks tests R2025b with 2024.1.
+if strcmp(version('-release'), '2025b') && strcmp(vivado_version, '2025.1')
+    warning('adi:UntestedVivadoVersion', ...
+        ['HDL hdl_2026_r1 requires Vivado 2025.1, but MathWorks tests ', ...
+         'R2025b HDL Workflow Advisor with Vivado 2024.1. ', ...
+         'This workflow explicitly allows the untested tool version.']);
+end
 hWC.AllowUnsupportedToolVersion = true;
 
 % Set Workflow tasks to run

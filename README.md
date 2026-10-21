@@ -12,15 +12,20 @@ As with many open source packages, we use [GitHub](https://github.com/analogdevi
 
 | HDL Branch         | MATLAB Release |  Installer Package  |
 |:------------------:|:--------------:|:-------------------:|
-| 2022_R2            | R2023b         | <a href="http://swdownloads.analog.com/cse/toolboxes/hsx/master/AnalogDevicesHighSpeedConverterToolbox_v23.2.1.mltbx"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" height="40" /></a>|
+| hdl_2026_r1        | R2025b         | Build from source (development) |
+| hdl_2022_r2        | R2023b         | <a href="http://swdownloads.analog.com/cse/toolboxes/hsx/master/AnalogDevicesHighSpeedConverterToolbox_v23.2.1.mltbx"><img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" height="40" /></a>|
 
 If you use it, and like it - please let us know. If you use it, and hate it - please let us know that too.
 
 ## Supported Tools and Releases
 
-We provide support for certain releases of MATLAB. This does not mean older releases will not work but they are not maintained. Currently supported tools are:
-- Bug fixes: MATLAB R2023b with Vivado 2021.2
-- Bug fixes and new features: MATLAB R2023b with Vivado 2022.2
+The development branch targets the following toolchain. Older MATLAB releases may work, but are not maintained:
+- Development target: MATLAB R2025b, HDL `hdl_2026_r1`, and Vivado 2025.1.
+- [MathWorks tests R2025b HDL Workflow Advisor with Vivado 2024.1](https://www.mathworks.com/help/releases/R2025b/hdlcoder/gs/language-and-tool-version-support.html). Vivado 2025.1 is required by this HDL branch, so this combination needs validation with the toolbox reference designs. The synthesis test workflow allows the unsupported tool version and reports a warning; this is not a MathWorks-supported tool pairing.
+
+The published installer above uses the previous toolchain. Updating the development target does not publish a new installer or change the package version.
+
+HDL targeting includes DAQ2/ZCU102, AD9081/ZCU102, AD9434/ZC706, AD9783/ZCU102, and AD9208/VCU118. AD9739A/ZC706, FMCJESDADC1/ZC706, and AD9265/ZC706 targeting was removed because those projects are unavailable in `hdl_2026_r1`. Their MATLAB streaming interfaces remain available.
 
 ## Support and Documentation
 

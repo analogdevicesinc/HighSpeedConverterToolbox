@@ -11,15 +11,6 @@ end
 if strcmpi(project, 'ad9434')
     ppath = 'ad9434_fmc';
 end
-if strcmpi(project, 'ad9739a')
-    ppath = 'ad9739a_fmc';
-end
-if strcmpi(project, 'ad9265')
-    ppath = 'ad9265_fmc';
-end
-if strcmpi(project, 'fmcjesdadc1')
-    ppath = 'fmcjesdadc1';
-end
 if strcmpi(project, 'ad9783')
     ppath = 'ad9783_ebz';
 end
@@ -37,8 +28,7 @@ hRD.ReferenceDesignName = sprintf('%s %s (%s)', pname, upper(board), upper(desig
 hRD.BoardName = sprintf('AnalogDevices %s %s', pname, upper(board));
 
 % Tool information
-%hRD.SupportedToolVersion = {adi.Version.Vivado}; % FIXME
-hRD.SupportedToolVersion = {'2022.2'};
+hRD.SupportedToolVersion = {adi.Version.Vivado};
 
 % Get the root directory
 rootDir = fileparts(strtok(mfilename('fullpath'), '+'));

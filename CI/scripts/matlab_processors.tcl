@@ -1,6 +1,14 @@
  proc preprocess_bd {project carrier rxtx} {
     puts "Preprocessing $project $carrier $rxtx"
 
+    # hdl_2026_r1 names CPU interconnects after the processor's AXI master.
+    switch $carrier {
+        zcu102 {set cpu_interconnect axi_hpm0_lpd_interconnect}
+        zc706 {set cpu_interconnect axi_gp0_interconnect}
+        vcu118 {set cpu_interconnect axi_dp_interconnect}
+        default {error "Unsupported carrier $carrier"}
+    }
+
     switch $project {
         daq2 {
             if {$rxtx == "rx" || $rxtx == "rxtx"} {
@@ -46,14 +54,14 @@
             }
             switch $carrier {
                 zcu102 {
-    		    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
+                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells ${cpu_interconnect}]
                     if {$rxtx == "rx" || $rxtx == "rxtx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_daq2_xcvr/rx_out_clk_0]
                     }
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_daq2_xcvr/tx_out_clk_0]
                     }
                 }
             }
@@ -104,51 +112,9 @@
             switch $carrier {                
                 zc706 {                    
                     if {$rxtx == "rx"} {
-                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9434/adc_clk]
-                        connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins axi_cpu_interconnect/M08_ARESETN]
-                    }
-                }
-            }
-        }
-        ad9739a_fmc {
-         
-            if {$rxtx == "tx"} {
-                # Disconnect the DAC PACK pins
-                # VALID PINS NOT CONNECTED TO INTERFACE CORE ON DAC SIDE
-                delete_bd_objs [get_bd_nets axi_ad9739a_dma_fifo_rd_dout]
-
-                # Create Slice blocks 
-                set i 15
-                while {$i >= 0} {
-                    create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_$i
-                    set_property -dict [list CONFIG.DIN_TO [expr $i * 16] CONFIG.DIN_FROM [expr ($i +1) * 16 -1] CONFIG.DIN_WIDTH {256} CONFIG.DOUT_WIDTH {16}] [get_bd_cells xlslice_$i]
-                    # Connect the fifo out to the slice blocks
-                    connect_bd_net [get_bd_pins xlslice_${i}/Din] [get_bd_pins axi_ad9739a_dma/fifo_rd_dout]
-                   
-                    set i [expr $i - 1]
-                }
-
-                #Create Concat block
-                create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0
-                set_property -dict [list CONFIG.NUM_PORTS {16}] [get_bd_cells xlconcat_0]
-
-                set j 15
-                while {$j >= 0 } {
-                    set_property -dict [list CONFIG.IN${j}_WIDTH.VALUE_SRC USER] [get_bd_cells xlconcat_0]
-                    set_property -dict [list CONFIG.IN${j}_WIDTH {16}] [get_bd_cells xlconcat_0]
-
-                    set j [expr $j - 1]
-                }
-                # connect the concat block to the axi_ad9739a
-                connect_bd_net [get_bd_pins xlconcat_0/dout] [get_bd_pins axi_ad9739a/dac_ddata]
-                
-            }
-            switch $carrier {                
-                zc706 {                    
-                    if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins sys_ps7/FCLK_CLK0]
+                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells ${cpu_interconnect}]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/M08_ACLK] [get_bd_pins axi_ad9434/adc_clk]
+                        connect_bd_net [get_bd_pins sys_rstgen/peripheral_aresetn] [get_bd_pins ${cpu_interconnect}/M08_ARESETN]
                     }
                 }
             }
@@ -218,61 +184,18 @@
             }
             switch $carrier {
                 zcu102 {
-                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
+                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells ${cpu_interconnect}]
 	            if {$rxtx == "rx" || $rxtx == "rxtx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
                     }
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
+                        set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
                     }
                 }
             }
         }
-        ad9265_fmc {
-            if {$rxtx == "rx"} {
-                # Disconnect the ADC pins
-                disconnect_bd_net /axi_ad9265_adc_valid [get_bd_pins axi_ad9265_dma/fifo_wr_en]
-                disconnect_bd_net /axi_ad9265_adc_data [get_bd_pins axi_ad9265_dma/fifo_wr_din]
-
-             }
- 
-            switch $carrier {
-                zc706 {
-    		    if {$rxtx == "rx" } {
-                        set_property -dict [list CONFIG.NUM_MI {9}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M08_ACLK] [get_bd_pins axi_ad9265/adc_clk]
-                    }
-                }
-            }
-        } 
-        
-        fmcjesdadc1 {
-            if {$rxtx == "rx" } {
-                # Disconnect the ADC PACK pins
-                disconnect_bd_net /axi_ad9250_core_adc_valid_0 [get_bd_pins axi_ad9250_cpack/fifo_wr_en]
-               
-
-                disconnect_bd_net /axi_ad9250_core_adc_data_0 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_0]
-                disconnect_bd_net /axi_ad9250_core_adc_data_1 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_1]
-                disconnect_bd_net /axi_ad9250_core_adc_data_2 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_2]
-                disconnect_bd_net /axi_ad9250_core_adc_data_3 [get_bd_pins axi_ad9250_cpack/fifo_wr_data_3]
-               
-
-                # Connect the ADC PACK valid signals together
-                 
-            }
-            switch $carrier {                
-                zc706 {                    
-                    if {$rxtx == "rx" } {
-                        set_property -dict [list CONFIG.NUM_MI {11}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/M10_ACLK] [get_bd_pins util_fmcjesdadc1_xcvr/rx_clk_0]
-                    }
-                }
-            }
-        } 
-
         ad9783_ebz {            
             if {$rxtx == "tx"} {
                 # DATA PINS
@@ -281,11 +204,11 @@
             }
             switch $carrier {                
                 zcu102 {                    
-                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells axi_cpu_interconnect]
+                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells ${cpu_interconnect}]
                         
                     if {$rxtx == "tx"} {
-                        set_property -dict [list CONFIG.NUM_MI {4}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk1] [get_bd_pins axi_ad9783/dac_div_clk]
+                        set_property -dict [list CONFIG.NUM_MI {4}] [get_bd_cells ${cpu_interconnect}]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins axi_ad9783/dac_div_clk]
                     }
                 }
             }
@@ -304,10 +227,11 @@
             }
             switch $carrier {                
                 vcu118 {     
-                    set_property -dict [list  CONFIG.NUM_CLKS {3}] [get_bd_cells axi_cpu_interconnect]             
+                    set_property -dict [list  CONFIG.NUM_CLKS {3}] [get_bd_cells ${cpu_interconnect}]
                     if {$rxtx == "rx"} {
-                        set_property -dict [list CONFIG.NUM_MI {18}] [get_bd_cells axi_cpu_interconnect]
-                        connect_bd_net [get_bd_pins axi_cpu_interconnect/aclk2] [get_bd_pins glbl_clk_0]
+                        # M00-M17 are occupied by the upstream VCU118/AD9208 design.
+                        set_property -dict [list CONFIG.NUM_MI {19}] [get_bd_cells ${cpu_interconnect}]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk2] [get_bd_pins glbl_clk_0]
                     }
                 }
             }

@@ -11,18 +11,22 @@ High-Speed Converter Toolbox supports the IP Core generation flow from MathWorks
 
 ## Getting Started
 
-To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2022.2. Using other versions are not supported. To build the necessary BOOT.BIN files will require the Xilinx SDK as well.
+The available reference designs are DAQ2/ZCU102, AD9081/ZCU102, AD9434/ZC706, AD9783/ZCU102, and AD9208/VCU118. AD9739A/ZC706, FMCJESDADC1/ZC706, and AD9265/ZC706 targeting is unavailable in `hdl_2026_r1`; their MATLAB streaming interfaces remain available.
+
+To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2025.1. Using other versions are not supported. BOOT.BIN generation uses bootgen and the bundled carrier-specific boot files on Windows and Linux; these boot files are unchanged by this toolchain upgrade.
+
+The development target is MATLAB R2025b with HDL `hdl_2026_r1`. [MathWorks tests R2025b HDL Workflow Advisor with Vivado 2024.1](https://www.mathworks.com/help/releases/R2025b/hdlcoder/gs/language-and-tool-version-support.html), while this HDL branch requires Vivado 2025.1. This pairing requires toolbox validation. The synthesis test workflow explicitly allows the unsupported tool version and emits a warning. In HDL Workflow Advisor, using 2025.1 requires opting into **Allow unsupported version**; it is not a MathWorks-supported pairing. Keep the selected reference-design version equal to the installed Vivado version.
 
 Once you have the installed the necessary 3rd party tools MATLAB needs to be told where they are installed by use of the [hdlsetuptoolpath](https://www.mathworks.com/help/hdlcoder/ref/hdlsetuptoolpath.html) command. For Windows the following MATLAB command can be used:
 
 ```matlab
-hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', 'C:\Xilinx\Vivado\2022.2\bin\vivado.bat');
+hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', 'C:\Xilinx\Vivado\2025.1\bin\vivado.bat');
 ```
 
 or Linux:
 
 ```matlab
-hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', '/opt/Xilinx/Vivado/2022.2/bin/vivado');
+hdlsetuptoolpath('ToolName', 'Xilinx Vivado', 'ToolPath', '/opt/Xilinx/Vivado/2025.1/bin/vivado');
 ```
 
 Please change the tool path if it is different on your system.

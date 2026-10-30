@@ -24,6 +24,8 @@ switch board
             "zynqmp-zcu102-rev10-ad9081-vm4-l8", ...
             "zynqmp-zcu102-rev10-ad9081-vm8-l4"}
         at = 'AD9081';
+    case {"versal-vck190-reva-ad9088-204C-M8-L2-NP16-8p0-8x4"}
+        at = 'AD9088';
     case {"zynq-zc706-adv7511-fmcomms11"}
         at = 'FMCOMMS11';
     case {"zynqmp-zcu102-rev10-ad9172-fmc-ebz-mode4"}
@@ -32,7 +34,7 @@ switch board
         error('%s unsupported for HW test harness', board);
 end
 
-    ats = {'DAQ2Tests','DAQ3Tests','AD9081HWTests','FMCOMMS11Test'};
+    ats = {'DAQ2Tests','DAQ3Tests','AD9081HWTests','AD9088HWTests','FMCOMMS11Test'};
 
     if nargin == 0
         suite = testsuite(ats);

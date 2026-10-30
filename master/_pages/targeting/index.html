@@ -826,6 +826,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../sysobjects/adi.AD9088.Rx/" class="md-nav__link">
+        adi.AD9088.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sysobjects/adi.AD9088.Tx/" class="md-nav__link">
+        adi.AD9088.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../sysobjects/adi.AD9144.Tx/" class="md-nav__link">
         adi.AD9144.Tx
       </a>
@@ -1087,10 +1115,10 @@
 <h2 id="getting-started">Getting Started</h2>
 <p>To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2022.2. Using other versions are not supported. To build the necessary BOOT.BIN files will require the Xilinx SDK as well.</p>
 <p>Once you have the installed the necessary 3rd party tools MATLAB needs to be told where they are installed by use of the <a href="https://www.mathworks.com/help/hdlcoder/ref/hdlsetuptoolpath.html">hdlsetuptoolpath</a> command. For Windows the following MATLAB command can be used:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">&#39;ToolName&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Xilinx Vivado&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;ToolPath&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;C:\Xilinx\Vivado\2022.2\bin\vivado.bat&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">'ToolName'</span><span class="p">,</span><span class="w"> </span><span class="s">'Xilinx Vivado'</span><span class="p">,</span><span class="w"> </span><span class="s">'ToolPath'</span><span class="p">,</span><span class="w"> </span><span class="s">'C:\Xilinx\Vivado\2022.2\bin\vivado.bat'</span><span class="p">);</span>
 </code></pre></div>
 <p>or Linux:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">&#39;ToolName&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;Xilinx Vivado&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;ToolPath&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;/opt/Xilinx/Vivado/2022.2/bin/vivado&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">'ToolName'</span><span class="p">,</span><span class="w"> </span><span class="s">'Xilinx Vivado'</span><span class="p">,</span><span class="w"> </span><span class="s">'ToolPath'</span><span class="p">,</span><span class="w"> </span><span class="s">'/opt/Xilinx/Vivado/2022.2/bin/vivado'</span><span class="p">);</span>
 </code></pre></div>
 <p>Please change the tool path if it is different on your system.</p>
 <h3 id="checking-for-supported-designs">Checking For Supported Designs</h3>

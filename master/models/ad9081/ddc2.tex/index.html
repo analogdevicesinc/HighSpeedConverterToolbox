@@ -846,6 +846,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../sysobjects/adi.AD9088.Rx/" class="md-nav__link">
+        adi.AD9088.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sysobjects/adi.AD9088.Tx/" class="md-nav__link">
+        adi.AD9088.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../sysobjects/adi.AD9144.Tx/" class="md-nav__link">
         adi.AD9144.Tx
       </a>
@@ -1129,10 +1157,10 @@
 <a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="n">outputCodes</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="n">outputCodes</span><span class="p">)</span><span class="o">.*</span><span class="n">win</span><span class="p">;</span>
 <a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="n">spec</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">outputCodes</span><span class="p">)</span> <span class="o">/</span> <span class="n">Nfft</span><span class="p">;</span>
 <a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="n">spec_db</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span><span class="o">/</span><span class="n">fullscale</span><span class="o">+</span><span class="mi">10</span><span class="o">^-</span><span class="mi">20</span><span class="p">);</span>
-<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a><span class="n">df</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="n">Nfft</span><span class="p">;</span>  <span class="n">freqRangeRx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">df</span><span class="p">:</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="s1">&#39;;</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a><span class="n">df</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="n">Nfft</span><span class="p">;</span>  <span class="n">freqRangeRx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span><span class="n">df</span><span class="p">:</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="s1">';</span>
 <a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="n">plot</span><span class="p">(</span><span class="n">freqRangeRx</span><span class="p">,</span><span class="n">fftshift</span><span class="p">(</span><span class="n">spec_db</span><span class="p">));</span>
-<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a><span class="n">legend</span><span class="p">(</span><span class="s1">&#39;CDDC0&#39;</span><span class="p">,</span><span class="s1">&#39;CDDC1&#39;</span><span class="p">,</span><span class="s1">&#39;CDDC2&#39;</span><span class="p">,</span><span class="s1">&#39;CDDC3&#39;</span><span class="p">)</span>
-<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">);</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Magnitude (dBFS)&#39;</span><span class="p">);</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a><span class="n">legend</span><span class="p">(</span><span class="s1">'CDDC0'</span><span class="p">,</span><span class="s1">'CDDC1'</span><span class="p">,</span><span class="s1">'CDDC2'</span><span class="p">,</span><span class="s1">'CDDC3'</span><span class="p">)</span>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Frequency (Hz)'</span><span class="p">);</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Magnitude (dBFS)'</span><span class="p">);</span>
 </code></pre></div>
 <p><img alt="/tmp/HighSpeedConverterToolbox/CI/doc/ad9081/ddc2_images/figure_0.png
 " src="../ddc2_images/figure_0.png" /></p>

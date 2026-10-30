@@ -846,6 +846,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../sysobjects/adi.AD9088.Rx/" class="md-nav__link">
+        adi.AD9088.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sysobjects/adi.AD9088.Tx/" class="md-nav__link">
+        adi.AD9088.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../sysobjects/adi.AD9144.Tx/" class="md-nav__link">
         adi.AD9144.Tx
       </a>
@@ -1082,11 +1110,11 @@
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">noiseVolts2</span> <span class="o">=</span> <span class="mf">1.4</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="mf">0.01</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">[</span><span class="n">o1</span><span class="p">,</span><span class="n">o2</span><span class="p">,</span><span class="o">~</span><span class="p">,</span><span class="o">~</span><span class="p">,</span><span class="n">o3</span><span class="p">,</span><span class="n">o4</span><span class="p">]</span> <span class="o">=</span> <span class="n">rx</span><span class="p">(</span><span class="n">noiseVolts1</span><span class="p">,</span><span class="n">noiseVolts2</span><span class="p">,</span><span class="n">noiseVolts1</span><span class="p">,</span><span class="n">noiseVolts1</span><span class="p">);</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">outs</span> <span class="o">=</span> <span class="p">[</span><span class="n">o1</span><span class="p">,</span><span class="n">o2</span><span class="p">,</span><span class="n">o3</span><span class="p">,</span><span class="n">o4</span><span class="p">];</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">fprintf</span><span class="p">(</span><span class="s1">&#39;Mapped values identical </span><span class="si">%d</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">isequal</span><span class="p">(</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)))</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">fprintf</span><span class="p">(</span><span class="s1">'Mapped values identical </span><span class="si">%d</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span><span class="n">isequal</span><span class="p">(</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)))</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Mapped values identical 1
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">fprintf</span><span class="p">(</span><span class="s1">&#39;Mapped values identical </span><span class="si">%d</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">isequal</span><span class="p">(</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">4</span><span class="p">)))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">fprintf</span><span class="p">(</span><span class="s1">'Mapped values identical </span><span class="si">%d</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span><span class="n">isequal</span><span class="p">(</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">3</span><span class="p">),</span><span class="n">outs</span><span class="p">(:,</span><span class="mi">4</span><span class="p">)))</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Mapped values identical 0
 </code></pre></div>

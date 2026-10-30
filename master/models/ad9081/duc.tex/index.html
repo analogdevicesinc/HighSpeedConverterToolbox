@@ -846,6 +846,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../sysobjects/adi.AD9088.Rx/" class="md-nav__link">
+        adi.AD9088.Rx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sysobjects/adi.AD9088.Tx/" class="md-nav__link">
+        adi.AD9088.Tx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../sysobjects/adi.AD9144.Tx/" class="md-nav__link">
         adi.AD9144.Tx
       </a>
@@ -1079,7 +1107,7 @@
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    Logical 4x8 array of for MainDataPath input summers. Each row
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    corresponds to each summmer [1-4] and each column corresponds
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    to an input Channelizer path 1-8]. Set indexes to true to
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    enable a given path to be added into summer&#39;s output.
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    enable a given path to be added into summer's output.
 </code></pre></div>
 <p>The 8x8 summing crossbar can sum any channels within the FDUC quads (FDUC0-&gt;FDUC3 and FDUC4-&gt;FDUC7). This is controlled by the columns of <strong>Crossbar8x8Mux</strong>, where each true row in a given column is feed into the individual summers feeding the inputs to the CDUCs. Below is an example of summing FDUC0,FDUC1,FDUC3 to CDDC0 and  FDUC4,FDUC5 to CDDC2:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">tx</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">AD9081</span><span class="o">.</span><span class="n">Tx</span><span class="p">;</span>

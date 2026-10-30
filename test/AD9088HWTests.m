@@ -8,8 +8,11 @@ classdef AD9088HWTests < HardwareTests
     methods(TestClassSetup)
         % Check hardware connected
         function CheckForHardware(testCase)
-            Device = @()adi.AD9088.Rx;
-            testCase.CheckDevice('ip',Device,testCase.uri(4:end),false);
+            % Probe disabled so configuration errors fail rather than
+            % being filtered as a missing device
+            disp('Skipping init test');
+%             Device = @()adi.AD9088.Rx;
+%             testCase.CheckDevice('ip',Device,testCase.uri(4:end),false);
         end
     end
 

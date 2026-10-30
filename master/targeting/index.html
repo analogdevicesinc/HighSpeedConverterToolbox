@@ -724,48 +724,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../hdlrefdesigns/ad9739a/" class="md-nav__link">
-        ad9739a
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../hdlrefdesigns/ad9265/" class="md-nav__link">
-        ad9265
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../hdlrefdesigns/fmcjesdadc1/" class="md-nav__link">
-        fmcjesdadc1
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../hdlrefdesigns/ad9783/" class="md-nav__link">
         ad9783
       </a>
@@ -1184,12 +1142,14 @@
 <li><a href="https://www.mathworks.com/support/search.html/videos/getting-started-with-zynq-80338.html?fq%5B%5D=asset_type_name:video&amp;fq%5B%5D=category:hdlcoder/index&amp;page=1">Getting started with Zynq</a></li>
 </ul>
 <h2 id="getting-started">Getting Started</h2>
-<p>To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2022.2. Using other versions are not supported. To build the necessary BOOT.BIN files will require the Xilinx SDK as well.</p>
+<p>The available reference designs are DAQ2/ZCU102, AD9081/ZCU102, AD9434/ZC706, AD9783/ZCU102, and AD9208/VCU118. AD9739A/ZC706, FMCJESDADC1/ZC706, and AD9265/ZC706 targeting is unavailable in <code>hdl_2026_r1</code>; their MATLAB streaming interfaces remain available.</p>
+<p>To perform targeting will require FPGA vendor tools for the FPGA system. For Xilinx this will be Vivado and the toolbox will require specific versions for each release. For the current release this is Vivado 2025.1. Using other versions are not supported. BOOT.BIN generation uses bootgen and the bundled carrier-specific boot files on Windows and Linux; these boot files are unchanged by this toolchain upgrade.</p>
+<p>The development target is MATLAB R2025b with HDL <code>hdl_2026_r1</code>. <a href="https://www.mathworks.com/help/releases/R2025b/hdlcoder/gs/language-and-tool-version-support.html">MathWorks tests R2025b HDL Workflow Advisor with Vivado 2024.1</a>, while this HDL branch requires Vivado 2025.1. This pairing requires toolbox validation. The synthesis test workflow explicitly allows the unsupported tool version and emits a warning. In HDL Workflow Advisor, using 2025.1 requires opting into <strong>Allow unsupported version</strong>; it is not a MathWorks-supported pairing. Keep the selected reference-design version equal to the installed Vivado version.</p>
 <p>Once you have the installed the necessary 3rd party tools MATLAB needs to be told where they are installed by use of the <a href="https://www.mathworks.com/help/hdlcoder/ref/hdlsetuptoolpath.html">hdlsetuptoolpath</a> command. For Windows the following MATLAB command can be used:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">'ToolName'</span><span class="p">,</span><span class="w"> </span><span class="s">'Xilinx Vivado'</span><span class="p">,</span><span class="w"> </span><span class="s">'ToolPath'</span><span class="p">,</span><span class="w"> </span><span class="s">'C:\Xilinx\Vivado\2022.2\bin\vivado.bat'</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">'ToolName'</span><span class="p">,</span><span class="w"> </span><span class="s">'Xilinx Vivado'</span><span class="p">,</span><span class="w"> </span><span class="s">'ToolPath'</span><span class="p">,</span><span class="w"> </span><span class="s">'C:\Xilinx\Vivado\2025.1\bin\vivado.bat'</span><span class="p">);</span>
 </code></pre></div>
 <p>or Linux:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">'ToolName'</span><span class="p">,</span><span class="w"> </span><span class="s">'Xilinx Vivado'</span><span class="p">,</span><span class="w"> </span><span class="s">'ToolPath'</span><span class="p">,</span><span class="w"> </span><span class="s">'/opt/Xilinx/Vivado/2022.2/bin/vivado'</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">hdlsetuptoolpath</span><span class="p">(</span><span class="s">'ToolName'</span><span class="p">,</span><span class="w"> </span><span class="s">'Xilinx Vivado'</span><span class="p">,</span><span class="w"> </span><span class="s">'ToolPath'</span><span class="p">,</span><span class="w"> </span><span class="s">'/opt/Xilinx/Vivado/2025.1/bin/vivado'</span><span class="p">);</span>
 </code></pre></div>
 <p>Please change the tool path if it is different on your system.</p>
 <h3 id="checking-for-supported-designs">Checking For Supported Designs</h3>

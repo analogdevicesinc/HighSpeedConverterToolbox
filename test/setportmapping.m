@@ -17,18 +17,6 @@ elseif contains(lower(ReferenceDesignName),'ad9434')
     dev = 'AD9434';
     mdl = 'testModel_Rx12Tx12';
     portWidthRX = 12;
-elseif contains(lower(ReferenceDesignName),'ad9739a')
-    dev = 'AD9739A';
-    mdl = 'testModel';
-    portWidthTX = 16;
-elseif contains(lower(ReferenceDesignName),'ad9265')
-    dev = 'AD9265';
-    mdl = 'testModel';
-    portWidthRX = 16;
-elseif contains(lower(ReferenceDesignName),'fmcjesdadc1')
-    dev = 'FMCJESDADC1';
-    mdl = 'testModel_Rx32Tx32';
-    portWidthRX = 32;
 elseif contains(lower(ReferenceDesignName),'ad9783')
     dev = 'AD9783';
     mdl = 'testModel_RxTx64';

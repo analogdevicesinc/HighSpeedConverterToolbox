@@ -11,8 +11,7 @@ puts "FPGA Board: $fpga_board_lc"
 if {$fpga_board_lc != "vcu118"} {
     # Verify support files exist
     if {![file exists $cdir/projects/common/boot/$fpga_board_lc/u-boot.elf]} {
-        puts "ERROR: Missing u-boot.elf for $fpga_board_lc"
-        return
+        error "Missing u-boot.elf for $fpga_board_lc"
     }
 }
 

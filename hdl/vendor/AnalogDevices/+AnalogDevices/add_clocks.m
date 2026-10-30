@@ -44,33 +44,6 @@ switch lower(project)
             otherwise
                 error('Unknown reference design');
         end
-    case 'ad9739a'
-        switch(upper(design))
-            case 'TX'
-                hRD.addClockInterface( ...
-                    'ClockConnection',   'sys_ps7/FCLK_CLK0', ...
-                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
-            otherwise
-                error('Unknown reference design');
-        end
-    case 'ad9265'
-        switch(upper(design))
-            case 'RX'
-                hRD.addClockInterface( ...
-                    'ClockConnection',   'axi_ad9265/adc_clk', ...
-                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
-            otherwise
-                error('Unknown reference design');
-        end
-    case 'fmcjesdadc1'
-        switch(upper(design))
-            case 'RX'
-                hRD.addClockInterface( ...
-                    'ClockConnection',   'util_fmcjesdadc1_xcvr/rx_clk_0', ...
-                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
-            otherwise
-                error('Unknown reference design');
-        end
     case 'ad9783'
         switch(upper(design))
             case 'TX'

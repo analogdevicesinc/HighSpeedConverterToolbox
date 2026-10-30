@@ -15,6 +15,11 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: '3.10'
+      - name: Check build integration
+        run: |
+            bash -n CI/scripts/build_bsp.sh CI/scripts/synth_designs.sh
+            python3 -m unittest discover -s CI/scripts/tests -v
+
       - name: Organize Toolbox Dependencies
         run: |
             make -C ./CI/scripts build
@@ -24,7 +29,7 @@ jobs:
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v3
         with:
-            release: R2023b
+            release: R2025b
       - name: Compile Toolbox
         uses: matlab-actions/run-command@v3
         with:

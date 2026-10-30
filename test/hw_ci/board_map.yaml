@@ -1,0 +1,32 @@
+# HighSpeedConverterToolbox board map for labgrid HW-CI (matlab-hw-request.yml@v3).
+#
+# Maps a coordinator place's tags -> the MATLAB board name runHWTests(<board>)
+# understands (the switch in test/runHWTests.m). Matching rules
+# (adi_lg_plugins.hw_ci.board_map): `daughter-board` required; `carrier` /
+# `hdl-config`, when present, must also match the place's tags; the MOST
+# specific matching row wins; ties -> first row in file order.
+#
+# NOTE: duplicates knowledge in test/runHWTests.m's switch — keep in sync.
+# AD9172 has a switch case but no test class; intentionally absent here.
+
+boards:
+  # --- AD9081 (zcu102; the hdl-config tag selects the JESD build variant) ---
+  - {carrier: zcu102, daughter-board: ad9081, hdl-config: v204b-txmode9-rxmode4, matlab_board: zynqmp-zcu102-rev10-ad9081-v204b-txmode9-rxmode4}
+  - {carrier: zcu102, daughter-board: ad9081, hdl-config: v204c-txmode0-rxmode1, matlab_board: zynqmp-zcu102-rev10-ad9081-v204c-txmode0-rxmode1}
+  - {carrier: zcu102, daughter-board: ad9081, hdl-config: vm4-l8, matlab_board: zynqmp-zcu102-rev10-ad9081-vm4-l8}
+  - {carrier: zcu102, daughter-board: ad9081, hdl-config: vm8-l4, matlab_board: zynqmp-zcu102-rev10-ad9081-vm8-l4}
+  # Carrier-only fallback for places that carry no hdl-config tag: set this
+  # to the variant the lab actually flashes (check the place's bootfile).
+  - {carrier: zcu102, daughter-board: ad9081, matlab_board: zynqmp-zcu102-rev10-ad9081-vm8-l4}
+
+  # --- DAQ2 ---
+  - {carrier: zcu102,  daughter-board: daq2, matlab_board: zynqmp-zcu102-rev10-fmcdaq2}
+  - {carrier: zc706,   daughter-board: daq2, matlab_board: zynq-zc706-adv7511-fmcdaq2}
+  - {carrier: arria10, daughter-board: daq2, matlab_board: socfpga-arria10-socdk-daq2}
+
+  # --- DAQ3 ---
+  - {carrier: zcu102, daughter-board: daq3, matlab_board: zynqmp-zcu102-rev10-fmcdaq3}
+  - {carrier: zc706,  daughter-board: daq3, matlab_board: zynq-zc706-adv7511-fmcdaq3-revC}
+
+  # --- FMCOMMS11 ---
+  - {carrier: zc706, daughter-board: fmcomms11, matlab_board: zynq-zc706-adv7511-fmcomms11}

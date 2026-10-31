@@ -17,7 +17,7 @@ classdef Rx < adi.AD9084.Base & adi.common.Rx & adi.common.Attribute
         %   connected to hardware
         SamplingRate
     end
-    
+   
     properties
         %ChannelNCOFrequencies Channel NCO Frequencies 
         %   Frequency of NCO in fine decimators in receive path. Property
@@ -53,6 +53,10 @@ classdef Rx < adi.AD9084.Base & adi.common.Rx & adi.common.Attribute
         JESD204FSMControl = '1';
     end
     
+    % =======================
+    % PFIR SUPPORT (existing)
+    % =======================
+
     properties (Nontunable, Logical)
         %EnablePFIRs Enable PFIRs
         %   Enable use of PFIR/PFILT filters
@@ -65,7 +69,17 @@ classdef Rx < adi.AD9084.Base & adi.common.Rx & adi.common.Attribute
         %   cell array of strings. Files are loading in order
         PFIRFilenames = '';
     end
-    
+    % =======================
+    % CFIR SUPPORT (added)
+    % =======================    
+    properties (Nontunable, Logical)
+        EnableCFIRs = false;
+    end
+
+    properties (Nontunable)
+        CFIRFilenames = '';
+    end
+
     properties (Hidden, Nontunable, Access = protected)
         isOutput = false;
     end
@@ -184,16 +198,31 @@ classdef Rx < adi.AD9084.Base & adi.common.Rx & adi.common.Attribute
         function set.PFIRFilenames(obj, value)
             obj.PFIRFilenames = value;
             if obj.EnablePFIRs && obj.ConnectedToDevice
-                writeFilterFile(obj);
+                obj.writePFIRFile();
             end
         end
+
+
+        % Enable CFIR
+        function set.EnableCFIRs(obj,value)
+            validateattributes(value,{'logical'},{});
+            obj.EnableCFIRs = value;
+        end
+        % CFIR Filenames
+        function set.CFIRFilenames(obj,value)
+            obj.CFIRFilenames = value;
+            if obj.EnableCFIRs && obj.ConnectedToDevice
+                obj.writeCFIRFile();
+            end
+        end
+
     end 
     
     %% API Functions
     methods (Hidden, Access = protected)
         
-        function writeFilterFile(obj)
-            % Read in filter files and write them sequentially into the
+        function writePFIRFile(obj)
+            % Read in pfir files and write them sequentially into the
             % attribute
             fir_data_files = obj.PFIRFilenames;
             if ~iscell(fir_data_files)
@@ -206,7 +235,25 @@ classdef Rx < adi.AD9084.Base & adi.common.Rx & adi.common.Attribute
                     error('Filter file %s does not exist',filename);
                 end
                 fir_data_str = fileread(filename);
-                obj.setDeviceAttributeRAW('filter_fir_config',fir_data_str);
+                obj.setDeviceAttributeRAW('pfilt_config',fir_data_str);
+            end
+        end
+
+        function writeCFIRFile(obj)
+            % Read in pfir files and write them sequentially into the
+            % attribute
+            fir_data_files = obj.CFIRFilenames;
+            if ~iscell(fir_data_files)
+                fir_data_files = {fir_data_files};
+            end
+            
+            for fir_data_file = fir_data_files
+                filename = fir_data_file{:};
+                if ~exist(filename,'file')
+                    error('Filter file %s does not exist',filename);
+                end
+                fir_data_str = fileread(filename);
+                obj.setDeviceAttributeRAW('cfir_config',fir_data_str);
             end
         end
                 
@@ -236,13 +283,20 @@ classdef Rx < adi.AD9084.Base & adi.common.Rx & adi.common.Attribute
             obj.CheckAndUpdateHW(obj.MainNCOPhases,...
                 'MainNCOPhases','main_nco_phase', ...
                 obj.iioDev);
-            %%
+            %% Program FIR Filters
+            %  Program PFIR
             if obj.EnablePFIRs
-                obj.writeFilterFile();
+                obj.writePFIRFile();
+            end
+
+            %  Program CFIR
+            if obj.EnableCFIRs
+                obj.writeCFIRFile();
             end
             %%
             obj.setAttributeRAW('voltage0_i','test_mode',obj.TestMode,...
                 false,obj.iioDev);
+
 
         end
 

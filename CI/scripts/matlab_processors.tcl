@@ -151,23 +151,23 @@
                 delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_7]
             }
             if {$rxtx == "rxtx"} {
-                # Connect TX clocking to RX path
+                # Connect TX clocking to the RX device clock
 
                 # Reset reconnect
                 delete_bd_objs [get_bd_nets tx_device_clk_1]
-                connect_bd_net [get_bd_pins tx_device_clk_rstgen/slowest_sync_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins tx_device_clk_rstgen/slowest_sync_clk] [get_bd_ports rx_device_clk]
 
                 # UPACK reconnect
-                connect_bd_net [get_bd_pins util_mxfe_upack/clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_mxfe_upack/clk] [get_bd_ports rx_device_clk]
 
                 # DAC FIFO reconnect
-                connect_bd_net [get_bd_pins mxfe_tx_data_offload/m_axis_aclk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins mxfe_tx_data_offload/m_axis_aclk] [get_bd_ports rx_device_clk]
 
                 # TX TPL Core
-                connect_bd_net [get_bd_pins tx_mxfe_tpl_core/link_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins tx_mxfe_tpl_core/link_clk] [get_bd_ports rx_device_clk]
 
                 # TX JESD
-                connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/device_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/device_clk] [get_bd_ports rx_device_clk]
 
 		        disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins axi_mxfe_tx_jesd/link_clk]
 		        connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins axi_mxfe_tx_jesd/link_clk]
@@ -187,11 +187,11 @@
                     set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells ${cpu_interconnect}]
 	            if {$rxtx == "rx" || $rxtx == "rxtx"} {
                         set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
-                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_ports rx_device_clk]
                     }
                     if {$rxtx == "tx"} {
                         set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
-                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_ports tx_device_clk]
                     }
                 }
             }

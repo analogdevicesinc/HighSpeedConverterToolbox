@@ -14,6 +14,25 @@ SCRIPTS = Path(__file__).resolve().parents[1]
 
 
 class BuildBSPTests(unittest.TestCase):
+    def test_registered_variants_match_verification_matrix(self):
+        root = SCRIPTS.parents[1]
+        vendor = root / 'hdl/vendor/AnalogDevices'
+        registry = (vendor / 'hdlcoder_board_customization.m').read_text()
+        expected = set()
+        for project, carrier in re.findall(r"'AnalogDevices\.([\w]+)\.([\w]+)\.plugin_board'", registry):
+            folder = vendor / '+AnalogDevices' / f'+{project}' / f'+{carrier}'
+            variants = re.findall(r"'(AnalogDevices\.[\w.]+\.plugin_rd_\w+)'",
+                                  (folder / 'hdlcoder_ref_design_customization.m').read_text())
+            self.assertTrue(variants)
+            for variant in variants:
+                self.assertTrue((folder / (variant.split('.')[-1] + '.m')).is_file())
+            expected.update(variants)
+        actual = re.findall(r"'(AnalogDevices\.[\w.]+\.plugin_rd_\w+)'",
+                            (root / 'test/board_variants.m').read_text())
+        self.assertTrue(expected)
+        self.assertEqual(len(actual), len(set(actual)))
+        self.assertEqual(set(actual), expected)
+
     def setUp(self):
         self.scratch = tempfile.TemporaryDirectory()
         self.addCleanup(self.scratch.cleanup)
@@ -27,6 +46,8 @@ class BuildBSPTests(unittest.TestCase):
         for folder in ('scripts', 'projects/scripts', 'projects/common/board with spaces',
                        'projects/pluto', 'library/axi_ad9361'):
             (self.fixture / folder).mkdir(parents=True)
+        for name in ('quiet.mk', 'Makefile'):
+            (self.fixture / name).write_text('# Root make support\n')
         self.version_file = self.fixture / 'scripts/adi_env.tcl'
         self.version_file.write_text(
             'set required_vivado_version "2025.1"\n'
@@ -34,6 +55,8 @@ class BuildBSPTests(unittest.TestCase):
             '  set required_vivado_version $::env(REQUIRED_VIVADO_VERSION)\n'
             '} elseif {[info exists REQUIRED_VIVADO_VERSION]} {\n'
             '  set required_vivado_version $REQUIRED_VIVADO_VERSION\n}\n')
+        parser = SCRIPTS / 'tests/fixtures/xcvr_diff.pl'
+        shutil.copyfile(parser, self.fixture / 'projects/scripts/gtwiz_parser.pl')
         self.project_file = self.fixture / 'projects/scripts/adi_project_xilinx.tcl'
         self.project_file.write_text('# Upstream MATLAB and transceiver support\n')
         for project, carrier in re.findall(r"'AnalogDevices\.([\w]+)\.([\w]+)\.plugin_board'",
@@ -52,6 +75,9 @@ class BuildBSPTests(unittest.TestCase):
         git.write_text(
             f'#!{sys.executable}\n'
             'import os, pathlib, shutil, sys\n'
+            'if sys.argv[1:] == ["-C", "hdl", "rev-parse", "HEAD"]:\n'
+            '    print("a" * 40)\n'
+            '    sys.exit(0)\n'
             'pathlib.Path(os.environ["CLONE_ARGS"]).write_text(" ".join(sys.argv[1:]))\n'
             'if os.environ.get("FAIL_CLONE"):\n'
             '    sys.exit(1)\n'
@@ -71,6 +97,7 @@ class BuildBSPTests(unittest.TestCase):
         self.assertIn('Required Vivado version 2025.1\n', result.stdout)
         self.assertIn('-b hdl_2026_r1', (self.root / 'clone-args').read_text())
         target = self.root / 'hdl/vendor/AnalogDevices/vivado'
+        self.assertEqual((target / 'HSX_UPSTREAM_COMMIT').read_text().strip(), 'a' * 40)
         self.assertEqual((target / 'projects/scripts/adi_project_xilinx_upstream.tcl').read_text(),
                          self.project_file.read_text())
         common = target / 'projects/common/board with spaces'
@@ -120,6 +147,13 @@ class BuildBSPTests(unittest.TestCase):
         result = self.prepare()
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('daq2/zcu102/system_top.v', result.stderr)
+
+    def test_missing_root_make_support_is_fatal(self):
+        (self.fixture / 'quiet.mk').unlink()
+        result = self.prepare()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('quiet.mk', result.stderr)
+        self.assertFalse((self.root / 'hdl/vendor/AnalogDevices/vivado').exists())
 
 
 if __name__ == '__main__':

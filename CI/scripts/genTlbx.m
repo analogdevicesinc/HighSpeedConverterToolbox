@@ -1,72 +1,35 @@
 function genTlbx(examples)
-
-if nargin==0
-    examples = 0;
+% Package only distributable inputs, independently of local build artifacts.
+if nargin == 0
+    examples = false;
 end
-
-% Lookup versioning info from adi.Version
-cwd = pwd;
-parts = strsplit(mfilename('fullpath'),filesep);
-tbroot = strjoin(parts(1:end-3),filesep);
-cd(tbroot);
+root = fileparts(fileparts(fileparts(mfilename('fullpath'))));
+originalPath = path;
+cleanup = onCleanup(@() path(originalPath)); %#ok<NASGU>
+addpath(root);
 v = adi.Version;
-uuid = matlab.lang.internal.uuid;
-cd(cwd);
-
-%%
-cd(fileparts((mfilename('fullpath'))));
-cd('../..');
-p = pwd;
-cd(fileparts((mfilename('fullpath'))));
-
-fid  = fopen('bsp.tmpl','r');
-f=fread(fid,'*char')';
-fclose(fid);
-
-f = strrep(f,'__REPO-ROOT__',p);
-f = strrep(f,'__VERSION__',v.Release);
-f = strrep(f,'__ML-RELEASE__',v.MATLAB);
-f = strrep(f,'__APP-NAME__',v.AppName);
-f = strrep(f,'__EXAMPLES-DIR__',v.ExamplesDir);
-f = strrep(f,'__UUID__',uuid);
-
-fid  = fopen('../../bsp.prj','w');
-fprintf(fid,'%s',f);
-fclose(fid);
-
-cd('../..');
-addpath(genpath(matlabshared.supportpkg.getSupportPackageRoot));
-addpath(genpath('.'));
-rmpath(genpath('.'));
+[files, matlabPaths] = toolbox_package_files(root, examples);
 if examples
-    ps = {'doc',v.ExamplesDir};
+    outputName = sprintf('AnalogDevices%s_v%s.mltbx', v.ToolboxName, v.Release);
 else
-    ps = {'doc'};
+    outputName = sprintf('AnalogDevices%s_noexamples_v%s.mltbx', v.ToolboxName, v.Release);
 end
-if isprop(v,'HasHDL') && v.HasHDL
-    ps = [ps(:)',{'hdl'}];
+options = matlab.addons.toolbox.ToolboxOptions(root, matlab.lang.internal.uuid, ...
+    'ToolboxFiles', files, ...
+    'ToolboxMatlabPath', matlabPaths, ...
+    'ToolboxName', v.AppName, ...
+    'ToolboxVersion', v.Release, ...
+    'MinimumMatlabRelease', v.MATLAB, ...
+    'MaximumMatlabRelease', v.MATLAB, ...
+    'AuthorName', 'Travis Collins', ...
+    'AuthorEmail', 'travis.collins@analog.com', ...
+    'AuthorCompany', 'Analog Devices, Inc', ...
+    'Summary', 'Board support package for HDL targeting and data streaming from Analog Devices transceivers.', ...
+    'Description', sprintf(['Scripts and tools created by ADI to be used with MATLAB and Simulink with ADI transceivers\n', ...
+        'Documentation: https://wiki.analog.com/resources/tools-software/mathworks\n', ...
+        'Support: https://ez.analog.com/']), ...
+    'ToolboxImageFile', fullfile(root, 'CI', 'doc', 'ADI_Logo_AWP_Large.png'), ...
+    'SupportedPlatforms', struct('Win64', true, 'Glnxa64', true, 'Maci64', false, 'MatlabOnline', false), ...
+    'OutputFile', fullfile(root, outputName));
+matlab.addons.toolbox.packageToolbox(options);
 end
-
-paths = '';
-for p = ps
-    pp = genpath(p{:});
-    ppF = pp;
-    pp = pp(1:end-1);
-    pp = strrep(pp,':','</matlabPath><matlabPath>');
-    paths = [paths,['<matlabPath>',pp,'</matlabPath>']]; %#ok<AGROW>
-    addpath(ppF);
-end
-rehash
-projectFile = 'bsp.prj';
-currentVersion = matlab.addons.toolbox.toolboxVersion(projectFile);
-if examples
-    outputFile = sprintf('AnalogDevices%s_v%s',v.ToolboxName,currentVersion);
-else
-    outputFile = sprintf('AnalogDevices%s_noexamples_v%s',v.ToolboxName,currentVersion);
-end
-matlab.addons.toolbox.packageToolbox(projectFile,outputFile)
-
-delete bsp.prj
-
-
-

@@ -25,13 +25,18 @@ class TclIntegrationTests(unittest.TestCase):
             scripts = root / 'projects/scripts'
             scripts.mkdir()
             (scripts / 'adi_make.tcl').write_text('namespace eval adi_make {proc lib args {}}\n')
-            (scripts / 'matlab_processors.tcl').write_text('proc preprocess_bd args {}\n')
+            (scripts / 'matlab_processors.tcl').write_text('''proc preprocess_bd {project carrier mode} {
+    if {[list $project $carrier $mode] ne "daq2 zcu102 rx"} {error "Clobbered project context"}
+}\n''')
             (project / 'system_project.tcl').write_text('''
 foreach flag {ADI_MATLAB ADI_SKIP_SYNTHESIS ADI_USE_OOC_SYNTHESIS} {
     if {![info exists ::env($flag)] || !$::env($flag)} {
         error "Missing upstream flag $flag"
     }
 }
+set carrier c5soc
+set project upstream_project
+set ref_design upstream_mode
 ''')
             result = self.run_tcl(root, f'''
 set project daq2
@@ -54,9 +59,10 @@ if {{[pwd] ne {{{root}}}}} {{error "Project did not restore working directory"}}
                 shutil.copyfile(SCRIPTS / 'adi_project_xilinx.tcl', root / 'adi_project_xilinx.tcl')
                 (root / 'adi_project_xilinx_upstream.tcl').write_text('''
 proc adi_xcvr_project {parameters} {
-    foreach flag {ADI_MATLAB ADI_SKIP_SYNTHESIS} {
+    foreach flag {ADI_MATLAB ADI_SKIP_SYNTHESIS MAKEFLAGS MAKEOVERRIDES MFLAGS GNUMAKEFLAGS} {
         if {[info exists ::env($flag)]} {error "Leaked parent flag $flag"}
     }
+    if {$::env(MAKELEVEL) != 1} {error "Wrong nested make parameter order"}
     if {$::fail} {error "Transceiver build failed"}
     return $parameters
 }
@@ -64,6 +70,7 @@ proc adi_xcvr_project {parameters} {
                 result = self.run_tcl(root, f'''
 set ::env(ADI_MATLAB) 1
 set ::env(ADI_SKIP_SYNTHESIS) 1
+foreach flag {{MAKEFLAGS MAKEOVERRIDES MFLAGS MAKELEVEL GNUMAKEFLAGS}} {{set ::env($flag) 1}}
 set fail {fail}
 source adi_project_xilinx.tcl
 # Loading another reference design in the same Vivado session must also work.
@@ -72,7 +79,7 @@ set status [catch {{adi_xcvr_project {{LANE_RATE 10}}}} result]
 if {{$status != {fail}}} {{error "Unexpected sub-build result: $result"}}
 if {{{fail} && $result ne "Transceiver build failed"}} {{error $result}}
 if {{!{fail} && $result ne "LANE_RATE 10"}} {{error "Lost helper return value"}}
-foreach flag {{ADI_MATLAB ADI_SKIP_SYNTHESIS}} {{
+foreach flag {{ADI_MATLAB ADI_SKIP_SYNTHESIS MAKEFLAGS MAKEOVERRIDES MFLAGS MAKELEVEL GNUMAKEFLAGS}} {{
     if {{![info exists ::env($flag)] || $::env($flag) ne "1"}} {{
         error "Parent flag was not restored: $flag"
     }}
@@ -80,7 +87,40 @@ foreach flag {{ADI_MATLAB ADI_SKIP_SYNTHESIS}} {{
 ''')
                 self.assertEqual(result.returncode, 0, result.stderr)
 
-    def boot_build(self, entrypoint, board, missing_files=False):
+    @unittest.skipUnless(shutil.which('make'), 'make is required')
+    def test_outer_make_arguments_do_not_change_transceiver_configuration(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch)
+            shutil.copyfile(SCRIPTS / 'adi_project_xilinx.tcl', root / 'adi_project_xilinx.tcl')
+            (root / 'child.mk').write_text('''ifeq ($(shell expr $(MAKELEVEL) % 2),0)
+CMD_VARIABLES := $(shell echo $(-*-command-variables-*-) | tac -s ' ')
+else
+CMD_VARIABLES := $(shell echo $(MAKEOVERRIDES))
+endif
+all:
+\t@echo $(CMD_VARIABLES)
+''')
+            (root / 'adi_project_xilinx_upstream.tcl').write_text('''
+proc adi_xcvr_project {parameters} {
+    return [exec make --no-print-directory -f child.mk {*}$parameters]
+}
+''')
+            result = self.run_tcl(root, '''
+set ::env(MAKEFLAGS) { -- BOARD=daq2}
+set ::env(MAKEOVERRIDES) {BOARD=daq2}
+set ::env(MAKELEVEL) 1
+source adi_project_xilinx.tcl
+set result [adi_xcvr_project {LANE_RATE=10 REF_CLK=500 PLL_TYPE=QPLL0}]
+if {[string match *BOARD* $result]} {error "Outer BOARD contaminated the transceiver: $result"}
+if {![string match *LANE_RATE=10* $result]} {error "Lost transceiver parameters: $result"}
+if {[string trim $result] ne "PLL_TYPE=QPLL0 REF_CLK=500 LANE_RATE=10"} {
+    error "Transceiver output directory parameter order changed: $result"
+}
+if {$::env(MAKEOVERRIDES) ne "BOARD=daq2"} {error "Lost outer make arguments"}
+''')
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+    def boot_build(self, entrypoint, board, missing_files=False, failure=""):
         with tempfile.TemporaryDirectory() as scratch:
             root = Path(scratch)
             scripts = root / 'projects/scripts'
@@ -113,6 +153,26 @@ proc exec args {{
     close [open BOOT.BIN w]
 }}
 proc exit args {{}}
+proc get_runs {{name}} {{return $name}}
+proc get_property {{property object}} {{
+    switch $property {{
+        PROGRESS {{if {{"{failure}" eq "incomplete"}} {{return "50%"}}; return "100%"}}
+        STATUS {{if {{"{failure}" eq "status"}} {{return "write_bitstream ERROR"}}; return "write_bitstream Complete!"}}
+        DIRECTORY {{return "vivado_prj.runs/impl_1"}}
+        SLACK {{
+            if {{"{failure}" eq "timing" || ("{failure}" eq "hold" && $::delay_type eq "min")}} {{return -0.1}}
+            return 0.1
+        }}
+    }}
+}}
+proc open_run args {{}}
+proc report_timing_summary args {{}}
+proc check_timing args {{}}
+proc get_timing_paths args {{
+    set ::delay_type [lindex $args 1]
+    if {{"{failure}" eq "no_paths"}} {{return {{}}}}
+    return path0
+}}
 set fpga_board {board}
 set project daq2
 set carrier {board}
@@ -160,6 +220,13 @@ preprocess_bd {project} {board} {mode}
                         self.assertIn(f'BOOTGEN_ARCH={arch}', result.stdout)
                     else:
                         self.assertNotIn('BOOTGEN_ARCH=', result.stdout)
+
+    def test_failed_implementation_or_timing_is_fatal(self):
+        for failure in ('incomplete', 'status', 'timing', 'hold', 'no_paths'):
+            with self.subTest(failure=failure):
+                result = self.boot_build('adi_build.tcl', 'zcu102', failure=failure)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertNotIn('BOOTGEN_ARCH=', result.stdout)
 
     def test_missing_boot_files_fail_clearly(self):
         result = self.boot_build('adi_build.tcl', 'zcu102', missing_files=True)

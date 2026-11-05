@@ -4,14 +4,22 @@ classdef BSPInstallerTests < BSPTestsBase
     end
     
     methods(TestClassSetup)
-        function removeinstalledbsp(~)
-            str = 'Analog Devices';
+        function requireCleanInstallation(~)
+            folder = getenv('HSX_ADDON_ROOT');
+            if ~isempty(folder)
+                if ~isfolder(folder)
+                    mkdir(folder);
+                end
+                preferences = settings;
+                preferences.matlab.addons.InstallationFolder.TemporaryValue = folder;
+                drawnow;
+            end
+            % Never remove unrelated user toolboxes during verification.
+            str = 'Analog Devices, Inc. High-Speed Converter Toolbox';
             ts = matlab.addons.toolbox.installedToolboxes;
             for t = ts
-                if contains(t.Name,str)
-                    disp('Removing installed BSP');
-                    matlab.addons.toolbox.uninstallToolbox(t);
-                end
+                assert(~strcmp(t.Name,str), 'adi:ExistingToolbox', ...
+                    'Run installer tests with an isolated add-on installation folder.');
             end
         end
         function installBSP(obj)
@@ -42,13 +50,23 @@ classdef BSPInstallerTests < BSPTestsBase
                 throw(ME);
             end
             obj.installed
+            installedRoot = char(matlab.internal.addons.util.retrieveInstallationFolderForAddOn( ...
+                obj.installed.Guid, obj.installed.Version));
+            for name = {'adi.Version', 'AnalogDevices.plugin_rd'}
+                resolved = which(name{1});
+                assert(~isempty(resolved) && startsWith(resolved, [installedRoot,filesep]), ...
+                    'adi:SourceShadowingInstaller', ...
+                    'Installer test resolved %s from source or could not find it: %s', name{1}, resolved);
+            end
             disp("Installed");
         end
     end
     
     methods(TestClassTeardown)
         function uninstallBSP(obj)
-            matlab.addons.toolbox.uninstallToolbox(obj.installed);
+            if ~isempty(obj.installed)
+                matlab.addons.toolbox.uninstallToolbox(obj.installed);
+            end
         end
     end
     

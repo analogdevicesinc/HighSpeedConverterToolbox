@@ -1,3 +1,16 @@
+# Recreate a plain BD input port as a clock port, keeping its connections.
+# Smartconnect only inserts a clock converter for an interface whose clock
+# carries its own CLK_DOMAIN; plain ports leave it on the interconnect clock.
+proc make_clock_port {name freq_hz} {
+    set net [get_bd_nets -of_objects [get_bd_ports $name]]
+    set pins [get_bd_pins -of_objects $net]
+    delete_bd_objs $net [get_bd_ports $name]
+    create_bd_port -dir I -type clk -freq_hz $freq_hz $name
+    foreach pin $pins {
+        connect_bd_net [get_bd_ports $name] $pin
+    }
+}
+
  proc preprocess_bd {project carrier rxtx} {
     puts "Preprocessing $project $carrier $rxtx"
 
@@ -120,6 +133,11 @@
             }
         }
         ad9081_fmca_ebz {
+            # The DUT and its AXI-Lite slave run on the device clocks (2.58 ns
+            # in the upstream timing constraints).
+            make_clock_port rx_device_clk 387596899
+            make_clock_port tx_device_clk 387596899
+
             if {$rxtx == "rx" || $rxtx == "rxtx"} {
                 # Disconnect the ADC PACK pins
                 disconnect_bd_net /rx_mxfe_tpl_core_adc_valid_0 [get_bd_pins util_mxfe_cpack/fifo_wr_en]
@@ -154,7 +172,7 @@
                 # Connect TX clocking to the RX device clock
 
                 # Reset reconnect
-                delete_bd_objs [get_bd_nets tx_device_clk_1]
+                delete_bd_objs [get_bd_nets -of_objects [get_bd_ports tx_device_clk]]
                 connect_bd_net [get_bd_pins tx_device_clk_rstgen/slowest_sync_clk] [get_bd_ports rx_device_clk]
 
                 # UPACK reconnect
@@ -214,6 +232,10 @@
             }
         }
         ad9208_dual_ebz {
+            # The DUT and its AXI-Lite slave run on the global clock (2.66 ns
+            # in the upstream timing constraints).
+            make_clock_port glbl_clk_0 375939850
+
             if {$rxtx == "rx"} {
                 # Disconnect the ADC PACK pins
                 delete_bd_objs [get_bd_nets rx_ad9208_0_tpl_core_adc_valid_0]

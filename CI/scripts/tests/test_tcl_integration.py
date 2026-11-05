@@ -199,10 +199,10 @@ proc check_interconnect {{name}} {{
     return $name
 }}
 proc get_bd_cells {{name}} {{return [check_interconnect $name]}}
-proc get_bd_pins {{name}} {{return [check_interconnect $name]}}
-proc get_bd_nets {{name}} {{return $name}}
+proc get_bd_pins {{args}} {{return [check_interconnect [lindex $args end]]}}
+proc get_bd_nets {{args}} {{return [lindex $args end]}}
 proc get_bd_ports {{name}} {{return $name}}
-foreach command {{disconnect_bd_net connect_bd_net delete_bd_objs set_property create_bd_cell}} {{
+foreach command {{disconnect_bd_net connect_bd_net delete_bd_objs set_property create_bd_cell create_bd_port}} {{
     proc $command args {{}}
 }}
 source {{{SCRIPTS / 'matlab_processors.tcl'}}}
@@ -237,10 +237,12 @@ preprocess_bd {project} {board} {mode}
         with tempfile.TemporaryDirectory() as scratch:
             result = self.run_tcl(Path(scratch), f'''
 proc get_bd_cells {{name}} {{return $name}}
-proc get_bd_pins {{name}} {{return $name}}
-proc get_bd_nets {{name}} {{return $name}}
+proc get_bd_pins {{args}} {{return [lindex $args end]}}
+proc get_bd_nets {{args}} {{return [lindex $args end]}}
+proc get_bd_ports {{name}} {{return $name}}
 proc delete_bd_objs args {{}}
 proc connect_bd_net args {{}}
+proc create_bd_port args {{}}
 proc set_property {{option properties cell}} {{
     if {{[dict exists $properties CONFIG.NUM_MI]}} {{
         # 10 VCU118 base peripherals plus 8 AD9208 peripherals already use M00-M17.

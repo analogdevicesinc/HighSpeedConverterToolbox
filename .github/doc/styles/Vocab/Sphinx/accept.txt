@@ -7,7 +7,7 @@ datapaths
 Zynq
 Vivado
 Walkthrough
-Workflow
+[wW]orkflow
 util
 fifo
 wr
@@ -90,3 +90,5 @@ devicetree
 hdlsetuptoolpath
 num
 attr
+bootgen
+toolchain

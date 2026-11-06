@@ -1,0 +1,20 @@
+/* Screenshots of MATLAB dialogs read better with a little separation from
+   the page background. */
+.screenshot {
+    box-shadow: 0 6px 5px rgba(0, 0, 0, .2);
+    max-width: 80%;
+}
+
+/* The reference design diagrams are inlined rather than served through an
+   <img> so that their sub-blocks stay clickable and rd_style.css can theme
+   them. */
+.refdesign svg {
+    width: 100%;
+    height: auto;
+}
+
+.refdesign > p:last-child {
+    color: var(--text-color2);
+    font-size: .9em;
+    text-align: center;
+}

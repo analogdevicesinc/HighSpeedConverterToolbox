@@ -1,0 +1,16 @@
+# Sphinx build output
+build/
+
+# Pages and assets rendered by docs/gen_all_doc.py
+docs/sysobjects/
+docs/hdlrefdesigns/
+docs/helptoc.xml
+docs/assets/*_custom.svg
+docs/_static/css/rd_style.css
+
+# Copied in from CI/scripts by the Makefile's gen target
+docs/ports.json
+docs/read_ports_json.py
+
+# Python bytecode
+__pycache__/

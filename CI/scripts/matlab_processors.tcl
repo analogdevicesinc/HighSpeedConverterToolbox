@@ -1,3 +1,14 @@
+# Write an implementation-only XDC next to the project being built and add it
+# to the current project's constraints.
+proc add_project_xdc {name contents} {
+    set path [file normalize $name]
+    set fd [open $path w]
+    puts $fd $contents
+    close $fd
+    add_files -fileset constrs_1 -norecurse $path
+    set_property USED_IN_SYNTHESIS false [get_files $path]
+}
+
 # Clock the HDL Coder DUT from a device clock pin that is not a clock
 # interface (no CLK_DOMAIN), with its AXI4-Lite slave behind an asynchronous
 # clock converter. Smartconnect cannot insert the crossing itself because the
@@ -238,6 +249,12 @@ proc add_dut_axi_lite_cdc {cpu_interconnect master_port device_clk} {
                         # M03_AXI feeds the DUT AXI4-Lite through dut_axi_cdc.
                         set_property -dict [list CONFIG.NUM_MI {4}] [get_bd_cells ${cpu_interconnect}]
                         add_dut_axi_lite_cdc ${cpu_interconnect} M03_AXI axi_ad9783/dac_div_clk
+                        # With the DUT added, dac_div_clk spans more clock
+                        # regions and the placer moves its root away from the
+                        # DAC OSERDES (X3Y2). The OSERDESE3 CLK/CLKDIV max-skew
+                        # check then fails (the upstream design passes it).
+                        # Root the divided clock in the OSERDES clock region.
+                        add_project_xdc hsx_ad9783_clock_root.xdc {set_property USER_CLOCK_ROOT X3Y2 [get_nets -of_objects [get_pins -hierarchical -filter {NAME =~ */axi_ad9783/inst/i_if/i_dac_div_clk_rbuf/O}]]}
                     }
                 }
             }

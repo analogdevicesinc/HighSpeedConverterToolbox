@@ -143,7 +143,7 @@ proc get_bd_pins {{name}} {{return [check_interconnect $name]}}
 proc get_bd_intf_pins {{name}} {{return [check_interconnect $name]}}
 proc get_bd_nets {{name}} {{return $name}}
 proc get_bd_ports {{name}} {{return $name}}
-foreach command {{disconnect_bd_net connect_bd_net connect_bd_intf_net delete_bd_objs set_property create_bd_cell}} {{
+foreach command {{disconnect_bd_net connect_bd_net connect_bd_intf_net delete_bd_objs set_property create_bd_cell add_files get_files}} {{
     proc $command args {{}}
 }}
 source {{{SCRIPTS / 'matlab_processors.tcl'}}}
@@ -194,35 +194,42 @@ preprocess_bd ad9208_dual_ebz vcu118 rx
             result = self.run_tcl(Path(scratch), f'''
 set log {{}}
 proc record args {{lappend ::log $args}}
-foreach command {{get_bd_cells get_bd_pins get_bd_intf_pins get_bd_nets}} {{
+foreach command {{get_bd_cells get_bd_pins get_bd_intf_pins get_bd_nets get_files}} {{
     proc $command {{name}} {{return $name}}
 }}
-foreach command {{create_bd_cell set_property connect_bd_net connect_bd_intf_net delete_bd_objs}} {{
+foreach command {{create_bd_cell set_property connect_bd_net connect_bd_intf_net delete_bd_objs add_files}} {{
     proc $command args "record $command {{*}}\\$args"
 }}
 source {{{SCRIPTS / 'matlab_processors.tcl'}}}
 preprocess_bd ad9783_ebz zcu102 tx
 foreach entry $log {{puts $entry}}
 ''')
-        self.assertEqual(result.returncode, 0, result.stderr)
-        log = result.stdout
-        ic = 'axi_hpm0_lpd_interconnect'
-        # Asynchronous AXI4-Lite converter between the CPU interconnect and the DUT.
-        self.assertIn('create_bd_cell -type ip -vlnv xilinx.com:ip:axi_clock_converter dut_axi_cdc', log)
-        self.assertIn('set_property -dict {CONFIG.PROTOCOL AXI4LITE CONFIG.ACLK_ASYNC 1} dut_axi_cdc', log)
-        self.assertIn(f'connect_bd_intf_net {ic}/M03_AXI dut_axi_cdc/S_AXI', log)
-        self.assertIn(f'connect_bd_net {ic}/aclk dut_axi_cdc/s_axi_aclk', log)
-        self.assertIn(f'connect_bd_net {ic}/aresetn dut_axi_cdc/s_axi_aresetn', log)
-        # The DUT side runs on the DAC clock with a reset synchronized to it.
-        self.assertIn('connect_bd_net axi_ad9783/dac_div_clk dut_clk/clk_in', log)
-        self.assertIn('set_property -dict {CONFIG.INTERFACE_MODE PASS_THROUGH} dut_clk', log)
-        self.assertIn('connect_bd_net dut_clk/clk_out dut_axi_cdc/m_axi_aclk', log)
-        self.assertIn('connect_bd_net dut_clk/clk_out dut_rstgen/slowest_sync_clk', log)
-        self.assertIn(f'connect_bd_net {ic}/aresetn dut_rstgen/ext_reset_in', log)
-        self.assertIn('connect_bd_net dut_rstgen/peripheral_aresetn dut_axi_cdc/m_axi_aresetn', log)
-        # The CPU interconnect must stay entirely on the CPU clock.
-        self.assertNotIn('aclk1', log)
-        self.assertNotIn('NUM_CLKS', log)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            log = result.stdout
+            ic = 'axi_hpm0_lpd_interconnect'
+            # Asynchronous AXI4-Lite converter between the CPU interconnect and the DUT.
+            self.assertIn('create_bd_cell -type ip -vlnv xilinx.com:ip:axi_clock_converter dut_axi_cdc', log)
+            self.assertIn('set_property -dict {CONFIG.PROTOCOL AXI4LITE CONFIG.ACLK_ASYNC 1} dut_axi_cdc', log)
+            self.assertIn(f'connect_bd_intf_net {ic}/M03_AXI dut_axi_cdc/S_AXI', log)
+            self.assertIn(f'connect_bd_net {ic}/aclk dut_axi_cdc/s_axi_aclk', log)
+            self.assertIn(f'connect_bd_net {ic}/aresetn dut_axi_cdc/s_axi_aresetn', log)
+            # The DUT side runs on the DAC clock with a reset synchronized to it.
+            self.assertIn('connect_bd_net axi_ad9783/dac_div_clk dut_clk/clk_in', log)
+            self.assertIn('set_property -dict {CONFIG.INTERFACE_MODE PASS_THROUGH} dut_clk', log)
+            self.assertIn('connect_bd_net dut_clk/clk_out dut_axi_cdc/m_axi_aclk', log)
+            self.assertIn('connect_bd_net dut_clk/clk_out dut_rstgen/slowest_sync_clk', log)
+            self.assertIn(f'connect_bd_net {ic}/aresetn dut_rstgen/ext_reset_in', log)
+            self.assertIn('connect_bd_net dut_rstgen/peripheral_aresetn dut_axi_cdc/m_axi_aresetn', log)
+            # The CPU interconnect must stay entirely on the CPU clock.
+            self.assertNotIn('aclk1', log)
+            self.assertNotIn('NUM_CLKS', log)
+            # Keep the divided DAC clock rooted at the OSERDES clock region.
+            xdc = Path(scratch).resolve() / 'hsx_ad9783_clock_root.xdc'
+            self.assertIn(f'add_files -fileset constrs_1 -norecurse {xdc}', log)
+            self.assertIn(f'set_property USED_IN_SYNTHESIS false {xdc}', log)
+            self.assertEqual(xdc.read_text().strip(),
+                             'set_property USER_CLOCK_ROOT X3Y2 [get_nets -of_objects [get_pins -hierarchical '
+                             '-filter {NAME =~ */axi_ad9783/inst/i_if/i_dac_div_clk_rbuf/O}]]')
 
     def test_ad9783_reference_design_targets_the_converter(self):
         vendor = SCRIPTS.parents[1] / 'hdl/vendor/AnalogDevices/+AnalogDevices'

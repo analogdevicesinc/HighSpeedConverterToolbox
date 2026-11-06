@@ -19,7 +19,7 @@ hdlset_param(mdl, 'SynthesisToolPackageName', config.FPGAPackage);
 hdlset_param(mdl, 'SynthesisToolSpeedValue', config.FPGASpeed);
 hdlset_param(mdl, 'TargetPlatform', config.BoardName);
 hdlset_param(mdl, 'TargetLanguage', 'Verilog');
-hdlset_param(mdl, 'TargetDirectory', [folder,'\hdlsrc']);
+hdlset_param(mdl, 'TargetDirectory', fullfile(folder,'hdlsrc'));
 hdlset_param(mdl, 'Workflow', 'IP Core Generation');
 hdlset_param([mdl,'/HDL_DUT'], 'ProcessorFPGASynchronization', 'Free running');
 
@@ -77,6 +77,9 @@ hWC.validate;
 %% Run the workflow
 try
     hdlcoder.runWorkflow([mdl,'/HDL_DUT'], hWC, 'Verbosity', 'on');
+    if SynthesizeDesign
+        verify_build_artifacts(folder, board_name);
+    end
     fprintf('Build finished without exception\n');
     close_system(mdl, false);
     bdclose('all');
@@ -91,9 +94,6 @@ try
     out = [];
 catch ME
     fprintf('Exception occurred with message: %s\n', ME.message);
-    if SynthesizeDesign && exist([folder,'/vivado_ip_prj/boot/BOOT.BIN'],'file')
-       ME = []; 
-    end
     out = ME;%.identifier
 end
 

@@ -47,24 +47,32 @@ cstage("HDL Tests", "", flags) {
         withEnv(['BOARD='+branchName]) {
             cstage("Source", branchName, flags) {
                 local_unstash('builtSources')
-                sh 'make -C ./CI/scripts test'
-                junit testResults: 'test/*.xml', allowEmptyResults: true
-                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+                try {
+                    sh 'make -C ./CI/scripts test'
+                } finally {
+                    archiveArtifacts artifacts: 'test/**/*.log', followSymlinks: false, allowEmptyArchive: true
+                    junit testResults: 'test/BSPTestResults.xml', allowEmptyResults: false
+                }
             }
-/*
-            stage("Synth") {
-                unstash "builtSources"
-                sh 'make -C ./CI/scripts test_synth'
-                junit testResults: 'test/*.xml', allowEmptyResults: true
-                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+            cstage("Synth", branchName, flags) {
+                local_unstash('builtSources')
+                try {
+                    sh 'make -C ./CI/scripts test_synth'
+                } finally {
+                    archiveArtifacts artifacts: 'test/**/*.log,test/**/*.rpt,test/**/*.bit,test/**/*.xsa,test/**/*.BIN,test/**/hsx_build_verified.txt', followSymlinks: false, allowEmptyArchive: true
+                    junit testResults: 'test/BSPTestResults.xml', allowEmptyResults: false
+                }
             }
-*/
+
             cstage("Installer", branchName, flags) {
                 local_unstash('builtSources')
                 sh 'rm -rf hdl'
-                sh 'make -C ./CI/scripts test_installer'
-                junit testResults: 'test/*.xml', allowEmptyResults: true
-                archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+                try {
+                    sh 'make -C ./CI/scripts test_installer'
+                } finally {
+                    archiveArtifacts artifacts: 'test/**/*.log', followSymlinks: false, allowEmptyArchive: true
+                    junit testResults: 'test/BSPTestResults.xml', allowEmptyResults: false
+                }
             }
         }
     }
@@ -82,9 +90,13 @@ deployments[board] = { node(nodeLabel) {
                 cstage("AD9208 HDL Test", "", flags) {
                     echo "Node: ${env.NODE_NAME}"
                     local_unstash('builtSources', '', false)
-                    sh 'make -C ./CI/scripts test'
-                    junit testResults: 'test/*.xml', allowEmptyResults: true
-                    archiveArtifacts artifacts: 'test/logs/*', followSymlinks: false, allowEmptyArchive: true
+                    try {
+                        sh 'make -C ./CI/scripts test'
+                        sh 'make -C ./CI/scripts test_synth'
+                    } finally {
+                        archiveArtifacts artifacts: 'test/**/*.log,test/**/*.rpt,test/**/*.bit,test/**/*.xsa,test/**/*.BIN,test/**/hsx_build_verified.txt', followSymlinks: false, allowEmptyArchive: true
+                        junit testResults: 'test/BSPTestResults.xml', allowEmptyResults: false
+                    }
                 }
             }
             finally {
@@ -154,8 +166,8 @@ node('docker') {
 //             stage("Synth") {
 //                 unstash "builtSources"
 //                 sh 'make -C ./CI/scripts test_synth'
-//                 junit testResults: 'test/*.xml', allowEmptyResults: true
 //                 archiveArtifacts artifacts: 'test/**/*.log', followSymlinks: false, allowEmptyArchive: true
+//                 junit testResults: 'test/*.xml', allowEmptyResults: true
 //             }
 //         }
 //     }

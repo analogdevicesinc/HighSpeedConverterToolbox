@@ -1,5 +1,10 @@
 function runTests(board)
 
+% A failure before runner creation must not leave a previous passing report.
+if isfile('BSPTestResults.xml')
+    delete('BSPTestResults.xml');
+end
+
 import matlab.unittest.TestRunner;
 import matlab.unittest.TestSuite;
 import matlab.unittest.plugins.TestReportPlugin;
@@ -22,6 +27,7 @@ else
 end
     
 try
+    assert(~isempty(suite), 'adi:EmptyTestSuite', 'No tests matched the requested selection.');
 
     runner = matlab.unittest.TestRunner.withTextOutput('OutputDetail',4);
     runner.addPlugin(DiagnosticsValidationPlugin)
@@ -67,4 +73,4 @@ end
 
 save(['BSPTest_',datestr(now,'dd_mm_yyyy-HH:MM:SS'),'.mat'],'t');
 bdclose('all');
-exit(any([results.Failed]));
+exit(isempty(results) || any(~[results.Passed]));

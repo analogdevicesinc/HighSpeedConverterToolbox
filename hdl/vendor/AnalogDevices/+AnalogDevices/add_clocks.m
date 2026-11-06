@@ -58,7 +58,7 @@ switch lower(project)
             case 'RX'
                 hRD.addClockInterface( ...
                     'ClockConnection',   'glbl_clk_0', ...
-                    'ResetConnection',   'sys_rstgen/peripheral_aresetn');
+                    'ResetConnection',   'glbl_clk_0_rstgen/peripheral_aresetn');
             otherwise
                 error('Unknown reference design');
         end

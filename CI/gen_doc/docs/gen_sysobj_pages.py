@@ -24,7 +24,7 @@ def gen_sys_obj_pages():
     def cleanup(obj):
         """Turn MATLAB's fixed width help text into Markdown."""
 
-        obj["dec"] = obj["dec"].replace("192.168.2.1", "ip:192.168.2.1")
+        obj["dec"] = obj["dec"].replace("'192.168.2.1'", "'ip:192.168.2.1'")
         lines = []
         for d in obj["dec"].split("<br>"):
 

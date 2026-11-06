@@ -5,7 +5,7 @@ switch project
     case 'daq2'
         switch fpga
             case {'ZCU102'}
-                InterfaceConnection = 'axi_cpu_interconnect/M11_AXI';
+                InterfaceConnection = 'axi_hpm0_lpd_interconnect/M11_AXI';
                 BaseAddress = '0x9D000000';
                 MasterAddressSpace = 'sys_ps8/Data';
             otherwise
@@ -15,7 +15,7 @@ switch project
     case 'ad9081'
         switch fpga
             case {'ZCU102'}
-                InterfaceConnection = 'axi_cpu_interconnect/M11_AXI';
+                InterfaceConnection = 'axi_hpm0_lpd_interconnect/M11_AXI';
                 BaseAddress = '0x9D000000';
                 MasterAddressSpace = 'sys_ps8/Data';
             otherwise
@@ -24,43 +24,16 @@ switch project
     case 'ad9434'
         switch fpga
             case {'ZC706'}
-                InterfaceConnection = 'axi_cpu_interconnect/M08_AXI';
+                InterfaceConnection = 'axi_gp0_interconnect/M08_AXI';
                 BaseAddress = '0x50000000';
                 MasterAddressSpace = 'sys_ps7/Data';
             otherwise
                 error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
-        end
-    case 'fmcjesdadc1'
-        switch fpga
-            case {'ZC706'}
-                InterfaceConnection = 'axi_cpu_interconnect/M10_AXI';
-                BaseAddress = '0x50000000';
-                MasterAddressSpace = 'sys_ps7/Data';
-            otherwise
-                error(sprintf('Unknown Project FPGA %s/%s',project,fpga)); %#ok<*SPERR>
-        end
-    case 'ad9265'
-        switch fpga
-            case {'ZC706'}
-                InterfaceConnection = 'axi_cpu_interconnect/M08_AXI';
-                BaseAddress = '0x50000000';
-                MasterAddressSpace = 'sys_ps7/Data';
-            otherwise
-                error(sprintf('Unknown Project FPGA %s/%s',project,fpga));
-        end
-    case 'ad9739a'
-        switch fpga
-            case {'ZC706'}
-                InterfaceConnection = 'axi_cpu_interconnect/M08_AXI';
-                BaseAddress = '0x50000000';
-                MasterAddressSpace = 'sys_ps7/Data';
-            otherwise
-                error(sprintf('Unknown Project FPGA %s/%s',project,fpga));
         end
     case 'ad9783'
         switch fpga
             case {'ZCU102'}
-                InterfaceConnection = 'axi_cpu_interconnect/M03_AXI';
+                InterfaceConnection = 'axi_hpm0_lpd_interconnect/M03_AXI';
                 BaseAddress = '0x9D000000';
                 MasterAddressSpace = 'sys_ps8/Data';
             otherwise
@@ -69,7 +42,7 @@ switch project
     case 'ad9208'
         switch fpga
             case {'VCU118'}
-                InterfaceConnection = 'axi_cpu_interconnect/M17_AXI';
+                InterfaceConnection = 'axi_dp_interconnect/M18_AXI';
                 BaseAddress = '0xFF0000';
                 MasterAddressSpace = 'sys_mb/Data';
             otherwise

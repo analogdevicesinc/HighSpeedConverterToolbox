@@ -340,6 +340,168 @@
     ]
   },
   {
+    "name": "adi.AD9088.Rx",
+    "dec": "    The adi.AD9088.Rx System object is a signal source that can receive<br>    complex data from the AD9088.<br> <br>    rx = adi.AD9088.Rx;<br>    rx = adi.AD9088.Rx('uri','ip:192.168.2.1');<br> <br>    <a href=\"https://www.analog.com/media/en/technical-documentation/data-sheets/ad9088.pdf\">AD9088 Datasheet</a><br> <br>    See also adi.AD9088.Tx<br>    Documentation for adi.AD9088.Rx<br>       doc adi.AD9088.Rx<br>",
+    "props": [
+      {
+        "prop_name": "ChannelNCOFrequencies",
+        "prop_title": " ChannelNCOFrequencies Channel NCO Frequencies",
+        "prop_description": "Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available."
+      },
+      {
+        "prop_name": "MainNCOFrequencies",
+        "prop_title": " MainNCOFrequencies Main NCO Frequencies",
+        "prop_description": "Frequency of NCO in coarse decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available."
+      },
+      {
+        "prop_name": "ChannelNCOPhases",
+        "prop_title": " ChannelNCOPhases Channel NCO Phases",
+        "prop_description": "Phase of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the phase of an NCO in millidegrees, and N is the number of channels available."
+      },
+      {
+        "prop_name": "MainNCOPhases",
+        "prop_title": " MainNCOPhases Main NCO Phases",
+        "prop_description": "Phase of NCO in coarse decimators in receive path. Property must be a [1,N] vector where each value is the phase of an NCO in millidegrees, and N is the number of channels available."
+      },
+      {
+        "prop_name": "TestMode",
+        "prop_title": " TestMode Test Mode",
+        "prop_description": "Test mode of receive path. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn9' 'pn23' 'one_zero_toggle' 'user' 'pn7' 'pn15' 'pn31' 'ramp'"
+      },
+      {
+        "prop_name": "JESD204FSMControl",
+        "prop_title": " JESD204FSMControl JESD204 FSM Control",
+        "prop_description": "JESD204 FSM CTRL. Options are: '0' '1' When set to '0' the JESD links will be disabled. This property should be toggled to reset the JESD204 links"
+      },
+      {
+        "prop_name": "EnablePFIRs",
+        "prop_title": " EnablePFIRs Enable PFIRs",
+        "prop_description": "Enable use of programmable filters (PFILT) in receive path"
+      },
+      {
+        "prop_name": "EnableCFIRs",
+        "prop_title": " EnableCFIRs Enable CFIRs",
+        "prop_description": "Enable use of complex FIR filters (CFIR) in receive path"
+      },
+      {
+        "prop_name": "PFIRFilenames",
+        "prop_title": " PFIRFilenames PFIR File names",
+        "prop_description": "Path(s) to PFILT filter file(s). Input can be a string or cell array of strings. Files are loaded in order"
+      },
+      {
+        "prop_name": "CFIRFilenames",
+        "prop_title": " CFIRFilenames CFIR File names",
+        "prop_description": "Path(s) to CFIR filter file(s). Input can be a string or cell array of strings. Files are loaded in order"
+      },
+      {
+        "prop_name": "SamplingRate",
+        "prop_title": " SamplingRate Sampling Rate",
+        "prop_description": "Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is only readable once connected to hardwareHelp for adi.AD9088.Rx/SamplingRate is inherited from superclass adi.AD9088.Base"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9088.Rx/SamplesPerFrame is inherited from superclass adi.AD9088.Base"
+      },
+      {
+        "prop_name": "EnabledChannels",
+        "prop_title": " EnabledChannels Enabled Channels",
+        "prop_description": "Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant"
+      },
+      {
+        "prop_name": "uri",
+        "prop_title": "  URI - remote host URI",
+        "prop_description": "Hostname or IP address of remote libIIO deviceHelp for adi.AD9088.Rx/uri is inherited from superclass matlabshared.libiio.base"
+      }
+    ]
+  },
+  {
+    "name": "adi.AD9088.Tx",
+    "dec": "    The adi.AD9088.Tx System object is a signal sink that can transmit<br>    complex data from the AD9088.<br> <br>    tx = adi.AD9088.Tx;<br>    tx = adi.AD9088.Tx('uri','ip:192.168.2.1');<br> <br>    <a href=\"https://www.analog.com/media/en/technical-documentation/data-sheets/ad9088.pdf\">AD9088 Datasheet</a><br> <br>    See also adi.AD9088.Rx<br>    Documentation for adi.AD9088.Tx<br>       doc adi.AD9088.Tx<br>",
+    "props": [
+      {
+        "prop_name": "ChannelNCOFrequencies",
+        "prop_title": " ChannelNCOFrequencies Channel NCO Frequencies",
+        "prop_description": "Frequency of NCO in fine interpolators in transmit path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz."
+      },
+      {
+        "prop_name": "MainNCOFrequencies",
+        "prop_title": " MainNCOFrequencies Main NCO Frequencies",
+        "prop_description": "Frequency of NCO in coarse interpolators in transmit path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz."
+      },
+      {
+        "prop_name": "ChannelNCOPhases",
+        "prop_title": " ChannelNCOPhases Channel NCO Phases",
+        "prop_description": "Phase of NCO in fine interpolators in transmit path. Property must be a [1,N] vector where each value is the phase of an NCO in millidegrees."
+      },
+      {
+        "prop_name": "MainNCOPhases",
+        "prop_title": " MainNCOPhases Main NCO Phases",
+        "prop_description": "Phase of NCO in coarse interpolators in transmit path. Property must be a [1,N] vector where each value is the phase of an NCO in millidegrees."
+      },
+      {
+        "prop_name": "ChannelNCOGainScales",
+        "prop_title": " ChannelNCOGainScales Channel NCO Gain Scales",
+        "prop_description": "Digital gain of fine interpolators in transmit path. Property must be a [1,N] vector where each value is a linear gain scale."
+      },
+      {
+        "prop_name": "NCOEnables",
+        "prop_title": " NCOEnables NCO Enables",
+        "prop_description": "Vector of logicals which enabled individual NCOs in channel interpolators"
+      },
+      {
+        "prop_name": "DDROffloadEnable",
+        "prop_title": " DDROffloadEnable DDR Offload Enable",
+        "prop_description": "Enable use of BRAM in Tx datapath to offload from DDR. This is necessary for highspeed configurations when DDR is not fast enough for datapath"
+      },
+      {
+        "prop_name": "SamplingRate",
+        "prop_title": " SamplingRate Sampling Rate",
+        "prop_description": "Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is only readable once connected to hardwareHelp for adi.AD9088.Tx/SamplingRate is inherited from superclass adi.AD9088.Base"
+      },
+      {
+        "prop_name": "SamplesPerFrame",
+        "prop_title": " SamplesPerFrame Samples Per Frame",
+        "prop_description": "Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9088.Tx/SamplesPerFrame is inherited from superclass adi.AD9088.Base"
+      },
+      {
+        "prop_name": "EnabledChannels",
+        "prop_title": " EnabledChannels Enabled Channels",
+        "prop_description": "Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant"
+      },
+      {
+        "prop_name": "uri",
+        "prop_title": "  URI - remote host URI",
+        "prop_description": "Hostname or IP address of remote libIIO deviceHelp for adi.AD9088.Tx/uri is inherited from superclass matlabshared.libiio.base"
+      },
+      {
+        "prop_name": "DataSource",
+        "prop_title": " DataSource Data Source",
+        "prop_description": "Data source, specified as one of the following: 'DMA' — Specify the host as the source of the data. 'DDS' — Specify the DDS on the radio hardware as the source of the data. In this case, each channel has two additive tones.Help for adi.AD9088.Tx/DataSource is inherited from superclass adi.common.DDS"
+      },
+      {
+        "prop_name": "DDSFrequencies",
+        "prop_title": " DDSFrequencies DDS Frequencies",
+        "prop_description": "Frequencies values in Hz of the DDS tone generators. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.AD9088.Tx/DDSFrequencies is inherited from superclass adi.common.DDS"
+      },
+      {
+        "prop_name": "DDSScales",
+        "prop_title": " DDSScales DDS Scales",
+        "prop_description": "Scale of DDS tones in range [0,1]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.AD9088.Tx/DDSScales is inherited from superclass adi.common.DDS"
+      },
+      {
+        "prop_name": "DDSPhases",
+        "prop_title": " DDSPhases DDS Phases",
+        "prop_description": "Phases of DDS tones in range [0,360000]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N < this upper limit, other DDSs are not set.Help for adi.AD9088.Tx/DDSPhases is inherited from superclass adi.common.DDS"
+      },
+      {
+        "prop_name": "EnableCyclicBuffers",
+        "prop_title": " EnableCyclicBuffers Enable Cyclic Buffers",
+        "prop_description": "Enable Cyclic Buffers, configures transmit buffers to be cyclic, which makes them continuously repeatHelp for adi.AD9088.Tx/EnableCyclicBuffers is inherited from superclass adi.common.DDS"
+      }
+    ]
+  },
+  {
     "name": "adi.AD9144.Tx",
     "dec": "    The adi.AD9144.Tx System object is a signal source that can send<br>    complex data from the AD9144.<br> <br>    tx = adi.AD9144.Tx;<br>    tx = adi.AD9144.Tx('uri','192.168.2.1');<br> <br>    <a href=\"http://www.analog.com/media/en/technical-documentation/data-sheets/AD9144.pdf\">AD9144 Datasheet</a><br> <br>    See also adi.DAQ2.Tx<br>    Documentation for adi.AD9144.Tx<br>       doc adi.AD9144.Tx<br>",
     "props": [

@@ -1,13 +1,13 @@
 #!/bin/bash
-set -x
+set -ex
 
 if [ -z "${HDLBRANCH}" ]; then
-HDLBRANCH='hdl_2022_r2'
+HDLBRANCH='hdl_2026_r1'
 fi
 
 # Script is designed to run from specific location
-scriptdir=`dirname "$BASH_SOURCE"`
-cd $scriptdir
+scriptdir=$(dirname "${BASH_SOURCE[0]}")
+cd "$scriptdir"
 cd ..
 
 # Get HDL
@@ -16,13 +16,11 @@ if [ -d "hdl" ]; then
 fi
 for i in {1..5}
 do
-	if git clone --single-branch -b $HDLBRANCH https://github.com/analogdevicesinc/hdl.git
+	if git clone --single-branch -b "$HDLBRANCH" https://github.com/analogdevicesinc/hdl.git
 	then
 	   break
 	fi
-	if [ -d "hdl" ]; then
-	   break
-	fi
+	rm -rf hdl
 done
 if [ ! -d "hdl" ]; then
    echo "HDL clone failed"
@@ -30,22 +28,25 @@ if [ ! -d "hdl" ]; then
 fi
 
 # Get required vivado version needed for HDL
-if [ -f "hdl/library/scripts/adi_ip.tcl" ]; then
-	TARGET="hdl/library/scripts/adi_ip.tcl"
-else
-	TARGET="hdl/library/scripts/adi_ip_xilinx.tcl"
+# The literal release moved to adi_env.tcl; ignore variable-based overrides.
+VER=""
+for TARGET in hdl/scripts/adi_env.tcl hdl/library/scripts/adi_ip.tcl hdl/library/scripts/adi_ip_xilinx.tcl
+do
+    if [ -f "$TARGET" ]; then
+        VER=$(sed -nE 's/^[[:space:]]*set[[:space:]]+required_vivado_version[[:space:]]+"?([0-9]{4}\.[0-9]+(\.[0-9]+)?)"?[[:space:]]*(#.*)?$/\1/p' "$TARGET")
+        if [ -n "$VER" ]; then
+            break
+        fi
+    fi
+done
+if [[ ! "$VER" =~ ^[0-9]{4}\.[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "Cannot determine required Vivado version for $HDLBRANCH" >&2
+    exit 1
 fi
-VER=$(awk '/set required_vivado_version/ {print $3}' $TARGET | sed 's/"//g')
 echo "Required Vivado version ${VER}"
-VIVADOFULL=${VER}
-if [ ${#VER} = 8 ]
-then
-VER=${VER:0:6}
-fi
-VIVADO=${VER}
+python3 ./scripts/validate_hdl_projects.py hdl ../hdl/vendor/AnalogDevices/hdlcoder_board_customization.m
 
-# Setup
-source /opt/Xilinx/Vivado/$VIVADO/settings64.sh
+# Preparing sources does not invoke Vivado, so packaging needs no tool install.
 
 # Pre-build IP library
 # cd hdl/library
@@ -53,19 +54,17 @@ source /opt/Xilinx/Vivado/$VIVADO/settings64.sh
 # cd ../..
 
 # Rename .prj files since MATLAB ignores then during packaging
-FILES=$(grep -lrn hdl/projects/common -e '.prj' | grep -v Makefile | grep -v .git)
-for f in $FILES
+while IFS= read -r -d '' f
 do
   echo "Updating prj reference in: $f"
   sed -i "s/\.prj/\.mk/g" "$f"
-done
-FILES=$(find hdl/projects/common -name "*.prj")
-for f in $FILES
+done < <(grep -rlZ --include='*' --exclude=Makefile --exclude-dir=.git -e '\.prj' hdl/projects/common || test "$?" -eq 1)
+while IFS= read -r -d '' f
 do
   DEST="${f::-3}mk"
   echo "Renaming: $f to $DEST"
   mv "$f" "$DEST"
-done
+done < <(find hdl/projects/common -name '*.prj' -print0)
 
 # Remove git directory move to bsp folder
 rm -fr hdl/.git*
@@ -84,6 +83,8 @@ cp ports.json ../hdl/vendor/AnalogDevices/+AnalogDevices/
 
 # Updates
 cp scripts/matlab_processors.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/matlab_processors.tcl
+# Retain upstream and add only the parent/child MATLAB flag adapter.
+mv ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx_upstream.tcl
 cp scripts/adi_project_xilinx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_project_xilinx.tcl
 cp scripts/system_project_rxtx.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/system_project_rxtx.tcl
 cp scripts/adi_build.tcl ../hdl/vendor/AnalogDevices/vivado/projects/scripts/adi_build.tcl
@@ -96,7 +97,7 @@ cp scripts/pmufw_zynqmp.tcl  ../hdl/vendor/AnalogDevices/vivado/projects/scripts
 cp scripts/fixmake.sh  ../hdl/vendor/AnalogDevices/vivado/projects/scripts/fixmake.sh
 
 # Copy boot files
-mkdir ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/
+mkdir -p ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/
 cp -r scripts/boot/* ../hdl/vendor/AnalogDevices/vivado/projects/common/boot/
 
 echo 'puts "Skipping"' > ../hdl/vendor/AnalogDevices/vivado/library/axi_ad9361/axi_ad9361_delay.tcl

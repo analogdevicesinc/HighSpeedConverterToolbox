@@ -12,5 +12,5 @@ get_style () {
 styles=( Google )
 for i in "${styles[@]}"
 do
-	get_style "errata-ai" $i
+	get_style "vale-cli" $i
 done

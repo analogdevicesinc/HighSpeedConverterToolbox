@@ -39,25 +39,43 @@ endif
 
 GITTAG := $(shell git describe --tags HEAD)
 
+# Sphinx settings
+SPHINXBUILD   ?= sphinx-build
+SPHINXOPTS    ?= -j auto
+SOURCEDIR     := docs
+BUILDDIR      := build
+DOCOUT        := ../../doc
+
 .ONESHELL:
 
-doc_ml:
-	cd docs ; \
-	cp ../../scripts/ports.json . ; \
-	cp ../../scripts/read_ports_json.py . ; \
-	python3 read_ports_json.py ; \
-	MATLAB=ON python3 gen_all_doc.py ; \
-	cd .. ; \
-	mkdocs build -d doc
-	mv doc ../../
+.PHONY: doc doc_ml gen html clean help
 
-doc:
+# Render the pages that are generated from ports.json and sysobjs.json
+gen:
 	cd docs ; \
 	cp ../../scripts/ports.json . ; \
 	cp ../../scripts/read_ports_json.py . ; \
 	python3 read_ports_json.py ; \
-	python3 gen_all_doc.py ; \
-	cd .. ; \
-	mkdocs build -d doc ; \
-	mkdir -p ../../doc ; \
-	cp -r doc/* ../../doc/ ; \
+	python3 gen_all_doc.py
+
+html:
+	$(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS) $(O)
+
+# Documentation for the web
+doc: gen html
+	rm -rf $(DOCOUT)
+	mkdir -p $(DOCOUT)
+	cp -r $(BUILDDIR)/html/. $(DOCOUT)/
+
+# Documentation embedded in MATLAB's help browser
+doc_ml: export MATLAB := ON
+doc_ml: gen html
+	rm -rf $(DOCOUT)
+	mkdir -p $(DOCOUT)
+	cp -r $(BUILDDIR)/html/. $(DOCOUT)/
+
+clean:
+	rm -rf $(BUILDDIR)
+
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

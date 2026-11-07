@@ -37,6 +37,9 @@ ifeq ($(INCLUDE_EXAMPLES),)
 INCLUDE_EXAMPLES := 1
 endif
 
+MATLAB_BIN ?= $(MLPATH)/$(MLRELEASE)/bin/matlab
+export MATLAB_BIN
+
 GITTAG := $(shell git describe --tags HEAD)
 
 .ONESHELL:
@@ -79,40 +82,42 @@ add_libad9361:
 test_installer:
 	cd ../.. ; \
 	cp *.mltbx test/ ; \
-	cp hdl/vendor/AnalogDevices/hdlcoder_board_customization.m test/hdlcoder_board_customization_local.m ; \
-	sed -i "s/hdlcoder_board_customization/hdlcoder_board_customization_local/g" test/hdlcoder_board_customization_local.m ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('test');runInstallerTests('$(BOARD)');"
+	if test -f hdl/vendor/AnalogDevices/hdlcoder_board_customization.m; then \
+	    cp hdl/vendor/AnalogDevices/hdlcoder_board_customization.m test/hdlcoder_board_customization_local.m; \
+	    sed -i "s/hdlcoder_board_customization/hdlcoder_board_customization_local/g" test/hdlcoder_board_customization_local.m; \
+	fi ; \
+	"$(MATLAB_BIN)" -batch "cd('test');runInstallerTests('$(BOARD)');"
 
 test:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('test');runTests('$(BOARD)');"
+	"$(MATLAB_BIN)" -batch "cd('test');runTests('$(BOARD)');"
 
 test_streaming:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));addpath(genpath('deps'));runHWTests;"
+	"$(MATLAB_BIN)" -batch "addpath(genpath('test'));addpath(genpath('deps'));runHWTests;"
 
 run_NonHWTests:
 	cd ../.. ; \
-        ${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));runNonHWTest;"
+        "$(MATLAB_BIN)" -batch "addpath(genpath('test'));runNonHWTest;"
 
 test_evm:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('test'));addpath(genpath('deps'));hwTestRunner;"
+	"$(MATLAB_BIN)" -batch "addpath(genpath('test'));addpath(genpath('deps'));hwTestRunner;"
 
 test_modem:
 	cd ../.. ; \
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "addpath(genpath('hdl'));cd('targeting');addpath(genpath('modem-qpsk'))"
+	"$(MATLAB_BIN)" -batch "addpath(genpath('hdl'));cd('targeting');addpath(genpath('modem-qpsk'))"
 
 test_synth:
 	bash synth_designs.sh $(BOARD)
 gen_tlbx:
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "genTlbx($(INCLUDE_EXAMPLES));exit();"
+	"$(MATLAB_BIN)" -batch "genTlbx($(INCLUDE_EXAMPLES));exit();"
 
 linter:
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "linter;exit();"
+	"$(MATLAB_BIN)" -batch "linter;exit();"
 
 doc:
-	${MLPATH}/$(MLRELEASE)/bin/matlab $(MLFLAGS) -r "cd('../doc');genhtml();exit();"
+	"$(MATLAB_BIN)" -batch "cd('../doc');genhtml();exit();"
 
 zip:
 	cd ../.. ; \

@@ -34,13 +34,19 @@ classdef BSPTestsBase < matlab.unittest.TestCase
             if ~exist([pwd,'/logs'],'dir')
                 mkdir('logs');
             end
-            system('cp *.log logs/');
+            files = dir('*.log');
+            for file = files'
+                copyfile(file.name, 'logs');
+            end
         end
         function collectBOOTBINs(~)
             if ~exist([pwd,'/BINS'],'dir')
                 mkdir('BINS');
             end
-            system('cp *.BIN BINS/');
+            files = dir('*.BIN');
+            for file = files'
+                copyfile(file.name, 'BINS');
+            end
         end
     end
     
@@ -161,10 +167,13 @@ classdef BSPTestsBase < matlab.unittest.TestCase
         end
         
         function setVivadoPath(~,vivado)
-            if ispc
-                pathname = ['C:\Xilinx\Vivado\',vivado,'\bin\vivado.bat'];
-            elseif isunix
-                pathname = ['/opt/Xilinx/Vivado/',vivado,'/bin/vivado'];
+            pathname = getenv('VIVADO_BIN');
+            if isempty(pathname)
+                if ispc
+                    pathname = ['C:\Xilinx\Vivado\',vivado,'\bin\vivado.bat'];
+                else
+                    pathname = ['/opt/Xilinx/Vivado/',vivado,'/bin/vivado'];
+                end
             end
             assert(exist(pathname,'file')>0,'Correct version of Vivado is unavailable or in a non-standard location');
             hdlsetuptoolpath('ToolName', 'Xilinx Vivado', ...
@@ -182,10 +191,8 @@ classdef BSPTestsBase < matlab.unittest.TestCase
             % Extract board configuration
             cfgb = testCase.extractConfigs(configs);
             %             for cfg = cfgs
-            if exist(testCase.Folder,'dir')
-                rmdir(testCase.Folder,'s');
-                pause(1);
-            end
+            % Keep each variant's outputs, including failed builds, for inspection.
+            testCase.Folder = tempname(pwd);
             % Set up vivado
             testCase.setVivadoPath(cfgb.vivado_version);
             % Build
@@ -195,13 +202,13 @@ classdef BSPTestsBase < matlab.unittest.TestCase
             res = build_design(cfgb.Board,cfgb.ReferenceDesignName,...
                 cfgb.vivado_version,cfgb.mode,cfgb.Board.BoardName,...
                 SynthesizeDesign,testCase.Folder);
+            testCase.CollectLogs(cfgb);
             % Check
             if isfield(res,'message') || isa(res,'MException')
                 disp(['Build error: ', cfgb.ReferenceDesignName]);
                 disp(res);
                 disp(res.message);
                 disp(res.stack);
-                testCase.CollectLogs(cfgb);
                 verifyEmpty(testCase,res,res.message);
             else
                 if SynthesizeDesign

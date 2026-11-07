@@ -12,7 +12,8 @@ def main():
                         registry.read_text())
     if not boards:
         sys.exit(f'No HDL boards found in {registry}')
-    missing = []
+    # HDL Coder must copy these root-level files for nested xcvr_wizard builds.
+    missing = [name for name in ('quiet.mk', 'Makefile') if not (hdl / name).is_file()]
     for project, carrier in boards:
         for name in ('system_project.tcl', 'system_top.v', 'system_constr.xdc'):
             path = Path('projects') / project / carrier / name

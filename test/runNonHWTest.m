@@ -1,12 +1,17 @@
 function suite = runNonHWTest()
 
+if isfile('BSPDemoTests.xml')
+    delete('BSPDemoTests.xml');
+end
+
 import matlab.unittest.TestRunner;
 import matlab.unittest.TestSuite;
 import matlab.unittest.plugins.TestReportPlugin;
 import matlab.unittest.plugins.XMLPlugin
 import matlab.unittest.plugins.DiagnosticsValidationPlugin
 
-suite = testsuite({'NonHWTest'});
+addpath('..');
+suite = testsuite({'NonHWTest','BuildVerificationTests','PackageManifestTests'});
 xmlFile = 'BSPDemoTests.xml';
 
 
@@ -36,4 +41,4 @@ end
 
 save(['BSPInstallerTest_',datestr(now,'dd_mm_yyyy-HH:MM:SS'),'.mat'],'t');
 bdclose('all');
-exit(any([results.Failed]));
+exit(isempty(results) || any(~[results.Passed]));

@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <toc>
    <tocitem target="index.html">Analog Devices, Inc High-Speed Converter Toolbox
-      <tocitem target="support/index.html">Support</tocitem>
-      <tocitem target="streaming/index.html">Streaming</tocitem>
-      <tocitem target="targeting/index.html">Targeting</tocitem>
-      <tocitem target="install/index.html">Install</tocitem>
-      <tocitem target="examples/index.html">Examples</tocitem>
-      <tocitem target="models/index.html">Models</tocitem>
-      <tocitem target="models/index.html">Behavioral Models
-          <tocitem target="models/ad9081/top_level.tex/index.html">AD9081: MxFE
-              <tocitem target="models/ad9081/adc.tex/index.html">ADC</tocitem>
-              <tocitem target="models/ad9081/dac.tex/index.html">DAC</tocitem>
-              <tocitem target="models/ad9081/ddc2.tex/index.html">DDC</tocitem>
-              <tocitem target="models/ad9081/duc.tex/index.html">DUC</tocitem>
-              <tocitem target="models/ad9081/pfilt.tex/index.html">PFILT</tocitem>
+      <tocitem target="install.html">Installation</tocitem>
+      <tocitem target="streaming.html">Data Streaming</tocitem>
+      <tocitem target="ad9081.html">AD9081/2 Specific Features</tocitem>
+      <tocitem target="targeting.html">HDL Targeting</tocitem>
+      <tocitem target="examples.html">Examples</tocitem>
+      <tocitem target="support.html">Support</tocitem>
+      <tocitem target="models.html">Behavioral Models
+          <tocitem target="models/ad9081/top_level.tex.html">AD9081: MxFE
+              <tocitem target="models/ad9081/adc.tex.html">ADC</tocitem>
+              <tocitem target="models/ad9081/dac.tex.html">DAC</tocitem>
+              <tocitem target="models/ad9081/ddc2.tex.html">DDC</tocitem>
+              <tocitem target="models/ad9081/duc.tex.html">DUC</tocitem>
+              <tocitem target="models/ad9081/pfilt.tex.html">PFILT</tocitem>
          </tocitem>
      </tocitem>
-      <tocitem target="objects/index.html">Hardware Interface APIs
-          <tocitem target="sysobjects/adi.AD9081.Rx/index.html">adi.AD9081.Rx</tocitem>
-          <tocitem target="sysobjects/adi.AD9081.Tx/index.html">adi.AD9081.Tx</tocitem>
-          <tocitem target="sysobjects/adi.AD9083.Rx/index.html">adi.AD9083.Rx</tocitem>
-          <tocitem target="sysobjects/adi.AD9084.Rx/index.html">adi.AD9084.Rx</tocitem>
-          <tocitem target="sysobjects/adi.AD9084.Tx/index.html">adi.AD9084.Tx</tocitem>
-          <tocitem target="sysobjects/adi.AD9088.Rx/index.html">adi.AD9088.Rx</tocitem>
-          <tocitem target="sysobjects/adi.AD9088.Tx/index.html">adi.AD9088.Tx</tocitem>
-          <tocitem target="sysobjects/adi.AD9144.Tx/index.html">adi.AD9144.Tx</tocitem>
-          <tocitem target="sysobjects/adi.AD9152.Tx/index.html">adi.AD9152.Tx</tocitem>
-          <tocitem target="sysobjects/adi.AD9213.Rx/index.html">adi.AD9213.Rx</tocitem>
-          <tocitem target="sysobjects/adi.DualAD9213.Rx/index.html">adi.DualAD9213.Rx</tocitem>
-          <tocitem target="sysobjects/adi.AD9467.Rx/index.html">adi.AD9467.Rx</tocitem>
-          <tocitem target="sysobjects/adi.AD9680.Rx/index.html">adi.AD9680.Rx</tocitem>
-          <tocitem target="sysobjects/adi.DAQ2.Rx/index.html">adi.DAQ2.Rx</tocitem>
-          <tocitem target="sysobjects/adi.DAQ2.Tx/index.html">adi.DAQ2.Tx</tocitem>
-          <tocitem target="sysobjects/adi.DAQ3.Rx/index.html">adi.DAQ3.Rx</tocitem>
-          <tocitem target="sysobjects/adi.DAQ3.Tx/index.html">adi.DAQ3.Tx</tocitem>
-          <tocitem target="sysobjects/adi.QuadMxFE.Rx/index.html">adi.QuadMxFE.Rx</tocitem>
-          <tocitem target="sysobjects/adi.QuadMxFE.Tx/index.html">adi.QuadMxFE.Tx</tocitem>
+      <tocitem target="sysobjects/index.html">Device Interfaces
+          <tocitem target="sysobjects/adi.AD9081.Rx.html">adi.AD9081.Rx</tocitem>
+          <tocitem target="sysobjects/adi.AD9081.Tx.html">adi.AD9081.Tx</tocitem>
+          <tocitem target="sysobjects/adi.AD9083.Rx.html">adi.AD9083.Rx</tocitem>
+          <tocitem target="sysobjects/adi.AD9084.Rx.html">adi.AD9084.Rx</tocitem>
+          <tocitem target="sysobjects/adi.AD9084.Tx.html">adi.AD9084.Tx</tocitem>
+          <tocitem target="sysobjects/adi.AD9088.Rx.html">adi.AD9088.Rx</tocitem>
+          <tocitem target="sysobjects/adi.AD9088.Tx.html">adi.AD9088.Tx</tocitem>
+          <tocitem target="sysobjects/adi.AD9144.Tx.html">adi.AD9144.Tx</tocitem>
+          <tocitem target="sysobjects/adi.AD9152.Tx.html">adi.AD9152.Tx</tocitem>
+          <tocitem target="sysobjects/adi.AD9213.Rx.html">adi.AD9213.Rx</tocitem>
+          <tocitem target="sysobjects/adi.DualAD9213.Rx.html">adi.DualAD9213.Rx</tocitem>
+          <tocitem target="sysobjects/adi.AD9467.Rx.html">adi.AD9467.Rx</tocitem>
+          <tocitem target="sysobjects/adi.AD9680.Rx.html">adi.AD9680.Rx</tocitem>
+          <tocitem target="sysobjects/adi.DAQ2.Rx.html">adi.DAQ2.Rx</tocitem>
+          <tocitem target="sysobjects/adi.DAQ2.Tx.html">adi.DAQ2.Tx</tocitem>
+          <tocitem target="sysobjects/adi.DAQ3.Rx.html">adi.DAQ3.Rx</tocitem>
+          <tocitem target="sysobjects/adi.DAQ3.Tx.html">adi.DAQ3.Tx</tocitem>
+          <tocitem target="sysobjects/adi.QuadMxFE.Rx.html">adi.QuadMxFE.Rx</tocitem>
+          <tocitem target="sysobjects/adi.QuadMxFE.Tx.html">adi.QuadMxFE.Tx</tocitem>
+       </tocitem>
+      <tocitem target="hdlrefdesigns/index.html">HDL Reference Designs
+          <tocitem target="hdlrefdesigns/daq2.html">daq2</tocitem>
+          <tocitem target="hdlrefdesigns/ad9081.html">ad9081</tocitem>
+          <tocitem target="hdlrefdesigns/ad9434.html">ad9434</tocitem>
+          <tocitem target="hdlrefdesigns/ad9783.html">ad9783</tocitem>
+          <tocitem target="hdlrefdesigns/ad9208.html">ad9208</tocitem>
        </tocitem>
    </tocitem>
 </toc>

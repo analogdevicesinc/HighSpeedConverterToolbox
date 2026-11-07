@@ -1,0 +1,188 @@
+# adi.QuadMxFE.Rx
+
+The adi.QuadMxFE.Rx System object is a signal source that can receive complex data from the QuadMxFE.
+
+```matlab
+rx = adi.QuadMxFE.Rx;
+rx = adi.QuadMxFE.Rx('uri','ip:192.168.2.1');
+```
+
+[AD9081 Datasheet](http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf)
+
+## Creation
+
+The class can be instantiated in the following way with and without property name value pairs.
+
+```matlab
+dev = adi.QuadMxFE.Rx
+dev = adi.QuadMxFE.Rx(Name, Value)
+```
+
+## Properties
+
+Unless otherwise indicated, properties are non-tunable, which means you cannot
+change their values after calling the object. Objects lock when you call them,
+and the release function unlocks them.
+
+If a property is tunable, you can change its value at any time.
+
+For more information on changing property values, see
+[System Design in MATLAB Using System Objects](https://www.mathworks.com/help/matlab/matlab_prog/system-design-in-matlab-using-system-objects.html).
+
+
+:::{collapsible} ChannelNCOFrequenciesChipA
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOFrequenciesChipB
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOFrequenciesChipC
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOFrequenciesChipD
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOFrequenciesChipA
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOFrequenciesChipB
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOFrequenciesChipC
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOFrequenciesChipD
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOPhasesChipA
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOPhasesChipB
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOPhasesChipC
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOPhasesChipD
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOPhasesChipA
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOPhasesChipB
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOPhasesChipC
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOPhasesChipD
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} TestModeChipA
+Test mode of receive path. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7' 'pn15' 'pn31' 'ramp'
+:::
+
+:::{collapsible} TestModeChipB
+Test mode of receive path. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7' 'pn15' 'pn31' 'ramp'
+:::
+
+:::{collapsible} TestModeChipC
+Test mode of receive path. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7' 'pn15' 'pn31' 'ramp'
+:::
+
+:::{collapsible} TestModeChipD
+Test mode of receive path. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7' 'pn15' 'pn31' 'ramp'
+:::
+
+:::{collapsible} EnablePFIRsChipA
+Enable use of PFIR/PFILT filters for Chip A
+:::
+
+:::{collapsible} EnablePFIRsChipB
+Enable use of PFIR/PFILT filters for Chip B
+:::
+
+:::{collapsible} EnablePFIRsChipC
+Enable use of PFIR/PFILT filters for Chip C
+:::
+
+:::{collapsible} EnablePFIRsChipD
+Enable use of PFIR/PFILT filters for Chip D
+:::
+
+:::{collapsible} PFIRFilenamesChipA
+Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip A
+:::
+
+:::{collapsible} PFIRFilenamesChipB
+Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip B
+:::
+
+:::{collapsible} PFIRFilenamesChipC
+Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip C
+:::
+
+:::{collapsible} PFIRFilenamesChipD
+Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip D
+:::
+
+:::{collapsible} ExternalAttenuation
+Attenuation value of external HMC425a
+:::
+
+:::{collapsible} SamplesPerFrame
+Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.
+:::
+
+:::{collapsible} EnableResampleFilters
+Enable interpolation (TX) or decimation (RX) by 2 when enabled to correct interface rate to 125 MS/s. This will scale the input and output data length by either 1/2 (RX) or 2 (TX).
+:::
+
+:::{collapsible} CalibrationBoardAttached
+adi.QuadMxFE.Rx/CalibrationBoardAttached is a property.
+:::
+
+:::{collapsible} EnabledChannels
+Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant
+:::
+
+:::{collapsible} uri
+Hostname or IP address of remote libIIO deviceHelp for adi.QuadMxFE.Rx/uri is inherited from superclass matlabshared.libiio.base
+:::
+
+
+## Example Usage
+
+```matlab
+%% Rx set up
+rx = adi.QuadMxFE.Rx('uri','ip:analog.local');
+rx.SamplesPerFrame = 2^14;
+rx.EnabledChannels = 1;
+
+%% Run
+for k=1:10
+    valid = false;
+    while ~valid
+        [out, valid] = rx();
+    end
+end
+
+%% Cleanup
+release(rx)
+```

@@ -1,0 +1,33 @@
+# ad9783 Reference Design Integration
+
+This page outlines the HDL reference design integration for the *ad9783* reference design for the Analog Devices
+AD9783 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants:
+
+- Supported FPGA carriers:
+    - ZCU102
+- Supported design variants:
+    - TX
+
+## Reference Design
+
+::::{container} refdesign
+:::{raw} html
+:file: ../assets/rd_jesd_custom.svg
+:::
+
+HDL Reference Design with Custom IP from HDL-Coder. Click on sub-blocks for more documentation.
+::::
+
+The IP-Core generation flow will integrate IP generated from Simulink subsystem into an ADI authored reference design. Depending on the FPGA carrier and FMC card or SoM, this will support different IP locations based on the diagram above.
+
+## HDL Workflow Advisor Port Mappings
+
+When using the HDL Workflow Advisor, the following port mappings are used to connect the reference design to the HDL-Coder generated IP-Core:
+
+| Type | Target Platform Interface (MATLAB) | Reference Design Connection (Vivado) | Width | Reference Design Variant |
+| ---- | ------------------------ | --------------------------- | ----- | ----------- |
+| VALID-IN | IP Valid Tx Data IN | axi_ad9783/dac_valid | 1 | TX |
+| DATA-OUT | AD9783 DAC Data 0 OUT | axi_ad9783/dac_ddata_0 | 64 | TX |
+| DATA-OUT | AD9783 DAC Data 1 OUT | axi_ad9783/dac_ddata_1 | 64 | TX |
+| DATA-IN | IP Data 0 IN | util_ad9783_dac_upack/fifo_rd_data_0 | 64 | TX |
+| DATA-IN | IP Data 1 IN | util_ad9783_dac_upack/fifo_rd_data_1 | 64 | TX |

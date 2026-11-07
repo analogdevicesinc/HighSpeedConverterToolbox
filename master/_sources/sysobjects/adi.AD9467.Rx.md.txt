@@ -1,0 +1,80 @@
+# adi.AD9467.Rx
+
+The adi.AD9467.Rx System object is a signal source that can receive complex data from the AD9467.
+
+```matlab
+rx = adi.AD9467.Rx;
+rx = adi.AD9467.Rx('uri','ip:192.168.2.1');
+```
+
+[AD9467 Datasheet](http://www.analog.com/media/en/technical-documentation/data-sheets/AD9467.pdf)
+
+## Creation
+
+The class can be instantiated in the following way with and without property name value pairs.
+
+```matlab
+dev = adi.AD9467.Rx
+dev = adi.AD9467.Rx(Name, Value)
+```
+
+## Properties
+
+Unless otherwise indicated, properties are non-tunable, which means you cannot
+change their values after calling the object. Objects lock when you call them,
+and the release function unlocks them.
+
+If a property is tunable, you can change its value at any time.
+
+For more information on changing property values, see
+[System Design in MATLAB Using System Objects](https://www.mathworks.com/help/matlab/matlab_prog/system-design-in-matlab-using-system-objects.html).
+
+
+:::{collapsible} SamplingRate
+Baseband sampling rate in Hz, specified as a scalar in samples per second. This value read from the hardware after the object is setup.
+:::
+
+:::{collapsible} TestMode
+Select ADC test mode. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn_long' 'pn_short' 'one_zero_toggle'
+:::
+
+:::{collapsible} FilterHighPass3dbFrequency
+FilterHighPass3dbFrequency
+:::
+
+:::{collapsible} Scale
+Scale received data. Possible options are: 0.030517 0.032043 0.033569 0.035095 0.036621 0.038146
+:::
+
+:::{collapsible} SamplesPerFrame
+Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9467.Rx/SamplesPerFrame is inherited from superclass adi.AD9467.Base
+:::
+
+:::{collapsible} EnabledChannels
+Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant
+:::
+
+:::{collapsible} uri
+Hostname or IP address of remote libIIO deviceHelp for adi.AD9467.Rx/uri is inherited from superclass matlabshared.libiio.base
+:::
+
+
+## Example Usage
+
+```matlab
+%% Rx set up
+rx = adi.AD9467.Rx('uri','ip:analog.local');
+rx.SamplesPerFrame = 2^14;
+rx.EnabledChannels = 1;
+
+%% Run
+for k=1:10
+    valid = false;
+    while ~valid
+        [out, valid] = rx();
+    end
+end
+
+%% Cleanup
+release(rx)
+```

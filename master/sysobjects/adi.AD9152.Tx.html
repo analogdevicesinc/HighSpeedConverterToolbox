@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The adi.AD9152.Tx System object is a signal source that can send complex data from the AD9144." name="description" />
+
+    <title>adi.AD9152.Tx &#8212; Analog Devices High-Speed Converter Toolbox 23.2.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a3ee7af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/style.css?v=bd4e21ef" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/rd_style.css?v=1230db28" />
+    <script async="async" src="../_static/app.umd.js?v=048c1170"></script>
+    <link rel="icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="adi.AD9213.Rx" href="adi.AD9213.Rx.html" />
+    <link rel="prev" title="adi.AD9144.Tx" href="adi.AD9144.Tx.html" />
+   
+  
+  
+  
+  <meta name="repository" content="HighSpeedConverterToolbox">
+  <meta name="version" content="23.2.1">
+  
+    <meta name="page_source_suffix" content=".md">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../index.html">
+          <div>Analog Devices High-Speed Converter Toolbox</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root/>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">adi.AD9152.Tx</a><ul>
+<li><a class="reference internal" href="#creation">Creation</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+<li><a class="reference internal" href="#example-usage">Example Usage</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../index.html">
+      <img class="only-light" src="../_static/logos/hsx_300.png"/>
+      <img class="only-dark" src="../_static/logos/hsx_w_300.png"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root/>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../models.html">Behavioral Models</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/top_level.tex.html">AD9081 Behavioral Model Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/top_level.tex.html#model-limitations">Model Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/top_level.tex.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/adc.tex.html">AD9081 ADC and ADC Mux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/adc.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/adc.tex.html#example-configuration">Example Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/dac.tex.html">AD9081 DAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/dac.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/ddc2.tex.html">AD9081 Digital Down Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/ddc2.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/ddc2.tex.html#example-configuration">Example Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/duc.tex.html">AD9081 Digital Up Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/duc.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/pfilt.tex.html">AD9081 Programmable FIR Filters (PFILT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/pfilt.tex.html#top-level-control"><strong>Top-Level Control</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/pfilt.tex.html#example-configuration">Example Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../streaming.html">Receiving and Sending Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad9081.html">AD9081/2 Specific Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../targeting.html">HDL Targeting with HDL-Coder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Device Interfaces</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9081.Rx.html">adi.AD9081.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9081.Tx.html">adi.AD9081.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9083.Rx.html">adi.AD9083.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9084.Rx.html">adi.AD9084.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9084.Tx.html">adi.AD9084.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9088.Rx.html">adi.AD9088.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9088.Tx.html">adi.AD9088.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9144.Tx.html">adi.AD9144.Tx</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">adi.AD9152.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9213.Rx.html">adi.AD9213.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DualAD9213.Rx.html">adi.DualAD9213.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9467.Rx.html">adi.AD9467.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9680.Rx.html">adi.AD9680.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ2.Rx.html">adi.DAQ2.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ2.Tx.html">adi.DAQ2.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ3.Rx.html">adi.DAQ3.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ3.Tx.html">adi.DAQ3.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.QuadMxFE.Rx.html">adi.QuadMxFE.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.QuadMxFE.Tx.html">adi.QuadMxFE.Tx</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../hdlrefdesigns/index.html">HDL Reference Designs</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/daq2.html">daq2 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9081.html">ad9081 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9434.html">ad9434 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9783.html">ad9783 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9208.html">ad9208 Reference Design Integration</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="index.html">Device Interfaces</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="adi-ad9152-tx">
+<h1>adi.AD9152.Tx<a class="headerlink" href="#adi-ad9152-tx" title="Link to this heading"></a></h1>
+<p>The adi.AD9152.Tx System object is a signal source that can send complex data from the AD9144.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">tx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9144</span><span class="p">.</span><span class="n">Tx</span><span class="p">;</span>
+<span class="n">tx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9144</span><span class="p">.</span><span class="n">Tx</span><span class="p">(</span><span class="s">'uri'</span><span class="p">,</span><span class="s">'ip:192.168.2.1'</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="icon link reference external" href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9144.pdf" target="_blank">AD9144 Datasheet</a></p>
+<section id="creation">
+<h2>Creation<a class="headerlink" href="#creation" title="Link to this heading"></a></h2>
+<p>The class can be instantiated in the following way with and without property name value pairs.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9152</span><span class="p">.</span><span class="n">Tx</span>
+<span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9152</span><span class="p">.</span><span class="n">Tx</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading"></a></h2>
+<p>Unless otherwise indicated, properties are non-tunable, which means you cannot
+change their values after calling the object. Objects lock when you call them,
+and the release function unlocks them.</p>
+<p>If a property is tunable, you can change its value at any time.</p>
+<p>For more information on changing property values, see
+<a class="icon link reference external" href="https://www.mathworks.com/help/matlab/matlab_prog/system-design-in-matlab-using-system-objects.html" target="_blank">System Design in MATLAB Using System Objects</a>.</p>
+<div><div class="collapsible docutils">
+<input class="collapsible_input" id="64f65d5d7ebbabb56e386ee9ece6ab076e22f473" name="64f65d5d7ebbabb56e386ee9ece6ab076e22f473" type="checkbox"></input><label for="64f65d5d7ebbabb56e386ee9ece6ab076e22f473"><p>SamplingRate</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is constant</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="dea8da78c9f8adde26b1c64f3878ad6e3d411a52" name="dea8da78c9f8adde26b1c64f3878ad6e3d411a52" type="checkbox"></input><label for="dea8da78c9f8adde26b1c64f3878ad6e3d411a52"><p>EnabledChannels</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="2951a66a3072d198f8e851197bcf1f1b372ba924" name="2951a66a3072d198f8e851197bcf1f1b372ba924" type="checkbox"></input><label for="2951a66a3072d198f8e851197bcf1f1b372ba924"><p>uri</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Hostname or IP address of remote libIIO deviceHelp for adi.AD9152.Tx/uri is inherited from superclass matlabshared.libiio.base</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="b012efc479e6cf4533bb0b29f686ea74ae19cfe4" name="b012efc479e6cf4533bb0b29f686ea74ae19cfe4" type="checkbox"></input><label for="b012efc479e6cf4533bb0b29f686ea74ae19cfe4"><p>SamplesPerFrame</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9152.Tx/SamplesPerFrame is inherited from superclass adi.AD9152.Base</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="1885aaf239a0c94950fb5534f23963ff32c84379" name="1885aaf239a0c94950fb5534f23963ff32c84379" type="checkbox"></input><label for="1885aaf239a0c94950fb5534f23963ff32c84379"><p>kernelBuffersCount</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>The number of buffers allocated in the kernel for data transfersHelp for adi.AD9152.Tx/kernelBuffersCount is inherited from superclass matlabshared.libiio.base</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="863154280b31e6337282b5227ad1091d3a1476e9" name="863154280b31e6337282b5227ad1091d3a1476e9" type="checkbox"></input><label for="863154280b31e6337282b5227ad1091d3a1476e9"><p>dataTypeStr</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>A String Representing the data typeHelp for adi.AD9152.Tx/dataTypeStr is inherited from superclass matlabshared.libiio.base</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="33804fd18ab266bab65796e36eb549d67e149239" name="33804fd18ab266bab65796e36eb549d67e149239" type="checkbox"></input><label for="33804fd18ab266bab65796e36eb549d67e149239"><p>DataSource</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Data source, specified as one of the following: ‘DMA’ — Specify the host as the source of the data. ‘DDS’ — Specify the DDS on the radio hardware as the source of the data. In this case, each channel has two additive tones.Help for adi.AD9152.Tx/DataSource is inherited from superclass adi.common.DDS</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="7b660d8575abdfc3850a4391f0a3be9e445f8046" name="7b660d8575abdfc3850a4391f0a3be9e445f8046" type="checkbox"></input><label for="7b660d8575abdfc3850a4391f0a3be9e445f8046"><p>DDSFrequencies</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequencies values in Hz of the DDS tone generators. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N &lt; this upper limit, other DDSs are not set.Help for adi.AD9152.Tx/DDSFrequencies is inherited from superclass adi.common.DDS</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="96f29c7c7a9845bea72b90d05f6ddb44d3dda090" name="96f29c7c7a9845bea72b90d05f6ddb44d3dda090" type="checkbox"></input><label for="96f29c7c7a9845bea72b90d05f6ddb44d3dda090"><p>DDSScales</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Scale of DDS tones in range [0,1]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N &lt; this upper limit, other DDSs are not set.Help for adi.AD9152.Tx/DDSScales is inherited from superclass adi.common.DDS</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="b3f02a0a785d4a210823d9390da063fdfcdf680f" name="b3f02a0a785d4a210823d9390da063fdfcdf680f" type="checkbox"></input><label for="b3f02a0a785d4a210823d9390da063fdfcdf680f"><p>DDSPhases</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Phases of DDS tones in range [0,360000]. For complex data devices the input is a [2xN] matrix where N is the available channels on the board. For complex data devices this is at most max(EnabledChannels)*2. For non-complex data devices this is at most max(EnabledChannels). If N &lt; this upper limit, other DDSs are not set.Help for adi.AD9152.Tx/DDSPhases is inherited from superclass adi.common.DDS</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="a042acd3db5cd582fcd1099afdc9a89e5d77c197" name="a042acd3db5cd582fcd1099afdc9a89e5d77c197" type="checkbox"></input><label for="a042acd3db5cd582fcd1099afdc9a89e5d77c197"><p>EnableCyclicBuffers</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Enable Cyclic Buffers, configures transmit buffers to be cyclic, which makes them continuously repeatHelp for adi.AD9152.Tx/EnableCyclicBuffers is inherited from superclass adi.common.DDS</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="b012efc479e6cf4533bb0b29f686ea74ae19cfe4" name="b012efc479e6cf4533bb0b29f686ea74ae19cfe4" type="checkbox"></input><label for="b012efc479e6cf4533bb0b29f686ea74ae19cfe4"><p>SamplesPerFrame</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9152.Tx/SamplesPerFrame is inherited from superclass adi.AD9152.Base</p>
+</div>
+</div>
+</div></section>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">%% Configure device</span>
+<span class="n">tx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9152</span><span class="p">.</span><span class="n">Tx</span><span class="p">;</span>
+<span class="n">tx</span><span class="p">.</span><span class="n">uri</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"ip:analog.local"</span><span class="p">;</span>
+<span class="n">tx</span><span class="p">.</span><span class="n">DataSource</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">'DMA'</span><span class="p">;</span>
+<span class="n">tx</span><span class="p">.</span><span class="n">EnableCyclicBuffers</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="n">tx</span><span class="p">.</span><span class="n">EnabledChannels</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="c">%% Generate tone</span>
+<span class="n">amplitude</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span><span class="o">^</span><span class="mi">15</span><span class="p">;</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.12e6</span><span class="p">;</span>
+<span class="n">swv1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dsp</span><span class="p">.</span><span class="n">SineWave</span><span class="p">(</span><span class="n">amplitude</span><span class="p">,</span><span class="w"> </span><span class="n">frequency</span><span class="p">);</span>
+<span class="n">swv1</span><span class="p">.</span><span class="n">SamplesPerFrame</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span><span class="o">^</span><span class="mi">14</span><span class="p">;</span>
+<span class="n">swv1</span><span class="p">.</span><span class="n">SampleRate</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">SamplingRate</span><span class="p">;</span>
+<span class="n">y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">swv1</span><span class="p">();</span>
+
+<span class="c">%% Send</span>
+<span class="n">tx</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="adi.AD9144.Tx.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">adi.AD9144.Tx</a>
+    <a href="adi.AD9213.Rx.html" title="Next document (Alt+Shift+RightArrow)" class="next">adi.AD9213.Rx</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2021-2026, Analog Devices, Inc
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

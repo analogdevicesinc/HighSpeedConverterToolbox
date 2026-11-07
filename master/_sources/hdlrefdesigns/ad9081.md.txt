@@ -1,0 +1,65 @@
+# ad9081 Reference Design Integration
+
+This page outlines the HDL reference design integration for the *ad9081* reference design for the Analog Devices
+AD9081 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants:
+
+- Supported FPGA carriers:
+    - ZCU102
+- Supported design variants:
+    - RX
+    - TX
+    - RX & TX
+
+## Reference Design
+
+::::{container} refdesign
+:::{raw} html
+:file: ../assets/rd_jesd_custom.svg
+:::
+
+HDL Reference Design with Custom IP from HDL-Coder. Click on sub-blocks for more documentation.
+::::
+
+The IP-Core generation flow will integrate IP generated from Simulink subsystem into an ADI authored reference design. Depending on the FPGA carrier and FMC card or SoM, this will support different IP locations based on the diagram above.
+
+## HDL Workflow Advisor Port Mappings
+
+When using the HDL Workflow Advisor, the following port mappings are used to connect the reference design to the HDL-Coder generated IP-Core:
+
+| Type | Target Platform Interface (MATLAB) | Reference Design Connection (Vivado) | Width | Reference Design Variant |
+| ---- | ------------------------ | --------------------------- | ----- | ----------- |
+| VALID-OUT | IP Data Valid OUT | util_mxfe_cpack/fifo_wr_en | 1 | RX |
+| VALID-IN | IP Valid Rx Data IN | rx_mxfe_tpl_core/adc_valid_0 | 1 | RX |
+| DATA-OUT | IP Data 0 OUT | util_mxfe_cpack/fifo_wr_data_0 | 16 | RX |
+| DATA-OUT | IP Data 1 OUT | util_mxfe_cpack/fifo_wr_data_1 | 16 | RX |
+| DATA-OUT | IP Data 2 OUT | util_mxfe_cpack/fifo_wr_data_2 | 16 | RX |
+| DATA-OUT | IP Data 3 OUT | util_mxfe_cpack/fifo_wr_data_3 | 16 | RX |
+| DATA-OUT | IP Data 4 OUT | util_mxfe_cpack/fifo_wr_data_4 | 16 | RX |
+| DATA-OUT | IP Data 5 OUT | util_mxfe_cpack/fifo_wr_data_5 | 16 | RX |
+| DATA-OUT | IP Data 6 OUT | util_mxfe_cpack/fifo_wr_data_6 | 16 | RX |
+| DATA-OUT | IP Data 7 OUT | util_mxfe_cpack/fifo_wr_data_7 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 0 IN | rx_mxfe_tpl_core/adc_data_0 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 1 IN | rx_mxfe_tpl_core/adc_data_1 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 2 IN | rx_mxfe_tpl_core/adc_data_2 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 3 IN | rx_mxfe_tpl_core/adc_data_3 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 4 IN | rx_mxfe_tpl_core/adc_data_4 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 5 IN | rx_mxfe_tpl_core/adc_data_5 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 6 IN | rx_mxfe_tpl_core/adc_data_6 | 16 | RX |
+| DATA-IN | AD9081 ADC Data 7 IN | rx_mxfe_tpl_core/adc_data_7 | 16 | RX |
+| VALID-IN | IP Valid Tx Data IN | util_mxfe_upack/fifo_rd_valid | 1 | TX |
+| DATA-OUT | AD9081 DAC Data 0 OUT | tx_mxfe_tpl_core/dac_data_0 | 16 | TX |
+| DATA-OUT | AD9081 DAC Data 1 OUT | tx_mxfe_tpl_core/dac_data_1 | 16 | TX |
+| DATA-OUT | AD9081 DAC Data 2 OUT | tx_mxfe_tpl_core/dac_data_2 | 16 | TX |
+| DATA-OUT | AD9081 DAC Data 3 OUT | tx_mxfe_tpl_core/dac_data_3 | 16 | TX |
+| DATA-OUT | AD9081 DAC Data 4 OUT | tx_mxfe_tpl_core/dac_data_4 | 16 | TX |
+| DATA-OUT | AD9081 DAC Data 5 OUT | tx_mxfe_tpl_core/dac_data_5 | 16 | TX |
+| DATA-OUT | AD9081 DAC Data 6 OUT | tx_mxfe_tpl_core/dac_data_6 | 16 | TX |
+| DATA-OUT | AD9081 DAC Data 7 OUT | tx_mxfe_tpl_core/dac_data_7 | 16 | TX |
+| DATA-IN | IP Data 0 IN | util_mxfe_upack/fifo_rd_data_0 | 16 | TX |
+| DATA-IN | IP Data 1 IN | util_mxfe_upack/fifo_rd_data_1 | 16 | TX |
+| DATA-IN | IP Data 2 IN | util_mxfe_upack/fifo_rd_data_2 | 16 | TX |
+| DATA-IN | IP Data 3 IN | util_mxfe_upack/fifo_rd_data_3 | 16 | TX |
+| DATA-IN | IP Data 4 IN | util_mxfe_upack/fifo_rd_data_4 | 16 | TX |
+| DATA-IN | IP Data 5 IN | util_mxfe_upack/fifo_rd_data_5 | 16 | TX |
+| DATA-IN | IP Data 6 IN | util_mxfe_upack/fifo_rd_data_6 | 16 | TX |
+| DATA-IN | IP Data 7 IN | util_mxfe_upack/fifo_rd_data_7 | 16 | TX |

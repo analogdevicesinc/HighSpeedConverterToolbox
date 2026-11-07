@@ -1,0 +1,80 @@
+# adi.DAQ3.Rx
+
+The adi.DAQ3.Rx System object is a signal source that can receive complex data from the DAQ3.
+
+```matlab
+rx = adi.DAQ3.Rx;
+rx = adi.DAQ3.Rx('uri','ip:192.168.2.1');
+```
+
+[User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-fmcDAQ3-ebz)
+
+## Creation
+
+The class can be instantiated in the following way with and without property name value pairs.
+
+```matlab
+dev = adi.DAQ3.Rx
+dev = adi.DAQ3.Rx(Name, Value)
+```
+
+## Properties
+
+Unless otherwise indicated, properties are non-tunable, which means you cannot
+change their values after calling the object. Objects lock when you call them,
+and the release function unlocks them.
+
+If a property is tunable, you can change its value at any time.
+
+For more information on changing property values, see
+[System Design in MATLAB Using System Objects](https://www.mathworks.com/help/matlab/matlab_prog/system-design-in-matlab-using-system-objects.html).
+
+
+:::{collapsible} SamplingRate
+Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is constantHelp for adi.DAQ3.Rx/SamplingRate is inherited from superclass adi.AD9680.Rx
+:::
+
+:::{collapsible} EnabledChannels
+Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant
+:::
+
+:::{collapsible} uri
+Hostname or IP address of remote libIIO deviceHelp for adi.DAQ3.Rx/uri is inherited from superclass matlabshared.libiio.base
+:::
+
+:::{collapsible} SamplesPerFrame
+Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.DAQ3.Rx/SamplesPerFrame is inherited from superclass adi.AD9680.Base
+:::
+
+:::{collapsible} kernelBuffersCount
+The number of buffers allocated in the kernel for data transfersHelp for adi.DAQ3.Rx/kernelBuffersCount is inherited from superclass matlabshared.libiio.base
+:::
+
+:::{collapsible} dataTypeStr
+A String Representing the data typeHelp for adi.DAQ3.Rx/dataTypeStr is inherited from superclass matlabshared.libiio.base
+:::
+
+:::{collapsible} SamplesPerFrame
+Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.DAQ3.Rx/SamplesPerFrame is inherited from superclass adi.AD9680.Base
+:::
+
+
+## Example Usage
+
+```matlab
+%% Rx set up
+rx = adi.DAQ3.Rx('uri','ip:analog.local');
+rx.SamplesPerFrame = 2^14;
+rx.EnabledChannels = 1;
+
+%% Run
+for k=1:10
+    valid = false;
+    while ~valid
+        [out, valid] = rx();
+    end
+end
+
+%% Cleanup
+release(rx)
+```

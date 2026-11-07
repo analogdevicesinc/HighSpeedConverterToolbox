@@ -1,0 +1,100 @@
+# adi.AD9081.Rx
+
+The adi.AD9081.Rx System object is a signal source that can receive complex data from the AD9081.
+
+```matlab
+rx = adi.AD9081.Rx;
+rx = adi.AD9081.Rx('uri','ip:192.168.2.1');
+```
+
+[AD9081 Datasheet](http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf)
+
+## Creation
+
+The class can be instantiated in the following way with and without property name value pairs.
+
+```matlab
+dev = adi.AD9081.Rx
+dev = adi.AD9081.Rx(Name, Value)
+```
+
+## Properties
+
+Unless otherwise indicated, properties are non-tunable, which means you cannot
+change their values after calling the object. Objects lock when you call them,
+and the release function unlocks them.
+
+If a property is tunable, you can change its value at any time.
+
+For more information on changing property values, see
+[System Design in MATLAB Using System Objects](https://www.mathworks.com/help/matlab/matlab_prog/system-design-in-matlab-using-system-objects.html).
+
+
+:::{collapsible} ChannelNCOFrequencies
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOFrequencies
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} ChannelNCOPhases
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} MainNCOPhases
+Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.
+:::
+
+:::{collapsible} TestMode
+Test mode of receive path. Options are: 'off' 'midscale_short' 'pos_fullscale' 'neg_fullscale' 'checkerboard' 'pn9' 'pn32' 'one_zero_toggle' 'user' 'pn7' 'pn15' 'pn31' 'ramp'
+:::
+
+:::{collapsible} JESD204FSMControl
+JESD204 FSM CTRL. Options are: '0' '1' When set to '0' the JESD links will be disabled. This property should be toggled to reset the JESD204 links
+:::
+
+:::{collapsible} EnablePFIRs
+Enable use of PFIR/PFILT filters
+:::
+
+:::{collapsible} PFIRFilenames
+Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order
+:::
+
+:::{collapsible} SamplingRate
+Baseband sampling rate in Hz, specified as a scalar in samples per second. This value is only readable once connected to hardwareHelp for adi.AD9081.Rx/SamplingRate is inherited from superclass adi.AD9081.Base
+:::
+
+:::{collapsible} SamplesPerFrame
+Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.Help for adi.AD9081.Rx/SamplesPerFrame is inherited from superclass adi.AD9081.Base
+:::
+
+:::{collapsible} EnabledChannels
+Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant
+:::
+
+:::{collapsible} uri
+Hostname or IP address of remote libIIO deviceHelp for adi.AD9081.Rx/uri is inherited from superclass matlabshared.libiio.base
+:::
+
+
+## Example Usage
+
+```matlab
+%% Rx set up
+rx = adi.AD9081.Rx('uri','ip:analog.local');
+rx.SamplesPerFrame = 2^14;
+rx.EnabledChannels = 1;
+
+%% Run
+for k=1:10
+    valid = false;
+    while ~valid
+        [out, valid] = rx();
+    end
+end
+
+%% Cleanup
+release(rx)
+```

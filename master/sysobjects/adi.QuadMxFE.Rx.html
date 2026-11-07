@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The adi.QuadMxFE.Rx System object is a signal source that can receive complex data from the QuadMxFE." name="description" />
+
+    <title>adi.QuadMxFE.Rx &#8212; Analog Devices High-Speed Converter Toolbox 23.2.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a3ee7af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/style.css?v=bd4e21ef" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/rd_style.css?v=1230db28" />
+    <script async="async" src="../_static/app.umd.js?v=048c1170"></script>
+    <link rel="icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="adi.QuadMxFE.Tx" href="adi.QuadMxFE.Tx.html" />
+    <link rel="prev" title="adi.DAQ3.Tx" href="adi.DAQ3.Tx.html" />
+   
+  
+  
+  
+  <meta name="repository" content="HighSpeedConverterToolbox">
+  <meta name="version" content="23.2.1">
+  
+    <meta name="page_source_suffix" content=".md">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../index.html">
+          <div>Analog Devices High-Speed Converter Toolbox</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root/>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">adi.QuadMxFE.Rx</a><ul>
+<li><a class="reference internal" href="#creation">Creation</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+<li><a class="reference internal" href="#example-usage">Example Usage</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../index.html">
+      <img class="only-light" src="../_static/logos/hsx_300.png"/>
+      <img class="only-dark" src="../_static/logos/hsx_w_300.png"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root/>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../models.html">Behavioral Models</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/top_level.tex.html">AD9081 Behavioral Model Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/top_level.tex.html#model-limitations">Model Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/top_level.tex.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/adc.tex.html">AD9081 ADC and ADC Mux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/adc.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/adc.tex.html#example-configuration">Example Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/dac.tex.html">AD9081 DAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/dac.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/ddc2.tex.html">AD9081 Digital Down Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/ddc2.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/ddc2.tex.html#example-configuration">Example Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/duc.tex.html">AD9081 Digital Up Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/duc.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/pfilt.tex.html">AD9081 Programmable FIR Filters (PFILT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/pfilt.tex.html#top-level-control"><strong>Top-Level Control</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/ad9081/pfilt.tex.html#example-configuration">Example Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../streaming.html">Receiving and Sending Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad9081.html">AD9081/2 Specific Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../targeting.html">HDL Targeting with HDL-Coder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="index.html">Device Interfaces</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9081.Rx.html">adi.AD9081.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9081.Tx.html">adi.AD9081.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9083.Rx.html">adi.AD9083.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9084.Rx.html">adi.AD9084.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9084.Tx.html">adi.AD9084.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9088.Rx.html">adi.AD9088.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9088.Tx.html">adi.AD9088.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9144.Tx.html">adi.AD9144.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9152.Tx.html">adi.AD9152.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9213.Rx.html">adi.AD9213.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DualAD9213.Rx.html">adi.DualAD9213.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9467.Rx.html">adi.AD9467.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.AD9680.Rx.html">adi.AD9680.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ2.Rx.html">adi.DAQ2.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ2.Tx.html">adi.DAQ2.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ3.Rx.html">adi.DAQ3.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.DAQ3.Tx.html">adi.DAQ3.Tx</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">adi.QuadMxFE.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adi.QuadMxFE.Tx.html">adi.QuadMxFE.Tx</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../hdlrefdesigns/index.html">HDL Reference Designs</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/daq2.html">daq2 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9081.html">ad9081 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9434.html">ad9434 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9783.html">ad9783 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdlrefdesigns/ad9208.html">ad9208 Reference Design Integration</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="index.html">Device Interfaces</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="adi-quadmxfe-rx">
+<h1>adi.QuadMxFE.Rx<a class="headerlink" href="#adi-quadmxfe-rx" title="Link to this heading"></a></h1>
+<p>The adi.QuadMxFE.Rx System object is a signal source that can receive complex data from the QuadMxFE.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">QuadMxFE</span><span class="p">.</span><span class="n">Rx</span><span class="p">;</span>
+<span class="n">rx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">QuadMxFE</span><span class="p">.</span><span class="n">Rx</span><span class="p">(</span><span class="s">'uri'</span><span class="p">,</span><span class="s">'ip:192.168.2.1'</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="icon link reference external" href="http://www.analog.com/media/en/technical-documentation/data-sheets/AD9081.pdf" target="_blank">AD9081 Datasheet</a></p>
+<section id="creation">
+<h2>Creation<a class="headerlink" href="#creation" title="Link to this heading"></a></h2>
+<p>The class can be instantiated in the following way with and without property name value pairs.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">QuadMxFE</span><span class="p">.</span><span class="n">Rx</span>
+<span class="n">dev</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">QuadMxFE</span><span class="p">.</span><span class="n">Rx</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading"></a></h2>
+<p>Unless otherwise indicated, properties are non-tunable, which means you cannot
+change their values after calling the object. Objects lock when you call them,
+and the release function unlocks them.</p>
+<p>If a property is tunable, you can change its value at any time.</p>
+<p>For more information on changing property values, see
+<a class="icon link reference external" href="https://www.mathworks.com/help/matlab/matlab_prog/system-design-in-matlab-using-system-objects.html" target="_blank">System Design in MATLAB Using System Objects</a>.</p>
+<div><div class="collapsible docutils">
+<input class="collapsible_input" id="ffdf7df776fb058b9a6da2d6483cd1ad9c13448d" name="ffdf7df776fb058b9a6da2d6483cd1ad9c13448d" type="checkbox"></input><label for="ffdf7df776fb058b9a6da2d6483cd1ad9c13448d"><p>ChannelNCOFrequenciesChipA</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="becceb2660b04db89ac63f0ff309fbd73d332565" name="becceb2660b04db89ac63f0ff309fbd73d332565" type="checkbox"></input><label for="becceb2660b04db89ac63f0ff309fbd73d332565"><p>ChannelNCOFrequenciesChipB</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="762e7ef5522b71772d321e95188951fda2f739f7" name="762e7ef5522b71772d321e95188951fda2f739f7" type="checkbox"></input><label for="762e7ef5522b71772d321e95188951fda2f739f7"><p>ChannelNCOFrequenciesChipC</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="6af8f58d8a35f968ef6aee85f3a0d02e33d01010" name="6af8f58d8a35f968ef6aee85f3a0d02e33d01010" type="checkbox"></input><label for="6af8f58d8a35f968ef6aee85f3a0d02e33d01010"><p>ChannelNCOFrequenciesChipD</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="18c69e1b53be0f6648d25de4a89bc8bfbdf4bc21" name="18c69e1b53be0f6648d25de4a89bc8bfbdf4bc21" type="checkbox"></input><label for="18c69e1b53be0f6648d25de4a89bc8bfbdf4bc21"><p>MainNCOFrequenciesChipA</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="6869f8a368643b977a97b05c03a0d9b39815d9b4" name="6869f8a368643b977a97b05c03a0d9b39815d9b4" type="checkbox"></input><label for="6869f8a368643b977a97b05c03a0d9b39815d9b4"><p>MainNCOFrequenciesChipB</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="7b8568dfe71730a2ef9658f08a2325df3b058884" name="7b8568dfe71730a2ef9658f08a2325df3b058884" type="checkbox"></input><label for="7b8568dfe71730a2ef9658f08a2325df3b058884"><p>MainNCOFrequenciesChipC</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="28d7a529567c9ce50312c1b2416ec4750257e609" name="28d7a529567c9ce50312c1b2416ec4750257e609" type="checkbox"></input><label for="28d7a529567c9ce50312c1b2416ec4750257e609"><p>MainNCOFrequenciesChipD</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="582d5e61a67581971df9e0cd4fc0e8f42dd818c9" name="582d5e61a67581971df9e0cd4fc0e8f42dd818c9" type="checkbox"></input><label for="582d5e61a67581971df9e0cd4fc0e8f42dd818c9"><p>ChannelNCOPhasesChipA</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="b90083e71d66a1a6f5744febc2205a1457c3a0ee" name="b90083e71d66a1a6f5744febc2205a1457c3a0ee" type="checkbox"></input><label for="b90083e71d66a1a6f5744febc2205a1457c3a0ee"><p>ChannelNCOPhasesChipB</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="51e0a64d93a953705638da7fd8f21eb20a11e936" name="51e0a64d93a953705638da7fd8f21eb20a11e936" type="checkbox"></input><label for="51e0a64d93a953705638da7fd8f21eb20a11e936"><p>ChannelNCOPhasesChipC</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="04f5502fa6ed2fdf24334ee3745854acae83dc9d" name="04f5502fa6ed2fdf24334ee3745854acae83dc9d" type="checkbox"></input><label for="04f5502fa6ed2fdf24334ee3745854acae83dc9d"><p>ChannelNCOPhasesChipD</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="2fbc3685469d9a33a5619a01ee0c2e206e2c3053" name="2fbc3685469d9a33a5619a01ee0c2e206e2c3053" type="checkbox"></input><label for="2fbc3685469d9a33a5619a01ee0c2e206e2c3053"><p>MainNCOPhasesChipA</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="6253bfad93ab7e98f6058e496c0741d767c6df28" name="6253bfad93ab7e98f6058e496c0741d767c6df28" type="checkbox"></input><label for="6253bfad93ab7e98f6058e496c0741d767c6df28"><p>MainNCOPhasesChipB</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="782f46933c6ab709de7c12e04eca2a7ebd993d81" name="782f46933c6ab709de7c12e04eca2a7ebd993d81" type="checkbox"></input><label for="782f46933c6ab709de7c12e04eca2a7ebd993d81"><p>MainNCOPhasesChipC</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="7951fa4e67ec9ea2ac4069ff2f8a4fa2a591fc01" name="7951fa4e67ec9ea2ac4069ff2f8a4fa2a591fc01" type="checkbox"></input><label for="7951fa4e67ec9ea2ac4069ff2f8a4fa2a591fc01"><p>MainNCOPhasesChipD</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Frequency of NCO in fine decimators in receive path. Property must be a [1,N] vector where each value is the frequency of an NCO in hertz, and N is the number of channels available.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="7a16e6f60fa20025127c5cb18ccd1328ea8b7d2f" name="7a16e6f60fa20025127c5cb18ccd1328ea8b7d2f" type="checkbox"></input><label for="7a16e6f60fa20025127c5cb18ccd1328ea8b7d2f"><p>TestModeChipA</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Test mode of receive path. Options are: ‘off’ ‘midscale_short’ ‘pos_fullscale’ ‘neg_fullscale’ ‘checkerboard’ ‘pn9’ ‘pn32’ ‘one_zero_toggle’ ‘user’ ‘pn7’ ‘pn15’ ‘pn31’ ‘ramp’</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="a76d7d7d42eab4023b4d7c72e1f80d4734d4e72f" name="a76d7d7d42eab4023b4d7c72e1f80d4734d4e72f" type="checkbox"></input><label for="a76d7d7d42eab4023b4d7c72e1f80d4734d4e72f"><p>TestModeChipB</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Test mode of receive path. Options are: ‘off’ ‘midscale_short’ ‘pos_fullscale’ ‘neg_fullscale’ ‘checkerboard’ ‘pn9’ ‘pn32’ ‘one_zero_toggle’ ‘user’ ‘pn7’ ‘pn15’ ‘pn31’ ‘ramp’</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="5511f8895e834c1a1dbe2218ee807ce8e550c08e" name="5511f8895e834c1a1dbe2218ee807ce8e550c08e" type="checkbox"></input><label for="5511f8895e834c1a1dbe2218ee807ce8e550c08e"><p>TestModeChipC</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Test mode of receive path. Options are: ‘off’ ‘midscale_short’ ‘pos_fullscale’ ‘neg_fullscale’ ‘checkerboard’ ‘pn9’ ‘pn32’ ‘one_zero_toggle’ ‘user’ ‘pn7’ ‘pn15’ ‘pn31’ ‘ramp’</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="04ebb3fe4bcc294193c9e31ff62bca49ddc81eff" name="04ebb3fe4bcc294193c9e31ff62bca49ddc81eff" type="checkbox"></input><label for="04ebb3fe4bcc294193c9e31ff62bca49ddc81eff"><p>TestModeChipD</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Test mode of receive path. Options are: ‘off’ ‘midscale_short’ ‘pos_fullscale’ ‘neg_fullscale’ ‘checkerboard’ ‘pn9’ ‘pn32’ ‘one_zero_toggle’ ‘user’ ‘pn7’ ‘pn15’ ‘pn31’ ‘ramp’</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="f8f2c4a4bc274023d8a83143972e21f9c8422361" name="f8f2c4a4bc274023d8a83143972e21f9c8422361" type="checkbox"></input><label for="f8f2c4a4bc274023d8a83143972e21f9c8422361"><p>EnablePFIRsChipA</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Enable use of PFIR/PFILT filters for Chip A</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="db140c7e9c9e4295892af7056ac806a7df46ef00" name="db140c7e9c9e4295892af7056ac806a7df46ef00" type="checkbox"></input><label for="db140c7e9c9e4295892af7056ac806a7df46ef00"><p>EnablePFIRsChipB</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Enable use of PFIR/PFILT filters for Chip B</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="cb79d2e2fe0c450ee3102ae31288594e76011584" name="cb79d2e2fe0c450ee3102ae31288594e76011584" type="checkbox"></input><label for="cb79d2e2fe0c450ee3102ae31288594e76011584"><p>EnablePFIRsChipC</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Enable use of PFIR/PFILT filters for Chip C</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="798ee407890f388bc5babcbea7e4f5099a2b3a30" name="798ee407890f388bc5babcbea7e4f5099a2b3a30" type="checkbox"></input><label for="798ee407890f388bc5babcbea7e4f5099a2b3a30"><p>EnablePFIRsChipD</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Enable use of PFIR/PFILT filters for Chip D</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="9e2e61144a05c92cf55f167728e6ac8ec5236575" name="9e2e61144a05c92cf55f167728e6ac8ec5236575" type="checkbox"></input><label for="9e2e61144a05c92cf55f167728e6ac8ec5236575"><p>PFIRFilenamesChipA</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip A</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="6cad16aca0cc551d93ddaadb9bc9d3948a63f8e1" name="6cad16aca0cc551d93ddaadb9bc9d3948a63f8e1" type="checkbox"></input><label for="6cad16aca0cc551d93ddaadb9bc9d3948a63f8e1"><p>PFIRFilenamesChipB</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip B</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="110b5e24301a3c54939148a1d5f0ed2bf3933661" name="110b5e24301a3c54939148a1d5f0ed2bf3933661" type="checkbox"></input><label for="110b5e24301a3c54939148a1d5f0ed2bf3933661"><p>PFIRFilenamesChipC</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip C</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="a7dbbf872db641ca1f761d65c83ab020b2ad400a" name="a7dbbf872db641ca1f761d65c83ab020b2ad400a" type="checkbox"></input><label for="a7dbbf872db641ca1f761d65c83ab020b2ad400a"><p>PFIRFilenamesChipD</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Path(s) to FPIR/PFILT filter file(s). Input can be a string or cell array of strings. Files are loading in order for Chip D</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="a73816dab6dce90274f07e008871331c4b36a011" name="a73816dab6dce90274f07e008871331c4b36a011" type="checkbox"></input><label for="a73816dab6dce90274f07e008871331c4b36a011"><p>ExternalAttenuation</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Attenuation value of external HMC425a</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="81cc5fd6e5b24e3d67c7ec13e350266a07c7a873" name="81cc5fd6e5b24e3d67c7ec13e350266a07c7a873" type="checkbox"></input><label for="81cc5fd6e5b24e3d67c7ec13e350266a07c7a873"><p>SamplesPerFrame</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Number of samples per frame, specified as an even positive integer from 2 to 16,777,216. Using values less than 3660 can yield poor performance.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="fed3278712a5b7c20ef31ec014c6fefaac6a6093" name="fed3278712a5b7c20ef31ec014c6fefaac6a6093" type="checkbox"></input><label for="fed3278712a5b7c20ef31ec014c6fefaac6a6093"><p>EnableResampleFilters</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Enable interpolation (TX) or decimation (RX) by 2 when enabled to correct interface rate to 125 MS/s. This will scale the input and output data length by either 1/2 (RX) or 2 (TX).</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="fd0b00bb1bbe8248f9dfd3d1be4ba963297f189f" name="fd0b00bb1bbe8248f9dfd3d1be4ba963297f189f" type="checkbox"></input><label for="fd0b00bb1bbe8248f9dfd3d1be4ba963297f189f"><p>CalibrationBoardAttached</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>adi.QuadMxFE.Rx/CalibrationBoardAttached is a property.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="dea8da78c9f8adde26b1c64f3878ad6e3d411a52" name="dea8da78c9f8adde26b1c64f3878ad6e3d411a52" type="checkbox"></input><label for="dea8da78c9f8adde26b1c64f3878ad6e3d411a52"><p>EnabledChannels</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Indexs of channels to be enabled. Input should be a [1xN] vector with the indexes of channels to be enabled. Order is irrelevant</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils">
+<input class="collapsible_input" id="e5265b7e43e1b56ab41fe556dbd4f27f95b91058" name="e5265b7e43e1b56ab41fe556dbd4f27f95b91058" type="checkbox"></input><label for="e5265b7e43e1b56ab41fe556dbd4f27f95b91058"><p>uri</p>
+<div class="icon"></div></label><div class="collapsible_content docutils">
+<p>Hostname or IP address of remote libIIO deviceHelp for adi.QuadMxFE.Rx/uri is inherited from superclass matlabshared.libiio.base</p>
+</div>
+</div>
+</div></section>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">%% Rx set up</span>
+<span class="n">rx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">QuadMxFE</span><span class="p">.</span><span class="n">Rx</span><span class="p">(</span><span class="s">'uri'</span><span class="p">,</span><span class="s">'ip:analog.local'</span><span class="p">);</span>
+<span class="n">rx</span><span class="p">.</span><span class="n">SamplesPerFrame</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span><span class="o">^</span><span class="mi">14</span><span class="p">;</span>
+<span class="n">rx</span><span class="p">.</span><span class="n">EnabledChannels</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="c">%% Run</span>
+<span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="p">=</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span>
+<span class="w">    </span><span class="n">valid</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="o">~</span><span class="n">valid</span>
+<span class="w">        </span><span class="p">[</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="n">valid</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rx</span><span class="p">();</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c">%% Cleanup</span>
+<span class="nb">release</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="adi.DAQ3.Tx.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">adi.DAQ3.Tx</a>
+    <a href="adi.QuadMxFE.Tx.html" title="Next document (Alt+Shift+RightArrow)" class="next">adi.QuadMxFE.Tx</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2021-2026, Analog Devices, Inc
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

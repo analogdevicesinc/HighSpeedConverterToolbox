@@ -1,0 +1,50 @@
+# Device Interfaces
+
+Available hardware streaming interfaces in High-Speed Converter Toolbox:
+
+- [adi.AD9081.Rx](adi.AD9081.Rx.md)
+- [adi.AD9081.Tx](adi.AD9081.Tx.md)
+- [adi.AD9083.Rx](adi.AD9083.Rx.md)
+- [adi.AD9084.Rx](adi.AD9084.Rx.md)
+- [adi.AD9084.Tx](adi.AD9084.Tx.md)
+- [adi.AD9088.Rx](adi.AD9088.Rx.md)
+- [adi.AD9088.Tx](adi.AD9088.Tx.md)
+- [adi.AD9144.Tx](adi.AD9144.Tx.md)
+- [adi.AD9152.Tx](adi.AD9152.Tx.md)
+- [adi.AD9213.Rx](adi.AD9213.Rx.md)
+- [adi.DualAD9213.Rx](adi.DualAD9213.Rx.md)
+- [adi.AD9467.Rx](adi.AD9467.Rx.md)
+- [adi.AD9680.Rx](adi.AD9680.Rx.md)
+- [adi.DAQ2.Rx](adi.DAQ2.Rx.md)
+- [adi.DAQ2.Tx](adi.DAQ2.Tx.md)
+- [adi.DAQ3.Rx](adi.DAQ3.Rx.md)
+- [adi.DAQ3.Tx](adi.DAQ3.Tx.md)
+- [adi.QuadMxFE.Rx](adi.QuadMxFE.Rx.md)
+- [adi.QuadMxFE.Tx](adi.QuadMxFE.Tx.md)
+
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+adi.AD9081.Rx
+adi.AD9081.Tx
+adi.AD9083.Rx
+adi.AD9084.Rx
+adi.AD9084.Tx
+adi.AD9088.Rx
+adi.AD9088.Tx
+adi.AD9144.Tx
+adi.AD9152.Tx
+adi.AD9213.Rx
+adi.DualAD9213.Rx
+adi.AD9467.Rx
+adi.AD9680.Rx
+adi.DAQ2.Rx
+adi.DAQ2.Tx
+adi.DAQ3.Rx
+adi.DAQ3.Tx
+adi.QuadMxFE.Rx
+adi.QuadMxFE.Tx
+
+```

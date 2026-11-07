@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Remote data streaming to and from hardware is made available through system object interfaces, which are unique for each component or platform. The hardware interfacing system objects provide a since class to both configure a given platform and move data back and forth from the device." name="description" />
+
+    <title>Receiving and Sending Data &#8212; Analog Devices High-Speed Converter Toolbox 23.2.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="_static/app.min.css?v=a3ee7af8" />
+    <link rel="stylesheet" type="text/css" href="_static/css/style.css?v=bd4e21ef" />
+    <link rel="stylesheet" type="text/css" href="_static/css/rd_style.css?v=1230db28" />
+    <script async="async" src="_static/app.umd.js?v=048c1170"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <link rel="icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AD9081/2 Specific Features" href="ad9081.html" />
+    <link rel="prev" title="AD9081 Programmable FIR Filters (PFILT)" href="models/ad9081/pfilt.tex.html" />
+   
+  
+  
+  
+  <meta name="repository" content="HighSpeedConverterToolbox">
+  <meta name="version" content="23.2.1">
+  
+    <meta name="page_source_suffix" content=".md">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="index.html">
+          <div>Analog Devices High-Speed Converter Toolbox</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root/>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Receiving and Sending Data</a><ul>
+<li><a class="reference internal" href="#connecting-and-configuration">Connecting and Configuration</a></li>
+<li><a class="reference internal" href="#receiving-data">Receiving Data</a></li>
+<li><a class="reference internal" href="#sending-data">Sending Data</a></li>
+<li><a class="reference internal" href="#dds">DDS</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="index.html">
+      <img class="only-light" src="_static/logos/hsx_300.png"/>
+      <img class="only-dark" src="_static/logos/hsx_w_300.png"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root/>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="models.html">Behavioral Models</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/top_level.tex.html">AD9081 Behavioral Model Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/top_level.tex.html#model-limitations">Model Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/top_level.tex.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/adc.tex.html">AD9081 ADC and ADC Mux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/adc.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/adc.tex.html#example-configuration">Example Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/dac.tex.html">AD9081 DAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/dac.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/ddc2.tex.html">AD9081 Digital Down Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/ddc2.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/ddc2.tex.html#example-configuration">Example Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/duc.tex.html">AD9081 Digital Up Converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/duc.tex.html#top-level-control">Top-Level Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/pfilt.tex.html">AD9081 Programmable FIR Filters (PFILT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/pfilt.tex.html#top-level-control"><strong>Top-Level Control</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ad9081/pfilt.tex.html#example-configuration">Example Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Receiving and Sending Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad9081.html">AD9081/2 Specific Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="targeting.html">HDL Targeting with HDL-Coder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="sysobjects/index.html">Device Interfaces</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9081.Rx.html">adi.AD9081.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9081.Tx.html">adi.AD9081.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9083.Rx.html">adi.AD9083.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9084.Rx.html">adi.AD9084.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9084.Tx.html">adi.AD9084.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9088.Rx.html">adi.AD9088.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9088.Tx.html">adi.AD9088.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9144.Tx.html">adi.AD9144.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9152.Tx.html">adi.AD9152.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9213.Rx.html">adi.AD9213.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.DualAD9213.Rx.html">adi.DualAD9213.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9467.Rx.html">adi.AD9467.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.AD9680.Rx.html">adi.AD9680.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.DAQ2.Rx.html">adi.DAQ2.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.DAQ2.Tx.html">adi.DAQ2.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.DAQ3.Rx.html">adi.DAQ3.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.DAQ3.Tx.html">adi.DAQ3.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.QuadMxFE.Rx.html">adi.QuadMxFE.Rx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysobjects/adi.QuadMxFE.Tx.html">adi.QuadMxFE.Tx</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="hdlrefdesigns/index.html">HDL Reference Designs</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="hdlrefdesigns/daq2.html">daq2 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdlrefdesigns/ad9081.html">ad9081 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdlrefdesigns/ad9434.html">ad9434 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdlrefdesigns/ad9783.html">ad9783 Reference Design Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdlrefdesigns/ad9208.html">ad9208 Reference Design Integration</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb empty"><ol></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section class="tex2jax_ignore mathjax_ignore" id="receiving-and-sending-data">
+<h1>Receiving and Sending Data<a class="headerlink" href="#receiving-and-sending-data" title="Link to this heading"></a></h1>
+<p>Remote data streaming to and from hardware is made available through <a class="icon link reference external" href="https://www.mathworks.com/help/matlab/matlab_prog/what-are-system-objects.html" target="_blank">system object interfaces</a>, which are unique for each component or platform. The hardware interfacing system objects provide a since class to both configure a given platform and move data back and forth from the device.</p>
+<p>Command and control of hardware from MATLAB is accomplished by leveraging the <a class="icon link reference external" href="https://wiki.analog.com/software/linux/docs/iio/iio" target="_blank">IIO drivers</a> built into the target platform’s kernel and <a class="icon link reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/libiio" target="_blank">libiio</a> which provides remote backends to control drivers across different backends. Backends can be Ethernet, serial, or USB based. Below is a diagram of the different components in the stack for an FMComms based systems, but will be nearly identical for all transceiver based systems.</p>
+<img alt="MATLAB libiio Stack" src="_images/MATLAB_libiio_Stack.png" />
+<p>Since libiio is cross-platform it can be used from Windows, Linux, or macOS based systems. It is also a lower level library independent of MATLAB, so when moving toward production or untethered systems similar APIs that are used in MATLAB can be used in C,C++,Python, or other languages.</p>
+<section id="connecting-and-configuration">
+<h2>Connecting and Configuration<a class="headerlink" href="#connecting-and-configuration" title="Link to this heading"></a></h2>
+<p>Connecting to hardware is done by setting the <strong>uri</strong> property of the system object interface. The <strong>uri</strong> for libiio always has the convention “<em>&lt; backend &gt;:&lt; address &gt;</em>,” where <em>backend</em> can be ip,usb, or serial. <em>address</em> will be specific to the backend. This is documented in the <a class="icon link reference external" href="https://analogdevicesinc.github.io/libiio/master/libiio/group__Context.html#gafdcee40508700fa395370b6c636e16fe" target="_blank">libiio API</a>.</p>
+<p>Below is a basic example of setting up an AD9361 receiver using an Ethernet/IP backend where the address of the target system is 192.168.2.1:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">rx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9081</span><span class="p">.</span><span class="n">Rx</span><span class="p">;</span>
+<span class="linenos">2</span><span class="n">rx</span><span class="p">.</span><span class="n">uri</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">'ip:192.168.2.1'</span><span class="p">;</span>
+<span class="linenos">3</span><span class="n">data</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rx</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>With the code above, the hardware is not contacted until the operator or step method is called on line 3. Therefore, any properties that are set or defined before line 3 are not applied or updated on the hardware until after line 3. However, after line 3 has completed the object will become locked and certain configuration changes cannot be applied after this point. These will primarily sample rates and buffer sizes.</p>
+<p>The state of the object follows the flow of the diagram below triggered by line 3 above.</p>
+<pre  class="mermaid">
+        graph LR
+  Z[Operator Called] --&gt;A;
+  A[Connect To Board] --&gt; B[Update Properties];
+  B --&gt; C[Initialize Buffers];
+  C --&gt; D[Send or Receive Data];
+  D --&gt; E[Lock Object];
+    </pre><p>Once the object becomes locked it must be released if the sample rate or buffers need to be modified. This will disconnect from the hardware:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span><span class="o">.</span><span class="n">release</span><span class="p">();</span> <span class="o">%</span> <span class="n">Release</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<p>To provide a complete example we can do more advanced configuration like so to demonstrate property changes:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">rx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">adi</span><span class="p">.</span><span class="n">AD9081</span><span class="p">.</span><span class="n">Rx</span><span class="p">;</span>
+<span class="linenos"> 2</span><span class="n">rx</span><span class="p">.</span><span class="n">uri</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">'ip:192.168.2.1'</span><span class="p">;</span>
+<span class="linenos"> 3</span><span class="n">rx</span><span class="p">.</span><span class="n">SamplesPerFrame</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span>
+<span class="linenos"> 4</span><span class="n">rx</span><span class="p">.</span><span class="n">ChannelNCOFrequencies</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1e9</span><span class="p">,</span><span class="mf">1e9</span><span class="p">,</span><span class="mf">1e9</span><span class="p">,</span><span class="mf">1e9</span><span class="p">];</span>
+<span class="linenos"> 5</span><span class="n">dataNCO1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rx</span><span class="p">();</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c">% Update tunable property</span>
+<span class="linenos"> 8</span><span class="n">rx</span><span class="p">.</span><span class="n">ChannelNCOFrequencies</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mf">2e9</span><span class="p">,</span><span class="mf">2e9</span><span class="p">,</span><span class="mf">2e9</span><span class="p">,</span><span class="mf">2e9</span><span class="p">];</span>
+<span class="linenos"> 9</span><span class="n">dataNCO2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rx</span><span class="p">();</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="c">% Update non-tunable property</span>
+<span class="linenos">12</span><span class="n">rx</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+<span class="linenos">13</span><span class="n">rx</span><span class="p">.</span><span class="n">SamplesPerFrame</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">4096</span><span class="p">;</span>
+<span class="linenos">14</span><span class="n">dataLargerBuffer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">rx</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="receiving-data">
+<h2>Receiving Data<a class="headerlink" href="#receiving-data" title="Link to this heading"></a></h2>
+<p>To receive or capture data from a given device first you must instantiate that device’s interface class. For example on a DAQ2 based system, this would be as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">DAQ2</span><span class="o">.</span><span class="n">Rx</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Once instantiated you can configure the number of samples to be captured by setting the property <strong>SamplesPerFrame.</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span><span class="o">.</span><span class="n">SamplesPerFrame</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><strong>SamplesPerFrame</strong> is the number of samples per channel which will be captured. If your device produces complex data (I and Q) this is the number of complex samples. There will be a limit to the maximum samples which can be collected. By default this is set to 2^20, but it may be possible to make it larger depending on hardware. Once the operator methods are used for a give instantiation, the object will become locked and the <strong>SamplesPerFrame</strong> property cannot be changed. This is known as a non-tunable property.</p>
+<p>To actually collect the samples or perform the capture, the operator of the system object should be used or the <strong>step</strong> method as so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">rx</span><span class="p">();</span> <span class="o">%</span> <span class="n">Operator</span> <span class="n">method</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">rx</span><span class="o">.</span><span class="n">step</span><span class="p">();</span> <span class="o">%</span> <span class="n">Step</span> <span class="n">method</span>
+</pre></div>
+</div>
+<p>Both method calls are equivalent, and the produced matrix <strong>data</strong> will be of size [SamplesPerFrame x length(EnabledChannels)]. <strong>EnabledChannels</strong> determines the channels which data will be collected from. <strong>EnabledChannels</strong> is a [1xN] vector with indexes starting at 1 of the desired channels. If the device transmits or receive complex data, these indexes are for complex channel pairs. For example, the AD9081 can have 16 complex channels from 4 ADCs and setting <strong>EnabledChannels</strong> as so will capture data from all 16 converters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span><span class="o">.</span><span class="n">EnabledChannels</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="mi">16</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>You cannot enable individual converters on complex data based devices, and the <strong>EnabledChannels</strong> property is always sorted so the channel mappings cannot be changed within the produced data.</p>
+</section>
+<section id="sending-data">
+<h2>Sending Data<a class="headerlink" href="#sending-data" title="Link to this heading"></a></h2>
+<p>Transmitting data is very similar to receiving it, a transmitter class needs to be instantiated to send data first. For an AD9081 based device this would be as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tx</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">AD9081</span><span class="o">.</span><span class="n">Tx</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Unlike the receivers, transmit objects automatically create their internal buffers based on the data passed to them during their operator or step methods. These methods can be called as follows with some data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tx_data</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="mi">2</span><span class="o">^</span><span class="mf">15.</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">^</span><span class="mf">15.</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">tx</span><span class="p">(</span><span class="n">tx_data</span><span class="p">);</span> <span class="o">%</span> <span class="n">Operator</span> <span class="n">method</span>
+<span class="n">tx</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">tx_data</span><span class="p">);</span> <span class="o">%</span> <span class="n">Step</span> <span class="n">method</span>
+</pre></div>
+</div>
+<p>However, once the step or operator method is called the object becomes locked and future passed data vectors must be the same length. As with the receive classes, the size of the passed data must be [SomeFixedSize x EnabledChannels]. <strong>EnabledChannels</strong> has the same definition as the receive side, except applied to DACs.</p>
+<p>Unlike the receiver, transmit objects have the ability to utilize <a class="icon link reference external" href="https://analogdevicesinc.github.io/libiio/group__Buffer.html#ga6caadf077c112ae55a64276aa24ef832" target="_blank">cyclic buffers</a> which will continuously transmit a provided vector without gaps forever. To utilize cyclic buffers set the <strong>EnableCyclicBuffers</strong> property then pass the operator data as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tx</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">AD9081</span><span class="o">.</span><span class="n">Tx</span><span class="p">;</span>
+<span class="n">tx</span><span class="o">.</span><span class="n">EnableCyclicBuffers</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+<span class="n">tx_data</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="mi">2</span><span class="o">^</span><span class="mf">15.</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="o">^</span><span class="mf">15.</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">tx</span><span class="p">(</span><span class="n">tx_data</span><span class="p">);</span> <span class="o">%</span> <span class="n">Data</span> <span class="n">will</span> <span class="n">repeat</span> <span class="n">forever</span>
+</pre></div>
+</div>
+<p>Once a vector is passed to the object with <strong>EnableCyclicBuffers</strong> set to <strong>true</strong>, the object will not accept future buffers unless first release or cleared.</p>
+<p>By default the system objects will utilize <strong>DMA</strong> as the source of data for the DACs, which will use data past from the operator. This can be set manually through the <strong>DataSource</strong> properties as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span><span class="o">.</span><span class="n">DataSource</span> <span class="o">=</span> <span class="s1">'DMA'</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="dds">
+<h2>DDS<a class="headerlink" href="#dds" title="Link to this heading"></a></h2>
+<p>Instead of providing data for transmission, it is possible to utilize DDSs inside the FPGA to send tones to individual DACs. For specific boards there are two DDS per DAC, which can be used to create complex (one-sided) tones. These DDSs can be used by first setting the <strong>DataSource</strong> property:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span><span class="o">.</span><span class="n">DataSource</span> <span class="o">=</span> <span class="s1">'DDS'</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Then the scale, frequency, and phase of each DDS can be controlled through three attributes as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rx</span><span class="o">.</span><span class="n">DDSFrequencies</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e3</span><span class="p">,</span><span class="mf">1e3</span><span class="p">,</span><span class="mf">1e3</span><span class="p">,</span><span class="mf">1e3</span><span class="p">;</span><span class="mf">1e4</span><span class="p">,</span><span class="mf">1e4</span><span class="p">,</span><span class="mf">1e4</span><span class="p">,</span><span class="mf">1e4</span><span class="p">];</span> <span class="o">%</span> <span class="n">Must</span> <span class="n">be</span> <span class="nb">range</span> <span class="p">[</span><span class="mi">0</span> <span class="n">FS</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">rx</span><span class="o">.</span><span class="n">DDSScales</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">;</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span> <span class="o">%</span> <span class="n">Must</span> <span class="n">be</span> <span class="nb">range</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">rx</span><span class="o">.</span><span class="n">DDSPhases</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">90e3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">90e3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span> <span class="o">%</span> <span class="n">Each</span> <span class="ow">in</span> <span class="n">millidegrees</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">90000</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Each of the above properties must be of size [2x(NumberOfPartDACs)], where each row is the first DDS of a given DAC (column) and the second row is the second DDS of a given DAC (column).</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="models/ad9081/pfilt.tex.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD9081 Programmable FIR Filters (PFILT)</a>
+    <a href="ad9081.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9081/2 Specific Features</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2021-2026, Analog Devices, Inc
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

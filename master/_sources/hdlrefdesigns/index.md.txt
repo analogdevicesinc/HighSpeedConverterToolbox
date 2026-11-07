@@ -1,0 +1,22 @@
+# HDL Reference Designs
+
+HDL reference designs that support the HDL-Coder IP-Core generation flow:
+
+- [daq2](daq2.md)
+- [ad9081](ad9081.md)
+- [ad9434](ad9434.md)
+- [ad9783](ad9783.md)
+- [ad9208](ad9208.md)
+
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+daq2
+ad9081
+ad9434
+ad9783
+ad9208
+
+```

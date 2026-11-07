@@ -1,0 +1,38 @@
+# ad9208 Reference Design Integration
+
+This page outlines the HDL reference design integration for the *ad9208* reference design for the Analog Devices
+AD9208 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants:
+
+- Supported FPGA carriers:
+    - VCU118
+- Supported design variants:
+    - RX
+
+## Reference Design
+
+::::{container} refdesign
+:::{raw} html
+:file: ../assets/rd_jesd_custom.svg
+:::
+
+HDL Reference Design with Custom IP from HDL-Coder. Click on sub-blocks for more documentation.
+::::
+
+The IP-Core generation flow will integrate IP generated from Simulink subsystem into an ADI authored reference design. Depending on the FPGA carrier and FMC card or SoM, this will support different IP locations based on the diagram above.
+
+## HDL Workflow Advisor Port Mappings
+
+When using the HDL Workflow Advisor, the following port mappings are used to connect the reference design to the HDL-Coder generated IP-Core:
+
+| Type | Target Platform Interface (MATLAB) | Reference Design Connection (Vivado) | Width | Reference Design Variant |
+| ---- | ------------------------ | --------------------------- | ----- | ----------- |
+| VALID-OUT | IP Data Valid OUT | util_ad9208_cpack/fifo_wr_en | 1 | RX |
+| VALID-IN | IP Valid Rx Data IN | rx_ad9208_0_tpl_core/adc_valid_0 | 1 | RX |
+| DATA-OUT | IP Data 0 OUT | util_ad9208_cpack/fifo_wr_data_0 | 128 | RX |
+| DATA-OUT | IP Data 1 OUT | util_ad9208_cpack/fifo_wr_data_1 | 128 | RX |
+| DATA-OUT | IP Data 2 OUT | util_ad9208_cpack/fifo_wr_data_2 | 128 | RX |
+| DATA-OUT | IP Data 3 OUT | util_ad9208_cpack/fifo_wr_data_3 | 128 | RX |
+| DATA-IN | AD9208 ADC Data 0 IN | rx_ad9208_0_tpl_core/adc_data_0 | 128 | RX |
+| DATA-IN | AD9208 ADC Data 1 IN | rx_ad9208_0_tpl_core/adc_data_1 | 128 | RX |
+| DATA-IN | AD9208 ADC Data 2 IN | rx_ad9208_1_tpl_core/adc_data_0 | 128 | RX |
+| DATA-IN | AD9208 ADC Data 3 IN | rx_ad9208_1_tpl_core/adc_data_1 | 128 | RX |

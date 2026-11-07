@@ -1,0 +1,41 @@
+# daq2 Reference Design Integration
+
+This page outlines the HDL reference design integration for the *daq2* reference design for the Analog Devices
+DAQ2 component. The IP-Core Generation follow is available on the based on the following base HDL reference design for the following board and design variants:
+
+- Supported FPGA carriers:
+    - ZCU102
+- Supported design variants:
+    - RX
+    - TX
+    - RX & TX
+
+## Reference Design
+
+::::{container} refdesign
+:::{raw} html
+:file: ../assets/rd_jesd_custom.svg
+:::
+
+HDL Reference Design with Custom IP from HDL-Coder. Click on sub-blocks for more documentation.
+::::
+
+The IP-Core generation flow will integrate IP generated from Simulink subsystem into an ADI authored reference design. Depending on the FPGA carrier and FMC card or SoM, this will support different IP locations based on the diagram above.
+
+## HDL Workflow Advisor Port Mappings
+
+When using the HDL Workflow Advisor, the following port mappings are used to connect the reference design to the HDL-Coder generated IP-Core:
+
+| Type | Target Platform Interface (MATLAB) | Reference Design Connection (Vivado) | Width | Reference Design Variant |
+| ---- | ------------------------ | --------------------------- | ----- | ----------- |
+| VALID-OUT | IP Data Valid OUT | axi_ad9680_cpack/fifo_wr_en | 1 | RX |
+| VALID-IN | IP Valid Rx Data IN | axi_ad9680_tpl/adc_valid_0 | 1 | RX |
+| DATA-OUT | IP Data 0 OUT | axi_ad9680_cpack/fifo_wr_data_0 | 64 | RX |
+| DATA-OUT | IP Data 1 OUT | axi_ad9680_cpack/fifo_wr_data_1 | 64 | RX |
+| DATA-IN | DAQ2 ADC Data 0 IN | axi_ad9680_tpl/adc_data_0 | 64 | RX |
+| DATA-IN | DAQ2 ADC Data 1 IN | axi_ad9680_tpl/adc_data_1 | 64 | RX |
+| VALID-IN | IP Valid Tx Data IN | axi_ad9144_upack/fifo_rd_valid | 1 | TX |
+| DATA-OUT | DAQ2 DAC Data 0 OUT | axi_ad9144_tpl/dac_data_0 | 64 | TX |
+| DATA-OUT | DAQ2 DAC Data 1 OUT | axi_ad9144_tpl/dac_data_1 | 64 | TX |
+| DATA-IN | IP Data 0 IN | axi_ad9144_upack/fifo_rd_data_0 | 64 | TX |
+| DATA-IN | IP Data 1 IN | axi_ad9144_upack/fifo_rd_data_1 | 64 | TX |

@@ -18,21 +18,23 @@ classdef HardwareTests < matlab.unittest.TestCase
     methods
         % Check hardware connected
         function CheckDevice(testCase,type,Dev,ip,istx)
+            % Construct outside the try so class or toolbox errors (e.g. a
+            % MATLAB release incompatibility) fail rather than skip.
+            switch type
+                case 'usb'
+                    d = Dev();
+                case 'ip'
+                    if strcmp(testCase.author,'MathWorks')
+                        d= Dev();
+                        d.IPAddress = ip;
+                    else
+                        d= Dev();
+                        d.uri = ['ip:',ip];
+                    end
+                otherwise
+                    error('Unknown interface type');
+            end
             try
-                switch type
-                    case 'usb'
-                        d = Dev();
-                    case 'ip'
-                        if strcmp(testCase.author,'MathWorks')
-                            d= Dev();
-                            d.IPAddress = ip;
-                        else
-                            d= Dev();
-                            d.uri = ['ip:',ip];
-                        end
-                    otherwise
-                        error('Unknown interface type');
-                end
                 if istx
                     d(complex(randn(1024,1),randn(1024,1)));
                 else

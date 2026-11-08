@@ -1,5 +1,10 @@
 function runSynthTests(board)
 
+% A failure before runner creation must not leave a previous passing report.
+if isfile('BSPTestResults.xml')
+    delete('BSPTestResults.xml');
+end
+
 import matlab.unittest.TestRunner;
 import matlab.unittest.TestSuite;
 import matlab.unittest.plugins.TestReportPlugin;
@@ -13,15 +18,18 @@ runParallel = false;
 SynthesizeDesign = {true};
 param = Parameter.fromData('SynthesizeDesign',SynthesizeDesign);
 
-if nargin == 0
-    suite = testsuite({'BSPTests'});
-else
-    boards = ['*',lower(board),'*'];
-    suite = TestSuite.fromClass(?BSPTests,'ExternalParameters',param);
+suite = TestSuite.fromClass(?BSPTests,'ExternalParameters',param);
+if nargin > 0 && ~isempty(board)
+    if startsWith(board, 'AnalogDevices.')
+        boards = board; % Exact registered variant for a targeted retry.
+    else
+        boards = ['*',lower(board),'*'];
+    end
     suite = suite.selectIf('ParameterProperty','configs', 'ParameterName',boards);
 end
     
 try
+    assert(~isempty(suite), 'adi:EmptyTestSuite', 'No tests matched the requested selection.');
 
     runner = matlab.unittest.TestRunner.withTextOutput('OutputDetail',4);
     runner.addPlugin(DiagnosticsValidationPlugin)
@@ -65,4 +73,4 @@ end
 
 save(['BSPTest_',datestr(now,'dd_mm_yyyy-HH:MM:SS'),'.mat'],'t');
 bdclose('all');
-exit(any([results.Failed]));
+exit(isempty(results) || any(~[results.Passed]));

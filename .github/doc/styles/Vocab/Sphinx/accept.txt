@@ -1,13 +1,13 @@
 Simulink
 Zedboard
-iio
+[iI][iI][oO]
 Loopback
 Verilog
 datapaths
 Zynq
 Vivado
 Walkthrough
-Workflow
+[wW]orkflow
 util
 fifo
 wr
@@ -22,7 +22,8 @@ upack
 cpack
 tpl
 uri
-ip usb
+[iI][pP]
+[uU][sS][bB]
 dout
 Pluto
 pluto
@@ -40,11 +41,11 @@ fullscale
 lookup
 Datasheet
 baseband
-decimator
+[dD]ecimator
 midscale
 Hostname
 logical
-interpolator
+[iI]nterpolator
 datarate
 decimation
 adijif
@@ -82,3 +83,12 @@ PLL
 [mM]ultiblock
 codecov
 
+Stratix
+[tT]cl
+[bB]itstreams?
+devicetree
+hdlsetuptoolpath
+num
+attr
+bootgen
+toolchain

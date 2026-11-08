@@ -46,6 +46,10 @@ fi
 echo "Required Vivado version ${VER}"
 python3 ./scripts/validate_hdl_projects.py hdl ../hdl/vendor/AnalogDevices/hdlcoder_board_customization.m
 
+# The upstream parser uses Git to derive transceiver attribute differences.
+# Packaged BSPs have no HDL Git metadata; keep that operation self-contained.
+python3 ./scripts/patch_gtwiz_parser.py hdl/projects/scripts/gtwiz_parser.pl
+
 # Preparing sources does not invoke Vivado, so packaging needs no tool install.
 
 # Pre-build IP library
@@ -67,6 +71,7 @@ do
 done < <(find hdl/projects/common -name '*.prj' -print0)
 
 # Remove git directory move to bsp folder
+git -C hdl rev-parse HEAD > hdl/HSX_UPSTREAM_COMMIT
 rm -fr hdl/.git*
 TARGET="../hdl/vendor/AnalogDevices/vivado"
 if [ -d "$TARGET" ]; then

@@ -59,8 +59,6 @@ for (int i=0; i < boardNames.size(); i++) {
                         local_unstash('builtSources', '', false)
                         sh 'echo "BOARD:$BOARD"'
                         sh 'make -C ./CI/scripts test_synth'
-                        junit testResults: 'test/*.xml', allowEmptyResults: true
-                        archiveArtifacts artifacts: 'test/*', followSymlinks: false, allowEmptyArchive: true
                     }
                     if (!board.contains("pluto") && !board.contains("vcu118")) {
                         stage("Upload BOOT.BINs") {
@@ -72,7 +70,12 @@ for (int i=0; i < boardNames.size(); i++) {
 			    }
                 }
                 finally {
-                    cleanWs();
+                    try {
+                        archiveArtifacts artifacts: 'test/**/*.log,test/**/*.rpt,test/**/*.bit,test/**/*.xsa,test/**/*.BIN,test/**/hsx_build_verified.txt', followSymlinks: false, allowEmptyArchive: true
+                        junit testResults: 'test/BSPTestResults.xml', allowEmptyResults: false
+                    } finally {
+                        cleanWs();
+                    }
                 }
             }
         } // stage

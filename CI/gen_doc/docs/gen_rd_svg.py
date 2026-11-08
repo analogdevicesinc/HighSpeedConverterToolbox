@@ -62,7 +62,7 @@ def gen_rd_svg():
             if id == "CarrierBox":
                 css_out += (
                     f"\n#{id} > rect {{\n"
-                    + "    fill: var(--md-default-fg-color--light);\n"
+                    + "    fill: var(--bg-color3);\n"
                     + "}\n"
                 )
 
@@ -75,20 +75,20 @@ def gen_rd_svg():
             # output += o
             # print(sec)
             # Add css to change fill color
-            css_out += f"#{id} > rect {{\n" + "    stroke: white;\n" + "}\n"
-            css_out += f"\n#{id}:hover > rect {{\n" + "    fill: rgb(0, 174, 255);\n" + "}\n"
+            css_out += f"#{id} > rect {{\n" + "    stroke: var(--bg-color1);\n" + "}\n"
+            css_out += f"\n#{id}:hover > rect {{\n" + "    fill: var(--accent-color);\n" + "}\n"
 
 
 
         with open(f"assets/{ref}_custom.svg", "w") as f:
             f.write(output)
 
-        css_out += "\n#FPGACarrierText {\n" + "    fill: var(--rd-title-color);\n" + "}\n"
-        css_out += "\n#CarrierBox > rect {\n" + "    fill: none;\n    stroke: black\n" + "}\n"
+        css_out += "\n#FPGACarrierText {\n" + "    fill: var(--text-color1);\n" + "}\n"
+        css_out += "\n#CarrierBox > rect {\n" + "    fill: none;\n    stroke: var(--text-color1)\n" + "}\n"
         css_out += (
-            "\n#CustomIPOutline > rect {\n" + "    stroke: var(--rd-title-color);\n" + "}\n"
+            "\n#CustomIPOutline > rect {\n" + "    stroke: var(--text-color1);\n" + "}\n"
         )
-        css_out += ("\n#CustomIPIntegrationText {\n" + "    fill: var(--rd-title-color);\n" + "}\n")
+        css_out += ("\n#CustomIPIntegrationText {\n" + "    fill: var(--text-color1);\n" + "}\n")
 
-    with open("stylesheets/rd_style.css", "w") as f:
+    with open(os.path.join("_static", "css", "rd_style.css"), "w") as f:
         f.write(css_out)

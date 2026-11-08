@@ -1,4 +1,5 @@
 set start_dir [pwd]
+set hsx_project_context [list $project $carrier $ref_design]
 puts "Starting High-Speed Converter Toolbox HDL build"
 
 if {$preprocess == "on"} {
@@ -14,6 +15,10 @@ set ::env(ADI_MATLAB) 1
 set ::env(ADI_USE_OOC_SYNTHESIS) 1
 
 source ./system_project.tcl
+
+# Upstream sourced scripts use global loop variables, including carrier.
+lassign $hsx_project_context project carrier ref_design
+unset hsx_project_context
 
 # Update block design to make room for new IP
 source ../../scripts/matlab_processors.tcl

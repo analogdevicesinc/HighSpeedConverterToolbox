@@ -1,3 +1,16 @@
+# Recreate a plain BD input port as a clock port, keeping its connections.
+# Smartconnect only inserts a clock converter for an interface whose clock
+# carries its own CLK_DOMAIN; plain ports leave it on the interconnect clock.
+proc make_clock_port {name freq_hz} {
+    set net [get_bd_nets -of_objects [get_bd_ports $name]]
+    set pins [get_bd_pins -of_objects $net]
+    delete_bd_objs $net [get_bd_ports $name]
+    create_bd_port -dir I -type clk -freq_hz $freq_hz $name
+    foreach pin $pins {
+        connect_bd_net [get_bd_ports $name] $pin
+    }
+}
+
 # Write an implementation-only XDC next to the project being built and add it
 # to the current project's constraints.
 proc add_project_xdc {name contents} {
@@ -161,6 +174,11 @@ proc add_dut_axi_lite_cdc {cpu_interconnect master_port device_clk} {
             }
         }
         ad9081_fmca_ebz {
+            # The DUT and its AXI-Lite slave run on the device clocks (2.58 ns
+            # in the upstream timing constraints).
+            make_clock_port rx_device_clk 387596899
+            make_clock_port tx_device_clk 387596899
+
             if {$rxtx == "rx" || $rxtx == "rxtx"} {
                 # Disconnect the ADC PACK pins
                 disconnect_bd_net /rx_mxfe_tpl_core_adc_valid_0 [get_bd_pins util_mxfe_cpack/fifo_wr_en]
@@ -192,23 +210,23 @@ proc add_dut_axi_lite_cdc {cpu_interconnect master_port device_clk} {
                 delete_bd_objs [get_bd_nets util_mxfe_upack_fifo_rd_data_7]
             }
             if {$rxtx == "rxtx"} {
-                # Connect TX clocking to RX path
+                # Connect TX clocking to the RX device clock
 
                 # Reset reconnect
-                delete_bd_objs [get_bd_nets tx_device_clk_1]
-                connect_bd_net [get_bd_pins tx_device_clk_rstgen/slowest_sync_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                delete_bd_objs [get_bd_nets -of_objects [get_bd_ports tx_device_clk]]
+                connect_bd_net [get_bd_pins tx_device_clk_rstgen/slowest_sync_clk] [get_bd_ports rx_device_clk]
 
                 # UPACK reconnect
-                connect_bd_net [get_bd_pins util_mxfe_upack/clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins util_mxfe_upack/clk] [get_bd_ports rx_device_clk]
 
                 # DAC FIFO reconnect
-                connect_bd_net [get_bd_pins mxfe_tx_data_offload/m_axis_aclk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins mxfe_tx_data_offload/m_axis_aclk] [get_bd_ports rx_device_clk]
 
                 # TX TPL Core
-                connect_bd_net [get_bd_pins tx_mxfe_tpl_core/link_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins tx_mxfe_tpl_core/link_clk] [get_bd_ports rx_device_clk]
 
                 # TX JESD
-                connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/device_clk] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                connect_bd_net [get_bd_pins axi_mxfe_tx_jesd/device_clk] [get_bd_ports rx_device_clk]
 
 		        disconnect_bd_net /util_mxfe_xcvr_tx_out_clk_0 [get_bd_pins axi_mxfe_tx_jesd/link_clk]
 		        connect_bd_net [get_bd_ports rx_device_clk] [get_bd_pins axi_mxfe_tx_jesd/link_clk]
@@ -228,11 +246,11 @@ proc add_dut_axi_lite_cdc {cpu_interconnect master_port device_clk} {
                     set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells ${cpu_interconnect}]
 	            if {$rxtx == "rx" || $rxtx == "rxtx"} {
                         set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
-                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_mxfe_xcvr/rx_out_clk_0]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_ports rx_device_clk]
                     }
                     if {$rxtx == "tx"} {
                         set_property -dict [list CONFIG.NUM_MI {12}] [get_bd_cells ${cpu_interconnect}]
-                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins util_mxfe_xcvr/tx_out_clk_0]
+                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_ports tx_device_clk]
                     }
                 }
             }
@@ -260,6 +278,10 @@ proc add_dut_axi_lite_cdc {cpu_interconnect master_port device_clk} {
             }
         }
         ad9208_dual_ebz {
+            # The DUT and its AXI-Lite slave run on the global clock (2.66 ns
+            # in the upstream timing constraints).
+            make_clock_port glbl_clk_0 375939850
+
             if {$rxtx == "rx"} {
                 # Disconnect the ADC PACK pins
                 delete_bd_objs [get_bd_nets rx_ad9208_0_tpl_core_adc_valid_0]

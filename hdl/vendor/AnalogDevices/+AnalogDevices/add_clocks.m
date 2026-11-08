@@ -47,9 +47,11 @@ switch lower(project)
     case 'ad9783'
         switch(upper(design))
             case 'TX'
+                % dut_clk, dut_rstgen and dut_axi_cdc are added by
+                % add_dut_axi_lite_cdc in matlab_processors.tcl.
                 hRD.addClockInterface( ...
-                    'ClockConnection',   'axi_ad9783/dac_div_clk', ...
-                    'ResetConnection',   'axi_ad9783/dac_rst');
+                    'ClockConnection',   'dut_clk/clk_out', ...
+                    'ResetConnection',   'dut_rstgen/peripheral_aresetn');
             otherwise
                 error('Unknown reference design');
         end 

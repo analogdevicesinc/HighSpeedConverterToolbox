@@ -11,6 +11,47 @@ proc make_clock_port {name freq_hz} {
     }
 }
 
+# Write an implementation-only XDC next to the project being built and add it
+# to the current project's constraints.
+proc add_project_xdc {name contents} {
+    set path [file normalize $name]
+    set fd [open $path w]
+    puts $fd $contents
+    close $fd
+    add_files -fileset constrs_1 -norecurse $path
+    set_property USED_IN_SYNTHESIS false [get_files $path]
+}
+
+# Clock the HDL Coder DUT from a device clock pin that is not a clock
+# interface (no CLK_DOMAIN), with its AXI4-Lite slave behind an asynchronous
+# clock converter. Smartconnect cannot insert the crossing itself because the
+# device pin has no clock domain, so it would time the DUT AXI4-Lite as
+# synchronous to the CPU clock.
+#   dut_clk/clk_out                 DUT IPCORE_CLK / AXI4_Lite_ACLK
+#   dut_rstgen/peripheral_aresetn   DUT IPCORE_RESETN / AXI4_Lite_ARESETN
+#   dut_axi_cdc/M_AXI               DUT AXI4_Lite
+# dut_clk is a clk_vip in pass-through mode (a wire in synthesis). It gives the
+# device clock a clock type and domain in the block design; it adds no logic
+# and no in-context constraints.
+proc add_dut_axi_lite_cdc {cpu_interconnect master_port device_clk} {
+    create_bd_cell -type ip -vlnv xilinx.com:ip:clk_vip dut_clk
+    set_property -dict [list CONFIG.INTERFACE_MODE {PASS_THROUGH}] [get_bd_cells dut_clk]
+    connect_bd_net [get_bd_pins $device_clk] [get_bd_pins dut_clk/clk_in]
+
+    # DUT-side reset: CPU reset synchronized to the device clock.
+    create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset dut_rstgen
+    connect_bd_net [get_bd_pins dut_clk/clk_out] [get_bd_pins dut_rstgen/slowest_sync_clk]
+    connect_bd_net [get_bd_pins ${cpu_interconnect}/aresetn] [get_bd_pins dut_rstgen/ext_reset_in]
+
+    create_bd_cell -type ip -vlnv xilinx.com:ip:axi_clock_converter dut_axi_cdc
+    set_property -dict [list CONFIG.PROTOCOL {AXI4LITE} CONFIG.ACLK_ASYNC {1}] [get_bd_cells dut_axi_cdc]
+    connect_bd_intf_net [get_bd_intf_pins ${cpu_interconnect}/${master_port}] [get_bd_intf_pins dut_axi_cdc/S_AXI]
+    connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk] [get_bd_pins dut_axi_cdc/s_axi_aclk]
+    connect_bd_net [get_bd_pins ${cpu_interconnect}/aresetn] [get_bd_pins dut_axi_cdc/s_axi_aresetn]
+    connect_bd_net [get_bd_pins dut_clk/clk_out] [get_bd_pins dut_axi_cdc/m_axi_aclk]
+    connect_bd_net [get_bd_pins dut_rstgen/peripheral_aresetn] [get_bd_pins dut_axi_cdc/m_axi_aresetn]
+}
+
  proc preprocess_bd {project carrier rxtx} {
     puts "Preprocessing $project $carrier $rxtx"
 
@@ -222,11 +263,16 @@ proc make_clock_port {name freq_hz} {
             }
             switch $carrier {                
                 zcu102 {                    
-                    set_property -dict [list CONFIG.NUM_CLKS {2}] [get_bd_cells ${cpu_interconnect}]
-                        
                     if {$rxtx == "tx"} {
+                        # M03_AXI feeds the DUT AXI4-Lite through dut_axi_cdc.
                         set_property -dict [list CONFIG.NUM_MI {4}] [get_bd_cells ${cpu_interconnect}]
-                        connect_bd_net [get_bd_pins ${cpu_interconnect}/aclk1] [get_bd_pins axi_ad9783/dac_div_clk]
+                        add_dut_axi_lite_cdc ${cpu_interconnect} M03_AXI axi_ad9783/dac_div_clk
+                        # With the DUT added, dac_div_clk spans more clock
+                        # regions and the placer moves its root away from the
+                        # DAC OSERDES (X3Y2). The OSERDESE3 CLK/CLKDIV max-skew
+                        # check then fails (the upstream design passes it).
+                        # Root the divided clock in the OSERDES clock region.
+                        add_project_xdc hsx_ad9783_clock_root.xdc {set_property USER_CLOCK_ROOT X3Y2 [get_nets -of_objects [get_pins -hierarchical -filter {NAME =~ */axi_ad9783/inst/i_if/i_dac_div_clk_rbuf/O}]]}
                     }
                 }
             }

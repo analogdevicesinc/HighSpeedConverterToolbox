@@ -33,7 +33,8 @@ switch project
     case 'ad9783'
         switch fpga
             case {'ZCU102'}
-                InterfaceConnection = 'axi_hpm0_lpd_interconnect/M03_AXI';
+                % Asynchronous clock converter on M03_AXI (matlab_processors.tcl)
+                InterfaceConnection = 'dut_axi_cdc/M_AXI';
                 BaseAddress = '0x9D000000';
                 MasterAddressSpace = 'sys_ps8/Data';
             otherwise

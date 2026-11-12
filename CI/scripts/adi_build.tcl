@@ -46,8 +46,26 @@ foreach delay_type {max min} {
         error "Routed $delay_type timing failed; see $report_dir/hsx_timing_summary.rpt"
     }
 }
+# Pulse width checks (min period, high/low pulse, max skew) are not timing
+# paths, so take them from the Design Timing Summary row of the report.
+set fd [open $report_dir/hsx_timing_summary.rpt r]
+set summary [split [read $fd] "\n"]
+close $fd
+set header [lsearch -regexp $summary {^\s+WNS\(ns\).*WPWS\(ns\)}]
+if {$header < 0} {
+    error "Design Timing Summary not found in $report_dir/hsx_timing_summary.rpt"
+}
+set row [regexp -all -inline {\S+} [lindex $summary [expr {$header + 2}]]]
+set wpws [lindex $row 8]
+set tpws_failing [lindex $row 10]
+if {![string is double -strict $wpws] || ![string is integer -strict $tpws_failing]} {
+    error "No pulse width checks were analyzed"
+}
+if {$wpws < 0 || $tpws_failing > 0} {
+    error "Routed pulse width checks failed (WPWS $wpws ns, $tpws_failing failing endpoints); see $report_dir/hsx_timing_summary.rpt"
+}
 set marker [open $report_dir/hsx_build_verified.txt w]
-puts $marker "Synthesis, implementation, setup and hold timing passed."
+puts $marker "Synthesis, implementation, setup, hold and pulse width timing passed."
 close $marker
 
 # Export the hdf

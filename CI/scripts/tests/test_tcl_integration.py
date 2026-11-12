@@ -166,7 +166,23 @@ proc get_property {{property object}} {{
     }}
 }}
 proc open_run args {{}}
-proc report_timing_summary args {{}}
+proc report_timing_summary args {{
+    set wpws 0.200
+    set failing 0
+    if {{"{failure}" eq "pulse_width"}} {{set wpws -0.204; set failing 17}}
+    if {{"{failure}" eq "pulse_width_skew"}} {{set failing 1}}
+    set fd [open [lindex $args [expr {{[lsearch $args -file] + 1}}]] w]
+    if {{"{failure}" ne "no_summary"}} {{
+        puts $fd "    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  "
+        puts $fd "    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  "
+        if {{"{failure}" eq "no_pulse_width"}} {{
+            puts $fd "      0.100        0.000                      0                  100        0.100        0.000                      0                  100           NA           NA                     NA                    NA  "
+        }} else {{
+            puts $fd "      0.100        0.000                      0                  100        0.100        0.000                      0                  100 [format %12s $wpws] [format %12s 0.000] [format %22s $failing] [format %21s 100]  "
+        }}
+    }}
+    close $fd
+}}
 proc check_timing args {{}}
 proc get_timing_paths args {{
     set ::delay_type [lindex $args 1]
@@ -223,7 +239,9 @@ preprocess_bd {project} {board} {mode}
                         self.assertNotIn('BOOTGEN_ARCH=', result.stdout)
 
     def test_failed_implementation_or_timing_is_fatal(self):
-        for failure in ('incomplete', 'status', 'timing', 'hold', 'no_paths'):
+        for failure in ('incomplete', 'status', 'timing', 'hold', 'no_paths',
+                        'pulse_width', 'pulse_width_skew', 'no_pulse_width',
+                        'no_summary'):
             with self.subTest(failure=failure):
                 result = self.boot_build('adi_build.tcl', 'zcu102', failure=failure)
                 self.assertNotEqual(result.returncode, 0)
